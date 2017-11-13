@@ -1,37 +1,12 @@
-## Welcome to GitHub Pages
+## Welcome to Buck's Presentations
 
-You can use the [editor on GitHub](https://github.com/BuckWoody/presentations/edit/master/docs/README.md) to maintain and preview the content for your website in Markdown files.
+These are the files I pointed you to in my session. Yes, you can use them. Yes, it would be nice if you gave me credit for making the original ones, but if you don't want to, hey, you have to live with that on your conscicence. 
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+The PPTx files are the PowerPoints (always look at them using the "Notes" view) and the DOCx files are the handouts with all the notes you need. 
 
-### Markdown
+Anyway, in no particular order, here are the files: 
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+  - [The Team Data Science Process](https://github.com/BuckWoody/presentations/tree/master/tdsp)
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/BuckWoody/presentations/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+###Disclaimer, for people who need to be told this sort of thing:
+*Never trust any script, presentation, code or information including those that you find here, until you understand exactly what it does and how it will act on your systems. Always check scripts and code on a test system or Virtual Machine, not a production system. Yes, there are always multiple ways to do things, and this script, code, information, or content may not work in every situation, for everything. It’s just a presentation, people. All scripts on this site are performed by a professional stunt driver on a closed course. Your mileage may vary. Void where prohibited. Offer good for a limited time only. Keep out of reach of small children. Do not operate heavy machinery while using this script. If you experience blurry vision, indigestion or diarrhea during the operation of this script, see a physician immediately.*
