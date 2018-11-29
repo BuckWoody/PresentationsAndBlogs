@@ -11,7 +11,26 @@
 
 ## Courses:
 
-- [Microsoft Artificial Intelligence - What to use When](https://github.com/BuckWoody/presentations/tree/master/ai-whattousewhen)
+- [Azure Notebooks](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/AzureNotebooks)
+
+- [Data Science Projects with SQL Server Machine Learning Services](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/SQLML)
+
+- [Python for the Data Professional](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/PythonDataProfessional)
+
+- [R for the Data Professional](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/RDataProfessional)
+
+- [The Team Data Science Process Workshop](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/TDSPPython)
+
+- [Machine Learning with Azure ML Studio](https://github.com/Azure/LearnAnalytics-DoingMachineLearningwithAzureMLStudio)
+
+- [Learn AI Materials on Artificial Intelligence on IaaS++](https://azure.github.io/LearnAI-AIonIaaS/)
+
+- [SQL Server R Services Workshop](https://github.com/Azure/LearnAnalytics-SQLServerRServices)
+
+- [Microsoft R for Architects](https://github.com/Azure/LearnAnalytics-MicrosoftRforArchitects)
+
+- [Microsoft R for the SQL Server Professional](https://github.com/Azure/LearnAnalytics-MicrosoftRforSQLServerProfessional)
+
 
 ### Disclaimer, for people who need to be told this sort of thing: 
 
