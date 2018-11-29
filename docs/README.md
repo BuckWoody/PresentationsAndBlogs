@@ -1,10 +1,14 @@
-# Presentations by Buck Woody, Applied Data Scientist, Microsoft
+# Presentations and courses by Buck Woody, Applied Data Scientist, Microsoft
 
-## Presentations List:
+## Presentations:
 
 - [Microsoft Artificial Intelligence - What to use When](https://github.com/BuckWoody/presentations/tree/master/ai-whattousewhen)
 
 - [The Team Data Science Process](https://github.com/BuckWoody/presentations/tree/master/tdsp)
+
+## Courses:
+
+- [Microsoft Artificial Intelligence - What to use When](https://github.com/BuckWoody/presentations/tree/master/ai-whattousewhen)
 
 ### Disclaimer, for people who need to be told this sort of thing: 
 
