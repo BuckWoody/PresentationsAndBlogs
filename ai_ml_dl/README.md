@@ -42,14 +42,15 @@ Here are the references used in the presentation, along with other resources you
 
 - [Beginners Guide to the Three Types of Machine Learning](https://www.kdnuggets.com/2019/11/beginners-guide-three-types-machine-learning.html)
 
+- [](https://docs.microsoft.com/en-us/azure/machine-learning/algorithm-cheat-sheet)
+
 - [Difference between Machine Learning, Data Science, AI, Deep Learning, and Statistics](https://www.datasciencecentral.com/profiles/blogs/difference-between-machine-learning-data-science-ai-deep-learning)
 
 - [New cardiology A.I. knows if you’ll die soon](https://www.digitaltrends.com/cool-tech/cardiology-ai-predicts-death/)
 
 - [AI Can Clone Any Voice After Listening To It For Just 5 Seconds](https://digg.com/video/ai-clones-your-voice-after-listening-for-5-seconds)
 
-
-- [](https://www.kdnuggets.com/2019/11/beginners-guide-three-types-machine-learning.html)
+- [Machine Learning Algorithm Cheat Sheet](https://www.kdnuggets.com/2019/11/beginners-guide-three-types-machine-learning.html)
 
 ### General Links in this topic:
 
