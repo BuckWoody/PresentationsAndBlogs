@@ -5,8 +5,15 @@
 
 ## Presentations:
 
+- [An Introduction to AI, Machine Learning and Deep Learning](https://github.com/BuckWoody/presentations/tree/master/ai_ml_dl)
 
-- [ *(Older, Archived)* Microsoft Artificial Intelligence - What to use When](https://github.com/BuckWoody/presentations/tree/master/ai-whattousewhen)
+- [ *(Not current)* Microsoft Artificial Intelligence - What to use When](https://github.com/BuckWoody/presentations/tree/master/ai-whattousewhen)
+
+- [SQL Server 2019 Big Data Clusters Workshop supporting materials](https://github.com/BuckWoody/presentations/tree/master/bdc)
+
+- [Presentation Workshop](https://github.com/BuckWoody/presentations/tree/master/presentation_workshop)
+
+- [Prroblem/Solution Database](https://github.com/BuckWoody/presentations/tree/master/problemtosolution)
 
 - [The Team Data Science Process](https://github.com/BuckWoody/presentations/tree/master/tdsp)
 
