@@ -5,7 +5,7 @@
 
 ## Presentations:
 
-- [An Introduction to AI, Machine Learning and Deep Learning](https://github.com/BuckWoody/presentations/tree/master/ai_ml_dl)
+- [An Introduction to AI, Machine Learning and Deep Learning](https://buckwoody.github.io/presentations/ai_ml_dl)
 
 - [ *(Not current)* Microsoft Artificial Intelligence - What to use When](https://github.com/BuckWoody/presentations/tree/master/ai-whattousewhen)
 
