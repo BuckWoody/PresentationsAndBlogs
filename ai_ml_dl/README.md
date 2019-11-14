@@ -2,7 +2,7 @@
 
 #### Buck Woody, Applied Data Scientist, Microsoft
 
-*(Use the "Issues" link above to report any errors, broken links, etc.)*
+*(File an [Issue here to report any errors, broken links](https://github.com/BuckWoody/presentations/issues), etc.)*
 
 ## Materials
 
