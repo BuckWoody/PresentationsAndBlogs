@@ -42,9 +42,11 @@ Here are the references used in the presentation, along with other resources you
 
 - [Beginners Guide to the Three Types of Machine Learning](https://www.kdnuggets.com/2019/11/beginners-guide-three-types-machine-learning.html)
 
-- [](https://docs.microsoft.com/en-us/azure/machine-learning/algorithm-cheat-sheet)
+- [Machine Learning Algorithms Cheat-Sheet](https://docs.microsoft.com/en-us/azure/machine-learning/algorithm-cheat-sheet)
 
 - [Difference between Machine Learning, Data Science, AI, Deep Learning, and Statistics](https://www.datasciencecentral.com/profiles/blogs/difference-between-machine-learning-data-science-ai-deep-learning)
+
+- [Free book from Microsoft: Foundations of Data Science](https://www.microsoft.com/en-us/research/video/foundations-of-ds/)
 
 - [New cardiology A.I. knows if you’ll die soon](https://www.digitaltrends.com/cool-tech/cardiology-ai-predicts-death/)
 
