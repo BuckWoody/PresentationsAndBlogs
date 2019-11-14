@@ -34,6 +34,8 @@ Here are the references used in the presentation, along with other resources you
 
 ### For more information: 
 
+- [Deep Learning versus Machine Learning](https://docs.microsoft.com/en-us/azure/machine-learning/service/concept-deep-learning-vs-machine-learning?WT.mc_id=docs-article-lazzeri/?ocid=AID2463683&wt.mc_id=ai-c9-sejuare)
+
 - [Quick-Start for Data Science](https://buckwoody.wordpress.com/2017/07/06/quick-start-for-data-science/)
 
 - [The Amatuer Data Science Body of Knowledge](https://buckwoody.wordpress.com/2015/09/16/the-amateur-data-science-body-of-knowledge/)
