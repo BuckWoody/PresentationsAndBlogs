@@ -5,11 +5,12 @@
 
 ## Presentations:
 
-- [Microsoft Artificial Intelligence - What to use When](https://github.com/BuckWoody/presentations/tree/master/ai-whattousewhen)
+
+- [ *(Older, Archived)* Microsoft Artificial Intelligence - What to use When](https://github.com/BuckWoody/presentations/tree/master/ai-whattousewhen)
 
 - [The Team Data Science Process](https://github.com/BuckWoody/presentations/tree/master/tdsp)
 
-## Courses:
+## Notebooks and Courses
 
 - [Azure Notebooks](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/AzureNotebooks)
 
