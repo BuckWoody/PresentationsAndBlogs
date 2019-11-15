@@ -34,8 +34,6 @@ Here are the references used in the presentation, along with other resources you
 
 ### For more information: 
 
-- [Deep Learning versus Machine Learning](https://docs.microsoft.com/en-us/azure/machine-learning/service/concept-deep-learning-vs-machine-learning?WT.mc_id=docs-article-lazzeri/?ocid=AID2463683&wt.mc_id=ai-c9-sejuare)
-
 - [Quick-Start for Data Science](https://buckwoody.wordpress.com/2017/07/06/quick-start-for-data-science/)
 
 - [The Amatuer Data Science Body of Knowledge](https://buckwoody.wordpress.com/2015/09/16/the-amateur-data-science-body-of-knowledge/)
@@ -44,15 +42,21 @@ Here are the references used in the presentation, along with other resources you
 
 - [Machine Learning Algorithms Cheat-Sheet](https://docs.microsoft.com/en-us/azure/machine-learning/algorithm-cheat-sheet)
 
+- [Free book from Microsoft: Foundations of Data Science](https://www.microsoft.com/en-us/research/video/foundations-of-ds/)
+
+- [Deep Learning versus Machine Learning](https://docs.microsoft.com/en-us/azure/machine-learning/service/concept-deep-learning-vs-machine-learning?WT.mc_id=docs-article-lazzeri/?ocid=AID2463683&wt.mc_id=ai-c9-sejuare)
+
 - [Difference between Machine Learning, Data Science, AI, Deep Learning, and Statistics](https://www.datasciencecentral.com/profiles/blogs/difference-between-machine-learning-data-science-ai-deep-learning)
 
-- [Free book from Microsoft: Foundations of Data Science](https://www.microsoft.com/en-us/research/video/foundations-of-ds/)
+- [Machine Learning Algorithm Cheat Sheet](https://www.kdnuggets.com/2019/11/beginners-guide-three-types-machine-learning.html)
+
+- [MIT courses on Deep Learning](https://deeplearning.mit.edu/)
+
+- [Nothing but NumPy: Understanding & Creating Neural Networks with Computational Graphs](https://www.kdnuggets.com/2019/08/numpy-neural-networks-computational-graphs.html)
 
 - [New cardiology A.I. knows if you’ll die soon](https://www.digitaltrends.com/cool-tech/cardiology-ai-predicts-death/)
 
 - [AI Can Clone Any Voice After Listening To It For Just 5 Seconds](https://digg.com/video/ai-clones-your-voice-after-listening-for-5-seconds)
-
-- [Machine Learning Algorithm Cheat Sheet](https://www.kdnuggets.com/2019/11/beginners-guide-three-types-machine-learning.html)
 
 ### General Links in this topic:
 
