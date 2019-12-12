@@ -6,7 +6,7 @@
 
 ## Materials
 
-- [PowerPoint Deck for this session](https://github.com/BuckWoody/presentations/blob/master/ai_ml_dl/Introduction%20to%20ML%2C%20AI%2C%20and%20DL.pptx)
+- [PowerPoint Deck for this session](https://bwsa.blob.core.windows.net/slides/Artificial%20Intelligence,%20Machine%20Learning%20and%20Deep%20Learning.pptx)
 
 - [AI Jupyter Notebook showing Cognitive Services for language classification for call routing](https://github.com/BuckWoody/presentations/blob/master/ai_ml_dl/AI.ipynb)
 
