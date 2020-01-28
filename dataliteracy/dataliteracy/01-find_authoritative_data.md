@@ -8,40 +8,33 @@
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/textbubble.png?raw=true"> <h2>1 - Find Authoritative Data</h2>
 
-In this workshop you'll cover using <TODO: Enter a brief description of the workshop>. 
+In this workshop you'll cover using data to make intelligent decisions. In each module you'll get more references, which you should follow up on to learn more. Also watch for links within the text - click on each one to explore that topic.
 
-In each module you'll get more references, which you should follow up on to learn more. Also watch for links within the text - click on each one to explore that topic.
-
-(<a href="file:///url" target="_blank">Make sure you check out the <b>Pre-Requisites</b> page before you start</a>. You'll need all of the items loaded there before you can proceed with the workshop.)
-
-You'll cover these topics in the workshop:
-<dl>
-
-  <dt><a href="url" target="_blank">01 - <TODO: Enter Module Name<dt>
-  <dt><a href="url" target="_blank">01 - <TODO: Enter Module Name<dt>
-  <dt><a href="url" target="_blank">01 - <TODO: Enter Module Name<dt>
-
-</dl>
+(<a href="file:///url" target="_blank">Make sure you check out the <b>Pre-Requisites</b> page before you start</a>. You'll need to complete the work there before you can proceed with the workshop.)
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/pencil2.png?raw=true">1.1 TODO: Topic Name</h2>
+Learning Data Literacy skills is similar to the way you learned the skills you have in literacy with your language.
 
-TODO: Topic Description
+To read and write, you learned the basic building blocks of your language – *the letters of the alphabet*. These form the atomic units of literacy. With Data Literacy, you’ll learn about *Data* as the atomic unit.
 
-<br>
+Next you learned to work with various tools, such as *paper and pencil*, to write those letters. This is similar to the tools you’ll use for writing and reading data such as *programming or other interfaces*.
 
-<img style="height: 400; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" src="https://docs.microsoft.com/en-us/sql/big-data-cluster/media/concept-security/cluster_endpoints.png?raw=true">
+From there you learned the rules of *grammar*. This is similar to learning how one data element affects another, using *context and relationships*.
 
-<br>
+And finally you were introduced to longer and more complex works of writing, and you derived *meaning from your reading*. This is similar to how you will *interpret data to make intelligent decisions*.
+
+In this Module you'll learn more about finding and using authoritative data. Before you do that, we need to define what data is.
+
+<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/pencil2.png?raw=true">1.1 Defining Data</h2>
+
+Let’s start at the beginning: What is Data? [Webster’s defines data as “factual information (such as measurements or statistics) used as a basis for reasoning, discussion, or calculation”](https://www.merriam-webster.com/dictionary/data). Essentially, data is one or more facts.
+
+So *Facts* make *Data*, data makes *Information*, recalling that information makes *Knowledge*, and correctly applied knowledge makes *Wisdom* – and the whole point of Data Literacy is helping you making *wise decisions*.
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
 
 TODO: Activity Description and tasks
-
-<p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Description</b></p>
-
-TODO: Enter activity description with checkbox
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
@@ -49,9 +42,72 @@ TODO: Enter activity steps description with checkbox
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/pencil2.png?raw=true">1.2 TODO: Topic Name</h2>
+<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/pencil2.png?raw=true">1.2 General Data Types</h2>
 
-TODO: Topic Description
+There are two general types of data you will work with: *Quantitative* and *Qualitative* (sometimes called *Categorical*) data. A longer explanation of these types is here, but in general, quantitative data is numeric, and qualitative data describes an attribute.
+
+Therefore:
+
+1 apple, 25 votes, 15 cars = **Quantitative** Data
+
+Red apple, University-age voters, Blue cars = **Qualitative** Data
+
+You’ll use formulas, aggregations and more on quantitative data, and you’ll describe those sets of data using qualitative data.
+
+You can also analyze qualitative data, or use it to get numbers – for instance, you can see the names of students in a class (qualitative), and then count the names (quantitative). This distinction is important because you want to ensure you perform the proper analysis on the appropriate type of data.
+
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+
+TODO: Activity Description and tasks
+
+
+<p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
+
+TODO: Enter activity steps description with checkbox
+
+<p style="border-bottom: 1px solid lightgrey;"></p>
+
+<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/pencil2.png?raw=true">1.3 Source Identification</h2>
+
+The next skill to learn is how to *find* the data you need. [Start with a basic understanding of how to do research](https://www.skillsyouneed.com/learn/research-methods.html). Create your own log of the data sources you use. Take your time on this step, it is pivotal to the rest of your work with data.
+
+To find sources of data you didn’t collect yourself, [a quick web search will open up a lot of data sources](https://infogram.com/blog/free-data-sources/), but make sure you [understand the difference between Primary and Secondary data sources](http://www.businessdictionary.com/definition/primary-data.html) as you use them.
+
+Don’t rely on one search result, or even one search engine. Check out the [advanced search features on Google](https://support.google.com/websearch/answer/134479?hl=en), [Bing](https://fossbytes.com/advanced-bing-search-tips-and-tricks/), [Yahoo](https://search.yahoo.com/web/advanced), [StartPage](https://www.startpage.com/en/?&hmb=1), [Yandex](https://yandex.com/), [Ask.com](https://www.ask.com/), [DuckDuckGo](https://duckduckgo.com/), [WolframAlpha](https://www.wolframalpha.com/) and more. And even though the web contains lots of data, it doesn’t have everything. [Visit your local library](https://publiclibraries.com/) and know how to [leverage the Research section](https://libraryguides.binghamton.edu/libraryresearch) - use the [libraries at colleges and schools](http://www.top10onlineuniversities.org/50-incredible-free-university-libraries-online.html) as well.
+
+If you find a discrepancy between a data set, find out why. [And always document your sources](https://docs.microsoft.com/en-us/azure/data-catalog/data-catalog-how-to-documentation), even the ones you don't use immediately.
+
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+
+TODO: Activity Description and tasks
+
+<p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
+
+TODO: Enter activity steps description with checkbox
+
+<p style="border-bottom: 1px solid lightgrey;"></p>
+
+<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/pencil2.png?raw=true">1.4 Data Verification</h2>
+
+After you know where to find data, you need to insure that it is valid – [accurate](https://www.whydoscientists.org/accuracy-precision-errors-statistics/), [representative](https://www.investopedia.com/terms/r/representative-sample.asp), and [sufficient](https://www.statisticshowto.datasciencecentral.com/sufficient-statistic/).
+
+*Accurate* data aligns closest to the actual reality of the observation or event.
+
+*Representative* data means that the observation and collection method took into account the most possibilities were covered.
+
+*Sufficient* data means that the data point (such as a sum or average) has enough support to represent what it purports to.
+
+There are three basic questions you should ask when you find information:
+
+- Who is telling me this
+- What are they telling me about this
+- Why are they telling me this
+
+Asking these simple questions can uncover a lot of issues with a data source. If you listen to a salesperson about a buying a car, you’ll find their data heavily supports the decision to buy the car. Knowing that it’s a salesperson giving you the data, knowing that they make their living off of selling you a car, and knowing they want you to buy the most expensive car will help you properly evaluate the data you have.
+
+It’s actually the same for most any data – not just qualitative data but quantitative as well. There is no single source of “fair and balanced” information – you’ll have to drive all the way back to the source to find out the truth, or at least the closest approximation to the truth that you can.
+
+In short, it’s best to be a [data skeptic](https://www.oreilly.com/ideas/on-being-a-data-skeptic).
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
 
@@ -69,7 +125,11 @@ TODO: Enter activity steps description with checkbox
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/owl.png?raw=true"><b>For Further Study</b></p>
 <ul>
-    <li><a href="url" target="_blank">TODO: Enter courses, books, posts, whatever the student needs to extend their study</a></li>
+    <li><a href="https://www.usgs.gov/products/data-and-tools/data-management/data-dictionaries" target="_blank">Government guide to data dictionary</a></li>
 </ul>
 
-Congratulations! You have completed this workshop on <TODO: Enter workshop name>. You now have the tools, assets, and processes you need to extrapolate this information into other applications.
+<p style="border-bottom: 1px solid lightgrey;"></p>
+
+<p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/owl.png?raw=true"><b>Next Steps</b></p>
+
+<a href=" " target="_blank">02 - Work With Data Using Various Tools</a>
