@@ -1,10 +1,10 @@
-![](https://github.com/microsoft/sqlworkshops/blob/master/graphics/SmallBuck.png?raw=true)
+<img width="55" style="margin: 15px 15px 15px 0px;" src="https://github.com/BuckWoody/presentations/blob/master/graphics/BWLogo001.png?raw=true"> 
 
 # Workshop: Data Literacy
 
-#### <i>Using Data To Make Intelligent Decisions</i>
+<br>
 
-<p style="border-bottom: 1px solid lightgrey;"></p>
+#### <i>Using Data To Make Intelligent Decisions</i>
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/textbubble.png?raw=true"> <h2>1 - Find Authoritative Data</h2>
 
