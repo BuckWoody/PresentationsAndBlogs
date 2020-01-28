@@ -1,4 +1,4 @@
-<img width="55" style="margin: 15px 15px 15px 0px;" src="https://github.com/BuckWoody/presentations/blob/master/graphics/BWLogo001.png?raw=true"> 
+<img width="350" src="https://github.com/BuckWoody/presentations/blob/master/graphics/BWLogo002.png?raw=true"> 
 
 # Workshop: Data Literacy
 
