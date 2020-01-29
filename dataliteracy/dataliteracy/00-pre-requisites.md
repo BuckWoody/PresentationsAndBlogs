@@ -82,3 +82,13 @@ TODO: Enter any code typing here
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/geopin.png?raw=true"><b >Next Steps</b></p>
 
 Next, Continue to <a href="url" target="_blank"><i> 01 - Module</i></a>.
+
+Even with a high school education on numerics, reading, writing and so on, it may have been a while since you have had to use those skills. Here’s a quick list of refreshers that will assist:
+
+- Reading skills
+- Basic Numeracy (add, subtract, multiply and divide, percentages, ratios, geometry, estimating, order of operations, aggregations)
+- Geography
+- Time calculations
+- Graphing
+
+In addition, it’s important to understand basic statistics. This branch of mathematics deals with data specifically, and on analyzing it. This is the one subject I find lacking in most adults who are asked to analyze data, and the place you should spend a lot of time. There’s an excellent, free set of courses here, although there are many others. Find one that works for you, and spend time with it until you have the basic concepts down.
