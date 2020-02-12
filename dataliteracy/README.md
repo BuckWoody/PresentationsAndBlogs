@@ -1,4 +1,4 @@
-![](https://github.com/microsoft/sqlworkshops/blob/master/graphics/SmallBuck.png?raw=true)
+<img width="150" style="float: right; margin: 0px 15px 15px 0px;" src="https://github.com/BuckWoody/presentations/blob/master/graphics/BWLogo002.png?raw=true"> 
 
 # Workshop: Data Literacy
 

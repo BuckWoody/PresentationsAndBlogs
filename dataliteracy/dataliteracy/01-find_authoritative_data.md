@@ -30,38 +30,30 @@ Let’s start at the beginning: What is Data? [Webster’s defines data as “fa
 
 So *Facts* make *Data*, data makes *Information*, recalling that information makes *Knowledge*, and correctly applied knowledge makes *Wisdom* – and the whole point of Data Literacy is helping you making *wise decisions*.
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
-
-TODO: Activity Description and tasks
-
-<p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
-
-TODO: Enter activity steps description with checkbox
-
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/pencil2.png?raw=true">1.2 General Data Types</h2>
 
-There are two general types of data you will work with: *Quantitative* and *Qualitative* (sometimes called *Categorical*) data. A longer explanation of these types is here, but in general, quantitative data is numeric, and qualitative data describes an attribute.
+There are two general types of data you will work with: *Quantitative* and *Qualitative* (sometimes called *Categorical*) data. [A longer explanation of these types is here](http://www.differencebetween.net/science/difference-between-qualitative-and-quantitative-observation/), but in general, quantitative data is *numeric*, and qualitative data describes an *attribute*.
 
 Therefore:
 
-1 apple, 25 votes, 15 cars = **Quantitative** Data
+**1** apple, **25** votes, **15** cars = **Quantitative** Data
 
-Red apple, University-age voters, Blue cars = **Qualitative** Data
+**Red** apple, **University-age** voters, **Blue** cars = **Qualitative** Data
 
 You’ll use formulas, aggregations and more on quantitative data, and you’ll describe those sets of data using qualitative data.
 
 You can also analyze qualitative data, or use it to get numbers – for instance, you can see the names of students in a class (qualitative), and then count the names (quantitative). This distinction is important because you want to ensure you perform the proper analysis on the appropriate type of data.
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: Setting Up Quantitative and Qualitative Data</b></p>
 
-TODO: Activity Description and tasks
+In this exercise you will work through a mental exercise of breaking down one type of data to another.
 
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-TODO: Enter activity steps description with checkbox
+You need to analyze the number of customers who have clicked on a web page for a particular clothing article, but the colors are marked as "red", "light red", "auburn" and other subjective terms. What are some of the ways you could standardize the data for more in-depth numerical analysis?
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -75,13 +67,15 @@ Don’t rely on one search result, or even one search engine. Check out the [adv
 
 If you find a discrepancy between a data set, find out why. [And always document your sources](https://docs.microsoft.com/en-us/azure/data-catalog/data-catalog-how-to-documentation), even the ones you don't use immediately.
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: Locate data about a topic</b></p>
 
-TODO: Activity Description and tasks
+In this exercise you will locate data that may not be in your field of expertise. You will ensure you have enough data to check against multiple verifications.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-TODO: Enter activity steps description with checkbox
+- Locate the unit sales of lipstick in the U.S. for this year, and compare it to the unit sales in 1947.
+- Were you able to locate data for each of these requests? 
+- How many sources did you use? Did they agree? If not, what do you think could account for the discrepancy, and how would you report that in your analysis?
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -107,13 +101,14 @@ It’s actually the same for most any data – not just qualitative data but qua
 
 In short, it’s best to be a [data skeptic](https://www.oreilly.com/ideas/on-being-a-data-skeptic).
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: Exceptional claims require exceptional sources</b></p>
 
-TODO: Activity Description and tasks
+Data Verification means that you have done due-diligence and documented your research from reliable sources. But in some cases, the data shows "red flags". This is called "Exceptional claims require exceptional sources". In this exercise you will identify those "red flags".
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-TODO: Enter activity steps description with checkbox
+- Name three "red flags" that would cause you to doubt a given dataset.
+- What are some of the ways you can deal with this type of data?
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -126,4 +121,4 @@ TODO: Enter activity steps description with checkbox
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/owl.png?raw=true"><b>Next Steps</b></p>
 
-<a href=" " target="_blank">Now move on to the next topic: 2 - Work With Data Using Various Tools</a>
+<a href="https://github.com/BuckWoody/presentations/blob/master/dataliteracy/dataliteracy/02-work_with_data_tools.md" target="_blank">Now move on to the next topic: 2 - Work With Data Using Various Tools</a>
