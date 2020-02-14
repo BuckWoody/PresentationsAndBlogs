@@ -291,11 +291,19 @@ TODO: Activity Description and tasks
 
 <h3>2.3.2 Visualizing Data using Programming</h3>
 
-https://www.analyticsvidhya.com/blog/2015/07/guide-data-visualization-r/
+Working with a graphical design tool directly within the data (such as Excel) is quite powerful. Creating data visualizations in code can be much more powerful, since you describe exactly what you want to show - and that description is obvious to the user by simply examining the code. While the SQL language does not have embedded visualization commands, the R Platform and Python have a rich set of graphical libraries that can create compelling, in-depth analytics. In some cases, the libraries have been written so that they can be used in R or Python, making them very portable. 
+
+In general, you will create an object that holds a set of data - such as an R or Python *Dataframe* or a data set, open and call the graphical library or package, and apply the commands available in that library to the data set. You can add in color, shapes, formats, types, legends and more to make very in-depth analytical diagrams. 
 
 <img src="https://upload.wikimedia.org/wikipedia/en/0/0a/Gallery_of_Plotly_Graphs.png">
 <br>
 <a href="https://en.wikipedia.org/wiki/Plotly"><i>Plot gallery using the Plotly library in R - Source: Wikimedia</i></a>
+
+
+A full course on graphical programming is beyond the scope of this course, [you can find a complete set of tutorials on the topic for R here.](https://www.analyticsvidhya.com/blog/2015/07/guide-data-visualization-r/)  
+
+
+
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
 
@@ -352,4 +360,4 @@ Remember, *the tool you use to convey information is less important than learnin
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/owl.png?raw=true"><b>Next Steps</b></p>
 
-<a href=" " target="_blank">Now move on to the next topic: 3 - Analyzing Data In Context</a>
+<a href="https://github.com/BuckWoody/presentations/blob/master/dataliteracy/dataliteracy/03-analyze_data_in_context.md" target="_blank">Now move on to the next topic: 3 - Analyzing Data In Context</a>
