@@ -242,17 +242,30 @@ In this exercise, you will watch an instructional video on the SQL Server databa
 
 <h3>2.2.3 NoSQL and Big Data Engines</h3>
 
-An RDBMS provides very tightly controlled data integrity and a high level of security and speed over "structured" 
+An RDBMS provides very tightly controlled data integrity and a high level of security and speed over "structured" data sets - meaning that data which fits neatly into consistent columns, data types  and a tabular data shape like a spreadsheet. But a lot of the world's data resides in social media comments, word-processing documents, and even pictures. While you can use an RDBMS to work with this data, when it becomes quite large or spread out over several systems, it needs to ensure that the data written is the same that is read, reads block writes and so on. This consistency guarantee only works on data of a certain size, until it become unworkable. 
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+A *NoSQL* (for Not  Only SQL) database engine separates the data storage, which might be Binary, Text, or even both, and the engine that reads and writes it. It allows several servers to run the engine, and quickly writes the data each engine receives. However, the read operations, given the system type and where the data is located, may not be the latest value - something called *relaxed consistency*. There are many situations where this is acceptable, and large-scale data analysis is usually not highly dependent on the latest single value in a very large data set. 
 
-TODO: Activity Description and tasks
+The languages used to access the engine are varied, including Python, Java, Javascript, R and even SQL. There are several types of NoSQL engines, but a few of the major categories are: 
+
+<table>
+    <tr><td><b>Engine Class</td><td>Description</b></td></tr>
+    <tr><td><a href="https://en.wikipedia.org/wiki/Document-oriented_database">Document Database</a></td><td>Works with semi-structured data, such as XML or JSON</td></tr>
+    <tr><td><a href="https://en.wikipedia.org/wiki/Column-oriented_DBMS">Column Database</a></td><td>Stores data by column instead of by row. For certain data, works very quickly over hardware to retrieve data.</td></tr>
+    <tr><td><a href="https://en.wikipedia.org/wiki/Key-value_database">Key-Value</a></td><td>Works across varied structures of data - often called a "dictionary" in programming terms. Several engines are in this category.</td></tr>
+    <tr><td><a href="https://en.wikipedia.org/wiki/Distributed_cache">Distributed Cache</a></td><td>Data is stored in memory or very fast storage across several computers, with a shared set of pointers to locate the data. Requires a very fast network layer between the servers.</td></tr>
+    <tr><td><a href="https://en.wikipedia.org/wiki/Graph_database">Graph Database</a></td><td>Uses graph theory processing (vertices and edges) to navigate relationships between entities. Very similar to a Social Network graph.</td></tr>
+</table>
+
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: Learn more about NoSQL Databases</b></p>
+
+In this exercise you will watch a short video explaining more about NoSQL databases.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-https://www.youtube.com/watch?v=uD3p_rZPBUQ
+- Open [the following reference, and watch the video you see there.](https://www.youtube.com/watch?v=uD3p_rZPBUQ)
 
-<p style="border-bottom: 1px solid lightgrey;"></p>
+p style="border-bottom: 1px solid lightgrey;"></p>
 
 <h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/pencil2.png?raw=true">2.3 Tools For Data Reporting</h2>
 
@@ -260,17 +273,19 @@ Reporting is [less about tools than about understanding how to visualize data](h
 
 <h3>2.3.1 Visualizing Data in Excel</h3>
 
-https://www.excel-easy.com/data-analysis/charts.html
+Microsoft Excel, along with many other Spreadsheet programs, has a rich set of data visualization tools. Once again, it's more important to pick the right data visualization than to focus on a particular tool, but once you have decided on your view of the data, you can use the built-in reporting features of Microsoft Excel. Start with the basics in the exercise below, and then [move on to using Power Pivot](https://support.office.com/en-us/article/Power-Pivot-Powerful-data-analysis-and-data-modeling-in-Excel-A9C2C6E2-CC49-4976-A7D7-40896795D045). 
 
+Power Pivot allows you to import and model large sets of data from many sources - after you have those data models [you can group them into a PivotTable](https://support.office.com/en-us/article/group-or-ungroup-data-in-a-pivottable-c9d1ddd0-6580-47d1-82bc-c84a5a340725), and then work with charts over that data. You can also create interactive reports that allow your users to manipulate the view in multiple ways. 
 
-
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: Work with Basic and Advanced Excel Charts</b></p>
 
 TODO: Activity Description and tasks
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-TODO: Enter activity steps description with checkbox
+- Open [this reference, and work through all 18 (they are quite short) lessons you find there.](https://www.excel-easy.com/data-analysis/charts.html) You will need Microsoft Excel installed, or use the Office365 Online version. 
+- Open [this reference on PivotTables and perform all of the steps](https://support.office.com/en-us/article/create-a-pivottable-to-analyze-worksheet-data-a9a84538-bfe9-40a9-a8e9-f99134456576) you find there.
+- Open [this reference on PivotCharts and perform all of the steps](https://support.office.com/en-us/article/create-a-pivotchart-c1b1e057-6990-4c38-b52b-8255538e7b1c?ui=en-US&rs=en-US&ad=US) you find there.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
