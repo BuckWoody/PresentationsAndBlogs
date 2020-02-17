@@ -279,11 +279,11 @@ Power Pivot allows you to import and model large sets of data from many sources 
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: Work with Basic and Advanced Excel Charts</b></p>
 
-TODO: Activity Description and tasks
+In this exercise you'll use Microsoft Excel's graphic features to show tables of data. You will need Microsoft Excel installed, or the online Microsoft Office 365 version.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-- Open [this reference, and work through all 18 (they are quite short) lessons you find there.](https://www.excel-easy.com/data-analysis/charts.html) You will need Microsoft Excel installed, or use the Office365 Online version. 
+- Open [this reference, and work through all 18 (they are quite short) lessons you find there.](https://www.excel-easy.com/data-analysis/charts.html) 
 - Open [this reference on PivotTables and perform all of the steps](https://support.office.com/en-us/article/create-a-pivottable-to-analyze-worksheet-data-a9a84538-bfe9-40a9-a8e9-f99134456576) you find there.
 - Open [this reference on PivotCharts and perform all of the steps](https://support.office.com/en-us/article/create-a-pivotchart-c1b1e057-6990-4c38-b52b-8255538e7b1c?ui=en-US&rs=en-US&ad=US) you find there.
 
@@ -299,50 +299,63 @@ In general, you will create an object that holds a set of data - such as an R or
 <br>
 <a href="https://en.wikipedia.org/wiki/Plotly"><i>Plot gallery using the Plotly library in R - Source: Wikimedia</i></a>
 
-
 A full course on graphical programming is beyond the scope of this course, [you can find a complete set of tutorials on the topic for R here.](https://www.analyticsvidhya.com/blog/2015/07/guide-data-visualization-r/)  
 
+One interesting point as you work through these exercises: In R, you can create a visualization, show it, and then "add" to it - changing the visualization after it has been created. This is a very powerful way of tuning the graphic to the information you want to display. 
 
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>AWorking with R and Charting</b></p>
 
-
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
-
-TODO: Activity Description and tasks
+In this online tutorial, you will work through a live example of Plotly and R. 
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-TODO: Enter activity steps description with checkbox
+- Open [this reference, and complete the first lesson](https://www.datacamp.com/community/open-courses/plotly-tutorial-plotly-and-r?tap_a=5644-dce66f&tap_s=10907-287229) you see there.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-
-https://gilberttanner.com/blog/introduction-to-data-visualization-inpython
+Many of the same libraries and packages used in R are released as Python packages. There are also other libraries found in only one language or the other. In general, the process for using either language is to access or create the data, decide on your visualization, and then code the data into the visualization. In the next exercise, you'll see that pattern worked out. 
 
 <img width="400" src="https://seaborn.pydata.org/_images/structured_heatmap.png">
 <br>
 <a href="https://seaborn.pydata.org/"><i>Plot gallery using the Seaborn library in Python - Source: Seaborn Project</i></a>
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>AWork with Python Programming and Charting</b></p>
 
-TODO: Activity Description and tasks
+In this exercise you will read through a complete example for charting in Python. You can also follow along if you have Python installed, but if you do, read through the entire article first to have that mental continuity.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-TODO: Enter activity steps description with checkbox
+- Open [this reference, and review the entire article](https://gilberttanner.com/blog/introduction-to-data-visualization-inpython). Optionally, if you have Python installed on your system, you can follow along with the code presented there. 
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <h3>2.3.3 Visualizing Data using Power BI and other Graphing Systems</h3>
 
-https://powerbi.microsoft.com/en-us/learning/
+There are many software packages dedicated to creating visualizations. Some of these are used in a browser, some in software you install on your local system, and some do both. They all work in a similar way: 
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+- Connect to a dataset
+- Model the data with headers, calculations, conversions and other changes
+- Use various visualizations to show the data in the format you want
 
-TODO: Activity Description and tasks
+In addition, some of these tools work with "live" (streaming) data, some of the visualizations are "active" (you can click on them and do something) and most allow the visualization, report or dashboard to have tools for the end-user to change the display, filter the results and so on.  
+
+Microsoft's primary visualization tool is [Power BI](https://powerbi.microsoft.com/en-us/), and it does all of those things. It comes as a local desktop client that you can use for free, and also has a full (fee-based) service you can use to share reports for collaboration. It works on desktops and mobile devices and has a full embedded feature to allow you to include the reports in code, much like R and Python libraries. 
+
+<img width="600" src="https://azurecomcdn.azureedge.net/cvt-22ee984c085077527ee5d4985e9c2873d7e12884dfe2dc9f89169d4e0ad7df6a/images/page/services/power-bi-embedded/grow.jpg">
+<br>
+
+When should you use a dedicated tool for visualization instead of a spreadsheet tool or programming language? In general, If everyone that needs to consume the report has the same spreadsheet software, then you should be able to use that effectively. If you have a development team that has enough time and resources to create the visualizations everyone needs, and you need to control the way the visualization is displayed, programming languages are useful. If you would like to standardize on the reports and collaborate across central data, then a dedicated tool might be more useful. 
+
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Install and Learn Power BI</b></p>
+
+In this exercise you will install the free Desktop Client of Power BI on your local system and work through a series of beginning tutorials. 
+
+> NOTE: If you are already familiar with Power BI, open [this reference and select exercises](https://docs.microsoft.com/en-us/power-bi/guided-learning/) from the **Introduction to DAX** section.  
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-TODO: Enter activity steps description with checkbox
+- Install Power BI on your local system by [navigating to this reference](https://powerbi.microsoft.com/en-us/desktop/) and clicking the **DownLoad Free** button you see there.
+- Open [this reference, and complete all of the exercises](https://docs.microsoft.com/en-us/power-bi/guided-learning/) in the **Get started building with Power BI** and **Get data with Power BI Desktop sections**.
 
 <p style="border-bottom: 1px solid lightgrey;"></p> 
 
