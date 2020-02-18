@@ -37,15 +37,18 @@ As you learned in the last skill, this is especially pronounced in statistics �
 
 But it’s more than numerical data. As mentioned a moment ago, the situation itself around the metric provides context, as does the environment, timing, location and more. The general advice is to look around at the entire picture at each step of the analytic process. Constantly be on the lookout for something that contradicts or enforces your analysis.
 
-<br>
+The key to finding context is using multiple resources. Remember that the time, place, source and delivery methods of data can affect the meaning of data, so you should perform a thorough analysis of a topic using several sources. 
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: Developing Context</b></p>
 
-TODO: Activity Description and tasks
+In this exercise, you will learn to develop context around your data. 
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-TODO: Enter activity steps description with checkbox
+- Open a new note in your favorite note-taking software.
+- Select one topic you are interested in.
+- Find at least three sources of data for that topic, and note their locations. 
+- Next to the location of each data source, write a short paragraph defending your selection of that resource as a reliable source. If you find you cannot  
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -53,35 +56,45 @@ TODO: Enter activity steps description with checkbox
 
 The first step in analyzing data is to put yourself in the place of being skeptical of the data, methods, tools, and results that you will use. Be your own critic. At each step, you imagine someone saying “I don’t believe you – prove it!” Having this voice in your head will help you ensure from the start that you are being careful in your data analytic process.
 
-And one of the best ways I’ve found to do that is to understand the errors I can make in analysis. They are all logical errors, and fall into two camps: Cognitive Biases, and Logical Fallacies.
+And one of the best ways to do that is to understand the errors you can make in analysis. They are all logical errors, and fall into two camps: *Cognitive Biases*, and *Logical Fallacies*.
 
 <h3>Cognitive Bias</h3>
 
-A Cognitive Bias is a logical error in rationality. There’s a great list here, and even a quick glance will show you errors you have probably seen in data analytics. Walk through each of these links to understand the error, how it applies to analysis, and how to combat it in your analysis. I actually visit this article once every few months to refresh my understanding as I work though an analysis.
+A *Cognitive Bias* is a logical error in rationality. You'll review a list of these in a moment, and even a quick glance will show you errors you have probably seen in data analytics. Walk through each of these to understand the error, how it applies to analysis, and how to combat it in your analysis. It is useful to visit this article once every few months to refresh your understanding as you work though an analysis.
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+<img width="800" src="https://upload.wikimedia.org/wikipedia/commons/6/65/Cognitive_bias_codex_en.svg">
+<br>
+<i>Image Source: <a href="https://upload.wikimedia.org/wikipedia/commons/6/65/Cognitive_bias_codex_en.svg">Wikimedia Commons</i></a>
+<br>
 
-TODO: Activity Description and tasks
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: Review Cognitive Biases</b></p>
+
+In this exercise you will evaluate various Cognitive Biases and detail how they can affect your data analysis.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-TODO: Enter activity steps description with checkbox
+- Open [this resource in a new tab](https://en.wikipedia.org/wiki/List_of_cognitive_biases#Decision-making,_belief,_and_behavioral_biases).
+- Review the list, and select three biases you think you may have committed recently.
+- Click on each of those, and in your notes explain a mitigation to those biases you can take.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <h3>Logical Fallacies</h3>
 
-A Logical Fallacy is also a logical error, but in this case it involves reasoning, argument or proof. Once again there’s another list to study, and this list will help you to do that. It’s actually a bit overwhelming, and that’s why many people don’t take the time to do it.
+The next step after you have worked to eliminate as much bias as you can from your data and assumptions is to examine the conclusions you come to. A *Logical Fallacy* is also a logical error, but in this case it involves reasoning, argument or proof. Once again there’s another list to study, and the list that follows will help you to do that. It’s actually a bit overwhelming, and that’s why many people don’t take the time to do it.
 
+However, understanding these fallacies will keep you from the major errors you can make in creating a conclusion from data.
 <br>
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: Recognize a Logical Fallacy</b></p>
 
-TODO: Activity Description and tasks
+In this exercise you will examine a list of Logical Fallacies, and then compare those to a claim about a topic to see if you recognize any fallacies in their conclusions.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-TODO: Enter activity steps description with checkbox
+- In your notes, using your topic of interest, locate one article or online resource that draws a conclusion from data.
+- Open [this reference in another tab](https://en.wikipedia.org/wiki/List_of_fallacies) and review the list quickly.
+- Document any Logical Fallacies in the conclusions drawn in your resource. 
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -91,7 +104,7 @@ TODO: Enter activity steps description with checkbox
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/owl.png?raw=true"><b>For Further Study</b></p>
 <ul>
-    <li><a href="url" target="_blank">TODO: Enter courses, books, posts, whatever the student needs to extend their study</a></li>
+    <li><a href="https://www.criticalthinking.org/pages/defining-critical-thinking/766" target="_blank">Critical Thinking is another important skills, related to Data Literacy.</a></li>
 </ul>
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/owl.png?raw=true"><b>Next Steps</b></p>

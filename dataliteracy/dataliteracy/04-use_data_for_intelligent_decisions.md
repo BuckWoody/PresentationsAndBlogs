@@ -22,17 +22,18 @@ This type of structure is also applicable to Data Literacy. You’ve learned the
 
 The [first place to start is with the problem itself](https://www.toolshero.com/problem-solving/problem-definition-process/). Many times – but not all – a problem drives the data research to start with. the most important question about the problem is: Is it properly defined? Assume you’re in a car, and you say to the driver “are we making good time?” and the driver checks the speedometer and answers “yes”. You sit back, confident that you’ll make the meeting. Later you say “are we nearly there?” and the driver says “yes”. Then he drops you off at the wrong address. The better question should have been “when will we arrive at this address?”
 
-That may be a trivial example (although I’ve had it happen more times than I care to admit) but the same mistake is often made in much more important situations, by trained professionals.
+That may be a trivial example, but the same mistake is often made in much more important situations, by trained professionals.
 
 The bigger point is to [ensure that you’ve asked the right question](https://docs.microsoft.com/en-us/archive/blogs/buckwoody/the-hardest-thing-in-data-science). You can often uncover the right question by asking another question: “When we get the answer from the data, what will we do about it?” In the trivial example mentioned earlier, we might find out that asking the speed of travel is only half the information we need – and that the action of arriving at the right destination at the right time would be the goal. That drives a different question – “When will we arrive at destination X?” Which is in fact the right question for the problem you are trying to solve.
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Developing Clarifying Questions</b></p>
 
-TODO: Activity Description and tasks
+In this exercise you will review resources that assist you in creating questions that you can answer with data.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-TODO: Enter activity steps description with checkbox
+- Open [this reference in another tab and review the course](https://www.lynda.com/Business-Skills-tutorials/Asking-Great-Data-Science-Questions/477451-2.html).
+- Open [this reference in another tab and download this resource](http://www.schoolreforminitiative.org/doc/probing_questions_guide.pdf). Review it and reference it later.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -42,13 +43,13 @@ Earlier you learned about [the importance of data quality – ensuring that the 
 
 What is true for data is true for the analytic process. Earlier you learned that a scientific method involves steps that aren’t included in other types of analysis, such as creating an initial hypothesis, creating control groups and so on. Ensure that the analytic process is appropriate to [the problem domain](http://www.site.uottawa.ca/~laganier/seg2500/cemdomain.htm) you are working in.
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: (Optional) Understand Decision Science</b></p>
 
-TODO: Activity Description and tasks
+*Decision Science* is the practice of applying a rigorous method and process to making decisions from data. It is an involved practice, and takes time to master. In this optional exercise, you will attend a full course in decisions from analysis.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-TODO: Enter activity steps description with checkbox
+- Open [this reference and take the course](https://www.edx.org/course/analytics-for-decision-making) you see there. Note that this is a lengthy course, and includes the decision aspect as part of a larger topic.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -58,13 +59,16 @@ Perhaps more than any other error in applying analysis to reach a conclusion is 
 
 Note that sometimes constraining factors will affect the quality of the decision. If you have only a few seconds to decide, a full set of research isn’t possible. If you have [limited funds and time, the decision is affected by those constraints](https://www.gamified.uk/2013/08/05/the-effect-of-time-on-decision-making/). It’s important to push back as much as possible on those constraints, however. There’s never enough time to analyze all the data and perform all the analysis, but you should do the best you can to get as much data and analysis as is possible.
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+It's in this area that you will often find a discussion of Artificial Intelligence, Machine Learning, and Deep Learning. While a complete discussion of these topics is beyond the scope of this course, [you can find resources here to learn more](https://buckwoody.github.io/presentations/ai_ml_dl/). It also includes references to go deeper into these topics. 
 
-TODO: Activity Description and tasks
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: Creating Alternative Conclusions</b></p>
+
+In this activity you will review the process for creating alternatives and select one approach for your last exercise.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-TODO: Enter activity steps description with checkbox
+- Open [this reference in another tab](https://www.decision-making-solutions.com/decision-alternatives.html) and review it. 
+- In your notes from the last exercise, detail which approach from this resource would be useful to correct any issues that you found with the analysis.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -74,13 +78,14 @@ Even if you’re using data and analytics to make a decision for yourself, you s
 
 [Documenting your sources and methods](http://libguides.mst.edu/c.php?g=335446&p=2257031) allows for good communication, understanding, debate and inclusion. It also allows others to reproduce and check your work, something you should seek out.
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: Create a Sourcing Document</b></p>
 
-TODO: Activity Description and tasks
+In this exercise you will create a sample data source document.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-TODO: Enter activity steps description with checkbox
+- Open [this reference in another tab](https://pages.uoregon.edu/rgp/PPPM613/class3.htm). Copy the text.
+- Open your notes and paste the text. From your last exercise, answer the questions (even though this may be an unreliable data source - this is just practice)
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -90,27 +95,27 @@ No matter how much time you spend in your data and analytics, you will make a mi
 
 This is the end of this short article on Data Literacy – please check the links throughout the text, and spread the article widely. If there’s anything the world needs, it’s more concern for each other, and part of that concern is to make wise decisions for us all. Data Literacy is a pathway to doing just that.
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: TODO: Activity Name</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Activity: Create a Data Project Post Mortem</b></p>
 
-TODO: Activity Description and tasks
+A *Post-Mortem* is a document that describes what went well and poorly in a project - in fact, it is a project in itself to create one. A Post-Mortem can help you learn from mistakes and assist yourself and others in not making those mistakes again. 
+
+These documents take time, and so they are often not completed. This apparent savings in time, however, is deceptive. Making the same mistake again can be far more costly than simply taking the time to create a learnings document after the decision process is complete. 
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/checkmark.png?raw=true"><b>Steps</b></p>
 
-TODO: Enter activity steps description with checkbox
+- Open [this reference in another tab](https://www.teamgantt.com/blog/post-mortem-meeting-template-and-tips) and review it. 
+- Either bookmark this reference or create another and build it in to your production data analytic processes. 
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/owl.png?raw=true"><b>For Further Study</b></p>
 <ul>
-    <li><a href="url" target="_blank">TODO: Enter courses, books, posts, whatever the student needs to extend their study</a></li>
+    <li><a href="https://www.microsoft.com/en-us/open-data-initiative" target="_blank">Open Data Initiative</a></li>
+    <li><a href="https://ijnet.org/en/story/5-ways-find-sources-online" target="_blank">5 Data Sources online</a></li>
+    <li><a href="https://www.spj.org/index.asp " target="_blank">Society of Professional Journalists</a></li>
+    <li><a href=" https://www.sciencenewsforstudents.org/blog/outside-comment/fact-checking-how-think-journalist" target="_blank">Fact Checking: Think like a Journalist</a></li>
+    <li><a href="https://www.data.gov/" target="_blank">US Government Data</a></li>
+    <li><a href="https://www.google.com/publicdata/directory#!" target="_blank">Google’s Public Data Explorer</a></li>
 </ul>
-
-Open Data Initiative – https://www.microsoft.com/en-us/open-data-initiative
-5 Data Sources online – https://ijnet.org/en/story/5-ways-find-sources-online
-Society of Professional Journalists - https://www.spj.org/index.asp 
-Fact Checking: Think like a Journalist – https://www.sciencenewsforstudents.org/blog/outside-comment/fact-checking-how-think-journalist
-US Government Data – https://www.data.gov/
-Google’s Public Data Explorer – https://www.google.com/publicdata/directory#!
-
 
 Congratulations! You have completed this workshop on <TODO: Enter workshop name>. You now have the tools, assets, and processes you need to extrapolate this information into other applications.

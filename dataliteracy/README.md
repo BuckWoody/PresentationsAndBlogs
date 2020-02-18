@@ -8,15 +8,15 @@
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/textbubble.png?raw=true"> <h2>About this Workshop</h2>
 
-Welcome to this Microsoft solutions workshop on *<TODO: Enter workshop name>*. In this workshop, you'll learn <TODO: Describe what the students will learn>
+Welcome to this workshop on *Data Literacy - Using Data To Make Intelligent Decisions*. In this workshop, you'll learn <TODO: Describe what the students will learn>
 
-The focus of this workshop is to understand <TODO: Describe the workshop's primay focus in one sentence>
+The focus of this workshop is to understand how to work with authoritative data to make decisions based on a repeatable scientific process. 
 
-You'll start by <TODO: Describe what the flow of the workshop will be>, with a focus on how to extrapolate what you have learned to create other solutions for your organization.
+You'll start by developing skills to find the most authoritative data, understand and use data tools including spreadsheets, databases, and programming languages, analyze the data in context, and use the data for intelligent decisions. 
 
 This README.MD file explains how the workshop is laid out, what you will learn, and the technologies you will use in this solution.
 
-(You can view all of the [source files for this workshop on this github site, along with other workshops as well. Open this link in a new tab to find out more.](https://github.com/BuckWoody/workshops))
+(You can view all of the [source files for this workshop on this github site, along with other workshops as well. Open this link in a new tab to find out more.](https://github.com/BuckWoody/presentations))
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -25,27 +25,18 @@ This README.MD file explains how the workshop is laid out, what you will learn, 
 In this workshop you'll learn:
 <br>
 
-- <TODO: Bullet-point on learning obective>
-- <TODO: Bullet-point on learning obective>
-- <TODO: Bullet-point on learning obective>
-
-<TODO: Enter the text you use when you submit the description for this course to a presentation, or advertising>
-
-The goal of this workshop is to train <TODO: Describe who you would train for this and why>.
-
-The concepts and skills taught in this workshop form the starting points for:
-
-    <TODO: Job Description and level of person who is the primary that should attend and the reason>.
-    For instance: Solution Architects and Developers, to understand how to put together an end to end solution.
-    <TODO: Job Description and level of person who is the secondary that should attend and the reason>.
-    <TODO: Job Description and level of person who is the third-level of who might want to attend and the reason>.
+- How to find and source the most authoritative data
+- Work with data tools
+- Analyze data in context
+- Create analytic results from data
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
+
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/building1.png?raw=true"> <h2>Business Applications of this Workshop</h2>
 
-Businesses require <TODO: Describe the reason the student's business or organization would be interested in the information. Be detailed about the solutions it addresses> 
+Businesses require a high level of data literacy in every role within an organization, and it is assumed these skills were gained in primary or secondary public education. However, many of these skills were not given the proper amount of time or consideration during this phase of training, and students are often left to fill in the gaps on their own. 
 
-Some industry examples of <TODO: Workshop Topic> are <TODO: Enter Sectors and use briefly>, to name just a few.
+This workshop provides a prescriptive methodology and references to go much deeper into each of the data literacy topics than primary education provides, and allows a modular approach to learning. 
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -57,8 +48,13 @@ The solution includes the following technologies - although you are not limited 
 
   <tr><th style="background-color: #1b20a1; color: white;">Technology</th> <th style="background-color: #1b20a1; color: white;">Description</th></tr>
 
-  <tr><td><i>TODO: Technology name not owned by Microsoft that you will cover</i></td><td>TODO: Reason the student needs to learn it</td></tr>
-  <tr><td>TODO: Technology name owned by Microsoft that you will cover</td><td>TODO: Reason the student needs to learn it</td></tr>
+  <tr><td><i>Spreadsheets</i></td><td>TODO: Reason the student needs to learn it</td></tr>
+  <tr><td>The SQL Programming Language</td><td>TODO: Reason the student needs to learn it</td></tr>
+  <tr><td><i>The R Platform</i></td><td>TODO: Reason the student needs to learn it</td></tr>
+  <tr><td>The Python Programming Language</td><td>TODO: Reason the student needs to learn it</td></tr>
+  <tr><td><i>Relational Database Management Systems</i></td><td>TODO: Reason the student needs to learn it</td></tr>
+  <tr><td>NoSQL Database Platforms</td><td>TODO: Reason the student needs to learn it</td></tr>
+  <tr><td><i>Data Science Tools and Platforms</i></td><td>TODO: Reason the student needs to learn it</td></tr>
 
 </table>
 
