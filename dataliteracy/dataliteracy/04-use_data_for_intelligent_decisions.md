@@ -4,11 +4,11 @@
 
 #### <i>Using Data To Make Intelligent Decisions</i>
 
-<img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/textbubble.png?raw=true"> <h2>4 - Using Data for Intelligent Decisions</h2>
+<img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/textbubble.png?raw=true"> <h2>4 - Use Data for Intelligent Decisions</h2>
 
 In this workshop you'll cover using data to make intelligent decisions. In each module you'll get more references, which you should follow up on to learn more. Also watch for links within the text - click on each one to explore that topic.
 
-(<a href="https://github.com/BuckWoody/presentations/blob/master/dataliteracy/dataliteracy/00-pre-requisites.md`" target="_blank">Make sure you check out the <b>Pre-Requisites</b> page before you start</a>. You'll need to complete the work there before you can proceed with the workshop.)
+(<a href="https://github.com/BuckWoody/presentations/blob/master/dataliteracy/dataliteracy/00-pre-requisites.md" target="_blank">Make sure you check out the <b>Pre-Requisites</b> page before you start</a>. You'll need to complete the work there before you can proceed with the workshop.)
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -38,6 +38,36 @@ In this exercise you will review resources that assist you in creating questions
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/pencil2.png?raw=true">4.2 Applying the Proper Data and Analysis to the Problem</h2>
+
+You're now ready to apply the data you have to the decision at hand. Your data analysis starts with one of two objectives: 
+
+- Discoveries about a set of data need to be surfaced
+- A question that needs to be answered
+
+The first objective is often solved in using the data tools to source and process data, and then to create a visualization or other view to allow users to work through the data sets in a curated way. 
+
+The second objective is where the decision-making process comes into play. Using the data analysis, you can form your decision or recommendation. For instance, if the question revolves around "Who should we target this advertising campaign towards?" your data analysis would involve answering more questions from data:
+
+- What is the product or service we offer?
+- Who normally purchases these products or services?
+- Why do they buy them over purchasing something else?
+- Who should be buying our product or service and is not?
+- Why are they not buying?
+- What is the most effective problem/solution statement about our product or service we can make?
+- Where is the place our potential customers most often frequent?
+- What do our customers normally care about?
+
+...and so on. This is a short list, you will no doubt think of many more immediately. 
+
+To create your final decision, you'll often see this process: 
+
+- Create the goal question
+- Create the sub-questions from the goal
+- Source data to answer each sub-question
+- Process that data to  develop an answer to each sub-question
+- Combine the answers to create possible courses of action
+- Score those courses of action based on how well they fit the goals you have, while considering the constraints you are under
+- Choose the highest scoring solution, and present the following as alternatives 
 
 Earlier you learned about [the importance of data quality – ensuring that the proper comparisons are made](https://smartbridge.com/data-done-right-6-dimensions-of-data-quality/). For instance, ensuring that the same [data types (inches, centimeters, dates, volumes, etc.) are applied](https://www.newscientist.com/article/mg12717301-000-the-testing-error-that-led-to-hubble-mirror-fiasco/) to the transformations is vital. It’s equally important to ensure that the data you’re using supports the analysis for the solution to the problem you are solving. Refer back to the last article on Cognitive Biases to see examples of using one data set to answer a problem it doesn’t support.
 
@@ -110,12 +140,8 @@ These documents take time, and so they are often not completed. This apparent sa
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/owl.png?raw=true"><b>For Further Study</b></p>
 <ul>
-    <li><a href="https://www.microsoft.com/en-us/open-data-initiative" target="_blank">Open Data Initiative</a></li>
-    <li><a href="https://ijnet.org/en/story/5-ways-find-sources-online" target="_blank">5 Data Sources online</a></li>
     <li><a href="https://www.spj.org/index.asp " target="_blank">Society of Professional Journalists</a></li>
     <li><a href=" https://www.sciencenewsforstudents.org/blog/outside-comment/fact-checking-how-think-journalist" target="_blank">Fact Checking: Think like a Journalist</a></li>
-    <li><a href="https://www.data.gov/" target="_blank">US Government Data</a></li>
-    <li><a href="https://www.google.com/publicdata/directory#!" target="_blank">Google’s Public Data Explorer</a></li>
 </ul>
 
 Congratulations! You have completed this workshop on <TODO: Enter workshop name>. You now have the tools, assets, and processes you need to extrapolate this information into other applications.

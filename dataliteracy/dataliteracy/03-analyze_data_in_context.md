@@ -4,7 +4,7 @@
 
 #### <i>Using Data To Make Intelligent Decisions</i>
 
-<img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/textbubble.png?raw=true"> <h2>3 - Analyzing Data In Context</h2>
+<img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/textbubble.png?raw=true"> <h2>3 - Analyze Data In Context</h2>
 
 In this workshop you'll cover using data to make intelligent decisions. In each module you'll get more references, which you should follow up on to learn more. Also watch for links within the text - click on each one to explore that topic.
 
@@ -109,4 +109,4 @@ In this exercise you will examine a list of Logical Fallacies, and then compare 
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/owl.png?raw=true"><b>Next Steps</b></p>
 
-<a href=" " target="_blank">Now move on to the next topic: 4 - Using Data for Intelligent Decisions</a>
+<a href="https://github.com/BuckWoody/presentations/blob/master/dataliteracy/dataliteracy/04-use_data_for_intelligent_decisions.md" target="_blank">Now move on to the next topic: 4 - Use Data for Intelligent Decisions</a>

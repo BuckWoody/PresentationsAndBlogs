@@ -115,6 +115,10 @@ Data Verification means that you have done due-diligence and documented your res
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/owl.png?raw=true"><b>For Further Study</b></p>
 <ul>
     <li><a href="https://www.usgs.gov/products/data-and-tools/data-management/data-dictionaries" target="_blank">Government guide to data dictionary</a></li>
+        <li><a href="https://www.data.gov/" target="_blank">US Government Data</a></li>
+    <li><a href="https://www.google.com/publicdata/directory#!" target="_blank">Google’s Public Data Explorer</a></li>
+        <li><a href="https://www.microsoft.com/en-us/open-data-initiative" target="_blank">Open Data Initiative</a></li>
+    <li><a href="https://ijnet.org/en/story/5-ways-find-sources-online" target="_blank">5 Data Sources online</a></li>
 </ul>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
