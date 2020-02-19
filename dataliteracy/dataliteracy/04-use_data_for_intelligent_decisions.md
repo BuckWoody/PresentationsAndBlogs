@@ -144,4 +144,4 @@ These documents take time, and so they are often not completed. This apparent sa
     <li><a href=" https://www.sciencenewsforstudents.org/blog/outside-comment/fact-checking-how-think-journalist" target="_blank">Fact Checking: Think like a Journalist</a></li>
 </ul>
 
-Congratulations! You have completed this workshop on <TODO: Enter workshop name>. You now have the tools, assets, and processes you need to extrapolate this information into other applications.
+Congratulations! You have completed this workshop on Data Literacy. You now have the tools, assets, and processes you need to extrapolate this information into other applications.
