@@ -82,8 +82,8 @@ This workshop uses various data technologies and languages, with a focus on crea
   <tr><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">Primary Audience:</td><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">Professionals tasked with data analysis</td></tr>
   <tr><td>Secondary Audience:</td><td> Students new to the data analysis discipline who wish to learn more about the processes and tools use in that field</td></tr>
   <tr><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">Level: </td><td style="background-color: Cornsilk; color: black; padding: 5px 5px0;"> 200-400 </td></tr>
-  <tr><td>Type:</td><td>TODO: In-Person, On-Line, or from github</td></tr>
-  <tr><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">Length: </td><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">TODO: Number of hours</td></tr>
+  <tr><td>Type:</td><td>In-Person, or from github</td></tr>
+  <tr><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">Length: </td><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">4-8</td></tr>
 
 </table>
 
