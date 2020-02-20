@@ -37,6 +37,7 @@ In this activity you'll learn more about working with Microsoft Excel.
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <h3>2.1.2 SQL</h3>
+
 After understanding spreadsheets, you should learn more about the *Structured Query Language*, or SQL. This language has statements to Create, Read, Update and Delete (*CRUD*) data in tabular sets called Relations, or Tables. A group of tables is stored in a database, and are similar to a group of Spreadsheets. 
 
 SQL is the language that works on a *Relational Database Management System* (RDBS) that you'll learn about in a few moments. Many companies make these engines, and they all extend or modify the basic SQL language into a "dialect". The dialect for SQL Server is Transact-SQL or T-SQL, the dialect for Oracle is PL-SQL and so on.   
@@ -145,9 +146,9 @@ But this can still lead to data consistency issues, so a text file often has a s
 Other common delimeters are tabs (TSV), Colons, and Fixed-Width files: 
 
 <pre>
-"Bob Smith"  "Lawnmower"  "150.00"
-"Jane T. Doe"  "Hammer"  "12.00"
-"Sushma Yentil Savarri"  "Tape"  "3"
+"Bob Smith"              "Lawnmower"  "150.00"
+"Jane T. Doe"            "Hammer"     "12.00"
+"Sushma Yentil Savarri"  "Tape"       "3"
 </pre>
 
 In any case, when you are working with text files in most any language or data processing system, you will need to specify the file encoding, delimiters and separators, and sometimes the line-terminator (Unix or Windows).
@@ -265,7 +266,7 @@ In this exercise you will watch a short video explaining more about NoSQL databa
 
 - Open [the following reference, and watch the video you see there.](https://www.youtube.com/watch?v=uD3p_rZPBUQ)
 
-p style="border-bottom: 1px solid lightgrey;"></p>
+<p style="border-bottom: 1px solid lightgrey;"></p>
 
 <h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/pencil2.png?raw=true">2.3 Tools For Data Reporting</h2>
 
@@ -303,7 +304,7 @@ A full course on graphical programming is beyond the scope of this course, [you 
 
 One interesting point as you work through these exercises: In R, you can create a visualization, show it, and then "add" to it - changing the visualization after it has been created. This is a very powerful way of tuning the graphic to the information you want to display. 
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>AWorking with R and Charting</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/point1.png?raw=true"><b>Working with R and Charting</b></p>
 
 In this online tutorial, you will work through a live example of Plotly and R. 
 

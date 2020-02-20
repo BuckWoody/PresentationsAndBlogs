@@ -14,7 +14,7 @@ You'll start by developing skills to find the most authoritative data, understan
 
 This README.MD file explains how the workshop is laid out, what you will learn, and the technologies you will use in this solution.
 
-(You can view all of the [source files for this workshop on this [github](https://lab.github.com/githubtraining/introduction-to-github) site, along with other presentations and workshops. Open this link in a new tab to find out more.](https://github.com/BuckWoody/presentations))
+You can view all of the [source files for this workshop on this [github](https://lab.github.com/githubtraining/introduction-to-github) site, along with other presentations and workshops. [Open this link in a new tab to find out more.](https://github.com/BuckWoody/presentations)
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 

@@ -140,8 +140,8 @@ These documents take time, and so they are often not completed. This apparent sa
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://github.com/microsoft/sqlworkshops/blob/master/graphics/owl.png?raw=true"><b>For Further Study</b></p>
 <ul>
-    <li><a href="https://www.spj.org/index.asp " target="_blank">Society of Professional Journalists</a></li>
-    <li><a href=" https://www.sciencenewsforstudents.org/blog/outside-comment/fact-checking-how-think-journalist" target="_blank">Fact Checking: Think like a Journalist</a></li>
+    <li><a href="https://www.spj.org/index.asp" target="_blank">Society of Professional Journalists</a></li>
+    <li><a href="https://www.sciencenewsforstudents.org/blog/outside-comment/fact-checking-how-think-journalist" target="_blank">Fact Checking: Think like a Journalist</a></li>
 </ul>
 
 Congratulations! You have completed this workshop on Data Literacy. You now have the tools, assets, and processes you need to extrapolate this information into other applications.

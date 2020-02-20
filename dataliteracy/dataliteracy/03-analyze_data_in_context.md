@@ -48,7 +48,7 @@ In this exercise, you will learn to develop context around your data.
 - Open a new note in your favorite note-taking software.
 - Select one topic you are interested in.
 - Find at least three sources of data for that topic, and note their locations. 
-- Next to the location of each data source, write a short paragraph defending your selection of that resource as a reliable source. If you find you cannot  
+- Next to the location of each data source, write a short paragraph defending your selection of that resource as a reliable source. If you find you cannot trust the source, write down your reason for rejecting it. 
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
