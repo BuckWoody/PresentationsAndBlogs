@@ -86,7 +86,7 @@ In this exercise, you will work through an online course to learn R. You do not 
 
 The Python language allows you to write code using object-oriented and other programming paradigms, has support for thousands of libraries, many of which deal with data and Machine Learning. It is fast-becoming of of the most popular programming language for Data Science applications.
 
-Python is guided (unofficially) by the "PEP" - the Python Enhancement Proposal - that gives [the following guidelines for writing Python code](https://pep8.org/). Reviewing that document will give you common information on writing good Python Code.
+Python is guided (unofficially) by the "PEP" - the Python Enhancement Proposal - that gives [the following guidelines for writing Python code](https://www.python.org/dev/peps/pep-0008/). Reviewing that document will give you common information on writing good Python Code.
 
 > NOTE: While reporting and visualization tools also query data, we'll treat that as a separate skill in this Workshop.
 
