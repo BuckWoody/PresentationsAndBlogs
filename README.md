@@ -13,11 +13,13 @@
 
 - [Presentation Workshop](https://github.com/BuckWoody/presentations/tree/master/presentation_workshop)
 
-- [Prroblem/Solution Database](https://github.com/BuckWoody/presentations/tree/master/problemtosolution)
+- [Problem/Solution Database](https://github.com/BuckWoody/presentations/tree/master/problemtosolution)
 
 - [The Team Data Science Process](https://github.com/BuckWoody/presentations/tree/master/tdsp)
 
 ## Notebooks and Courses
+
+- [Data Literacy](https://github.com/BuckWoody/presentations/tree/master/dataliteracy)
 
 - [Azure Notebooks](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/AzureNotebooks)
 
