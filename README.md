@@ -17,6 +17,8 @@
 
 - [The Team Data Science Process](https://github.com/BuckWoody/presentations/tree/master/tdsp)
 
+- [Designing Secure AI Projects](https://github.com/BuckWoody/presentations/blob/master/secureai/Designing%20Secure%20Artificial%20Intelligence%20Applications.pptx)
+
 ## Notebooks and Courses
 
 - [Data Literacy](https://github.com/BuckWoody/presentations/tree/master/dataliteracy)
