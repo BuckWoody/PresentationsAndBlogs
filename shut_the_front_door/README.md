@@ -1,4 +1,4 @@
-# Workshop: <TODO: Enter workshop name>
+# Workshop: Shut The Front Door
 
 #### <i>A Security Course from Buck Woody and David Seis</i>
 
@@ -119,9 +119,9 @@ This is a modular workshop, and in each section, you'll learn concepts, technolo
 
   <tr><td style="background-color: AliceBlue; color: black;"><b>Module</b></td><td style="background-color: AliceBlue; color: black;"><b>Topics</b></td></tr>
 
-  <tr><td><a href="url" target="_blank">TODO: 01 - Common Security Breaches </a></td><td> TODO: This module covers teh most common security breach avenues, and how criminals use them to infiltrate your systems.</td></tr>
-  <tr><td style="background-color: AliceBlue; color: black;"><a href="url" target="_blank">TODO: 02 - Basic Security Tools</a> </td><td td style="background-color: AliceBlue; color: black;"> TODO: In this Module you'll learn free and commerical tools you can use to investigate, mitigate and prevent the most common security vilations. </td></tr>
-  <tr><td><a href="url" target="_blank">TODO: 03 - Security Processes and Procedures </a></td><td> TODO: In this module you'll learn how to create a "security mindset" that will use the knowledge about security risks and the tools you can use to prevent the most common security breaches.</td></tr>
+  <tr><td><a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module01.md" target="_blank">TODO: 01 - Common Security Breaches </a></td><td> TODO: This module covers teh most common security breach avenues, and how criminals use them to infiltrate your systems.</td></tr>
+  <tr><td style="background-color: AliceBlue; color: black;"><a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module02.md" target="_blank">TODO: 02 - Basic Security Tools</a> </td><td td style="background-color: AliceBlue; color: black;"> TODO: In this Module you'll learn free and commerical tools you can use to investigate, mitigate and prevent the most common security vilations. </td></tr>
+  <tr><td><a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module03.md" target="_blank">TODO: 03 - Security Processes and Procedures </a></td><td> TODO: In this module you'll learn how to create a "security mindset" that will use the knowledge about security risks and the tools you can use to prevent the most common security breaches.</td></tr>
 </table>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>

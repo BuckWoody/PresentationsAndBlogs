@@ -1,12 +1,11 @@
-![](../graphics/microsoftlogo.png)
+# Workshop: Shut The Front Door
 
-# Workshop: <TODO: Enter workshop name>
-
-#### <i>A Microsoft workshop from the SQL Server team</i>
+#### <i>A Security Course from Buck Woody and David Seis</i>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/textbubble.png"> <h2>Security</h2>
+
+<img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/textbubble.png"> <h2>Module 01: Common Security Breaches</h2>
 
 In this workshop you'll cover using <TODO: Enter a brief description of the workshop>. 
 
