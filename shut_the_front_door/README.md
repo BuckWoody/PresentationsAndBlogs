@@ -1,14 +1,16 @@
-![](graphics/microsoftlogo.png)
-
 # Workshop: <TODO: Enter workshop name>
 
-#### <i>A Microsoft Course from the SQL Server team</i>
+#### <i>A Security Course from Buck Woody and David Seis</i>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/textbubble.png"> <h2>About this Workshop</h2>
 
-Welcome to this Microsoft solutions workshop on *<TODO: Enter workshop name>*. In this workshop, you'll learn <TODO: Describe what the students will learn>
+Welcome to this workshop on "Shut the front door", which covers *<TODO: Enter workshop name>*. In this workshop, you'll learn <TODO: Describe what the students will learn>
+
+<TODO> Identify the primary causes of security breaches
+<TODO> Tools of the trade to identify the primary laxes
+<TODO> Processes that you can follow to help secure systems at work and home
 
 The focus of this workshop is to understand <TODO: Describe the workshop's primay focus in one sentence>
 
@@ -117,12 +119,9 @@ This is a modular workshop, and in each section, you'll learn concepts, technolo
 
   <tr><td style="background-color: AliceBlue; color: black;"><b>Module</b></td><td style="background-color: AliceBlue; color: black;"><b>Topics</b></td></tr>
 
-  <tr><td><a href="url" target="_blank">TODO: 01 - Module Name </a></td><td> TODO: Module Description</td></tr>
-  <tr><td style="background-color: AliceBlue; color: black;"><a href="url" target="_blank">TODO: 02 - Module 2</a> </td><td td style="background-color: AliceBlue; color: black;"> TODO: Module Description</td></tr>
-  <tr><td><a href="url" target="_blank">TODO: 03 - Module Name </a></td><td> TODO: Module Description</td></tr>
-  <tr><td style="background-color: AliceBlue; color: black;"><a href="url" target="_blank">TODO: 04 - Module 2</a> </td><td td style="background-color: AliceBlue; color: black;"> TODO: Module Description</td></tr>  <tr><td><a href="url" target="_blank">TODO: 05 - Module Name </a></td><td> TODO: Module Description</td></tr>
-  <tr><td style="background-color: AliceBlue; color: black;"><a href="url" target="_blank">TODO: 06 - Module 2</a> </td><td td style="background-color: AliceBlue; color: black;"> TODO: Module Description</td></tr>
-
+  <tr><td><a href="url" target="_blank">TODO: 01 - Common Security Breaches </a></td><td> TODO: This module covers teh most common security breach avenues, and how criminals use them to infiltrate your systems.</td></tr>
+  <tr><td style="background-color: AliceBlue; color: black;"><a href="url" target="_blank">TODO: 02 - Basic Security Tools</a> </td><td td style="background-color: AliceBlue; color: black;"> TODO: In this Module you'll learn free and commerical tools you can use to investigate, mitigate and prevent the most common security vilations. </td></tr>
+  <tr><td><a href="url" target="_blank">TODO: 03 - Security Processes and Procedures </a></td><td> TODO: In this module you'll learn how to create a "security mindset" that will use the knowledge about security risks and the tools you can use to prevent the most common security breaches.</td></tr>
 </table>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
@@ -148,11 +147,11 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 # Legal Notices
 
 ### License
-Microsoft and any contributors grant you a license to the Microsoft documentation and other content in this repository under the [Creative Commons Attribution 4.0 International Public License](https://creativecommons.org/licenses/by/4.0/legalcode), see [the LICENSE file](https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web/blob/master/LICENSE), and grant you a license to any code in the repository under [the MIT License](https://opensource.org/licenses/MIT), see the [LICENSE-CODE file](https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web/blob/master/LICENSE-CODE).
+Buck Woody and David Seis and any other contributors grant you a license to the documentation and other content in this repository under the [Creative Commons Attribution 4.0 International Public License](https://creativecommons.org/licenses/by/4.0/legalcode), see [the LICENSE file](https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web/blob/master/LICENSE), and grant you a license to any code in the repository under [the MIT License](https://opensource.org/licenses/MIT), see the [LICENSE-CODE file](https://github.com/MicrosoftDocs/mslearn-tailspin-spacegame-web/blob/master/LICENSE-CODE).
 
-Microsoft, Windows, Microsoft Azure and/or other Microsoft products and services referenced in the documentation
-may be either trademarks or registered trademarks of Microsoft in the United States and/or other countries.
-The licenses for this project do not grant you rights to use any Microsoft names, logos, or trademarks.
+Microsoft, Windows, Microsoft Azure and/or other Microsoft and Non-Microsoft products and services referenced in the documentation may be either trademarks or registered trademarks of Microsoft in the United States and/or other countries.
+
+The licenses for this project do not grant you rights to use any Microsoft or other company names, logos, or other trademarks.
 Microsoft's general trademark guidelines can be found at http://go.microsoft.com/fwlink/?LinkID=254653.
 
 Privacy information can be found at https://privacy.microsoft.com/en-us/
