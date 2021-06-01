@@ -103,7 +103,6 @@ This workshop uses <TODO: enter main technologies used to solve the sceanrio>, w
 
 </table>
 
-(Change)
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
