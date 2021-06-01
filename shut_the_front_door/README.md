@@ -103,6 +103,8 @@ This workshop uses <TODO: enter main technologies used to solve the sceanrio>, w
 
 </table>
 
+(Change)
+
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pinmap.png"> <h2>Related Workshops</h2>
