@@ -1,14 +1,12 @@
-![](../graphics/microsoftlogo.png)
+# Workshop: Shut The Front Door
 
-# Workshop: <TODO: Enter workshop name>
-
-#### <i>A Microsoft Course from the SQL Server team</i>
+#### <i>A Security Course from Buck Woody and David Seis</i>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/textbubble.png"> <h2>00 Pre-Requisites</h2>
 
-The "<TODO: Enter workshop name>" workshop is taught using the following components, which you will install and configure in the sections that follow. 
+The "Shut The Front Door" workshop is taught using the following components, which you will install and configure in the sections that follow. 
 
 *(Note: TODO: Any notes you want.)*
 

@@ -68,6 +68,11 @@ TODO: Enter activity steps description with checkbox
 
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/owl.png"><b>For Further Study</b></p>
 <ul>
+    <li><a href="https://www.cisa.gov/" target="_blank">Cybersecurity & Infrastructure Security Agency (Articles on most national cybersecurity incidents.) </a></li>
+    <li><a href="https://haveibeenpwned.com/" target="_blank">Have I been pwned? A website that catalogs data breaches and provides a service to see if your email or phone (and connected password) has been leaked, and from where.</a></li>
+  
+    
+
     <li><a href="url" target="_blank">TODO: Enter courses, books, posts, whatever the student needs to extend their study</a></li>
 </ul>
 
