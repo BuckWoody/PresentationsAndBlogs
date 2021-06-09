@@ -70,10 +70,6 @@ TODO: Enter activity steps description with checkbox
 <ul>
     <li><a href="https://www.cisa.gov/" target="_blank">Cybersecurity & Infrastructure Security Agency (Articles on most national cybersecurity incidents.) </a></li>
     <li><a href="https://haveibeenpwned.com/" target="_blank">Have I been pwned? A website that catalogs data breaches and provides a service to see if your email or phone (and connected password) has been leaked, and from where.</a></li>
-  
-    
-
-    <li><a href="url" target="_blank">TODO: Enter courses, books, posts, whatever the student needs to extend their study</a></li>
 </ul>
 
-Congratulations! You have completed this workshop on <TODO: Enter workshop name>. You now have the tools, assets, and processes you need to extrapolate this information into other applications.
+Congratulations! You have completed this Module on <TODO: Enter workshop name>. You now have the tools, assets, and processes you need to extrapolate this information into other applications.

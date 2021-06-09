@@ -67,7 +67,14 @@ TODO: Enter activity steps description with checkbox
 
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/owl.png"><b>For Further Study</b></p>
 <ul>
-    <li><a href="url" target="_blank">TODO: Enter courses, books, posts, whatever the student needs to extend their study</a></li>
+    <li><a href="https://community.windows.com/en-us/videos/windows-security-the-dashboard-for-device-protections/e_Z2bk7Cp1g?from=search" target="_blank">Windows Security: The dashboard for device protections</a></li>
+    <li><a href="https://community.windows.com/en-us/videos/keep-your-pc-more-secure-with-windows-security-updates/YmIitr4eJ8E?from=search" target="_blank">Keep your PC more secure with Windows Security Updates</a></li>
+    <li><a href="https://community.windows.com/en-us/videos/device-security-security-that-comes-built-into-your-device/fadv4TuMOnc?from=search" target="_blank">Device security: Security that comes built into your device</a></li>
+    <li><a href="https://community.windows.com/en-us/videos/meet-marcus-security-made-simple-with-windows-10-in-s-mode/VvAPQTtd-M8?from=search" target="_blank">Meet Marcus: Security made simple with Windows 10 in S mode</a></li>
+    <li><a href="https://community.windows.com/en-us/videos/windows-defender-team-make-security-easier/vuduNkegxb8?from=search" target="_blank">Windows Defender team: Make security easier</a></li>
+    <li><a href="https://community.windows.com/en-us/videos/firewall-network-protections-keep-unwanted-online-traffic-out/pfyyc9XdT5M?from=search" target="_blank">Firewall & network protections: Keep unwanted online traffic out</a></li>
+    <li><a href="https://community.windows.com/en-us/videos/app-browser-control-add-protection-and-online-security/4kyb3u8AVpg?from=search" target="_blank">App & browser control: Add protection and online security</a></li>
+    <li><a href="https://community.windows.com/en-us/videos/virus-threat-protection-keep-defender-antivirus-at-full-strength/s5ezErDI_IM?from=search" target="_blank">Virus & threat protection: Keep Defender antivirus at full strength</a></li>
 </ul>
 
-Congratulations! You have completed this workshop on <TODO: Enter workshop name>. You now have the tools, assets, and processes you need to extrapolate this information into other applications.
+Congratulations! You have completed this module on **Shutting the Front Door**. You now have the tools, assets, and processes you need to extrapolate this information into other applications.
