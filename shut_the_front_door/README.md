@@ -6,19 +6,19 @@
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/textbubble.png"> <h2>About this Workshop</h2>
 
-Welcome to this workshop on "Shut the front door", which covers *<TODO: Enter workshop name>*. In this workshop, you'll learn <TODO: Describe what the students will learn>
+Welcome to this workshop on "Shut the front door", which covers how to bolster personal computer security for the layman and expert alike. In this workshop, you'll learn the most common threats to personal computer security and the tools and processes that can be used to mitigate these threats.
 
-<TODO> Identify the primary causes of security breaches
-<TODO> Tools of the trade to identify the primary laxes
-<TODO> Processes that you can follow to help secure systems at work and home
+<TODO> Identify the primary causes of security breaches (loss of credentials (e-skimming, companies being hacked), vulnerable systems (IoT hacking, weak configurations, default passwords or no password, unpatched systems.), and user error (weak passwords, falling prey to phishing (clicking links and opening files), downloading bad software, sharing links))
+<TODO> Tools of the trade to identify the primary laxes (MS Security Center, MS Map Tool, A brief overview of other softwares (malewarebytes, AV total, Mcafee, Norton.)
+<TODO> Processes that you can follow to help secure systems at work and home (Strong passwords, replacing Defaults, Computer hygiene and habits to avoid phishing and malware downloading.)
 
-The focus of this workshop is to understand <TODO: Describe the workshop's primay focus in one sentence>
+The focus of this workshop is to understand what every person should know and do to keep themselves and their loved ones safe in the cyber environment.
 
 You'll start by <TODO: Describe what the flow of the workshop will be>, with a focus on how to extrapolate what you have learned to create other solutions for your organization.
 
-This [github README.MD file](https://lab.github.com/githubtraining/introduction-to-github) explains how the workshop is laid out, what you will learn, and the technologies you will use in this solution. To download this Lab to your local computer, click the **Clone or Download** button you see at the top right side of this page. [More about that process is here](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository). 
+This [github README.MD file](https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/README.md) explains how the workshop is laid out, what you will learn, and the technologies you will use in this solution. To download this Lab to your local computer, click the **Clone or Download** button you see at the top right side of this page. [More about that process is here](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository). 
 
-You can view all of the [courses and other workshops our team has created at this link - open in a new tab to find out more.](https://microsoft.github.io/sqlworkshops/)
+You can view all of the [courses and other workshops Buck and his team has created at this link - open in a new tab to find out more.](https://microsoft.github.io/sqlworkshops/).
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -120,7 +120,7 @@ This is a modular workshop, and in each section, you'll learn concepts, technolo
 
   <tr><td style="background-color: AliceBlue; color: black;"><b>Module</b></td><td style="background-color: AliceBlue; color: black;"><b>Topics</b></td></tr>
 
-  <tr><td><a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module01.md" target="_blank">TODO: 01 - Common Security Breaches </a></td><td> TODO: This module covers teh most common security breach avenues, and how criminals use them to infiltrate your systems.</td></tr>
+  <tr><td><a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module01.md" target="_blank">TODO: 01 - Common Security Breaches </a></td><td> TODO: This module covers the most common security breach avenues, and how criminals use them to infiltrate your systems.</td></tr>
   <tr><td style="background-color: AliceBlue; color: black;"><a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module02.md" target="_blank">TODO: 02 - Basic Security Tools</a> </td><td td style="background-color: AliceBlue; color: black;"> TODO: In this Module you'll learn free and commerical tools you can use to investigate, mitigate and prevent the most common security vilations. </td></tr>
   <tr><td><a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module03.md" target="_blank">TODO: 03 - Security Processes and Procedures </a></td><td> TODO: In this module you'll learn how to create a "security mindset" that will use the knowledge about security risks and the tools you can use to prevent the most common security breaches.</td></tr>
 </table>
@@ -133,13 +133,9 @@ Next, Continue to <a href="url" target="_blank"><i> Pre-Requisites</i></a>
 
 # Contributing
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
-Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
-the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
+This project welcomes contributions and suggestions.  Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
 
-When you submit a pull request, a CLA bot will automatically determine whether you need to provide
-a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions
-provided by the bot. You will only need to do this once across all repos using our CLA.
+When you submit a pull request, a CLA bot will automatically determine whether you need to provide a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions provided by the bot. You will only need to do this once across all repos using our CLA.
 
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
