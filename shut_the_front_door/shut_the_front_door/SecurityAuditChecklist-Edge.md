@@ -13,10 +13,10 @@ Here are a few basic areas you should cover in a Security Audit:
 
   <dt><a href="#UserBriefing" target="_blank">01 - User Briefing<dt>
   <dt><a href="#AssetInventory" target="_blank">02 - Hardware and Software Asset Inventory<dt>
-  <dt><a href="url" target="_blank">03 - Patches and Updates<dt>
-  <dt><a href="url" target="_blank">04 - Virus and Malware Scans<dt>
-  <dt><a href="url" target="_blank">05 - Firewalls and Ports<dt>
-  <dt><a href="url" target="_blank">06 - Browser, E-Mail and Internet-Facing Assets<dt>
+  <dt><a href="#Updates" target="_blank">03 - Patches and Updates<dt>
+  <dt><a href="#Scans" target="_blank">04 - Virus and Malware Scans<dt>
+  <dt><a href="#Ports" target="_blank">05 - Firewalls and Ports<dt>
+  <dt><a href="#Web" target="_blank">06 - Browser, E-Mail and Internet-Facing Assets<dt>
 
 </dl>
 
