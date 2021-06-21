@@ -11,7 +11,7 @@ A Security Audit is an important tool to ensure each area of your system is secu
 Here are a few basic areas you should cover in a Security Audit:
 <dl>
 
-  <dt><a href="url" target="_blank">01 - User Briefing<dt>
+  <dt><a href="#UserBriefing" target="_blank">01 - User Briefing<dt>
   <dt><a href="url" target="_blank">02 - Hardware and Software Asset Inventory<dt>
   <dt><a href="url" target="_blank">03 - Patches and Updates<dt>
   <dt><a href="url" target="_blank">04 - Virus and Malware Scans<dt>
@@ -22,7 +22,7 @@ Here are a few basic areas you should cover in a Security Audit:
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">01 - User Briefing</h2>
+<h2 id="UserBriefing"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">01 - User Briefing</h2>
 
 TODO: Topic Description
 
