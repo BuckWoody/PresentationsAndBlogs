@@ -16,7 +16,7 @@ Here are a few basic areas you should cover in a Security Audit:
   <dt><a href="url" target="_blank">03 - Patches and Updates<dt>
   <dt><a href="url" target="_blank">04 - Virus and Malware Scans<dt>
   <dt><a href="url" target="_blank">05 - Firewalls and Ports<dt>
-  <dt><a href="url" target="_blank">06 - Internet, E-Mail and Internet-Facing Assets<dt>
+  <dt><a href="url" target="_blank">06 - Browser, E-Mail and Internet-Facing Assets<dt>
 
 </dl>
 
