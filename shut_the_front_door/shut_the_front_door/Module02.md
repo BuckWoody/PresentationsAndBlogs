@@ -77,4 +77,4 @@ TODO: Enter activity steps description with checkbox
     <li><a href="https://community.windows.com/en-us/videos/virus-threat-protection-keep-defender-antivirus-at-full-strength/s5ezErDI_IM?from=search" target="_blank">Virus & threat protection: Keep Defender antivirus at full strength</a></li>
 </ul>
 
-Congratulations! You have completed this module on **Shutting the Front Door**. You now have the tools, assets, and processes you need to extrapolate this information into other applications.
+Next, Continue to <a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module03.md" target="_blank"><i> 03 - Module</i></a>.

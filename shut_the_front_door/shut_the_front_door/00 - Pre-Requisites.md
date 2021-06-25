@@ -75,4 +75,4 @@ TODO: Enter any code typing here
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/geopin.png"><b >Next Steps</b></p>
 
-Next, Continue to <a href="url" target="_blank"><i> 01 - Module</i></a>.
+Next, Continue to <a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module01.md" target="_blank"><i> 01 - Module</i></a>.
