@@ -8,9 +8,9 @@
 
 Welcome to this workshop on "Shut the front door", which covers how to bolster personal computer security for the layman and expert alike. In this workshop, you'll learn the most common threats to personal computer security and the tools and processes that can be used to mitigate these threats.
 
-<TODO> Identify the primary causes of security breaches (loss of credentials (e-skimming, companies being hacked), vulnerable systems (IoT hacking, weak configurations, default passwords or no password, unpatched systems.), and user error (weak passwords, falling prey to phishing (clicking links and opening files), downloading bad software, sharing links))
+<TODO> Identify the primary causes of security breaches (user error, vulnerable systems, and loss of credentials) 
 <TODO> Tools of the trade to identify the primary laxes (MS Security Center, MS Map Tool, A brief overview of other softwares (malewarebytes, AV total, Mcafee, Norton.)
-<TODO> Processes that you can follow to help secure systems at work and home (Strong passwords, replacing Defaults, Computer hygiene and habits to avoid phishing and malware downloading.)
+<TODO> Processes that you can follow to help secure systems at work and home (Strong passwords, replacing defaults, Computer hygiene and habits to avoid phishing and malware downloading.)
 
 The focus of this workshop is to understand what every person should know and do to keep themselves and their loved ones safe in the cyber environment.
 
@@ -129,7 +129,7 @@ This is a modular workshop, and in each section, you'll learn concepts, technolo
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
 
-Next, Continue to <a href="url" target="_blank"><i> Pre-Requisites</i></a>
+Next, Continue to <a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/00%20-%20Pre-Requisites.md" target="_blank"><i> Pre-Requisites</i></a>
 
 # Contributing
 

@@ -4,72 +4,90 @@
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-
 <img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/textbubble.png"> <h2>Module 01: Common Security Breaches</h2>
 
-In this workshop you'll cover using <TODO: Enter a brief description of the workshop>. 
+In this workshop you'll cover the main avenues attackers use to get what they want.
 
 In each module you'll get more references, which you should follow up on to learn more. Also watch for links within the text - click on each one to explore that topic.
 
-(<a href="file:///url" target="_blank">Make sure you check out the <b>Pre-Requisites</b> page before you start</a>. You'll need all of the items loaded there before you can proceed with the workshop.)
+(<a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/00%20-%20Pre-Requisites.md" target="_blank">Make sure you check out the <b>Pre-Requisites</b> page before you start</a>. You'll need all of the items loaded there before you can proceed with the workshop.)
 
 You'll cover these topics in the workshop:
 <dl>
-
-  <dt><a href="url" target="_blank">01 - <TODO: Enter Module Name<dt>
-  <dt><a href="url" target="_blank">01 - <TODO: Enter Module Name<dt>
-  <dt><a href="url" target="_blank">01 - <TODO: Enter Module Name<dt>
-
+  <dt><a href="url" target="_blank">1.1 - User Error
+  <dt><a href="url" target="_blank">1.2 - Vulnerable Systems
+  <dt><a href="url" target="_blank">1.3 - Loss of Credentials
 </dl>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">1.1 TODO: Topic Name</h2>
+<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">1.1 User Error</h2>
+  Cybercrime has <a href="https://purplesec.us/resources/cyber-security-statistics/" target="_blank">increased by over 600%</a> since the beginning of the global pandemic. 
+  (weak passwords, falling prey to phishing (clicking links and opening files), downloading bad software, sharing links, believing malicious emails or texts)
 
-TODO: Topic Description
+  <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/point1.png"><b>Activity: TODO: Activity Name</b></p>
 
-<br>
+  TODO: Activity Description and tasks
 
-<img style="height: 400; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" src="https://docs.microsoft.com/en-us/sql/big-data-cluster/media/concept-security/cluster_endpoints.png">
+  <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Description</b></p>
 
-<br>
+  TODO: Enter activity description with checkbox
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/point1.png"><b>Activity: TODO: Activity Name</b></p>
+  <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Steps</b></p>
 
-TODO: Activity Description and tasks
+  TODO: Enter activity steps description with checkbox
 
-<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Description</b></p>
+  <p style="border-bottom: 1px solid lightgrey;"></p>
 
-TODO: Enter activity description with checkbox
+<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">1.2 Vunerable Systems</h2>
 
-<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Steps</b></p>
+  (IoT hacking, weak configurations, default passwords or no password, unpatched systems.)
 
-TODO: Enter activity steps description with checkbox
+  <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/point1.png"><b>Activity: TODO: Activity Name</b></p>
 
-<p style="border-bottom: 1px solid lightgrey;"></p>
+  TODO: Activity Description and tasks
 
-<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">1.2 TODO: Topic Name</h2>
+  <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Description</b></p>
 
-TODO: Topic Description
+  TODO: Enter activity description with checkbox
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/point1.png"><b>Activity: TODO: Activity Name</b></p>
+  <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Steps</b></p>
 
-TODO: Activity Description and tasks
+  TODO: Enter activity steps description with checkbox
 
-<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Description</b></p>
+  <p style="border-bottom: 1px solid lightgrey;"></p>
 
-TODO: Enter activity description with checkbox
 
-<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Steps</b></p>
+<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">1.3 Loss of Credentials</h2>
 
-TODO: Enter activity steps description with checkbox
+  (e-skimming, companies being hacked) 
 
-<p style="border-bottom: 1px solid lightgrey;"></p>
+  <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/point1.png"><b>Activity: TODO: Activity Name</b></p>
+
+  TODO: Activity Description and tasks
+
+  <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Description</b></p>
+
+  TODO: Enter activity description with checkbox
+
+  <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Steps</b></p>
+
+  TODO: Enter activity steps description with checkbox
+
+  <p style="border-bottom: 1px solid lightgrey;"></p>
+
 
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/owl.png"><b>For Further Study</b></p>
 <ul>
     <li><a href="https://www.cisa.gov/" target="_blank">Cybersecurity & Infrastructure Security Agency (Articles on most national cybersecurity incidents.) </a></li>
     <li><a href="https://haveibeenpwned.com/" target="_blank">Have I been pwned? A website that catalogs data breaches and provides a service to see if your email or phone (and connected password) has been leaked, and from where.</a></li>
+    <li><a href="https://purplesec.us/resources/cyber-security-statistics/" target="_blank">PurpleSec.us: A website that collects data to identify trends in cybersecuirty</a></li>
 </ul>
 
-Congratulations! You have completed this Module on <TODO: Enter workshop name>. You now have the tools, assets, and processes you need to extrapolate this information into other applications.
+Next, Continue to <a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module02.md" target="_blank"><i> 02 - Module</i></a>.
+  
+  
+  
+  
+  
+  <img style="height: 400; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" src="">
