@@ -1,24 +1,18 @@
 # Workshop: Shut The Front Door
 
-#### <i>A Security Course from Buck Woody and David Seis</i>
+#### *A Security Course from [Buck Woody](https://aka.ms/buckwoody) and [David Seis](https://www.linkedin.com/in/davidseis/)*
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/textbubble.png"> <h2>About this Workshop</h2>
 
-Welcome to this workshop on "Shut the front door", which covers how to bolster personal computer security for the layman and expert alike. In this workshop, you'll learn the most common threats to personal computer security and the tools and processes that can be used to mitigate these threats.
+Welcome to this workshop on "Shut the front door", which covers tools and processes used to bolster personal computer security for the layman and expert alike. In this workshop, you'll learn the most common threats to personal computer security and the tools and processes that can be used to mitigate these threats. The focus of this workshop is to educate technical professionals on what every person should know and do to keep themselves andothers safe in the cyber environment. You'll also get a starting checklist you can use to audit and check a computing asset. 
 
-<TODO> Identify the primary causes of security breaches (user error, vulnerable systems, and loss of credentials) 
-<TODO> Tools of the trade to identify the primary laxes (MS Security Center, MS Map Tool, A brief overview of other softwares (malewarebytes, AV total, Mcafee, Norton.)
-<TODO> Processes that you can follow to help secure systems at work and home (Strong passwords, replacing defaults, Computer hygiene and habits to avoid phishing and malware downloading.)
-
-The focus of this workshop is to understand what every person should know and do to keep themselves and their loved ones safe in the cyber environment.
-
-You'll start by <TODO: Describe what the flow of the workshop will be>, with a focus on how to extrapolate what you have learned to create other solutions for your organization.
+You'll start by understanding the most common and easily preventable vectors for computing security, moving on to the tools you can use to inventory and detect malware, and then how to educate users for better security, with a focus on how to extrapolate what you have learned to create other solutions for your organization.
 
 This [github README.MD file](https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/README.md) explains how the workshop is laid out, what you will learn, and the technologies you will use in this solution. To download this Lab to your local computer, click the **Clone or Download** button you see at the top right side of this page. [More about that process is here](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository). 
 
-You can view all of the [courses and other workshops Buck and his team has created at this link - open in a new tab to find out more.](https://microsoft.github.io/sqlworkshops/).
+You can view other courses and  workshops Buck and his team has created at this link - open in a new tab to find out more.](https://github.com/BuckWoody/presentations).
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -27,27 +21,24 @@ You can view all of the [courses and other workshops Buck and his team has creat
 In this workshop you'll learn:
 <br>
 
-- <TODO: Bullet-point on learning obective>
-- <TODO: Bullet-point on learning obective>
-- <TODO: Bullet-point on learning obective>
+- How to identify the primary causes of security breaches (user error, vulnerable systems, and loss of credentials)
+- The "tools of the trade" to identify the primary issues (MS Security Center, MS Map Tool, and a brief overview of other options)
+- Processes that you can follow to help secure systems at work and home (Strong passwords, replacing defaults, computer hygiene and habits to avoid phishing and malware downloading)
 
-<TODO: Enter the text you use when you submit the description for this course to a presentation, or advertising>
-
-The goal of this workshop is to train <TODO: Describe who you would train for this and why>.
+The goal of this workshop is to train technical professionals to secure their organization's computing assets from the most common security threats and issues. The technical professional can then use this information to form their own materials to assist end-users. 
 
 The concepts and skills taught in this workshop form the starting points for:
 
-    <TODO: Job Description and level of person who is the primary that should attend and the reason>.
-    For instance: Solution Architects and Developers, to understand how to put together an end to end solution.
-    <TODO: Job Description and level of person who is the secondary that should attend and the reason>.
-    <TODO: Job Description and level of person who is the third-level of who might want to attend and the reason>.
+- Technical Professionals tasked with administration of a computing network
+- Technical Professionals tasked with securing computing assets
+- End-Users with a degree of technical skill that want to assist others in securing computing assets
+
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/building1.png"> <h2>Business Applications of this Workshop</h2>
 
-Businesses require <TODO: Describe the reason the student's business or organization would be interested in the information. Be detailed about the solutions it addresses> 
+Businesses require secure systems at the edge of their networks, and the front-lines of this area is the end-user. However, many end-users are so busy with their daily work that they do not take the proper steps to behave in a secure fashion with computing assets. This course provides the technical professionals tasked with securing the organization from viri, malware, and ransomware to brief the users on proper security behaviors and also gives them a checklist and a set of tools to check each system to maintain that posture. 
 
-Some industry examples of <TODO: Workshop Topic> are <TODO: Enter Sectors and use briefly>, to name just a few.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -59,8 +50,7 @@ The solution includes the following technologies - although you are not limited 
 
   <tr><th style="background-color: #1b20a1; color: white;">Technology</th> <th style="background-color: #1b20a1; color: white;">Description</th></tr>
 
-  <tr><td><i>TODO: Technology name not owned by Microsoft that you will cover</i></td><td>TODO: Reason the student needs to learn it</td></tr>
-  <tr><td>TODO: Technology name owned by Microsoft that you will cover</td><td>TODO: Reason the student needs to learn it</td></tr>
+  <tr><td><i>Microsoft Windows</i></td><td> While the behaviors and general processes for security apply to all operating systems, the focus of this course is on the Microsoft Windows operating system. </td></tr>
 
 </table>
 
@@ -70,45 +60,18 @@ The solution includes the following technologies - although you are not limited 
 
 You'll need a local system that you are able to install software on. The workshop demonstrations use Microsoft Windows as an operating system and all examples use Windows for the workshop. Optionally, you can use a Microsoft Azure Virtual Machine (VM) to install the software on and work with the solution.
 
-You must have a Microsoft Azure account with the ability to create assets.
-
-This workshop expects that you understand <TODO: Enter a brief solution for what a student should know before taking the workshop>.
+This workshop expects that you understand basic computing concepts, and how to install and configure Microsoft Windows on a computing device. 
 
 If you are new to these, here are a few references you can complete prior to class:
 
-<TODO: Enter some pre-work courses or books or whatever that the student could use to prep>
--  [Reference Name](https://url)
--  [Reference Name](https://url)
--  [Reference Name](https://url)
--  [Reference Name](https://url)
-
+-  [Windows 10 Free e-book](https://www.filecritic.com/windows10-free-ebook-filecritic.pdf)
+-  [Windows 10 Security](https://www.microsoft.com/en-us/windows/comprehensive-security)
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/bulletlist.png"> <h3>Setup</h3>
 
-<a href="url" target="_blank">A full pre-requisites document is located here</a>. These instructions should be completed before the workshop starts, since you will not have time to cover these in class. <i>Remember to turn off any Virtual Machines from the Azure Portal when not taking the class so that you do incur charges (shutting down the machine in the VM itself is not sufficient)</i>.
+You will only need a web browser and a note-taking software or paper/pen. You can perform the steps you see in the software area on your local system, but be aware that this does install software on your system. You can perform all audit actions (with no changes) without affecting your system. 
 
-<p style="border-bottom: 1px solid lightgrey;"></p>
-
-<img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/education1.png"> <h2>Workshop Details</h2>
-
-This workshop uses <TODO: enter main technologies used to solve the sceanrio>, with a focus on <TODO: architecture and implementation, development and use, etc>.
-
-<table style="tr:nth-child(even) {background-color: #f2f2f2;}; text-align: left; display: table; border-collapse: collapse; border-spacing: 5px; border-color: gray;">
-
-  <tr><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">Primary Audience:</td><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">TODO: Enter the technical people who will take the workshop> tasked with TODO: Enter what they are tasked to do</td></tr>
-  <tr><td>Secondary Audience:</td><td> TODO: Secondary Audience</td></tr>
-  <tr><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">Level: </td><td style="background-color: Cornsilk; color: black; padding: 5px 5px0;"> TODO: 100, 200, 300, 400 </td></tr>
-  <tr><td>Type:</td><td>TODO: In-Person, On-Line, or from github</td></tr>
-  <tr><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">Length: </td><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">TODO: Number of hours</td></tr>
-
-</table>
-
-
-<p style="border-bottom: 1px solid lightgrey;"></p>
-
-<img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pinmap.png"> <h2>Related Workshops</h2>
-
- - [TODO: Enter any other workshops that help in this area](url)
+> NOTE: All systems should be backed up prior to making any changes; this ensures the system can be restored to the current state. If there is no backup available, take one now, otherwise you can simply listen during the class and make no changes to the computer. No changes should be made if there is not a current backup. 
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -120,11 +83,11 @@ This is a modular workshop, and in each section, you'll learn concepts, technolo
 
 <tr><td style="background-color: AliceBlue; color: black;"><b>Module</b></td><td style="background-color: AliceBlue; color: black;"><b>Topics</b></td></tr>
 
-<tr><td><a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module01.md" target="_blank">TODO: 01 - Common Security Breaches </a></td><td> TODO: This module covers the most common security breach avenues, and how criminals use them to infiltrate your systems.</td></tr>
+<tr><td><a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module01.md" target="_blank"> 01 - Common Security Breaches </a></td><td> This module covers the most common security breach avenues, and how criminals use them to infiltrate your systems.</td></tr>
 
-<tr><td style="background-color: AliceBlue; color: black;"><a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module02.md" target="_blank">TODO: 02 - Basic Security Tools</a> </td><td td style="background-color: AliceBlue; color: black;"> TODO: In this Module you'll learn free and commerical tools you can use to investigate, mitigate and prevent the most common security vilations. </td></tr>
+<tr><td style="background-color: AliceBlue; color: black;"><a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module02.md" target="_blank"> 02 - Basic Security Tools</a> </td><td td style="background-color: AliceBlue; color: black;"> In this Module you'll learn free and commerical tools you can use to investigate, mitigate and prevent the most common security violations. </td></tr>
 
-<tr><td><a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module03.md" target="_blank">TODO: 03 - Security Processes and Procedures </a></td><td> TODO: In this module you'll learn how to create a "security mindset" that will use the knowledge about security risks and the tools you can use to prevent the most common security breaches.</td></tr>
+<tr><td><a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module03.md" target="_blank"> 03 - Security Processes and Procedures </a></td><td> In this module you'll learn how to create a "security mindset" that will use the knowledge about security risks and the tools you can use to prevent the most common security breaches.</td></tr>
 
 <tr><td style="background-color: AliceBlue; color: black;"><a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/SecurityAuditChecklist-Edge.md" target="_blank"> Security Audit Checklist</a> </td><td td style="background-color: AliceBlue; color: black;"> Use this Checklist as a starting point for your Security Audits. </td></tr>
 
@@ -138,7 +101,7 @@ Next, Continue to <a href="https://github.com/BuckWoody/presentations/blob/maste
 
 # Contributing
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com.
+This project welcomes contributions and suggestions.  Most contributions require you to agree to a Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us the rights to use your contribution. For details, visit https://cla.opensource.microsoft.com. Changes are submitted via comments, multiple-committers are not allowed. 
 
 When you submit a pull request, a CLA bot will automatically determine whether you need to provide a CLA and decorate the PR appropriately (e.g., status check, comment). Simply follow the instructions provided by the bot. You will only need to do this once across all repos using our CLA.
 
