@@ -51,16 +51,14 @@ The second most common vector is the exploitation of a vulnerable system. You sh
 
 >The following items are a base-level of briefing for each system user. You should enhance this list with additional requirements based on your environment and your organization's security and acceptable use policies:
 
-<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Collect Hardware Inventory using the <a href="https://support.microsoft.com/en-us/topic/description-of-microsoft-system-information-msinfo32-exe-tool-10d335d8-5834-90b4-8452-42c58e61f9fc">System Information function</a> in Windows</p>
-<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Collect Software Inventory using the <a href="https://devblogs.microsoft.com/scripting/use-powershell-to-find-installed-software/">PowerShell Tool</a> in Windows</b></p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Collect and review Hardware Inventory using the <a href="https://support.microsoft.com/en-us/topic/description-of-microsoft-system-information-msinfo32-exe-tool-10d335d8-5834-90b4-8452-42c58e61f9fc">System Information function</a> in Windows</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Collect and review Software Inventory using the <a href="https://devblogs.microsoft.com/scripting/use-powershell-to-find-installed-software/">PowerShell Tool</a> in Windows</b></p>
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Brief the user on removing unused programs.</p>
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Breif the user on how to check the author of programs and the keys to identifying malicious programs and removing them.</p>
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Explain that any software that allows a user to do things that are illegal (pirating) will likely cause a compromise.</p>
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Catalogue and brief the user on peripherals (Printers, Phones, cameras and microphones).</p>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
-
-
 
 <h2 id="Updates"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">03 - Patches and Updates</h2>
 To protect systems, companies regularly publish updates to software and hardware. You should continue your security audit by guiding the user through the updating process, and reinforce their understanding of the process and necessity of maintaining and up-to-date system.
@@ -76,9 +74,6 @@ To protect systems, companies regularly publish updates to software and hardware
 
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
-
-
-
 
 <h2 id="Scans"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">04 - Virus and Malware Scans</h2>
 Not all attacks are immediately visible. You should continue your security audit by guiding the user through a virus and malware check of the system, and reinforcing their understanding of the different types of malware and their purpose.
