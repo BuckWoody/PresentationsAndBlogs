@@ -23,10 +23,7 @@ Here are a few basic areas you should cover in a Security Audit:
 </dl>
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
->The following items are a base-level of briefing for each system user. You should enhance this list with additional requirements based on your environment and your organization's security policies.
-
-   
- <h2 id="UserBriefing"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">01 - User Briefing</h2>
+<h2 id="UserBriefing"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">01 - User Briefing</h2>
 The most common security vector is social engineering or compromising a user account. You should begin your security audit by sitting with the user (in-person or online, individually or in a group) and walk them through your organization's security policy, and reinforce their understanding of the security vectors they are responsible for. 
 <br>
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/point1.png"><b>Activity: Checklist for User Briefing</b></p>
@@ -61,7 +58,9 @@ To protect systems, technology vendors regularly publish updates to software and
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/point1.png"><b>Activity: Checklist for Patches and Updates</b></p>
 
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Explain <a href="https://support.microsoft.com/en-us/windows/windows-update-faq-8a903416-6f45-0718-f5c7-375e92dddeb2">the Windows Update utility</a>, and after review, apply any applicable pending updates.</p>
-    >NOTE: Your organization's policies may dictate a central review and application of Updates. In that case, your organization's preferences apply. 
+
+>NOTE: Your organization's policies may dictate a central review and application of Updates. In that case, your organization's preferences apply. 
+
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Use <a href="https://support.microsoft.com/en-us/windows/update-drivers-in-windows-10-ec62f46c-ff14-c91d-eead-d7126dc1f7b6">device manager</a> to find and update any out-of-date firmware or software updates.</p>
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -105,7 +104,7 @@ Arguably the best, and also most dangerous, part of using a computer is when it 
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/owl.png"><b>For Further Study</b></p>
 <ul>
     <li><a href="https://nvd.nist.gov/">NIST National Vulnerability Database<a></li> 
-    <li><a href="https://www.microsoft.com/en-us/videoplayer/embed/RE3Fq1Y"></a>Firewall and network protection resource video</li> 
+    <li><a href="https://www.microsoft.com/en-us/videoplayer/embed/RE3Fq1Y"></a>Firewall and network protection resource video</a></li> 
 </ul>
 
 Congratulations! You have completed this Audit - ensure you set the next schedule to complete the Audit for the Edge systems and Users at this time.
