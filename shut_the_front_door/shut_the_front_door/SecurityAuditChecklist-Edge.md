@@ -72,7 +72,9 @@ Not all attacks are immediately visible. You should continue your security audit
   
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Explain and guide the user through the use of <a href="https://support.microsoft.com/en-us/windows/stay-protected-with-windows-security-2ae0363d-0ada-c064-8b56-6a39afb6a963">Windows Security</a> and run a scan using whatever virus and malware software the user has installed.</p>
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Run a scan for viruses and malware, following the remediation recommendations if anything is found.</p>
-    >NOTE: If malware is found, you should report it using your organization's process for notifying the Information Security team. 
+
+>NOTE: If malware is found, you should report it using your organization's process for notifying the Information Security team. 
+
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Search application list for anything untrustworthy (unauthored, no versions, unknown) - using search engines to do research on anything you are unsure of.</p>
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Ensure <a href="https://docs.microsoft.com/en-us/windows/security/identity-protection/user-account-control/user-account-control-overview">User Account Control</a> is configured so that the user is aware when programs are attempting to make changes.</p>
 <p style="border-bottom: 1px solid lightgrey;"></p>
