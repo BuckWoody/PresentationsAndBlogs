@@ -6,7 +6,7 @@
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/textbubble.png"> <h2>Module 02: Basic Security Tools</h2>
 
-In this workshop you'll cover using <TODO: Enter a brief description of the workshop>. 
+In this workshop you'll cover using the basic security tools avaliable, and recommended for using in monitoring and protecting your systems. 
 
 In each module you'll get more references, which you should follow up on to learn more. Also watch for links within the text - click on each one to explore that topic.
 
@@ -14,54 +14,96 @@ In each module you'll get more references, which you should follow up on to lear
 
 You'll cover these topics in the workshop:
 <dl>
-
-  <dt><a href="url" target="_blank">01 - <TODO: Enter Module Name<dt>
-  <dt><a href="url" target="_blank">01 - <TODO: Enter Module Name<dt>
-  <dt><a href="url" target="_blank">01 - <TODO: Enter Module Name<dt>
-
+  <dt><a href="url" target="_blank">2.1 - Windows Update</dt>
+  <dt><a href="url" target="_blank">2.2 - Windows Security</dt>
+  <dt><a href="url" target="_blank">2.3 - Windows Map Tool</dt>
 </dl>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">1.1 TODO: Topic Name</h2>
 
-TODO: Topic Description
-
+<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">2.1 Windows Update</h2>
+Maintaining an updated system is important for avoiding many security vulnerabilities. This activity will walk you through the general update process.
 <br>
-
 <img style="height: 400; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);" src="https://docs.microsoft.com/en-us/sql/big-data-cluster/media/concept-security/cluster_endpoints.png">
-
 <br>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/point1.png"><b>Activity: Updating your windows system</b></p>
+You will identify any pending updates and apply them, as well as setting up automatic updating as appropriate for the setting.
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Description</b></p>
+Using windows update to maintain a secure system.
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Steps</b></p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Using the windows key you can search for apps on your device. Type "Windows Update" and open the corresponding app.</p>  
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  When the app opens you should see the option to "Search for Update", otherwise you may see an error, or a confimration that you are all up to date.</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  In the case of pending updates or the message saying all updates are current it is good practice to apply updates and then re-search for updates, just in case.</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  In the case of an error, following the steps </a href="https://support.microsoft.com/en-us/sbs/windows/fix-windows-update-errors-18b693b5-7818-5825-8a7e-2a4a37d6d787">in this Microsoft Support article</a></p>
+<p style="border-bottom: 1px solid lightgrey;"></p>
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/point1.png"><b>Activity: TODO: Activity Name</b></p>
 
-TODO: Activity Description and tasks
+
+<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">2.2 Windows Security</h2>
+Using Windows Security will help ensure your computer is protected from most vulnerabilities. 
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/point1.png"><b>Activity: Windows Security Configuration</b></p>
+Configuring Windows Security features such as virus scanning, account protection, firewall and network, browsing, and device security.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Description</b></p>
-
-TODO: Enter activity description with checkbox
-
+Configuring virus & threat protection.
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Steps</b></p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Using the search function from the start menu or in the task bar type in "Windows Security"</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Click Virus & Threat Protection.</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Making sure the Virus & threat protection updates are current is important for blocking up-to-date malware.</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Going into Virus & threat protection settings to ensure real-time protection is on, as well as tamper protection, cloud delivered protection and automatic sample submission as well.</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Run a full scan to check the health of your device.</p>
 
-TODO: Enter activity steps description with checkbox
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Description</b></p>
+Configuring account protection
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Steps</b></p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Using the search function from the start menu or in the task bar type in "Windows Security"</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Click Account Protection</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Using Windows Hello or some other kind of Multi-factor Authentication (security key, biometrics, etc.) will help protect your device and account.</p>
+
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Description</b></p>
+Configuring firewall & network protection
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Steps</b></p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Using the search function from the start menu or in the task bar type in "Windows Security"</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Click Firewall & Network Protection</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Turn the firewall on if it is not already (and there is not 3rd party firewall enabled.)</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Watch <A href="https://www.microsoft.com/en-us/videoplayer/embed/RE3Fq1Y">This video from Microsoft</a> to help understand the role of the firewall. </p>
+
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Description</b></p>
+Configuring app & browser control
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Steps</b></p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Using the search function from the start menu or in the task bar type in "Windows Security"</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Click App & Browser Control</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Ensure reputation-based protections are all enabled.</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Ensure Exploit protection settings are all "On" by Default (except image randomization)</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Consider using Microsoft's Defender Appllication guard and With edge for a very secure browsing environment. </p>
+
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Description</b></p>
+Configuring device security
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Steps</b></p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Using the search function from the start menu or in the task bar type in "Windows Security"</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Click Device Security</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  If your device has the appropriate hardware you have choices outlined in <a href="https://www.microsoft.com/en-us/videoplayer/embed/RE4qLzU">this video</a></p>
+
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Description</b></p>
+Bonus activity - Device health and overview
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Steps</b></p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Read <a href="<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png"> ">this article</a> to get a general overview of Windows Security
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Using the search function from the start menu or in the task bar type in "Windows Security"</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Click Device performance and health - check to see if there are any issues and then watch <a href="https://www.microsoft.com/en-us/videoplayer/embed/RE3F7Sk">this video</a></p>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">1.2 TODO: Topic Name</h2>
-
-TODO: Topic Description
-
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/point1.png"><b>Activity: TODO: Activity Name</b></p>
-
-TODO: Activity Description and tasks
+<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">2.3 Windows Map Tool</h2>
+The Microsoft Assessment and Planning(MAP) Toolkit can be used to do an inventory of a system, or a network, 
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/point1.png"><b>Activity: Read the example reports</b></p>
+The MAP toolkit is useful in hardware and software inventorying as well as systems upgrading. Using this tool will help in a variety of ways.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Description</b></p>
-
-TODO: Enter activity description with checkbox
-
+Review the different example reports run through the MAP tool to see what benefit it could be in your situation:
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Steps</b></p>
-
-TODO: Enter activity steps description with checkbox
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Go to <a href="https://social.technet.microsoft.com/wiki/contents/articles/1640.microsoft-assessment-and-planning-map-toolkit-getting-started.aspx#GSG">this link</a> to read about the setup, use, and interpretation of the MAP toolkit reports. 
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  (OPTIONAL: download the map toolkit and review the example reports to see the possibilities.)</p>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
