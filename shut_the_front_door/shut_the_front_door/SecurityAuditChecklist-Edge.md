@@ -21,9 +21,6 @@ Here are a few basic areas you should cover in a Security Audit:
 </dl>
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-
-
-
 <h2 id="UserBriefing"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">01 - User Briefing</h2>
 The most common security vector is social engineering or compromising a user account. You should begin your security audit by sitting with the user (in-person or online, individually or in a group) and walk them through your organization's security policy, and reinforce their understanding of the security vectors they are responsible for. 
 <br>
@@ -39,9 +36,6 @@ The most common security vector is social engineering or compromising a user acc
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Explain the contact information for follow up questions and incident reporting.</p>
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-
-
-
 <h2 id="AssetInventory"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">02 - Hardware and Software Asset Inventory</h2>
 The second most common vector is the exploitation of a vulnerable system. You should continue your security audit by guiding the user through your organizations security and acceptable use policies, and reinforce their understanding of the software and hardware they are responsible for.
 <br>
@@ -56,9 +50,6 @@ The second most common vector is the exploitation of a vulnerable system. You sh
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Catalogue and brief the user on peripheral security (Printers, Phones, cameras and microphones).</p>
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-
-
-
 <h2 id="Updates"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">03 - Patches and Updates</h2>
 To protect systems, companies regularly publish updates to software and hardware. You should continue your security audit by guiding the user through the updating process, and reinforce their understanding of the process and necessity of maintaining and up-to-date system.
 <br>
@@ -68,9 +59,6 @@ To protect systems, companies regularly publish updates to software and hardware
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Explain <a href="https://support.microsoft.com/en-us/windows/windows-update-faq-8a903416-6f45-0718-f5c7-375e92dddeb2">Windows Update</a>, and apply pending updates.</p>
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Use <a href="https://support.microsoft.com/en-us/windows/update-drivers-in-windows-10-ec62f46c-ff14-c91d-eead-d7126dc1f7b6">device manager</a> to </p>
 <p style="border-bottom: 1px solid lightgrey;"></p>
-
-
-
 
 <h2 id="Scans"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">04 - Virus and Malware Scans</h2>
 Not all attacks are immediately visible. You should continue your security audit by guiding the user through a virus and malware check of the system, and reinforcing their understanding of the different types of malware and their purpose.
@@ -84,9 +72,6 @@ Not all attacks are immediately visible. You should continue your security audit
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Ensure <a href="https://docs.microsoft.com/en-us/windows/security/identity-protection/user-account-control/user-account-control-overview">User Account Control</a> is configured so that the user is aware of when programs are attempting to make changes..</p>
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-
-
-
 <h2 id="Port"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">05 - Firewalls and Ports</h2>
 Securing the perimeter. You should continue your security audit by guiding the user through a firewall check, reinforcing their understanding of the purpose of the firewall and how to ensure it as effective as possible. 
 <br>
@@ -99,9 +84,6 @@ Securing the perimeter. You should continue your security audit by guiding the u
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Guide the user through a check of the firewall logs.</p>
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-
-
-
 <h2 id="Web"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">06 - Browser, E-Mail and Internet-Facing Assets</h2>
 Arguably the best, and also most dangerous, part of using a computer is when it connects to others. Finish your security audit by walking the user through safe browsing, emailing, and internet usage. 
 <br>
@@ -113,9 +95,6 @@ Arguably the best, and also most dangerous, part of using a computer is when it 
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Guide the user in spotting malicious emails, links, attachments, and sites.</p>
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Guide the user in <a href="https://us-cert.cisa.gov/publications/securing-your-web-browser">securing the web browser.</a> (Settings - Privacy, Permissions, Cookies.)
 <p style="border-bottom: 1px solid lightgrey;"></p>
-
-
-
 
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/owl.png"><b>For Further Study</b></p>
 <ul>
