@@ -6,13 +6,13 @@
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/textbubble.png"> <h2>About this Workshop</h2>
 
-Welcome to this workshop on "Shut the front door", which covers tools and processes used to bolster personal computer security for the layman and expert alike. In this workshop, you'll learn the most common threats to personal computer security and the tools and processes that can be used to mitigate these threats. The focus of this workshop is to educate technical professionals on what every person should know and do to keep themselves andothers safe in the cyber environment. You'll also get a starting checklist you can use to audit and check a computing asset. 
+Welcome to this workshop on "Shut the front door", which covers tools and processes used to bolster personal computer security for the technical professional to assist in securing organizational assets. In this workshop, you'll learn the most common threats to personal computer security and the tools and processes that can be used to mitigate these threats. The focus of this workshop is to educate technical professionals on what every person should know and do to keep themselves andothers safe in the cyber environment. You'll also get a starting checklist you can use to audit and check a computing asset. 
 
 You'll start by understanding the most common and easily preventable vectors for computing security, moving on to the tools you can use to inventory and detect malware, and then how to educate users for better security, with a focus on how to extrapolate what you have learned to create other solutions for your organization.
 
 This [github README.MD file](https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/README.md) explains how the workshop is laid out, what you will learn, and the technologies you will use in this solution. To download this Lab to your local computer, click the **Clone or Download** button you see at the top right side of this page. [More about that process is here](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository). 
 
-You can view other courses and  workshops Buck and his team has created at this link - open in a new tab to find out more.](https://github.com/BuckWoody/presentations).
+You can view other courses and  workshops Buck and his team have created at this link - open in a new tab to find out more.](https://github.com/BuckWoody/presentations).
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -33,12 +33,10 @@ The concepts and skills taught in this workshop form the starting points for:
 - Technical Professionals tasked with securing computing assets
 - End-Users with a degree of technical skill that want to assist others in securing computing assets
 
-
 <p style="border-bottom: 1px solid lightgrey;"></p>
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/building1.png"> <h2>Business Applications of this Workshop</h2>
 
 Businesses require secure systems at the edge of their networks, and the front-lines of this area is the end-user. However, many end-users are so busy with their daily work that they do not take the proper steps to behave in a secure fashion with computing assets. This course provides the technical professionals tasked with securing the organization from viri, malware, and ransomware to brief the users on proper security behaviors and also gives them a checklist and a set of tools to check each system to maintain that posture. 
-
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -47,11 +45,8 @@ Businesses require secure systems at the edge of their networks, and the front-l
 The solution includes the following technologies - although you are not limited to these, they form the basis of the workshop. At the end of the workshop you will learn how to extrapolate these components into other solutions. You will cover these at an overview level, with references to much deeper training provided.
 
  <table style="tr:nth-child(even) {background-color: #f2f2f2;}; text-align: left; display: table; border-collapse: collapse; border-spacing: 2px; border-color: gray;">
-
   <tr><th style="background-color: #1b20a1; color: white;">Technology</th> <th style="background-color: #1b20a1; color: white;">Description</th></tr>
-
   <tr><td><i>Microsoft Windows</i></td><td> While the behaviors and general processes for security apply to all operating systems, the focus of this course is on the Microsoft Windows operating system. </td></tr>
-
 </table>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
@@ -97,7 +92,7 @@ This is a modular workshop, and in each section, you'll learn concepts, technolo
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
 
-Next, Continue to <a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/00%20-%20Pre-Requisites.md" target="_blank"><i> Pre-Requisites</i></a>
+Next, Continue to <a href="https://github.com/BuckWoody/presentations/blob/David2.0/shut_the_front_door/shut_the_front_door/Module01.md" target="_blank"><i> Module 01: Common Security Breaches</i></a>
 
 # Contributing
 
