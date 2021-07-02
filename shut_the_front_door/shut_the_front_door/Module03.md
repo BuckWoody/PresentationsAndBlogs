@@ -10,15 +10,13 @@ In this workshop you'll cover using <TODO: Enter a brief description of the work
 
 In each module you'll get more references, which you should follow up on to learn more. Also watch for links within the text - click on each one to explore that topic.
 
-(<a href="file:///url" target="_blank">Make sure you check out the <b>Pre-Requisites</b> page before you start</a>. You'll need all of the items loaded there before you can proceed with the workshop.)
+(<a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/00%20-%20Pre-Requisites.md" target="_blank">Make sure you check out the <b>Pre-Requisites</b> page before you start</a>. You'll need all of the items loaded there before you can proceed with the workshop.)
 
 You'll cover these topics in the workshop:
 <dl>
-
-  <dt><a href="url" target="_blank">01 - <TODO: Enter Module Name<dt>
-  <dt><a href="url" target="_blank">01 - <TODO: Enter Module Name<dt>
-  <dt><a href="url" target="_blank">01 - <TODO: Enter Module Name<dt>
-
+  <dt><a href="url" target="_blank">3.1 - Zero Trust</dt>
+  <dt><a href="url" target="_blank">3.2 - Self-Auditing</dt>
+  <dt><a href="url" target="_blank">3.3 - </dt>
 </dl>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
