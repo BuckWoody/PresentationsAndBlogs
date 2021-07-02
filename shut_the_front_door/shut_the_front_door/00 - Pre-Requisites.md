@@ -7,7 +7,7 @@
 <img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/textbubble.png"> <h2>00 Pre-Requisites</h2>
 
 The "Shut The Front Door" workshop is taught using the following components, which you will install and configure in the sections that follow. 
-
+ 
 *(Note: TODO: Any notes you want.)*
 >REMINDER: If you do not have a backup of your current system make one now. Otherwise you are free to just take notes as you go through the course. Do not make any changes to your system if you do not have a backup. 
 
