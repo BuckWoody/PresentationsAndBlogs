@@ -10,8 +10,6 @@
 
 - [Presentation Workshop](https://github.com/BuckWoody/presentations/tree/master/presentation_workshop)
 
-- [Shut the Front Door - A guide for organization security audits](https://github.com/BuckWoody/presentations/tree/master/shut_the_front_door)
-
 - [Problem/Solution Database](https://github.com/BuckWoody/presentations/tree/master/problemtosolution)
 
 - [The Team Data Science Process](https://github.com/BuckWoody/presentations/tree/master/tdsp)
@@ -23,6 +21,8 @@
 ## Notebooks and Courses
 
 - [Data Literacy](https://github.com/BuckWoody/presentations/tree/master/dataliteracy)
+
+- [Shut the Front Door - A guide for organization security audits](https://github.com/BuckWoody/presentations/tree/master/shut_the_front_door)
 
 - [Azure Notebooks](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/AzureNotebooks)
 
