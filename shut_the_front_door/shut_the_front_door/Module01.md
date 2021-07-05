@@ -13,14 +13,14 @@ In each module you'll get more references, which you should follow up on to lear
 You'll cover these topics in the workshop:
 
 <dl>
-  <dt><a href="url" target="_blank">1.1 - User Error
-  <dt><a href="url" target="_blank">1.2 - Vulnerable Systems
-  <dt><a href="url" target="_blank">1.3 - Loss of Credentials
+  <dt><a href="#UserError" target="_blank">1.1 - User Error
+  <dt><a href="#VulnerableSystems" target="_blank">1.2 - Vulnerable Systems
+  <dt><a href="#Credentials" target="_blank">1.3 - Loss of Credentials
 </dl>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">1.1 User Error</h2>
+<h2 id="UserError"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">1.1 User Error</h2>
 
 <p>Studies show that Cybercrime has <a href="https://purplesec.us/resources/cyber-security-statistics/" target="_blank">increased by over 600%</a> since 2019. More security vectors, users not applying updates, weak passwords, falling prey to phishing (clicking links and opening files), downloading bad software, and sharing sharing suspicious links are all causes of increased attack surfaces on the user's systems. Most users are not technically savvy enough to recognize when they are being attacked. No matter how much you secure a system, users clicking a spurious link can allow an attacker into the computer, so the first line of defense for your environment is to brief the user so that they understand how attackers work, and what they can do to prevent attacks.</p>
 
@@ -44,7 +44,7 @@ You'll cover these topics in the workshop:
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <br>
-<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">1.2 Vulnerable Systems</h2>
+<h2 id="VulnerableSystems"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">1.2 Vulnerable Systems</h2>
 
 All systems connected to a network can be a target for an attack. Many systems come with default configurations, and many of those are not set for the highest level of security. Your next step is to evaluate these configurations along with the users. One of the most common configuration settings that should be changed on a new system or software installation is to ensure any default passwords are changed to one that meets a high level of complexity.
 
@@ -67,7 +67,7 @@ Take an inventory of your router and any other netwrok connected devices that su
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <br>
-<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">1.3 Loss of Credentials</h2>
+<h2 id="Credentials"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">1.3 Loss of Credentials</h2>
 
 <p>Another common vulnerability is when a company or device at a business has been comprimised. When a company is hacked one of the prime targets is the personal information of the customers and internal users. These credentials are then used to perform illegal activities or compromise other systems.</p>
 

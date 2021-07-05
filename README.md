@@ -2,22 +2,23 @@
 
 #### Buck Woody, Applied Data Scientist, Microsoft
 
-
 ## Presentations:
 
 - [An Introduction to AI, Machine Learning and Deep Learning](https://buckwoody.github.io/presentations/ai_ml_dl)
 
-- [ *(Not current)* Microsoft Artificial Intelligence - What to use When](https://github.com/BuckWoody/presentations/tree/master/ai-whattousewhen)
-
 - [SQL Server 2019 Big Data Clusters Workshop supporting materials](https://github.com/BuckWoody/presentations/tree/master/bdc)
 
 - [Presentation Workshop](https://github.com/BuckWoody/presentations/tree/master/presentation_workshop)
+
+- [Shut the Front Door - A guide for organization security audits](https://github.com/BuckWoody/presentations/tree/master/shut_the_front_door)
 
 - [Problem/Solution Database](https://github.com/BuckWoody/presentations/tree/master/problemtosolution)
 
 - [The Team Data Science Process](https://github.com/BuckWoody/presentations/tree/master/tdsp)
 
 - [Designing Secure AI Projects](https://github.com/BuckWoody/presentations/blob/master/secureai/Designing%20Secure%20Artificial%20Intelligence%20Applications.pptx)
+
+- [ *(Archived)* Microsoft Artificial Intelligence - What to use When](https://github.com/BuckWoody/presentations/tree/master/ai-whattousewhen)
 
 ## Notebooks and Courses
 

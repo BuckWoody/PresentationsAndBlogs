@@ -12,16 +12,16 @@ In each module you'll get more references, which you should follow up on to lear
 
 You'll cover these topics in this Module of the workshop:
 <dl>
-  <dt><a href="url" target="_blank">2.1 - Windows Update</a></dt>
-  <dt><a href="url" target="_blank">2.2 - Windows Security</a></dt>
-  <dt><a href="url" target="_blank">2.3 - Windows Map Tool</a></dt>
+  <dt><a href="#WindowsUpdate" target="_blank">2.1 - Windows Update</a></dt>
+  <dt><a href="#WindowsSecurity" target="_blank">2.2 - Windows Security</a></dt>
+  <dt><a href="#MAP" target="_blank">2.3 - Windows Map Tool</a></dt>
 </dl>
 
 <br>
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <br>
-<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">2.1 Windows Update</h2>
+<h2 id="WindowsUpdate"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">2.1 Windows Update</h2>
 
 <p>Maintaining an updated system is important for avoiding many security vulnerabilities, and is one of the simplest and yet most often overlooked security vectors. In the Microsoft Windows operating system, the "System Update" tool is responsible for assessing the current state of the computer and updating it for performance, capability, and security aspects. You can make various changes to the behavior of the frequency, source, and application of these patches. For software from Microsoft, the System Update can also check patches for those deployments as well if desired.</p>
 
@@ -54,7 +54,7 @@ More information on the [Microsoft Update utility is here](https://docs.microsof
 <br>
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">2.2 Windows Security</h2>
+<h2 id="WindowsSecurity"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">2.2 Windows Security</h2>
 
 The Windows Security application can help ensure your computer is protected from many vulnerabilities. The following areas are covered in this tool:
 
@@ -123,7 +123,7 @@ The Windows Security application can help ensure your computer is protected from
 <br>
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">2.3 Windows MAP Tool</h2>
+<h2 id="WindowsSecurity"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">2.3 Windows MAP Tool</h2>
 <p>The Microsoft Assessment and Planning (MAP) Toolkit can be used to get an inventory of one or more systems on your network. It creates reports that you can use for more than a single system.</p>
 
 > NOTE: You may need Domain or Local system administrator rights to perform this scan, so ensure you coordinate this tool with your organization's IT Team. 
