@@ -6,7 +6,7 @@
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/textbubble.png"> <h2>Module 02: Basic Security Tools</h2>
 
-In this workshop you'll cover using the basic security tools avaliable, and recommended for using in monitoring and protecting your systems. 
+In this module you'll cover using the basic security tools that are avaliable in the Microsoft Windows operating system, and recommended for using in monitoring and protecting your systems. 
 
 In each module you'll get more references, which you should follow up on to learn more. Also watch for links within the text - click on each one to explore that topic.
 
