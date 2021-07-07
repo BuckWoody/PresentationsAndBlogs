@@ -65,8 +65,8 @@ To protect systems, companies regularly publish updates to software and hardware
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/point1.png"><b>Activity: Checklist for Patches and Updates</b></p>
 
 >The following items are a base-level of briefing for each system user. You should enhance this list with additional requirements and processes based on your environment and your organizations security policy:
-<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Explain <a href="https://support.microsoft.com/en-us/windows/windows-update-faq-8a903416-6f45-0718-f5c7-375e92dddeb2">Windows Update</a>, and apply pending updates.</p>
-<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Use <a href="https://support.microsoft.com/en-us/windows/update-drivers-in-windows-10-ec62f46c-ff14-c91d-eead-d7126dc1f7b6">device manager</a> to </p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Explain <a href="https://support.microsoft.com/en-us/windows/windows-update-faq-8a903416-6f45-0718-f5c7-375e92dddeb2">Windows Update</a>, and apply approrpiate pending updates.</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Use <a href="https://support.microsoft.com/en-us/windows/update-drivers-in-windows-10-ec62f46c-ff14-c91d-eead-d7126dc1f7b6">device manager</a> to check for the latest and upd to date device drivers. </p>
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 
@@ -81,7 +81,7 @@ Not all attacks are immediately visible. You should continue your security audit
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Explain and guide the user through the use of <a href="https://support.microsoft.com/en-us/windows/stay-protected-with-windows-security-2ae0363d-0ada-c064-8b56-6a39afb6a963">Windows Security</a> and run a scan.</p>
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Run a scan for viruses and malware, following the remediation if anything is found.</p>
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Search application list for anything untrustworthy (unauthored, no versions, unknown) - using search engines to do research on anything you are unsure of.</p>
-<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Ensure <a href="https://docs.microsoft.com/en-us/windows/security/identity-protection/user-account-control/user-account-control-overview">User Account Control</a> is configured so that the user is aware of when programs are attempting to make changes..</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Ensure <a href="https://docs.microsoft.com/en-us/windows/security/identity-protection/user-account-control/user-account-control-overview">User Account Control</a> is configured so that the user is aware of when programs are attempting to make changes.</p>
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 
