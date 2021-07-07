@@ -65,7 +65,7 @@ To protect systems, companies regularly publish updates to software and hardware
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/point1.png"><b>Activity: Checklist for Patches and Updates</b></p>
 
 >The following items are a base-level of briefing for each system user. You should enhance this list with additional requirements and processes based on your environment and your organizations security policy:
-<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Explain <a href="https://support.microsoft.com/en-us/windows/windows-update-faq-8a903416-6f45-0718-f5c7-375e92dddeb2">Windows Update</a>, and apply approrpiate pending updates.</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Explain <a href="https://support.microsoft.com/en-us/windows/windows-update-faq-8a903416-6f45-0718-f5c7-375e92dddeb2">Windows Update</a>, and apply approrpiate pending updates. Note that this tool update the Windows operating system, and if selected, any programs that Microsoft provides or those that register with the service. Some applications may not use this feature, so you should use the software list you created earlier to ensure proper updates for each application.</p>
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Use <a href="https://support.microsoft.com/en-us/windows/update-drivers-in-windows-10-ec62f46c-ff14-c91d-eead-d7126dc1f7b6">device manager</a> to check for the latest and upd to date device drivers. </p>
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
