@@ -119,10 +119,8 @@ Arguably the best, and also most dangerous, part of using a computer is when it 
 
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/owl.png"><b>For Further Study</b></p>
 <ul>
-    <li><a href="url" target="_blank">TODO: Enter courses, books, posts, whatever the student needs to extend their study</a></li>
     <li><a href="https://nvd.nist.gov/">NIST National Vulnerability Database<a></li> 
     <li><a href="https://www.microsoft.com/en-us/videoplayer/embed/RE3Fq1Y"></a>Firewall and network protection resource video</li>
-    <li><a href=""> 
 </ul>
 
 Congratulations! You have completed this Audit - ensure you set the next schedule to complete the Audit for the Edge systems and Users at this time.
