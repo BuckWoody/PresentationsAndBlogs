@@ -108,4 +108,4 @@ In this Activity you will review several resources to create your own maintenanc
     <li><a href="https://www.dsac.gov/topics/cyber-resources" target="_blank">DSAC- Cyber resources.</a></li>
 </ul>
 
-Next, Continue to <a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module03.md" target="_blank"><i> Security Audit Checklist</i></a>.
+Next, Continue to <a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/SecurityAuditChecklist-Edge.md" target="_blank"><i> Security Audit Checklist</i></a>.
