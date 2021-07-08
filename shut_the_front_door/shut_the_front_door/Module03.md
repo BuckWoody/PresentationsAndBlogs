@@ -10,8 +10,6 @@ In this module you'll cover various security processes and procedures you can us
 
 In each module you'll get more references, which you should follow up on to learn more. Also watch for links within the text - click on each one to explore that topic.
 
-(<a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/00%20-%20Pre-Requisites.md" target="_blank">Make sure you check out the <b>Pre-Requisites</b> page before you start</a>. You'll need all of the items loaded there before you can proceed with the workshop.)
-
 You'll cover these topics in the workshop:
 <dl>
   <dt><a href="#ZeroTrust" target="_blank">3.1 - Zero Trust</a></dt>
@@ -46,7 +44,7 @@ Create a section in your system notes for each system you evaluate. Using the fo
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <br>
-<h2 id="SelfAudit"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">3.2 Self- Auditing</h2>
+<h2 id="SelfAudit"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">3.2 Self-Auditing</h2>
 
 Secure behaviors are as important as having a secure device. Users are the first line of defense and secure environments, so giving them concrete steps they can follow is essential to ensuring a secure environment. Along with the information you learned in [Module 01](https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/Module01.md), the following activities can assist you in creating a sense of personal responsibility for security in your organization.
 
@@ -61,12 +59,12 @@ In this step you will provide each user a Security Audit Checklist they can use 
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Steps</b></p>
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Do you have a unique credentials for all online accounts? </p>
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  How often do you change your passwords?</p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  How often do you change your passwords? (<a href="https://www.vericlouds.com/nist-password-guidelines-2021-challenging-traditional-password-management/#:~:text=NIST%202021%20Best%20Practices%201%20Minimum%20Password%20Length.,NIST%20guidelines.%203%20Use%20A%20Password%20Manager.%20">NIST recommends having no change requirements?)</p>
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Are your passwords <a href="https://security.harvard.edu/use-strong-passwords">strong?</a></p>
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Do you have a backup of your data?</p>
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Do you allow auto-filling of web forms? (<a href="https://www.techadvisory.org/2019/01/the-dangers-of-autocomplete-passwords/">Why is this dangerous?</a>) </p>
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Do you allow multiple users onto the admin account or do multiple users have admin privileges?</p>
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Are you familiar with the methods scammers, fraudsters, and phishers will use to trick you? (<a href="https://www.consumer.ftc.gov/articles/how-recognize-and-avoid-phishing-scams">email, phone, text</a>, <a href="https://www.usa.gov/online-safety#item-37227">websites</a>, <a href="https://www.consumer.ftc.gov/blog/2020/10/scams-start-social-media">"friends on social media"</a>, <a href="https://www.consumer.ftc.gov/features/scam-alerts">grants, work, prizes or gifts</a></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Are you familiar with the methods scammers, fraudsters, and phishers will use to trick you? (<a href="https://www.consumer.ftc.gov/articles/how-recognize-and-avoid-phishing-scams">email, phone, text</a>, <a href="https://www.usa.gov/online-safety#item-37227">websites</a>, <a href="https://www.consumer.ftc.gov/blog/2020/10/scams-start-social-media">"friends" on social media</a>, <a href="https://www.consumer.ftc.gov/features/scam-alerts">grants, work, prizes or gifts</a>, <a href="https://www.idtheftcenter.org/dont-fall-for-a-boss-gift-card-scam/#:~:text=The%20boss%20gift%20card%20scam%20is%20so%20simple,stranger%E2%80%99s%20phone%20or%20computer%20since%20theirs%20is%20locked.">bosses requesting gift cards.</a> </p>
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Do you have Multi-factor authentication enabled on your most sensitive accounts? (Authenticator apps from <a href="https://play.google.com/store/apps/details?id=com.azure.authenticator&hl=en_US&gl=US">Microsoft</a> and <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en_US&gl=US">Google</a>)
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Are you dilligent and aware enough to notice the many phony <a href="https://nordvpn.com/blog/fake-apps/">apps</a>, <a href="https://www.asecurelife.com/how-to-spot-a-fake-website/">websites</a>, and <a href="https://www.cisecurity.org/daily-tip/know-how-to-spot-fake-software/">programs</a> out there that try to get information by emulating what you were looking for?
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Are the systems you are using past their <a href="https://www.abcservices.com/the-risks-of-end-of-life-technology/">end-of-life</a>?
