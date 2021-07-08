@@ -46,7 +46,7 @@ You'll cover these topics in the workshop:
 <br>
 <h2 id="VulnerableSystems"><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/pencil2.png">1.2 Vulnerable Systems</h2>
 
-All systems connected to a network can be a target for an attack. Many systems come with default configurations, and many of those are not set for the highest level of security. Your next step is to evaluate these configurations along with the users. One of the most common configuration settings that should be changed on a new system or software installation is to ensure any default passwords are changed to one that meets a high level of complexity.
+All systems connected to a network can be a target for an attack. Many systems come with default configurations, and many of those are not set for the highest level of security. Your next step is to evaluate these configurations along with the users. One of the most common configuration settings that should be changed on a new system or software installation is to ensure any default passwords are changed to one that meets a <a href="https://auth0.com/blog/dont-pass-on-the-new-nist-password-guidelines/">high level of complexity.</a>
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/point1.png"><b>Activity: Finding Default Passwords.</b></p>
 You will identify a few key internet connected devices in every home and business and do some security research for each.
@@ -54,13 +54,13 @@ You will identify a few key internet connected devices in every home and busines
 <br>
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Description</b></p>
 
-Take an inventory of your router and any other netwrok connected devices that such as cameras, fire alarms, door locks, medical sensors and other devices. 
+Take an inventory of your router and any other network connected devices that such as cameras, fire alarms, door locks, and medical sensors. 
 
 <br>
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkmark.png"><b>Steps</b></p>
 
 <br>
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Identify the brand and model used for each device that has a password. Search for the <a href="https://en.wikipedia.org/wiki/Default_password">default password</a> on that device using <a href="https://cirt.net/passwords">Cirt.Net</a> default passwords. If the website doesnt have the brand, use a search engine to find the default credentials.</p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Identify the brand and model used for each device that has a password. Search for the <a href="https://en.wikipedia.org/wiki/Default_password">default password</a> on that device using <a href="https://cirt.net/passwords">Cirt.net</a>'s default password database. If the website doesnt have the brand, use a search engine to find the default credentials.</p>
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Change the password to a more complex passphase <a href="https://support.microsoft.com/en-us/windows/create-and-use-strong-passwords-c5cebb49-8c53-4f5e-2bc4-fe357ca048eb">using the tips you find here</a>. If your organization allows it, you can also <a href="https://cybernews.com/password-generator/">use a password generator</a> and storage tool <a href="https://nordpass.com/">such as NordPass</a>. An even stronger solution is to use a <a href="https://pixelprivacy.com/resources/two-factor-authentication/">Two-Factor Authentication system </a> wherever possible.</p>
 
 <br>
@@ -91,7 +91,7 @@ You will use a website that catalogues the credentials lost in large data breach
 <br>
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Go to <a href="https://haveibeenpwned.com/" target="_blank">Have I been Pwned?</a></p>
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Identify any email addresses you would like to check and enter them into the tool.</p>
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Look at the results - if your credentials have been comprimised, change the password for that location. If the password and email combination is used in multiple places, you should change those as well. Unique passwords are important in preventing this issue.</p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Look at the results - if your credentials have been comprimised, change the password for that location. If the password and email combination is used in multiple places, you should change those as well. Unique passwords are important in preventing an attacker from gaining even more ground after a breach.</p>
 
 <br>
 <p style="border-bottom: 1px solid lightgrey;"></p>
@@ -104,6 +104,7 @@ You will use a website that catalogues the credentials lost in large data breach
     <li><a href="https://www.cisa.gov/" target="_blank">Cybersecurity & Infrastructure Security Agency (Articles on most national cybersecurity incidents.) </a></li>
     <li><a href="https://haveibeenpwned.com/" target="_blank">Have I been pwned? A website that catalogs data breaches and provides a service to see if your email or phone (and connected password) has been leaked, and from where.</a></li>
     <li><a href="https://purplesec.us/resources/cyber-security-statistics/" target="_blank">PurpleSec.us: A website that collects data to identify trends in cybersecuirty</a></li>
+    <li><a href="https://pages.nist.gov/800-63-3/sp800-63b.html">NIST Digital Identity Guidelines</a></li>
 </ul>
 
 <br>
