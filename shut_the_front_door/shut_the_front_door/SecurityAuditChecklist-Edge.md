@@ -51,7 +51,7 @@ The second most common vector is the exploitation of a vulnerable system. You sh
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Collect and review Hardware Inventory using the <a href="https://support.microsoft.com/en-us/topic/description-of-microsoft-system-information-msinfo32-exe-tool-10d335d8-5834-90b4-8452-42c58e61f9fc">System Information function</a> in Windows</p>
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Collect and review Software Inventory using the <a href="https://devblogs.microsoft.com/scripting/use-powershell-to-find-installed-software/">PowerShell Tool</a> in Windows</b></p>
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Brief the user on removing unused programs.</p>
-<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Breif the user on how to check the author of programs and the keys to identifying malicious programs and removing them.</p>
+<p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Brief the user on how to check the author of programs and the keys to identifying malicious programs and removing them.</p>
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Explain that any software that allows a user to do things that are illegal (pirating) will likely cause a compromise.</p>
 <p><img style="margin: 0px 15px 15px 0px;" src="../graphics/checkbox.png">  Catalogue and brief the user on peripheral security (Printers, Phones, cameras and microphones).</p>
 <p style="border-bottom: 1px solid lightgrey;"></p>
