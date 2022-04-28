@@ -104,6 +104,7 @@ In this Activity you will review several resources to create your own maintenanc
     <li><a href="https://www.cisecurity.org/resources/" target="_blank">Center for Internet Security Resources.</a></li>
     <li><a href="https://www.fbi.gov/investigate/cyber" target="_blank">FBI Cyber Threats</a></li>
     <li><a href="https://www.dsac.gov/topics/cyber-resources" target="_blank">DSAC- Cyber resources.</a></li>
+    <li><a href="https://www.nytimes.com/wirecutter/guides/simple-online-security/" target="_blank">Simple Online Security</a></li>            
 </ul>
 
 Next, Continue to <a href="https://github.com/BuckWoody/presentations/blob/master/shut_the_front_door/shut_the_front_door/SecurityAuditChecklist-Edge.md" target="_blank"><i> Security Audit Checklist</i></a>.
