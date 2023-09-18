@@ -1,4 +1,4 @@
-# Presentations and courses 
+# Presentations, Courses and Blogs 
 
 #### Buck Woody, Applied Data Scientist, Microsoft
 
