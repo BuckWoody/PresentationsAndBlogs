@@ -5,29 +5,33 @@
 
 #### Buck Woody, Principal Applied Data Scientist, Microsoft 
 
-Intro and Overview 
+Modern application development has several challenges. From selecting a "stack" of front-end through data storage and processing from several competing standards, through ensuring the highest levels of security and performance, developers are required to ensure the application scales and performs well and is supportable on multiple platforms. For that last requirement, bundling up the application into Container technologies such as Docker and deploying multiple Containers onto the Kubernetes platform is now de rigueur in application development.  
 
-## Using the AdventureWorks Sample Database in a Practical Example
-Edit the following:
-The AdventureWorks (fictitious) company uses a database that store data about Sales and Marketing, Products, Customers and Manufacturing. It also contains a view that joins information about the 
-products, such as the product name, category, price, and a brief description. 
+In this example, we'll explore using Python, Docker Containers, and Kubernetes - all running on the Microsoft Azure platform. Using Kubernetes means that you also have the flexibility of using local enviroments or even other clouds for a seamless and consistent deployment of your application, and allows for multi-cloud deployments for even higher resiliency. We'll also use Microsoft Azure SQL DB for a service-based, scalable, highly resilient and secure environment for the data storage and processing. In fact, in many cases, other applications are often using Microsoft Azure SQL DB already, and this sample application can be used to curther leverage and enrich that data.  
 
-Currently, AdventureWorks sends the product name and brief description to a marketing firm to develop a campaign to boost sales. The cost for this marketing specialist is significant, and after looking into the capabilities of Generative Pre-trained Transformers (GPT), the company is curious to know if this Artificial Intelligence (AI) could be used to create starter-text for brochures, automating the first step of the process. GPT-4 is a powerful language model that can generate coherent and creative text from complex input, or prompts. Instead of hiring a professional writer, they can use SQL Server Machine Learning Services with Microsoft Azure OpenAI to automatically generate high-quality starter ad copy based on the product description and other relevant data. This can save time and money on the marketing budget. This approach also has the added benefit of security, since the database stays local, Stored Procedures have high security granularity, and Azure OpenAI does not use the information sent for further training. 
+This example is fairly comprehensive in scope, but uses the simplest applications, databases and deployments to illustrate the process. You can adapt this sample to be far more robust, even including leveraging the latest technologies for the returned data. 
 
-This process works on SQL Server Machine Learning Services platforms on Windows, Linux, Containers, and Kubernetes clusters, including Virtual Machines and SQL Server Managed Instance, from version 2019.
+## Using the AdventureWorksLT Sample Database in a Practical Example
 
-During their research, AdventureWorks discovered that it is important to be cautious when generating text using a GPT model. It is possible that the generated text may not always be appropriate or accurate, so it is important to have a system in place for reviewing and approving any changes before they are published.
+The AdventureWorks (fictitious) company uses a database that stores data about Sales and Marketing, Products, Customers and Manufacturing. It also contains views and stored procedures that join information about the products, such as the product name, category, price, and a brief description. 
 
-The Proof-of-Concept (PoC) for AdventureWorks involves the following requirements: 
-1.	Create a Stored Procedure to accept the model of a given product.
-2.	Generate marketing brochure text for that product, highlighting its features and benefits, using OpenAI's GPT-4 model. 
-3.	Ensure that the generated text is safe and factual, and that it can be edited before publishing.
+The AdventureWorks Development team wants to create a Proof-of-Concept (PoC) that returns data from a View in the AdventureWorksLT database, and show the result in a web interface. Using this PoC, the Development team will create a more scalable snd multi-cloud ready application for the Sales team. They have selected the Microsoft Azure platform for all aspects of deployment. The PoC is using the following elements:
+
+1.	A Python application using the Flask package for headless web deployment.
+2.	Docker Containers for code and environment isolation, stored in a private registry so that the entire company can re-use the application Containers in future projects, saving time and money. 
+3.	Kubernetes for ease of deployment and scale, and to avoid platform lock-in.
 
 ## Pre-Requisites
-Python
-az commands
-SQL DB with AdventureWorksLT sample installed
+
+> [You can find all of the code assets for this sample at this location.]()
+
+
+**Python, pip, and packages**
+
+**Microsoft Azure SQL DB with AdventureWorksLT sample installed**
  
+**The Microsoft Azure az CLI tool**
+
 az login
 az account set --name ""Visual Studio Enterprise Subscription""
 az sql server list
@@ -35,8 +39,7 @@ az sql db list bwoody-db
  
 ## Create the Application
  
-NOTE: https://medium.com/google-cloud/a-guide-to-deploy-flask-app-on-google-kubernetes-engine-bfbbee5c6fb#:~:text=Deploy%20to%20Flask%20app%20to%20the%20kubernetes%20cluster,deployment%20flask-app-tutorial%20%20--type%3DLoadBalancer%20--port%2080%20--target-port%208080 
- 
+
 
 > Important Security Considerations
 For clarity and simplicity, this application is using a configuration file that is read from Python. Since the code will deploy with the container, the connection information may be able to derive from the contents. You should carefully consider the various methods of working with security, connections, and secrets and determine the best level and mechanism you should use for your application. [You can learn more about Azure SQL DB security here.](https://learn.microsoft.com/en-us/azure/security/fundamentals/database-security-checklist) 
