@@ -20,16 +20,30 @@ The AdventureWorks Development team wants to create a Proof-of-Concept (PoC) tha
 1.	A Python application using the Flask package for headless web deployment.
 2.	Docker Containers for code and environment isolation, stored in a private registry so that the entire company can re-use the application Containers in future projects, saving time and money. 
 3.	Kubernetes for ease of deployment and scale, and to avoid platform lock-in.
+4.  Microsoft Azure SQL DB for selection of size, performance, scale, auto-management and backup, in addition to Relational data storage and processing at the highest security level.  
 
 ## Pre-Requisites
-
-> [You can find all of the code assets for this sample at this location.]()
-
+The developers at AdventureWorks use a mix of Windows, Linux, and Apple systems for development, so they are using Visual Studio Code as their environment and git for the source control, which runs cross-platform. 
+For the PoC, The team requires the following pre-requisites:
 
 **Python, pip, and packages**
+The development team has chosen the Python programming language as the standard for this web-based application. Currently they are using version 3.12, but any version supporting the PoC required packages is acceptable.
+You can download the Python language here.
+
+The team is using the pyodbc package for database access.
+You can find the pyodbc package here.
+
+The team is using the ConfigParser package for configuration variables.
+You can find the configparser package here.
+
 
 **Microsoft Azure SQL DB with AdventureWorksLT sample installed**
- 
+
+Create
+Sample
+Firewalls
+
+
 **The Microsoft Azure az CLI tool**
 
 az login
@@ -94,7 +108,20 @@ kubectl get service flask2sql --watch
  
 // Find a way to expose the port
  
- 
+
+## Coding Assets
+
+[You can find all of the code assets for this sample at this location.](https://github.com/BuckWoody/PresentationsAndBlogs/tree/master/K8s2AzureSQL/code). Here's what they do:
+
+- app.py
+- buck3.yaml
+- config.ini
+- Dockerfile
+- flask2sql.yaml
+- requirements.txt
+
+In addition, the az commands will make additional files such as the key for the application and other information.
+
 ## Clean Up
 az group delete -n bwoodyflask2sqlrg -y
 copy c:\users\bwoody\.kube\config c:\users\bwoody\.kube\config.old
