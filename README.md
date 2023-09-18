@@ -18,6 +18,10 @@
 
 - [ *(Archived)* Microsoft Artificial Intelligence - What to use When](https://github.com/BuckWoody/presentations/tree/master/ai-whattousewhen)
 
+## Blogs
+
+- [Kubernetes Application to Azure SQL DB](https://github.com/BuckWoody/PresentationsAndBlogs/tree/master/K8s2AzureSQL)
+  
 ## Notebooks and Courses
 
 - [Data Literacy](https://github.com/BuckWoody/presentations/tree/master/dataliteracy)
@@ -43,6 +47,8 @@
 - [Microsoft R for Architects](https://github.com/Azure/LearnAnalytics-MicrosoftRforArchitects)
 
 - [Microsoft R for the SQL Server Professional](https://github.com/Azure/LearnAnalytics-MicrosoftRforSQLServerProfessional)
+
+
 
 
 ### Disclaimer, for people who need to be told this sort of thing: 
