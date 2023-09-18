@@ -27,22 +27,20 @@ The developers at AdventureWorks use a mix of Windows, Linux, and Apple systems 
 For the PoC, The team requires the following pre-requisites:
 
 **Python, pip, and packages**
-The development team has chosen the Python programming language as the standard for this web-based application. Currently they are using version 3.12, but any version supporting the PoC required packages is acceptable.
-You can download the Python language here.
+The development team has chosen the [Python programming language](https://learn.microsoft.com/en-us/training/paths/beginner-python/) as the standard for this web-based application. Currently they are using version 3.12, but any version supporting the PoC required packages is acceptable.
+[You can download the Python language here.](https://www.python.org/downloads/)
 
 The team is using the pyodbc package for database access.
-You can find the pyodbc package here.
+[You can find the pyodbc package here.](https://pypi.org/project/pyodbc/)
 
-The team is using the ConfigParser package for configuration variables.
-You can find the configparser package here.
+The team is using the ConfigParser package for controlling and setting configuration variables.
+[You can find the configparser package here.](https://pypi.org/project/configparser/)
 
 
 **Microsoft Azure SQL DB with AdventureWorksLT sample installed**
+AdventureWorks has standardized on the [Microsoft SQL Server Relational Database Management System platform](https://www.microsoft.com/en-us/sql-server/), and the Development team wants to use a managed service for the database rather than installing locally. Using Azure SQL DB allows this managed service to be completely code-compatible wherever they run the SQL Server engine - on-premises, in a Container, in Linux or Windows, or even in an Internet of Things (IoT) environment. 
 
-Create
-Sample
-Firewalls
-
+The team used the sample AdventureWorksLT database for the PoC, [which you can learn to deploy here.](https://learn.microsoft.com/en-us/azure/azure-sql/database/single-database-create-quickstart?view=azuresql&tabs=azure-portal) On completion, they used the [Azure Management Portal to set the Firewall for the application](https://learn.microsoft.com/en-us/azure/azure-sql/database/firewall-create-server-level-portal-quickstart?view=azuresql) and also [retreived the connection credentials.](https://learn.microsoft.com/en-us/azure/azure-sql/database/azure-sql-python-quickstart?view=azuresql&tabs=windows%2Csql-auth#configure-the-local-connection-string) 
 
 **The Microsoft Azure az CLI tool**
 
