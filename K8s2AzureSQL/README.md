@@ -48,8 +48,8 @@ The developers at AdventureWorks use a mix of Windows, Linux, and Apple systems 
 
 For the PoC, The team requires the following pre-requisites:
 
-- **Python, pip, and packages** - The development team has chosen the [Python programming language](https://learn.microsoft.com/en-us/training/paths/beginner-python/) as the standard for this web-based application. Currently they are using version 3.12, but any version supporting the PoC required packages is acceptable. [You can download the Python language here.](https://www.python.org/downloads/)
-- The team is using the *pyodbc package* for database access. [You can find the pyodbc package here with the *pip* commands to install it.](https://pypi.org/project/pyodbc/)
+- **Python, pip, and packages** - The development team has chosen the [Python programming language](https://learn.microsoft.com/en-us/training/paths/beginner-python/) as the standard for this web-based application. Currently they are using version 3.12, but any version supporting the PoC required packages is acceptable. [You can download the Python language version 3.9 here.](https://www.python.org/downloads/release/python-390/)
+- The team is using the *pyodbc package* for database access. [You can find the pyodbc package here with the *pip* commands to install it.](https://pypi.org/project/pyodbc/). You may also need the [Microsoft ODBC Driver software](https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver16) if you do not have it installed.
 - The team is using the *ConfigParser package* for controlling and setting configuration variables. [You can find the configparser package here with the *pip* commands to install it.](https://pypi.org/project/configparser/)
 - The team is using the *Flask package* for a web interface for the application. [You can find the Flask library here.](https://flask.palletsprojects.com/en/2.3.x/installation/)
 
@@ -134,7 +134,9 @@ UserName = config.get('Connection', 'SQL_SERVER_USERNAME')
 PasswordValue = config.get('Connection', 'SQL_SERVER_PASSWORD')
 
 # Connect to Azure SQL DB using the pyodbc package
-connection = pyodbc.connect(f'Driver=ODBC Driver 17 for SQL Server;Server={ServerName};Database={DatabaseName};uid={UserName};pwd={PasswordValue}')
+# Note: You might need to change the Driver number based on what ODBC you have installed. 
+# More here: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver16
+connection = pyodbc.connect(f'Driver=ODBC Driver 18 for SQL Server;Server={ServerName};Database={DatabaseName};uid={UserName};pwd={PasswordValue}')
 
 # Create the query and set the cursor object to hold the results
 cursor = connection.cursor()
