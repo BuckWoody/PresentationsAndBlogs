@@ -17,58 +17,141 @@ The AdventureWorks (fictitious) company uses a database that stores data about S
 
 The AdventureWorks Development team wants to create a Proof-of-Concept (PoC) that returns data from a View in the AdventureWorksLT database, and show the result in a web interface. Using this PoC, the Development team will create a more scalable snd multi-cloud ready application for the Sales team. They have selected the Microsoft Azure platform for all aspects of deployment. The PoC is using the following elements:
 
-1.	A Python application using the Flask package for headless web deployment.
-2.	Docker Containers for code and environment isolation, stored in a private registry so that the entire company can re-use the application Containers in future projects, saving time and money. 
-3.	Kubernetes for ease of deployment and scale, and to avoid platform lock-in.
-4.  Microsoft Azure SQL DB for selection of size, performance, scale, auto-management and backup, in addition to Relational data storage and processing at the highest security level.  
+- A Python application using the Flask package for headless web deployment.
+- Docker Containers for code and environment isolation, stored in a private registry so that the entire company can re-use the application Containers in future projects, saving time and money. 
+- Kubernetes for ease of deployment and scale, and to avoid platform lock-in.
+- Microsoft Azure SQL DB for selection of size, performance, scale, auto-management and backup, in addition to Relational data storage and processing at the highest security level.  
+
+In this article we'll explain the process for creating the entire Proof-of-Concept project. The general steps for creating the application are:
+
+1. Set up pre-requisites
+2. Write the application
+3. Create a Docker Container to deploy the application and test
+4. Create an Azure Container Service (ACS) Registry and load the Container to the ACS Registry
+5. Create the Azure Kubernetes Service (AKS) environment
+6. Deploy the application Container from the ACS Registry to AKS and test the application
+7. Clean up
 
 ## Pre-Requisites
-The developers at AdventureWorks use a mix of Windows, Linux, and Apple systems for development, so they are using Visual Studio Code as their environment and git for the source control, which runs cross-platform. 
+The developers at AdventureWorks use a mix of Windows, Linux, and Apple systems for development, so they are using Visual Studio Code as their environment and git for the source control, both of which which run cross-platform. 
+
 For the PoC, The team requires the following pre-requisites:
 
 **Python, pip, and packages**
 The development team has chosen the [Python programming language](https://learn.microsoft.com/en-us/training/paths/beginner-python/) as the standard for this web-based application. Currently they are using version 3.12, but any version supporting the PoC required packages is acceptable.
-[You can download the Python language here.](https://www.python.org/downloads/)
+- [You can download the Python language here.](https://www.python.org/downloads/)
 
 The team is using the pyodbc package for database access.
-[You can find the pyodbc package here.](https://pypi.org/project/pyodbc/)
+- [You can find the pyodbc package here with the *pip* commands to install it.](https://pypi.org/project/pyodbc/)
 
 The team is using the ConfigParser package for controlling and setting configuration variables.
-[You can find the configparser package here.](https://pypi.org/project/configparser/)
+- [You can find the configparser package here with the *pip* commands to install it.](https://pypi.org/project/configparser/)
 
 
 **Microsoft Azure SQL DB with AdventureWorksLT sample installed**
 AdventureWorks has standardized on the [Microsoft SQL Server Relational Database Management System platform](https://www.microsoft.com/en-us/sql-server/), and the Development team wants to use a managed service for the database rather than installing locally. Using Azure SQL DB allows this managed service to be completely code-compatible wherever they run the SQL Server engine - on-premises, in a Container, in Linux or Windows, or even in an Internet of Things (IoT) environment. 
 
-The team used the sample AdventureWorksLT database for the PoC, [which you can learn to deploy here.](https://learn.microsoft.com/en-us/azure/azure-sql/database/single-database-create-quickstart?view=azuresql&tabs=azure-portal) On completion, they used the [Azure Management Portal to set the Firewall for the application](https://learn.microsoft.com/en-us/azure/azure-sql/database/firewall-create-server-level-portal-quickstart?view=azuresql) and also [retreived the connection credentials.](https://learn.microsoft.com/en-us/azure/azure-sql/database/azure-sql-python-quickstart?view=azuresql&tabs=windows%2Csql-auth#configure-the-local-connection-string) 
+The team used the sample *AdventureWorksLT* database for the PoC, [which you can learn to deploy here.](https://learn.microsoft.com/en-us/azure/azure-sql/database/single-database-create-quickstart?view=azuresql&tabs=azure-portal) They set a SQL Server account for login for testing, but will revisit this decision in a security review. 
+
+On completion, they used the [Azure Management Portal to set the Firewall for the application](https://learn.microsoft.com/en-us/azure/azure-sql/database/firewall-create-server-level-portal-quickstart?view=azuresql) to the local development machine and all Azure Services, and also [retreived the connection credentials.](https://learn.microsoft.com/en-us/azure/azure-sql/database/azure-sql-python-quickstart?view=azuresql&tabs=windows%2Csql-auth#configure-the-local-connection-string) Note that with this approach, the database could be in another region or even a different subscription.
 
 **The Microsoft Azure az CLI tool**
+Next, the team installed the Azure *AZ CLI* tool. This cross-platform tool allows a command-line and scripted approach to the PoC, so that they can repeat the steps as they make changes and improvements. 
 
+You can find the installation for the AZ CLI tool here. 
+
+With that tool set up, the team used it to log in to their Azure subscription, and set the subscription name they used for the PoC. They then ensured the Azure SQL DB server and database is accessible to the subscription.
+
+'''
 az login
-az account set --name ""Visual Studio Enterprise Subscription""
+az account set --name "<ReplaceWith-AzureSubscriptionName>""
 az sql server list
-az sql db list bwoody-db 
+az sql db list <ReplaceWith-AzureSQLDBDatabaseName> 
+'''
+
+**Create a Microsoft Azure Resource Group (RG) to hold the entire PoC**
+
+```
+az group create --name <ReplaceWith-PoCResourceGroupName> --location eastus
+```
  
 ## Create the Application
- 
 
+Next, the Development team created a simple Python application that opens a connection to Azure SQL DB, and returns a list of products. This code will be replaced with much more complex functions, and may also include more than one application deployed into the Kubernetes Pods in production for a robust, manifest-driven approach to application solutions. 
 
-> Important Security Considerations
-For clarity and simplicity, this application is using a configuration file that is read from Python. Since the code will deploy with the container, the connection information may be able to derive from the contents. You should carefully consider the various methods of working with security, connections, and secrets and determine the best level and mechanism you should use for your application. [You can learn more about Azure SQL DB security here.](https://learn.microsoft.com/en-us/azure/security/fundamentals/database-security-checklist) 
+The Team created a simple text file called *config.ini* to hold variables for the server connections and other information. Using the ConfigParser library they can then separate out the variables from the Python Code into a block they set to *[Connection]*:
+
+```
+[Connection]
+SQL_SERVER_USERNAME = <ReplaceWith-AzureSQLDBSQLServerLoginName>
+SQL_SERVER_ENDPOINT = <ReplaceWith-AzureSQLDBServerName>
+SQL_SERVER_PASSWORD = <ReplaceWith-AzureSQLDBSQLServerLoginPassword>
+SQL_SERVER_DATABASE = <ReplaceWith-AzureSQLDBDatabaseName>
+```
+
+> **Important Security Considerations:** For clarity and simplicity, this application is using a configuration file that is read from Python. Since the code will deploy with the container, the connection information may be able to derive from the contents. You should carefully consider the various methods of working with security, connections, and secrets and determine the best level and mechanism you should use for your application. 
+
+- [You can learn more about Azure SQL DB security here.](https://learn.microsoft.com/en-us/azure/security/fundamentals/database-security-checklist) 
 - Python secrets
 - Docker security
 - Kubernetes secrets
 - Microsoft Entra - https://learn.microsoft.com/en-us/azure/active-directory-b2c/configure-authentication-sample-python-web-app 
 
+The team next wrote the application and called it *app.py*. You can see the self-documented code here:
+
+```
+# Set up the libraries for the configuration and base web interfaces
+import configparser
+from flask import Flask
+import pyodbc
+
+# Open the configuration file
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+# Create the Flask Application
+app = Flask(__name__)
+
+# Create connection to Azure SQL DB using the config.ini file values
+ServerName = config.get('Connection', 'SQL_SERVER_ENDPOINT')
+DatabaseName = config.get('Connection', 'SQL_SERVER_DATABASE')
+UserName = config.get('Connection', 'SQL_SERVER_USERNAME')
+PasswordValue = config.get('Connection', 'SQL_SERVER_PASSWORD')
+
+# Connect to Azure SQL DB using the pyodbc package
+connection = pyodbc.connect(f'Driver=ODBC Driver 17 for SQL Server;Server={ServerName};Database={DatabaseName};uid={UserName};pwd={PasswordValue}')
+
+# Create the query and set the cursor object to hold the results
+cursor = connection.cursor()
+cursor.execute("SELECT [ProductID], [Name], [Description] FROM [SalesLT].[vProductAndDescription] ORDER BY [Name];")
+
+# Display the results
+strContent= "<table style='border:1px solid red'>"
+for row in cursor:
+    strContent= strContent+ "<tr>"
+    for dbItem in row:
+        strContent= strContent+ "<td>" + str(dbItem) + "</td>"
+    strContent= strContent+ "</tr>"
+strContent= strContent+ "</table>"
+connection.close()
+
+# Set the Flask application to run on the standard ports - typically port 5000
+@app.route('/')
+@app.route('/home')
+def home():
+    return "<html><body>" + strContent + "</body></html>"
+
+if __name__ == "__main__":
+    app.run(debug=True)
+```
+
+
 ## Deploy the Application to a Docker Container
+
+```
 docker build -t flask2sql .
 docker run -d -p 5000:5000 -t flask2sql
 http://localhost:5000
- 
-## Create the Microsoft Assets for the Container Deployment
-
-```
-az group create --name bwoodyflask2sqlrg --location eastus
 ```
  
 Create Container registry: 
@@ -81,31 +164,50 @@ az acr update --name bwoodyflask2sqlacr --anonymous-pull-enabled
 az acr login --name bwoodyflask2sqlacr
 ```
 
+## Tag the local Docker Image to prepare it for uploading
+
+```
 docker images
 az acr list --resource-group bwoodyflask2sqlrg --query "[].{acrLoginServer:loginServer}" --output table
 docker tag flask2sql bwoodyflask2sqlacr.azurecr.io/azure-flask2sql:v1
 docker images
- 
+```
+
+```
 docker push bwoodyflask2sqlacr.azurecr.io/azure-flask2sql:v1
 az acr repository list --name bwoodyflask2sqlacr --output table
- 
+```
  
 ## Deploy to Kubernetes: 
 https://learn.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-cluster?tabs=azure-cli
  
+```
 az aks create --resource-group bwoodyflask2sqlrg --name bwoodyflask2sqlaks --node-count 2 --generate-ssh-keys --attach-acr bwoodyflask2sqlacr
- 
+```
+
+```
 az aks install-cli
+```
+
+```
 az aks get-credentials --resource-group bwoodyflask2sqlrg --name bwoodyflask2sqlaks
+```
+
+```
 kubectl get nodes
- 
+```
+
+```
 az acr list --resource-group bwoodyflask2sqlrg --query "[].{acrLoginServer:loginServer}" --output table
+```
  
+```
 kubectl apply -f flask2sql.yaml
 kubectl get service flask2sql --watch
+```
  
-// Find a way to expose the port
- 
+## Test the Application
+
 
 ## Coding Assets
 
