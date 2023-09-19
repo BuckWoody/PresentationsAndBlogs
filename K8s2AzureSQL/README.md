@@ -34,14 +34,14 @@ In this article we'll explain the process for creating the entire Proof-of-Conce
 
 > Throughout this article, there are several values you should replace, as listed below. Ensure that you consistently replace these values for each step.
 
-- *ReplaceWith_AzureSubscriptionName*: Replace with the name of the Azure subscription name you have. 
-- *ReplaceWith_PoCResourceGroupName*: Replace with the name of the resource group you would like to create. 
-- *ReplaceWith_AzureSQLDBServerName*: Replace with the name of the Azure SQL Database Server you create using the Azure Portal.
-- *ReplaceWith_AzureSQLDBSQLServerLoginName*: Replace with the vaue of the SQL Server User Name you create in the Azure Portal.
-- *ReplaceWith_AzureSQLDBSQLServerLoginPassword*: Replace with the vaue of the SQL Server User Password you create in the Azure Portal.
-- *ReplaceWith_AzureSQLDBDatabaseName*: Replace with the name of the Azure SQL Database you create using the Azure Portal.
-- *ReplaceWith_AzureContainerRegistryName*: Replace with the name of the Azure Container Registry you would like to create.
-- *ReplaceWith_AzureKubernetesServiceName*: Replace with the name of the Azure Kubernetes Service you would like to create.
+- *ReplaceWith_AzureSubscriptionName*: Replace this value with the name of the Azure subscription name you have. 
+- *ReplaceWith_PoCResourceGroupName*: Replace this value with the name of the resource group you would like to create. 
+- *ReplaceWith_AzureSQLDBServerName*: Replace this value with the name of the Azure SQL Database Server you create using the Azure Portal.
+- *ReplaceWith_AzureSQLDBSQLServerLoginName*: Replace this value with the vaue of the SQL Server User Name you create in the Azure Portal.
+- *ReplaceWith_AzureSQLDBSQLServerLoginPassword*: Replace this value with the vaue of the SQL Server User Password you create in the Azure Portal.
+- *ReplaceWith_AzureSQLDBDatabaseName*: Replace this value with the name of the Azure SQL Database you create using the Azure Portal.
+- *ReplaceWith_AzureContainerRegistryName*: Replace this value with the name of the Azure Container Registry you would like to create.
+- *ReplaceWith_AzureKubernetesServiceName*: Replace this value with the name of the Azure Kubernetes Service you would like to create.
 
 ## Pre-Requisites
 The developers at AdventureWorks use a mix of Windows, Linux, and Apple systems for development, so they are using Visual Studio Code as their environment and git for the source control, both of which which run cross-platform. 
@@ -158,6 +158,8 @@ def home():
 if __name__ == "__main__":
     app.run(debug=True)
 ```
+
+They checked that this application runs locally, and returns a page to http://localhost:5000
 
 
 ## Deploy the Application to a Docker Container
