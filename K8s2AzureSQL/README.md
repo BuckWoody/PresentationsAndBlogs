@@ -51,6 +51,7 @@ For the PoC, The team requires the following pre-requisites:
 - **Python, pip, and packages** - The development team has chosen the [Python programming language](https://learn.microsoft.com/en-us/training/paths/beginner-python/) as the standard for this web-based application. Currently they are using version 3.12, but any version supporting the PoC required packages is acceptable. [You can download the Python language here.](https://www.python.org/downloads/)
 - The team is using the *pyodbc package* for database access. [You can find the pyodbc package here with the *pip* commands to install it.](https://pypi.org/project/pyodbc/)
 - The team is using the *ConfigParser package* for controlling and setting configuration variables. [You can find the configparser package here with the *pip* commands to install it.](https://pypi.org/project/configparser/)
+- The team is using the *Flask package* for a web interface for the application. [You can find the Flask library here.](https://flask.palletsprojects.com/en/2.3.x/installation/)
 
 **The Microsoft Azure az CLI tool**
 Next, the team installed the Azure *AZ CLI* tool. This cross-platform tool allows a command-line and scripted approach to the PoC, so that they can repeat the steps as they make changes and improvements. [You can find the installation for the AZ CLI tool here.](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
