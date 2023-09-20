@@ -134,9 +134,9 @@ UserName = config.get('Connection', 'SQL_SERVER_USERNAME')
 PasswordValue = config.get('Connection', 'SQL_SERVER_PASSWORD')
 
 # Connect to Azure SQL DB using the pyodbc package
-# Note: You might need to change the Driver number based on what ODBC you have installed. 
-# More here: https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver16
-connection = pyodbc.connect(f'Driver=ODBC Driver 18 for SQL Server;Server={ServerName};Database={DatabaseName};uid={UserName};pwd={PasswordValue}')
+# Note: You may need to install the ODBC driver if it is not already there. You can find that at:
+# https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver16#version-17
+connection = pyodbc.connect(f'Driver=ODBC Driver 17 for SQL Server;Server={ServerName};Database={DatabaseName};uid={UserName};pwd={PasswordValue}')
 
 # Create the query and set the cursor object to hold the results
 cursor = connection.cursor()
