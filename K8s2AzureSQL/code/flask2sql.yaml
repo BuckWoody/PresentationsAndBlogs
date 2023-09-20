@@ -1,7 +1,10 @@
+## The API name for Kubernetes
 apiVersion: apps/v1
+# The type of commands that will be sent, along with the name of the deployment
 kind: Deployment
 metadata:
   name: flask2sql
+# This section sets the general specifications for the application
 spec:
   replicas: 1
   selector:
@@ -19,18 +22,22 @@ spec:
     spec:
       nodeSelector:
         "kubernetes.io/os": linux
+# This section sets the location of the Image(s) in the deployment, and where to find them 
       containers:
       - name: flask2sql
         image:  bwoodyflask2sqlacr.azurecr.io/azure-flask2sql:v1
+# Recall that the Flask application uses (by default) TCIP/IP port 5000 for access. This line tells Kubernetes that this "pod" uses that address.
         ports:
         - containerPort: 5000
 ---
 apiVersion: v1
+# This is the front-end of the application access, called a "Load Balancer"
 kind: Service
 metadata:
   name: flask2sql
 spec:
   type: LoadBalancer
+# this final step then sets the outside exposed port of the service to TCP/IP port 80, but maps it internally to the app's port of 5000
   ports:
   - protocol: TCP
     port: 80

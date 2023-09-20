@@ -7,9 +7,9 @@
 
 Modern application development has several challenges. From selecting a "stack" of front-end through data storage and processing from several competing standards, through ensuring the highest levels of security and performance, developers are required to ensure the application scales and performs well and is supportable on multiple platforms. For that last requirement, bundling up the application into Container technologies such as Docker and deploying multiple Containers onto the Kubernetes platform is now de rigueur in application development.  
 
-In this example, we'll explore using Python, Docker Containers, and Kubernetes - all running on the Microsoft Azure platform. Using Kubernetes means that you also have the flexibility of using local enviroments or even other clouds for a seamless and consistent deployment of your application, and allows for multi-cloud deployments for even higher resiliency. We'll also use Microsoft Azure SQL DB for a service-based, scalable, highly resilient and secure environment for the data storage and processing. In fact, in many cases, other applications are often using Microsoft Azure SQL DB already, and this sample application can be used to curther leverage and enrich that data.  
+In this example, we'll explore using Python, Docker Containers, and Kubernetes - all running on the Microsoft Azure platform. Using Kubernetes means that you also have the flexibility of using local enviroments or even other clouds for a seamless and consistent deployment of your application, and allows for multi-cloud deployments for even higher resiliency. We'll also use Microsoft Azure SQL Database for a service-based, scalable, highly resilient and secure environment for the data storage and processing. In fact, in many cases, other applications are often using Microsoft Azure SQL Database already, and this sample application can be used to further leverage and enrich that data.  
 
-This example is fairly comprehensive in scope, but uses the simplest applications, databases and deployments to illustrate the process. You can adapt this sample to be far more robust, even including leveraging the latest technologies for the returned data. 
+This example is fairly comprehensive in scope, but uses the simplest application, database and deployment to illustrate the process. You can adapt this sample to be far more robust, even including leveraging the latest technologies for the returned data. It's a useful learning tool to create a pattern for other applications.
 
 ## Using the AdventureWorksLT Sample Database in a Practical Example
 
@@ -57,7 +57,6 @@ For the PoC, The team requires the following pre-requisites:
 Next, the team installed the Azure *AZ CLI* tool. This cross-platform tool allows a command-line and scripted approach to the PoC, so that they can repeat the steps as they make changes and improvements. [You can find the installation for the AZ CLI tool here.](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
 
 With that tool set up, the team used it to log in to their Azure subscription, and set the subscription name they used for the PoC. They then ensured the Azure SQL DB server and database is accessible to the subscription:
-
 
 ```
 az login
@@ -166,9 +165,8 @@ They checked that this application runs locally, and returns a page to http://lo
 
 <img src="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/K8s2AzureSQL/code/FlaskReturn01.png?raw=true" alt="drawing" width="800"/>
 
-
 ## Deploy the Application to a Docker Container
-A Container is a reserved, protected space in a computing system that provides isolation and encapsulation. To create one, you use a Manifest file, which is simply a text file describing the binaries and code you wish to contain. Using a Container Runtime (such as Docker), you can then create a binary Image that has all of the files you want to run and reference. From there, you can "run" the binary image, and that is called a Container, which you can reference as if it were a full computing system. It's a smaller, simpler way to abstract your application runtimes and environment than using a full Virtual Machine. [You can learn more about Containers and Docker here.]()
+A Container is a reserved, protected space in a computing system that provides isolation and encapsulation. To create one, you use a Manifest file, which is simply a text file describing the binaries and code you wish to contain. Using a Container Runtime (such as Docker), you can then create a binary Image that has all of the files you want to run and reference. From there, you can "run" the binary image, and that is called a Container, which you can reference as if it were a full computing system. It's a smaller, simpler way to abstract your application runtimes and environment than using a full Virtual Machine. [You can learn more about Containers and Docker here.](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/container-docker-introduction/docker-defined)
 
 The team started with a DockerFile (the Manifest) that layers the elements of what the team wants to use. They start with a base Python image that already has the pyodbc
 libraries installed, and then they run all commands necessary to contain the program and config file in the previous step. 
@@ -204,16 +202,17 @@ docker run -d -p 5000:5000 -t flask2sql
 
 Once again, the team tests the http://localhost:5000 link to ensure the Container can access the database, and they see the following return:
 
-<img src="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/K8s2AzureSQL/code/FlaskReturn01.png?raw=true" alt="drawing" width="800"/>
+<img src="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/K8s2AzureSQL/graphics/FlaskReturn01.png?raw=true" alt="drawing" width="800"/>
 
 ## Deploy the Image to a Docker Registry
-The Container is now working, but is only available on the developer's machine. The Development team would like to make this application Image available to the rest of the company, and on to Kubernetes for deployment. The storage area for Container Images is called a *repository*, and there can be both public and private repositories for Container Images. In fact, AdvenureWorks used a public Image for the Python environment in their Dockerfile. 
+The Container is now working, but is only available on the developer's machine. The Development team would like to make this application Image available to the rest of the company, and then on to Kubernetes for production deployment. 
+
+The storage area for Container Images is called a *repository*, and there can be both public and private repositories for Container Images. In fact, AdvenureWorks used a public Image for the Python environment in their Dockerfile. 
 
 The team would like to control access to the Image, and rather than putting it on the web they decide they would like to host it themselves, but in Microsoft Azure where they have full control over security and access. [You can read more about Microsoft Azure Container Registry here.](https://learn.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-acr?tabs=azure-cli
 )
 
 Returning to the command-line, the Development team uses the *az CLI* utility to add a Container registry service, enable an administration account, set it to anonymous "pulls" during the testing phase, and set a log in context to the registry:
-
 
 ```
 az acr create --resource-group ReplaceWith_PoCResourceGroupName --name ReplaceWith_AzureContainerRegistryName --sku Standard
@@ -225,6 +224,7 @@ az acr login --name ReplaceWith_AzureContainerRegistryName
 This context will be used in subsequent steps. 
 
 ## Tag the local Docker Image to prepare it for uploading
+The next step is to send the local application Container Image to the Azure Container Registry (ACR) service so that it is available in the cloud. Returning to the command-line, the team uses the Docker commands to list the Images on the machine, then the *az CLI* utility to list the Images in the ACR service. They then use the Docker command to "tag" the Image with the destination name of the ACR they created in the previous step, and to set a version number for proper DevOps. They then list the local Image information again to ensure the tag applied correctly:   
 
 ```
 docker images
@@ -233,39 +233,107 @@ docker tag flask2sql ReplaceWith_AzureContainerRegistryName.azurecr.io/azure-fla
 docker images
 ```
 
+With the code written and tested, the Dockerfile, Image and Container run and tested, the ACR service set up, and all tags applied, the team can upload the Image to the ACR service. They use the Docker "push" command to send the file, and then the *az CLI* utility to ensure the Image was loaded: 
+
 ```
 docker push ReplaceWith_AzureContainerRegistryName.azurecr.io/azure-flask2sql:v1
 az acr repository list --name ReplaceWith_AzureContainerRegistryName --output table
 ```
  
-## Deploy to Kubernetes: 
-https://learn.microsoft.com/en-us/azure/aks/tutorial-kubernetes-deploy-cluster?tabs=azure-cli
- 
+## Deploy to Kubernetes 
+The team could simply run Containers and deploy the application to on-premises and in-cloud environments. However, they would like to add multiple copies of the application for scale and availability, add other Containers performing different tasks, and add monitoring and instrumentation to the entire solution. 
+
+To group Containers togehter into a complete solution, the team decided to use Kubernetes. Kubernetes runs on-premises, and in all major cloud platforms. Microsoft Azure has a complete managed enviroment for Kubernetes, called the Azure Kubernetes Service (AKS). [You can learn more about AKS here.](https://learn.microsoft.com/en-us/training/paths/intro-to-kubernetes-on-azure/)
+
+Using the *az CLI* utility, the team adds AKS to the Resource Group they created earlier. They add two "nodes" or computing enviroments for resiliency in the testing phase, they automatically generate SSH Keys for access to the environment, and then they attach the ACR service they created in the prevous steps so that the AKS "cluster" can locate the images they want to use for the deployment: 
+
 ```
 az aks create --resource-group ReplaceWith_PoCResourceGroupName --name ReplaceWith_AzureKubernetesServiceName --node-count 2 --generate-ssh-keys --attach-acr ReplaceWith_AzureContainerRegistryName
 ```
 
+Kubernetes uses a command-line tool to access and control a cluster, called *kubectl*. The team uses the *az CLI* utility to download the *kubectl* tool and install it:
+
 ```
 az aks install-cli
 ```
+Since they have a connection to AKS at the moment, they can ask it to send the SSH keys for connection to be used when they execute the *kubectl* utility:
 
 ```
 az aks get-credentials --resource-group ReplaceWith_PoCResourceGroupName --name ReplaceWith_AzureKubernetesServiceName
 ```
 
+These keys are stored in a file called *.kubeconfig* in the user's directory. With that security context set, the team uses the "get nodes" command using the *kubectl* utility to show the nodes in the cluster:
+
 ```
 kubectl get nodes
 ```
+
+Now the team uses the *az CLI* tool to list the Images in the ACR service:
 
 ```
 az acr list --resource-group ReplaceWith_PoCResourceGroupName --query "[].{acrLoginServer:loginServer}" --output table
 ```
  
+Now they can build the Mainfest that Kubernetes uses to control the deployment. This is a text file stored in a *yaml* format. Here is the annotated text in the *flask2sql.yaml* file:
+
+```
+apiVersion: apps/v1
+# The type of commands that will be sent, along with the name of the deployment
+kind: Deployment
+metadata:
+  name: flask2sql
+# This section sets the general specifications for the application
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask2sql
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+  minReadySeconds: 5 
+  template:
+    metadata:
+      labels:
+        app: flask2sql
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+# This section sets the location of the Image(s) in the deployment, and where to find them 
+      containers:
+      - name: flask2sql
+        image:  bwoodyflask2sqlacr.azurecr.io/azure-flask2sql:v1
+# Recall that the Flask application uses (by default) TCIP/IP port 5000 for access. This line tells Kubernetes that this "pod" uses that address.
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+# This is the front-end of the application access, called a "Load Balancer"
+kind: Service
+metadata:
+  name: flask2sql
+spec:
+  type: LoadBalancer
+# this final step then sets the outside exposed port of the service to TCP/IP port 80, but maps it internally to the app's port of 5000
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5000
+  selector:
+    app: flask2sql
+```
+
+With that file defined, the team can deploy the application to the running AKS cluster. That's done with the *apply* command in the *kubectl* utility, which as you recall still has a security context to the cluster. Then the *get service* command is sent to watch the cluster as it is being built. 
+
 ```
 kubectl apply -f flask2sql.yaml
 kubectl get service flask2sql --watch
 ```
- 
+
+After a few moments, the "watch" command will return an external IP address. At that point the team presses CTRL-C to break the watch command, and records the external IP address of the load balancer.
+
+
 ## Test the Application
 
 
