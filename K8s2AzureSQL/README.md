@@ -7,7 +7,7 @@
 
 Modern application development has several challenges. From selecting a "stack" of front-end through data storage and processing from several competing standards, through ensuring the highest levels of security and performance, developers are required to ensure the application scales and performs well and is supportable on multiple platforms. For that last requirement, bundling up the application into Container technologies such as Docker and deploying multiple Containers onto the Kubernetes platform is now de rigueur in application development.  
 
-In this example, we'll explore using Python, Docker Containers, and Kubernetes - all running on the Microsoft Azure platform. Using Kubernetes means that you also have the flexibility of using local enviroments or even other clouds for a seamless and consistent deployment of your application, and allows for multi-cloud deployments for even higher resiliency. We'll also use Microsoft Azure SQL Database for a service-based, scalable, highly resilient and secure environment for the data storage and processing. In fact, in many cases, other applications are often using Microsoft Azure SQL Database already, and this sample application can be used to further leverage and enrich that data.  
+In this example, we'll explore using Python, Docker Containers, and Kubernetes - all running on the Microsoft Azure platform. Using Kubernetes means that you also have the flexibility of using local environments or even other clouds for a seamless and consistent deployment of your application, and allows for multi-cloud deployments for even higher resiliency. We'll also use Microsoft Azure SQL Database for a service-based, scalable, highly resilient and secure environment for the data storage and processing. In fact, in many cases, other applications are often using Microsoft Azure SQL Database already, and this sample application can be used to further leverage and enrich that data.  
 
 This example is fairly comprehensive in scope, but uses the simplest application, database and deployment to illustrate the process. You can adapt this sample to be far more robust, even including leveraging the latest technologies for the returned data. It's a useful learning tool to create a pattern for other applications.
 
@@ -15,7 +15,7 @@ This example is fairly comprehensive in scope, but uses the simplest application
 
 The AdventureWorks (fictitious) company uses a database that stores data about Sales and Marketing, Products, Customers and Manufacturing. It also contains views and stored procedures that join information about the products, such as the product name, category, price, and a brief description. 
 
-The AdventureWorks Development team wants to create a Proof-of-Concept (PoC) that returns data from a View in the AdventureWorksLT database, and make them available as a REST API. Using this PoC, the Development team will create a more scalable snd multi-cloud ready application for the Sales team. They have selected the Microsoft Azure platform for all aspects of deployment. The PoC is using the following elements:
+The AdventureWorks Development team wants to create a Proof-of-Concept (PoC) that returns data from a View in the AdventureWorksLT database, and make them available as a REST API. Using this PoC, the Development team will create a more scalable and multi-cloud ready application for the Sales team. They have selected the Microsoft Azure platform for all aspects of deployment. The PoC is using the following elements:
 
 - A Python application using the Flask package for headless web deployment.
 - Docker Containers for code and environment isolation, stored in a private registry so that the entire company can re-use the application Containers in future projects, saving time and money. 
@@ -85,7 +85,7 @@ The team used the sample *AdventureWorksLT* database for the PoC using the same 
 
 <img src="https://learn.microsoft.com/en-us/azure/azure-sql/database/media/single-database-create-quickstart/additional-settings.png?view=azuresql" alt="drawing" width="600"/>
 
-During creation, they used the [Azure Management Portal to set the Firewall for the application](https://learn.microsoft.com/en-us/azure/azure-sql/database/firewall-create-server-level-portal-quickstart?view=azuresql) to the local development machine, and changed the default you see here to **allow all Azure Services**, and also [retreived the connection credentials.](https://learn.microsoft.com/en-us/azure/azure-sql/database/azure-sql-python-quickstart?view=azuresql&tabs=windows%2Csql-auth#configure-the-local-connection-string) Note that with this approach, the database could be in another region or even a different subscription.
+During creation, they used the [Azure Management Portal to set the Firewall for the application](https://learn.microsoft.com/en-us/azure/azure-sql/database/firewall-create-server-level-portal-quickstart?view=azuresql) to the local development machine, and changed the default you see here to **allow all Azure Services**, and also [retrieved the connection credentials.](https://learn.microsoft.com/en-us/azure/azure-sql/database/azure-sql-python-quickstart?view=azuresql&tabs=windows%2Csql-auth#configure-the-local-connection-string) Note that with this approach, the database could be in another region or even a different subscription.
 
 <img src="https://learn.microsoft.com/en-us/azure/azure-sql/database/media/single-database-create-quickstart/networking.png?view=azuresql" alt="drawing" width="600"/>
  
@@ -105,7 +105,7 @@ SQL_SERVER_DATABASE = ReplaceWith_AzureSQLDBDatabaseName
 > **Important Security Considerations:** For clarity and simplicity, this application is using a configuration file that is read from Python. Since the code will deploy with the container, the connection information may be able to derive from the contents. You should carefully consider the various methods of working with security, connections, and secrets and determine the best level and mechanism you should use for your application. You have multiple options of working with secret information such as connection strings and the like, and the list below shows a few of those options. Always pick the highest level of security, and even multiple levels to ensure your application is secure.
 
 - [You can learn more about Azure SQL DB security here.](https://learn.microsoft.com/en-us/azure/security/fundamentals/database-security-checklist) 
-- [Another method to work with secrets in Python is to use the python-secrets library. More here.](https://pypi.org/project/python-secrets/)Python secrets
+- [Another method to work with secrets in Python is to use the python-secrets library, which you can read about here.](https://pypi.org/project/python-secrets/)
 - [Docker security and secrets are discussed here.](https://docs.docker.com/engine/swarm/secrets/)
 - [Kubernetes secrets are discussed here.](https://kubernetes.io/docs/concepts/configuration/secret/)
 - [You can also learn more about Microsoft Entra, formerly Azure Active Directory authentication here.](https://learn.microsoft.com/en-us/azure/active-directory-b2c/configure-authentication-sample-python-web-app)
@@ -170,7 +170,7 @@ They checked that this application runs locally, and returns a page to http://lo
 
 <img src="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/K8s2AzureSQL/graphics/FlaskReturn01.png?raw=true" alt="drawing" width="800"/>
 
-> **Important Considerations:** When building production application, it is strongly recommened to avoid using the administrator account to access the database. Read here more details on how to set up an account for your application: [Create and connect to an Azure SQL DB in 6 easy steps](https://devblogs.microsoft.com/azure-sql/create-and-connect-to-an-azure-sql-db/). Also, the provided code is heavily simplified so that you can easily get started with Python and Kubernetes in Azure. For a complete example on how to create API with Python and Azure SQL, take a look here: [Creating a REST API with Python and Azure SQL](https://github.com/Azure-Samples/azure-sql-db-python-rest-api/)
+> **Important Considerations:** When building production applications, you should avoid using the administrator account to access the database. [Read more here for details on how to set up an account for your application.](https://devblogs.microsoft.com/azure-sql/create-and-connect-to-an-azure-sql-db/). The code in this article is simplified so that you can quickly get started with applications using Python and Kubernetes in MicrosoftAzure. [Check this resource for a complete example on how to create API with Python and Azure SQL Database.](https://github.com/Azure-Samples/azure-sql-db-python-rest-api/)
 
 ## Deploy the Application to a Docker Container
 A Container is a reserved, protected space in a computing system that provides isolation and encapsulation. To create one, you use a Manifest file, which is simply a text file describing the binaries and code you wish to contain. Using a Container Runtime (such as Docker), you can then create a binary Image that has all of the files you want to run and reference. From there, you can "run" the binary image, and that is called a Container, which you can reference as if it were a full computing system. It's a smaller, simpler way to abstract your application runtimes and environment than using a full Virtual Machine. [You can learn more about Containers and Docker here.](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/container-docker-introduction/docker-defined)
@@ -249,9 +249,9 @@ az acr repository list --name ReplaceWith_AzureContainerRegistryName --output ta
 ## Deploy to Kubernetes 
 The team could simply run Containers and deploy the application to on-premises and in-cloud environments. However, they would like to add multiple copies of the application for scale and availability, add other Containers performing different tasks, and add monitoring and instrumentation to the entire solution. 
 
-To group Containers togehter into a complete solution, the team decided to use Kubernetes. Kubernetes runs on-premises, and in all major cloud platforms. Microsoft Azure has a complete managed enviroment for Kubernetes, called the Azure Kubernetes Service (AKS). [You can learn more about AKS here.](https://learn.microsoft.com/en-us/training/paths/intro-to-kubernetes-on-azure/)
+To group Containers together into a complete solution, the team decided to use Kubernetes. Kubernetes runs on-premises, and in all major cloud platforms. Microsoft Azure has a complete managed environment for Kubernetes, called the Azure Kubernetes Service (AKS). [You can learn more about AKS here.](https://learn.microsoft.com/en-us/training/paths/intro-to-kubernetes-on-azure/)
 
-Using the *az CLI* utility, the team adds AKS to the Resource Group they created earlier. They add two "nodes" or computing enviroments for resiliency in the testing phase, they automatically generate SSH Keys for access to the environment, and then they attach the ACR service they created in the prevous steps so that the AKS "cluster" can locate the images they want to use for the deployment: 
+Using the *az CLI* utility, the team adds AKS to the Resource Group they created earlier. They add two "nodes" or computing environments for resiliency in the testing phase, they automatically generate SSH Keys for access to the environment, and then they attach the ACR service they created in the previous steps so that the AKS cluster can locate the images they want to use for the deployment: 
 
 ```
 az aks create --resource-group ReplaceWith_PoCResourceGroupName --name ReplaceWith_AzureKubernetesServiceName --node-count 2 --generate-ssh-keys --attach-acr ReplaceWith_AzureContainerRegistryName
@@ -280,7 +280,7 @@ Now the team uses the *az CLI* tool to list the Images in the ACR service:
 az acr list --resource-group ReplaceWith_PoCResourceGroupName --query "[].{acrLoginServer:loginServer}" --output table
 ```
  
-Now they can build the Mainfest that Kubernetes uses to control the deployment. This is a text file stored in a *yaml* format. Here is the annotated text in the *flask2sql.yaml* file:
+Now they can build the manifest that Kubernetes uses to control the deployment. This is a text file stored in a *yaml* format. Here is the annotated text in the *flask2sql.yaml* file:
 
 ```
 apiVersion: apps/v1
@@ -353,20 +353,20 @@ Using the IP Address (Endpoint) they obtained in the last step, the team checks 
 - **app.py** - The Python application that performs a simple SELECT from an Azure SQL Database 
 - **.env** - A text file with connection information to the Azure SQL Database
 - **Dockerfile** - The manifest for the Docker Image creation
-- **flask2sql.yaml** - The manifest for the Kubernetes deplpyment
+- **flask2sql.yaml** - The manifest for the Kubernetes deployment
 
-In addition, the *az CLI* utility commands may make additional files such as the key for the application and other information in your application directory.
+> In addition, the *az CLI* utility commands may make additional files such as the key for the application and other information in your application directory.
 
 ## Clean Up
-With the application created, edtied, documented and tested, the team can now "tear down" the application. By keeping everything in a single resource group in Microsoft Azure, it's a simple matter of deleting the resource group using the *az CLI* utility: 
+With the application created, edited, documented and tested, the team can now "tear down" the application. By keeping everything in a single resource group in Microsoft Azure, it's a simple matter of deleting the resource group using the *az CLI* utility: 
 
 ```
 az group delete -n ReplaceWith_PoCResourceGroupName -y
 ```
 
-> Note: If you created your Azure SQL Database in another rewource group and you no longer need it, you can use the Microsoft Azure Portal to delete that resource.
+> Note: If you created your Azure SQL Database in another resource group and you no longer need it, you can use the Microsoft Azure Portal to delete it.
 
-The team member leading the PoC project uses Microsoft Windows as her workstation, and wants to retain the secrets file from Kubernets but wants to remove it from the system as the active location. She simply copies the file to a *config.old" text file and then deletes it:
+The team member leading the PoC project uses Microsoft Windows as her workstation, and wants to retain the secrets file from Kubernetes but wants to remove it from the system as the active location. She simply copies the file to a *config.old" text file and then deletes it:
 
 ```
 copy c:\users\ReplaceWith_YourUserName\.kube\config c:\users\ReplaceWith_YourUserName\.kube\config.old
@@ -374,4 +374,8 @@ del c:\users\ReplaceWith_YourUserName\.kube\config
 ```
 
 # Learn More
-- What is SQL Server Machine Learning Services with Python and R? https://learn.microsoft.com/en-us/sql/machine-learning/sql-server-machine-learning-services?view=sql-server-ver16 
+- [Application development overview - SQL Database & SQL Managed Instance](https://learn.microsoft.com/en-us/azure/azure-sql/database/develop-overview?view=azuresql) 
+- [Connect to and query Azure SQL Database using Python and the pyodbc driver](https://learn.microsoft.com/en-us/azure/azure-sql/database/azure-sql-python-quickstart?view=azuresql&tabs=windows%2Csql-inter)
+- [Publish a Database Project for Azure SQL Database to the local emulator](https://learn.microsoft.com/en-us/azure/azure-sql/database/local-dev-experience-publish-emulator?view=azuresql)
+- [The Wingtip Tickets SaaS application](https://learn.microsoft.com/en-us/azure/azure-sql/database/saas-tenancy-welcome-wingtip-tickets-app?view=azuresql)
+- [Browse code samples for Azure SQL Database](https://learn.microsoft.com/en-us/samples/browse/?products=azure-sql-database%2Cazure-sql-managed-instance%2Cazure-sqlserver-vm&expanded=azure)
