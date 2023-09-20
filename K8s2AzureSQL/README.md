@@ -163,7 +163,7 @@ if __name__ == "__main__":
 
 They checked that this application runs locally, and returns a page to http://localhost:5000
 
-<img src="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/K8s2AzureSQL/code/FlaskReturn01.png?raw=true" alt="drawing" width="800"/>
+<img src="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/K8s2AzureSQL/graphics/FlaskReturn01.png?raw=true" alt="drawing" width="800"/>
 
 ## Deploy the Application to a Docker Container
 A Container is a reserved, protected space in a computing system that provides isolation and encapsulation. To create one, you use a Manifest file, which is simply a text file describing the binaries and code you wish to contain. Using a Container Runtime (such as Docker), you can then create a binary Image that has all of the files you want to run and reference. From there, you can "run" the binary image, and that is called a Container, which you can reference as if it were a full computing system. It's a smaller, simpler way to abstract your application runtimes and environment than using a full Virtual Machine. [You can learn more about Containers and Docker here.](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/container-docker-introduction/docker-defined)
@@ -262,7 +262,7 @@ Since they have a connection to AKS at the moment, they can ask it to send the S
 az aks get-credentials --resource-group ReplaceWith_PoCResourceGroupName --name ReplaceWith_AzureKubernetesServiceName
 ```
 
-These keys are stored in a file called *.kubeconfig* in the user's directory. With that security context set, the team uses the "get nodes" command using the *kubectl* utility to show the nodes in the cluster:
+These keys are stored [in a file called *.config* in the user's directory](https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/). With that security context set, the team uses the "get nodes" command using the *kubectl* utility to show the nodes in the cluster:
 
 ```
 kubectl get nodes
@@ -336,13 +336,15 @@ After a few moments, the "watch" command will return an external IP address. At 
 
 ## Test the Application
 
+Using the IP Address (Endpoint) they obtained in the last step, the team checks to ensure the same output as the local application and the Docker Container:
+
+<img src="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/K8s2AzureSQL/graphics/FlaskReturn01.png?raw=true" alt="drawing" width="800"/>
 
 ## Coding Assets
 
 [You can find all of the code assets for this sample at this location.](https://github.com/BuckWoody/PresentationsAndBlogs/tree/master/K8s2AzureSQL/code). Here's what they do:
 
 - app.py
-- buck3.yaml
 - config.ini
 - Dockerfile
 - flask2sql.yaml
@@ -351,11 +353,19 @@ After a few moments, the "watch" command will return an external IP address. At 
 In addition, the az commands will make additional files such as the key for the application and other information.
 
 ## Clean Up
+With the application created, edtied, documented and tested, the team can now "tear down" the application. By keeping everything in a single resource group in Microsoft Azure, it's a simple matter of deleting the resource group using the *az CLI* utility: 
 
 ```
 az group delete -n ReplaceWith_PoCResourceGroupName -y
-copy c:\users\bwoody\.kube\config c:\users\bwoody\.kube\config.old
-del c:\users\bwoody\.kube\config
+```
+
+> Note: If you created your Azure SQL Database in another rewource group and you no longer need it, you can use the Microsoft Azure Portal to delete that resource.
+
+The team member leading the PoC project uses Microsoft Windows as her workstation, and wants to retain the secrets file from Kubernets but wants to remove it from the system as the active location. She simply copies the file to a *config.old" text file and then deletes it:
+
+```
+copy c:\users\ReplaceWith_YourUserName\.kube\config c:\users\ReplaceWith_YourUserName\.kube\config.old
+del c:\users\ReplaceWith_YourUserName\.kube\config
 ```
 
 # Learn More
