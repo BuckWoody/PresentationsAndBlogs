@@ -32,7 +32,7 @@ In this article we'll explain the process for creating the entire Proof-of-Conce
 6. Deploy the application Container from the ACS Registry to AKS and test the application
 7. Clean up
 
-> Throughout this article, there are several values you should replace, as listed below. Ensure that you consistently replace these values for each step.
+> Throughout this article, there are several values you should replace, as listed below. Ensure that you consistently replace these values for each step. You might want to open a text editor and drop these values in to set the correct values as you work though the Proof-of-Concept project:
 
 - *ReplaceWith_AzureSubscriptionName*: Replace this value with the name of the Azure subscription name you have. 
 - *ReplaceWith_PoCResourceGroupName*: Replace this value with the name of the resource group you would like to create. 
