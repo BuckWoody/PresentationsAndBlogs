@@ -15,7 +15,7 @@ This example is fairly comprehensive in scope, but uses the simplest application
 
 The AdventureWorks (fictitious) company uses a database that stores data about Sales and Marketing, Products, Customers and Manufacturing. It also contains views and stored procedures that join information about the products, such as the product name, category, price, and a brief description. 
 
-The AdventureWorks Development team wants to create a Proof-of-Concept (PoC) that returns data from a View in the AdventureWorksLT database, and show the result in a web interface. Using this PoC, the Development team will create a more scalable snd multi-cloud ready application for the Sales team. They have selected the Microsoft Azure platform for all aspects of deployment. The PoC is using the following elements:
+The AdventureWorks Development team wants to create a Proof-of-Concept (PoC) that returns data from a View in the AdventureWorksLT database, and make them available as a REST API. Using this PoC, the Development team will create a more scalable snd multi-cloud ready application for the Sales team. They have selected the Microsoft Azure platform for all aspects of deployment. The PoC is using the following elements:
 
 - A Python application using the Flask package for headless web deployment.
 - Docker Containers for code and environment isolation, stored in a private registry so that the entire company can re-use the application Containers in future projects, saving time and money. 
@@ -93,12 +93,11 @@ During creation, they used the [Azure Management Portal to set the Firewall for 
 
 Next, the Development team created a simple Python application that opens a connection to Azure SQL DB, and returns a list of products. This code will be replaced with much more complex functions, and may also include more than one application deployed into the Kubernetes Pods in production for a robust, manifest-driven approach to application solutions. 
 
-The Team created a simple text file called *config.ini* to hold variables for the server connections and other information. Using the ConfigParser library they can then separate out the variables from the Python Code into a block they set to *[Connection]*:
+The Team created a simple text file called *.env* to hold variables for the server connections and other information. Using the `python-dotenv` library they can then separate out the variables from the Python Code. This is a common approach to keeping secrets and other information out of the code itself. 
 
 ```
-[Connection]
-SQL_SERVER_USERNAME = ReplaceWith_AzureSQLDBSQLServerLoginName
 SQL_SERVER_ENDPOINT = ReplaceWith_AzureSQLDBServerName
+SQL_SERVER_USERNAME = ReplaceWith_AzureSQLDBSQLServerLoginName
 SQL_SERVER_PASSWORD = ReplaceWith_AzureSQLDBSQLServerLoginPassword
 SQL_SERVER_DATABASE = ReplaceWith_AzureSQLDBDatabaseName
 ```
@@ -115,16 +114,23 @@ The team next wrote the PoC application and called it *app.py*. You can see the 
 
 ```
 # Set up the libraries for the configuration and base web interfaces
-import configparser
+from dotenv import load_dotenv
 from flask import Flask
+from flask_restful import Resource, Api
 import pyodbc
 
-# Open the configuration file
-config = configparser.ConfigParser()
-config.read('config.ini')
+# Load the variables from the .env file
+load_dotenv()
 
-# Create the Flask Application
+# Create the Flask-RESTful Application
 app = Flask(__name__)
+api = Api(app)
+
+# Create connection to Azure SQL DB using the config.ini file values
+server_name = os.getenv('SQL_SERVER_ENDPOINT')
+database_name = os.getenv('SQL_SERVER_DATABASE')
+user_name = os.getenv('SQL_SERVER_USERNAME')
+password = os.getenv('SQL_SERVER_PASSWORD')
 
 # Create connection to Azure SQL DB using the config.ini file values
 ServerName = config.get('Connection', 'SQL_SERVER_ENDPOINT')
@@ -137,33 +143,34 @@ PasswordValue = config.get('Connection', 'SQL_SERVER_PASSWORD')
 # https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver16#version-17
 connection = pyodbc.connect(f'Driver=ODBC Driver 17 for SQL Server;Server={ServerName};Database={DatabaseName};uid={UserName};pwd={PasswordValue}')
 
-# Create the query and set the cursor object to hold the results
-cursor = connection.cursor()
-cursor.execute("SELECT [ProductID], [Name], [Description] FROM [SalesLT].[vProductAndDescription] ORDER BY [Name];")
+# Create the SQL query to run against the database
+def query_db():
+    cursor = connection.cursor()
+    cursor.execute("SELECT TOP (10) [ProductID], [Name], [Description] FROM [SalesLT].[vProductAndDescription] WHERE Culture = 'EN' FOR JSON AUTO;")
+    result = cursor.fetchone()
+    cursor.close()
+    return result
 
-# Display the results
-strContent= "<table style='border:1px solid red'>"
-for row in cursor:
-    strContent= strContent+ "<tr>"
-    for dbItem in row:
-        strContent= strContent+ "<td>" + str(dbItem) + "</td>"
-    strContent= strContent+ "</tr>"
-strContent= strContent+ "</table>"
-connection.close()
+# Create the class that will be used to return the data from the API
+class Products(Resource):
+    def get(self):
+        result = query_db()
+        json_result = {} if (result == None) else json.loads(result[0])     
+        return json_result, 200
 
-# Set the Flask application to run on the standard ports - typically port 5000
-@app.route('/')
-@app.route('/home')
-def home():
-    return "<html><body>" + strContent + "</body></html>"
+# Set the API endpoint to the Products class
+api.add_resource(Products, '/products')
 
+# Start App on default Flask port 5000
 if __name__ == "__main__":
     app.run(debug=True)
 ```
 
-They checked that this application runs locally, and returns a page to http://localhost:5000
+They checked that this application runs locally, and returns a page to http://localhost:5000/products
 
 <img src="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/K8s2AzureSQL/graphics/FlaskReturn01.png?raw=true" alt="drawing" width="800"/>
+
+> **Important Considerations:** When building production application, it is strongly recommened to avoid using the administrator account to access the database. Read here more details on how to set up an account for your application: [Create and connect to an Azure SQL DB in 6 easy steps](https://devblogs.microsoft.com/azure-sql/create-and-connect-to-an-azure-sql-db/). Also, the provided code is heavily simplified so that you can easily get started with Python and Kubernetes in Azure. For a complete example on how to create API with Python and Azure SQL, take a look here: [Creating a REST API with Python and Azure SQL](https://github.com/Azure-Samples/azure-sql-db-python-rest-api/)
 
 ## Deploy the Application to a Docker Container
 A Container is a reserved, protected space in a computing system that provides isolation and encapsulation. To create one, you use a Manifest file, which is simply a text file describing the binaries and code you wish to contain. Using a Container Runtime (such as Docker), you can then create a binary Image that has all of the files you want to run and reference. From there, you can "run" the binary image, and that is called a Container, which you can reference as if it were a full computing system. It's a smaller, simpler way to abstract your application runtimes and environment than using a full Virtual Machine. [You can learn more about Containers and Docker here.](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/container-docker-introduction/docker-defined)
@@ -182,12 +189,11 @@ FROM laudio/pyodbc
 # Create a Working directory for the application
 WORKDIR /flask2sql
 
-# Install the other two libraries that are required - this could also be done in a "requirements file"
-RUN pip install Flask
-RUN pip install configparser
-
 # Copy all of the code from the current directory into the WORKDIR
 COPY . .
+
+# Install the  libraries that are required
+RUN pip install -r ./requirements.txt
 
 # Once the container starts, run the application, and open all TCP/IP ports 
 CMD ["python3", "-m" , "flask", "run", "--host=0.0.0.0"]
@@ -200,7 +206,7 @@ docker build -t flask2sql .
 docker run -d -p 5000:5000 -t flask2sql
 ```
 
-Once again, the team tests the http://localhost:5000 link to ensure the Container can access the database, and they see the following return:
+Once again, the team tests the http://localhost:5000/products link to ensure the Container can access the database, and they see the following return:
 
 <img src="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/K8s2AzureSQL/graphics/FlaskReturn01.png?raw=true" alt="drawing" width="800"/>
 
@@ -345,7 +351,7 @@ Using the IP Address (Endpoint) they obtained in the last step, the team checks 
 [You can find all of the code assets for this sample at this location.](https://github.com/BuckWoody/PresentationsAndBlogs/tree/master/K8s2AzureSQL/code). Here's what they do:
 
 - **app.py** - The Python application that performs a simple SELECT from an Azure SQL Database 
-- **config.ini** - A text file with connection information to the Azure SQL Database
+- **.env** - A text file with connection information to the Azure SQL Database
 - **Dockerfile** - The manifest for the Docker Image creation
 - **flask2sql.yaml** - The manifest for the Kubernetes deplpyment
 
