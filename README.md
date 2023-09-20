@@ -21,6 +21,7 @@
 ## Blogs
 
 - [Kubernetes Application to Azure SQL DB](https://github.com/BuckWoody/PresentationsAndBlogs/tree/master/K8s2AzureSQL)
+- [Using Microsoft Azure OpenAI and SQL Server Machine Learning Services](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/ai_ml_dl/OpenAI-SQLML.ipynb)
   
 ## Notebooks and Courses
 

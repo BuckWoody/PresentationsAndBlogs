@@ -104,15 +104,15 @@ SQL_SERVER_PASSWORD = ReplaceWith_AzureSQLDBSQLServerLoginPassword
 SQL_SERVER_DATABASE = ReplaceWith_AzureSQLDBDatabaseName
 ```
 
-> **Important Security Considerations:** For clarity and simplicity, this application is using a configuration file that is read from Python. Since the code will deploy with the container, the connection information may be able to derive from the contents. You should carefully consider the various methods of working with security, connections, and secrets and determine the best level and mechanism you should use for your application. 
+> **Important Security Considerations:** For clarity and simplicity, this application is using a configuration file that is read from Python. Since the code will deploy with the container, the connection information may be able to derive from the contents. You should carefully consider the various methods of working with security, connections, and secrets and determine the best level and mechanism you should use for your application. You have multiple options of working with secret information such as connection strings and the like, and the list below shows a few of those options. Always pick the highest level of security, and even multiple levels to ensure your application is secure.
 
 - [You can learn more about Azure SQL DB security here.](https://learn.microsoft.com/en-us/azure/security/fundamentals/database-security-checklist) 
-- Python secrets
-- Docker security
-- Kubernetes secrets
-- Microsoft Entra - https://learn.microsoft.com/en-us/azure/active-directory-b2c/configure-authentication-sample-python-web-app 
+- [Another method to work with secrets in Python is to use the python-secrets library. More here.](https://pypi.org/project/python-secrets/)Python secrets
+- [Docker security and secrets are discussed here.](https://docs.docker.com/engine/swarm/secrets/)
+- [Kubernetes secrets are discussed here.](https://kubernetes.io/docs/concepts/configuration/secret/)
+- [You can also learn more about Microsoft Entra, formerly Azure Active Directory authentication here.](https://learn.microsoft.com/en-us/azure/active-directory-b2c/configure-authentication-sample-python-web-app)
 
-The team next wrote the application and called it *app.py*. You can see the self-documented code here:
+The team next wrote the PoC application and called it *app.py*. You can see the self-documented code here:
 
 ```
 # Set up the libraries for the configuration and base web interfaces
@@ -164,17 +164,56 @@ if __name__ == "__main__":
 
 They checked that this application runs locally, and returns a page to http://localhost:5000
 
+<img src="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/K8s2AzureSQL/code/FlaskReturn01.png?raw=true" alt="drawing" width="800"/>
+
 
 ## Deploy the Application to a Docker Container
+A Container is a reserved, protected space in a computing system that provides isolation and encapsulation. To create one, you use a Manifest file, which is simply a text file describing the binaries and code you wish to contain. Using a Container Runtime (such as Docker), you can then create a binary Image that has all of the files you want to run and reference. From there, you can "run" the binary image, and that is called a Container, which you can reference as if it were a full computing system. It's a smaller, simpler way to abstract your application runtimes and environment than using a full Virtual Machine. [You can learn more about Containers and Docker here.]()
+
+The team started with a DockerFile (the Manifest) that layers the elements of what the team wants to use. They start with a base Python image that already has the pyodbc
+libraries installed, and then they run all commands necessary to contain the program and config file in the previous step. 
+
+You can see the self-annotated Dockerfile here:
+
+```
+# syntax=docker/dockerfile:1
+
+# Start with a Container binary that already has Python and pyodbc installed
+FROM laudio/pyodbc
+
+# Create a Working directory for the application
+WORKDIR /flask2sql
+
+# Install the other two libraries that are required - this could also be done in a "requirements file"
+RUN pip install Flask
+RUN pip install configparser
+
+# Copy all of the code from the current directory into the WORKDIR
+COPY . .
+
+# Once the container starts, run the application, and open all TCP/IP ports 
+CMD ["python3", "-m" , "flask", "run", "--host=0.0.0.0"]
+```
+
+With that file in place, the team dropped to a command-prompt in the coding directory and ran the following code to create the binary Image from the Manifest, and then another command to start the Container: 
 
 ```
 docker build -t flask2sql .
 docker run -d -p 5000:5000 -t flask2sql
-http://localhost:5000
 ```
- 
-Create Container registry: 
-https://learn.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-acr?tabs=azure-cli
+
+Once again, the team tests the http://localhost:5000 link to ensure the Container can access the database, and they see the following return:
+
+<img src="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/K8s2AzureSQL/code/FlaskReturn01.png?raw=true" alt="drawing" width="800"/>
+
+## Deploy the Image to a Docker Registry
+The Container is now working, but is only available on the developer's machine. The Development team would like to make this application Image available to the rest of the company, and on to Kubernetes for deployment. The storage area for Container Images is called a *repository*, and there can be both public and private repositories for Container Images. In fact, AdvenureWorks used a public Image for the Python environment in their Dockerfile. 
+
+The team would like to control access to the Image, and rather than putting it on the web they decide they would like to host it themselves, but in Microsoft Azure where they have full control over security and access. [You can read more about Microsoft Azure Container Registry here.](https://learn.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-acr?tabs=azure-cli
+)
+
+Returning to the command-line, the Development team uses the *az CLI* utility to add a Container registry service, enable an administration account, set it to anonymous "pulls" during the testing phase, and set a log in context to the registry:
+
 
 ```
 az acr create --resource-group ReplaceWith_PoCResourceGroupName --name ReplaceWith_AzureContainerRegistryName --sku Standard
@@ -182,6 +221,8 @@ az acr update -n ReplaceWith_AzureContainerRegistryName --admin-enabled true
 az acr update --name ReplaceWith_AzureContainerRegistryName --anonymous-pull-enabled
 az acr login --name ReplaceWith_AzureContainerRegistryName
 ```
+
+This context will be used in subsequent steps. 
 
 ## Tag the local Docker Image to prepare it for uploading
 
