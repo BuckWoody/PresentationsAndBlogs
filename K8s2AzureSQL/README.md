@@ -344,13 +344,12 @@ Using the IP Address (Endpoint) they obtained in the last step, the team checks 
 
 [You can find all of the code assets for this sample at this location.](https://github.com/BuckWoody/PresentationsAndBlogs/tree/master/K8s2AzureSQL/code). Here's what they do:
 
-- app.py
-- config.ini
-- Dockerfile
-- flask2sql.yaml
-- requirements.txt
+- **app.py** - The Python application that performs a simple SELECT from an Azure SQL Database 
+- **config.ini** - A text file with connection information to the Azure SQL Database
+- **Dockerfile** - The manifest for the Docker Image creation
+- **flask2sql.yaml** - The manifest for the Kubernetes deplpyment
 
-In addition, the az commands will make additional files such as the key for the application and other information.
+In addition, the *az CLI* utility commands may make additional files such as the key for the application and other information in your application directory.
 
 ## Clean Up
 With the application created, edtied, documented and tested, the team can now "tear down" the application. By keeping everything in a single resource group in Microsoft Azure, it's a simple matter of deleting the resource group using the *az CLI* utility: 
