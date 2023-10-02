@@ -1,7 +1,7 @@
 
 <img style="float: right;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/solutions-microsoft-logo-small.png">
 
-# Creating a Kubernetes Application for Azure SQL DB
+# Creating a Kubernetes Application for Azure SQL Database
 
 #### Buck Woody, Principal Applied Data Scientist, Microsoft 
 
@@ -20,7 +20,7 @@ The AdventureWorks Development team wants to create a Proof-of-Concept (PoC) tha
 - A Python application using the Flask package for headless web deployment.
 - Docker Containers for code and environment isolation, stored in a private registry so that the entire company can re-use the application Containers in future projects, saving time and money. 
 - Kubernetes for ease of deployment and scale, and to avoid platform lock-in.
-- Microsoft Azure SQL DB for selection of size, performance, scale, auto-management and backup, in addition to Relational data storage and processing at the highest security level.  
+- Microsoft Azure SQL Database for selection of size, performance, scale, auto-management and backup, in addition to Relational data storage and processing at the highest security level.  
 
 In this article we'll explain the process for creating the entire Proof-of-Concept project. The general steps for creating the application are:
 
@@ -56,7 +56,7 @@ For the PoC, The team requires the following pre-requisites:
 **The Microsoft Azure az CLI tool**
 Next, the team installed the Azure *AZ CLI* tool. This cross-platform tool allows a command-line and scripted approach to the PoC, so that they can repeat the steps as they make changes and improvements. [You can find the installation for the AZ CLI tool here.](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
 
-With that tool set up, the team used it to log in to their Azure subscription, and set the subscription name they used for the PoC. They then ensured the Azure SQL DB server and database is accessible to the subscription:
+With that tool set up, the team used it to log in to their Azure subscription, and set the subscription name they used for the PoC. They then ensured the Azure SQL Database server and database is accessible to the subscription:
 
 ```
 az login
@@ -78,8 +78,8 @@ In the snippet below, you can see the AZ command used to create a resource group
 az group create --name ReplaceWith_PoCResourceGroupName --location eastus
 ```
 
-**Microsoft Azure SQL DB with the AdventureWorksLT sample database installed, using SQL Server Logins**
-AdventureWorks has standardized on the [Microsoft SQL Server Relational Database Management System platform](https://www.microsoft.com/en-us/sql-server/), and the Development team wants to use a managed service for the database rather than installing locally. Using Azure SQL DB allows this managed service to be completely code-compatible wherever they run the SQL Server engine - on-premises, in a Container, in Linux or Windows, or even in an Internet of Things (IoT) environment. 
+**Microsoft Azure SQL Database with the AdventureWorksLT sample database installed, using SQL Server Logins**
+AdventureWorks has standardized on the [Microsoft SQL Server Relational Database Management System platform](https://www.microsoft.com/en-us/sql-server/), and the Development team wants to use a managed service for the database rather than installing locally. Using Azure SQL Database allows this managed service to be completely code-compatible wherever they run the SQL Server engine - on-premises, in a Container, in Linux or Windows, or even in an Internet of Things (IoT) environment. 
 
 The team used the sample *AdventureWorksLT* database for the PoC using the same PoC Resource Group, [which you can learn to deploy here.](https://learn.microsoft.com/en-us/azure/azure-sql/database/single-database-create-quickstart?view=azuresql&tabs=azure-portal) They set a SQL Server account for login for testing, but will revisit this decision in a security review. 
 
@@ -91,7 +91,7 @@ During creation, they used the [Azure Management Portal to set the Firewall for 
  
 ## Create the Application
 
-Next, the Development team created a simple Python application that opens a connection to Azure SQL DB, and returns a list of products. This code will be replaced with much more complex functions, and may also include more than one application deployed into the Kubernetes Pods in production for a robust, manifest-driven approach to application solutions. 
+Next, the Development team created a simple Python application that opens a connection to Azure SQL Database, and returns a list of products. This code will be replaced with much more complex functions, and may also include more than one application deployed into the Kubernetes Pods in production for a robust, manifest-driven approach to application solutions. 
 
 The Team created a simple text file called *.env* to hold variables for the server connections and other information. Using the `python-dotenv` library they can then separate out the variables from the Python Code. This is a common approach to keeping secrets and other information out of the code itself. 
 
@@ -104,7 +104,7 @@ SQL_SERVER_DATABASE = ReplaceWith_AzureSQLDBDatabaseName
 
 > **Important Security Considerations:** For clarity and simplicity, this application is using a configuration file that is read from Python. Since the code will deploy with the container, the connection information may be able to derive from the contents. You should carefully consider the various methods of working with security, connections, and secrets and determine the best level and mechanism you should use for your application. You have multiple options of working with secret information such as connection strings and the like, and the list below shows a few of those options. Always pick the highest level of security, and even multiple levels to ensure your application is secure.
 
-- [You can learn more about Azure SQL DB security here.](https://learn.microsoft.com/en-us/azure/security/fundamentals/database-security-checklist) 
+- [You can learn more about Azure SQL Database security here.](https://learn.microsoft.com/en-us/azure/security/fundamentals/database-security-checklist) 
 - [Another method to work with secrets in Python is to use the python-secrets library, which you can read about here.](https://pypi.org/project/python-secrets/)
 - [Docker security and secrets are discussed here.](https://docs.docker.com/engine/swarm/secrets/)
 - [Kubernetes secrets are discussed here.](https://kubernetes.io/docs/concepts/configuration/secret/)
@@ -126,19 +126,19 @@ load_dotenv()
 app = Flask(__name__)
 api = Api(app)
 
-# Create connection to Azure SQL DB using the config.ini file values
+# Create connection to Azure SQL Database using the config.ini file values
 server_name = os.getenv('SQL_SERVER_ENDPOINT')
 database_name = os.getenv('SQL_SERVER_DATABASE')
 user_name = os.getenv('SQL_SERVER_USERNAME')
 password = os.getenv('SQL_SERVER_PASSWORD')
 
-# Create connection to Azure SQL DB using the config.ini file values
+# Create connection to Azure SQL Database using the config.ini file values
 ServerName = config.get('Connection', 'SQL_SERVER_ENDPOINT')
 DatabaseName = config.get('Connection', 'SQL_SERVER_DATABASE')
 UserName = config.get('Connection', 'SQL_SERVER_USERNAME')
 PasswordValue = config.get('Connection', 'SQL_SERVER_PASSWORD')
 
-# Connect to Azure SQL DB using the pyodbc package
+# Connect to Azure SQL Database using the pyodbc package
 # Note: You may need to install the ODBC driver if it is not already there. You can find that at:
 # https://learn.microsoft.com/en-us/sql/connect/odbc/download-odbc-driver-for-sql-server?view=sql-server-ver16#version-17
 connection = pyodbc.connect(f'Driver=ODBC Driver 17 for SQL Server;Server={ServerName};Database={DatabaseName};uid={UserName};pwd={PasswordValue}')
