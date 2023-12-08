@@ -1,4 +1,4 @@
-# Presentations, Courses and Blogs 
+# Presentations, Courses and Blogs from Buck
 
 #### Buck Woody, Applied Data Scientist, Microsoft
 
@@ -48,7 +48,6 @@
 - [Microsoft R for Architects](https://github.com/Azure/LearnAnalytics-MicrosoftRforArchitects)
 
 - [Microsoft R for the SQL Server Professional](https://github.com/Azure/LearnAnalytics-MicrosoftRforSQLServerProfessional)
-
 
 
 
