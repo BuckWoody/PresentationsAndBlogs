@@ -24,26 +24,27 @@ The AdventureWorks Development team wants to create a Proof-of-Concept (PoC) tha
 
 In this article we'll explain the process for creating the entire Proof-of-Concept project. The general steps for creating the application are:
 
-1. Set up pre-requisites
-2. Write the application
+1. Set up prerequisites
+2. Create the application
 3. Create a Docker Container to deploy the application and test
 4. Create an Azure Container Service (ACS) Registry and load the Container to the ACS Registry
 5. Create the Azure Kubernetes Service (AKS) environment
 6. Deploy the application Container from the ACS Registry to AKS and test the application
-7. Clean up
+7. Test the application
+8. Clean up
 
 > Throughout this article, there are several values you should replace, as listed below. Ensure that you consistently replace these values for each step. You might want to open a text editor and drop these values in to set the correct values as you work though the Proof-of-Concept project:
 
 - *ReplaceWith_AzureSubscriptionName*: Replace this value with the name of the Azure subscription name you have. 
 - *ReplaceWith_PoCResourceGroupName*: Replace this value with the name of the resource group you would like to create. 
-- *ReplaceWith_AzureSQLDBServerName*: Replace this value with the name of the Azure SQL Database Server you create using the Azure Portal.
-- *ReplaceWith_AzureSQLDBSQLServerLoginName*: Replace this value with the vaue of the SQL Server User Name you create in the Azure Portal.
-- *ReplaceWith_AzureSQLDBSQLServerLoginPassword*: Replace this value with the vaue of the SQL Server User Password you create in the Azure Portal.
-- *ReplaceWith_AzureSQLDBDatabaseName*: Replace this value with the name of the Azure SQL Database you create using the Azure Portal.
+- *ReplaceWith_AzureSQLDBServerName*: Replace this value with the name of the Azure SQL Database Server you create using the Azure portal.
+- *ReplaceWith_AzureSQLDBSQLServerLoginName*: Replace this value with the value of the SQL Server User Name you create in the Azure portal.
+- *ReplaceWith_AzureSQLDBSQLServerLoginPassword*: Replace this value with the value of the SQL Server User Password you create in the Azure portal.
+- *ReplaceWith_AzureSQLDBDatabaseName*: Replace this value with the name of the Azure SQL Database you create using the Azure portal.
 - *ReplaceWith_AzureContainerRegistryName*: Replace this value with the name of the Azure Container Registry you would like to create.
 - *ReplaceWith_AzureKubernetesServiceName*: Replace this value with the name of the Azure Kubernetes Service you would like to create.
 
-## Pre-Requisites
+## Prerequisites
 The developers at AdventureWorks use a mix of Windows, Linux, and Apple systems for development, so they are using Visual Studio Code as their environment and git for the source control, both of which which run cross-platform. 
 
 For the PoC, The team requires the following pre-requisites:
@@ -81,7 +82,7 @@ az group create --name ReplaceWith_PoCResourceGroupName --location eastus
 **Microsoft Azure SQL Database with the AdventureWorksLT sample database installed, using SQL Server Logins**
 AdventureWorks has standardized on the [Microsoft SQL Server Relational Database Management System platform](https://www.microsoft.com/en-us/sql-server/), and the Development team wants to use a managed service for the database rather than installing locally. Using Azure SQL Database allows this managed service to be completely code-compatible wherever they run the SQL Server engine - on-premises, in a Container, in Linux or Windows, or even in an Internet of Things (IoT) environment. 
 
-The team used the sample *AdventureWorksLT* database for the PoC using the same PoC Resource Group, [which you can learn to deploy here.](https://learn.microsoft.com/en-us/azure/azure-sql/database/single-database-create-quickstart?view=azuresql&tabs=azure-portal) They set a SQL Server account for login for testing, but will revisit this decision in a security review. 
+The team used the sample *AdventureWorksLT* database for the PoC using the same PoC Resource Group, [which you can learn to deploy here.](https://learn.microsoft.com/en-us/azure/azure-sql/database/single-database-create-quickstart?view=azuresql&tabs=azure-portal) The team set up a SQL authenticated login for testing, but will revisit this decision in a security review. 
 
 <img src="https://learn.microsoft.com/en-us/azure/azure-sql/database/media/single-database-create-quickstart/additional-settings.png?view=azuresql" alt="drawing" width="600"/>
 
@@ -170,7 +171,7 @@ They checked that this application runs locally, and returns a page to http://lo
 
 <img src="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/K8s2AzureSQL/graphics/FlaskReturn01.png?raw=true" alt="drawing" width="800"/>
 
-> **Important Considerations:** When building production applications, you should avoid using the administrator account to access the database. [Read more here for details on how to set up an account for your application.](https://devblogs.microsoft.com/azure-sql/create-and-connect-to-an-azure-sql-db/). The code in this article is simplified so that you can quickly get started with applications using Python and Kubernetes in MicrosoftAzure. [Check this resource for a complete example on how to create API with Python and Azure SQL Database.](https://github.com/Azure-Samples/azure-sql-db-python-rest-api/)
+> **Important Considerations:** When building production applications, you should avoid using the administrator account to access the database. [Read more here for details on how to set up an account for your application.](https://devblogs.microsoft.com/azure-sql/create-and-connect-to-an-azure-sql-db/). More realistically, you could use a [contained database user](https://learn.microsoft.com/sql/relational-databases/security/contained-database-users-making-your-database-portable?view=azuresqldb-current&preserve-view=true) with read-only permissions, or a login or contained database user connected to [a user-assigned managed identity](https://learn.microsoft.com/azure/azure-sql/database/authentication-azure-ad-user-assigned-managed-identity) with read-only permissions. The code in this article is simplified so that you can quickly get started with applications using Python and Kubernetes in Microsoft Azure. [Check this resource for a complete example on how to create API with Python and Azure SQL Database.](https://github.com/Azure-Samples/azure-sql-db-python-rest-api/)
 
 ## Deploy the Application to a Docker Container
 A Container is a reserved, protected space in a computing system that provides isolation and encapsulation. To create one, you use a Manifest file, which is simply a text file describing the binaries and code you wish to contain. Using a Container Runtime (such as Docker), you can then create a binary Image that has all of the files you want to run and reference. From there, you can "run" the binary image, and that is called a Container, which you can reference as if it were a full computing system. It's a smaller, simpler way to abstract your application runtimes and environment than using a full Virtual Machine. [You can learn more about Containers and Docker here.](https://learn.microsoft.com/en-us/dotnet/architecture/microservices/container-docker-introduction/docker-defined)
@@ -218,7 +219,7 @@ The storage area for Container Images is called a *repository*, and there can be
 The team would like to control access to the Image, and rather than putting it on the web they decide they would like to host it themselves, but in Microsoft Azure where they have full control over security and access. [You can read more about Microsoft Azure Container Registry here.](https://learn.microsoft.com/en-us/azure/aks/tutorial-kubernetes-prepare-acr?tabs=azure-cli
 )
 
-Returning to the command-line, the Development team uses the *az CLI* utility to add a Container registry service, enable an administration account, set it to anonymous "pulls" during the testing phase, and set a log in context to the registry:
+Returning to the command-line, the Development team uses the *az CLI* utility to add a Container registry service, enable an administration account, set it to anonymous "pulls" during the testing phase, and set a login context to the registry:
 
 ```
 az acr create --resource-group ReplaceWith_PoCResourceGroupName --name ReplaceWith_AzureContainerRegistryName --sku Standard
@@ -364,7 +365,7 @@ With the application created, edited, documented and tested, the team can now "t
 az group delete -n ReplaceWith_PoCResourceGroupName -y
 ```
 
-> Note: If you created your Azure SQL Database in another resource group and you no longer need it, you can use the Microsoft Azure Portal to delete it.
+> Note: If you created your Azure SQL Database in another resource group and you no longer need it, you can use the Azure portal to delete it.
 
 The team member leading the PoC project uses Microsoft Windows as her workstation, and wants to retain the secrets file from Kubernetes but wants to remove it from the system as the active location. She simply copies the file to a *config.old" text file and then deletes it:
 
