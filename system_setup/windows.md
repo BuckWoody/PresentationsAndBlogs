@@ -2,7 +2,7 @@
 
 These are a few of the scripts, commands, and other environment settings I use on my Windows systems. I'm currently running Windows 11 Enterprise, which is working well with these settings. I do everything in [PowerShell](https://learn.microsoft.com/en-us/powershell/) (Core) for my system management and configuration. Also, some of these commands won't run properly unless you are in "Elevated" or "Administrator" level, so be aware of that.
 
-This is for info and examples **only**. I explain a few things here, but if *anything* is a new term or command, highlight it and look it up. Understand what your are doing if you want to try this - and you're on your own here. Test first, don't run this in production first! 
+This is for info and examples **only**. I explain a few things here, but if *anything* is a new term or command, highlight it and look it up. Understand what your are doing if you want to try this - and you're on your own here - test first, don't run this in production first! 
 
 ### Disclaimer, for people who need to be told this sort of thing: 
 
@@ -12,7 +12,7 @@ If you want to suggest something here, add an [Issue](https://docs.github.com/en
 
 # Configure Powershell Environment
 
-I like interesting prompts and so on. I also use Windows Terminal, which is really useful. My prompt looks like this (I blanked out my domain name in this graphic, it shows if you use this script:)
+I like interesting prompts and so on. I also use [Windows Terminal](https://apps.microsoft.com/detail/9N0DX20HK701?launch=true&mode=full&referrer=bingwebsearch&ocid=bingwebsearch&hl=en-us&gl=US), which is really useful. My prompt looks like this (I blanked out my domain name in this graphic, it shows if you use this script:)
 
 ![My PowerShell Prompt, which has embedded graphics](../graphics/tempsnip.png)
 
