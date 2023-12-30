@@ -2,6 +2,13 @@
 
 #### Buck Woody, Applied Data Scientist, Microsoft
 
+
+## System Setup
+
+- [My Current Windows Setup](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/system_setup/windows.md)
+
+- [My Current Ubuntu Setup](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/system_setup/ubuntu.md)
+
 ## Presentations:
 
 - [An Introduction to AI, Machine Learning and Deep Learning](https://buckwoody.github.io/presentations/ai_ml_dl)
