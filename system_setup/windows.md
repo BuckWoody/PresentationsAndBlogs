@@ -75,11 +75,19 @@ As I mentioned, I run a complete update script to keep my system up to date and 
 > This is the most dangerouse of the scripts, don't run this on your test system without understanding everything it does. Completely. You are on your own here.
 
 <pre>
+$host.ui.RawUI.WindowTitle = "Synchronizing Clock..."
 net start w32time
 w32tm /resync
+
 $host.ui.RawUI.WindowTitle = "Beginning update with Choco..."
 Write-Host "Running Choco Upgrade"
 choco upgrade all --confirm
+
+$host.ui.RawUI.WindowTitle = "Choco Librairies to OneDrive..."
+Write-Host "Copy Choco Lib"
+xcopy C:\ProgramData\chocolatey\choco.exe.manifest "C:\Users\bwoody\OneDrive - Microsoft\Transfer\ChocoLib" /Y 
+xcopy C:\ProgramData\chocolatey\lib\*.* "C:\Users\bwoody\OneDrive - Microsoft\Transfer\ChocoLib" /Y 
+
 
 $host.ui.RawUI.WindowTitle = "Beginning update with Winget..."
 Write-Host "Running Winget Upgrade"
@@ -94,7 +102,15 @@ $host.ui.RawUI.WindowTitle = "Beginning File Cleanup with CleanMgr..."
 Write-Host "Running CleanMgr"
 Start-Process -FilePath CleanMgr.exe -ArgumentList '/sagerun:1' ##-WindowStyle Hidden
 
-Get-Volume
+$host.ui.RawUI.WindowTitle = "Complete. System Information:"
+Write-Host "Drives: "
+Get-Volume | sort-object Size
+
+Write-Host "Network: " 
+Get-NetIPConfiguration | format-table -autosize -Property InterfaceDescription, IPv4Address
+
+Write-Host "GB of Memory om this system: " 
+(Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum /1gb
 </pre>
 
 ## So what's your deal?
