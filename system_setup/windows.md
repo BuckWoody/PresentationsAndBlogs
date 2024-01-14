@@ -34,7 +34,7 @@ function prompt {
     Write-host ($(if ($IsAdmin) { '(as admin) ' } else { '' })) -ForegroundColor Red -NoNewLine
     Write-Host "on `u{1F4BB}" $env:COMPUTERNAME"."$env:USERDNSDOMAIN
 
-    Write-Host "`u{1F4C1} $pwd"  -ForegroundColor Yellow ``
+    Write-Host "`u{1F4C1} $pwd"  -ForegroundColor Yellow 
     return "`u{25B6} "
 } 
 </pre>
@@ -83,12 +83,6 @@ $host.ui.RawUI.WindowTitle = "Beginning update with Choco..."
 Write-Host "Running Choco Upgrade"
 choco upgrade all --confirm
 
-$host.ui.RawUI.WindowTitle = "Choco Librairies to OneDrive..."
-Write-Host "Copy Choco Lib"
-xcopy C:\ProgramData\chocolatey\choco.exe.manifest "C:\Users\bwoody\OneDrive - Microsoft\Transfer\ChocoLib" /Y 
-xcopy C:\ProgramData\chocolatey\lib\*.* "C:\Users\bwoody\OneDrive - Microsoft\Transfer\ChocoLib" /Y 
-
-
 $host.ui.RawUI.WindowTitle = "Beginning update with Winget..."
 Write-Host "Running Winget Upgrade"
 winget upgrade --all 
@@ -102,7 +96,17 @@ $host.ui.RawUI.WindowTitle = "Beginning File Cleanup with CleanMgr..."
 Write-Host "Running CleanMgr"
 Start-Process -FilePath CleanMgr.exe -ArgumentList '/sagerun:1' ##-WindowStyle Hidden
 
+
+$host.ui.RawUI.WindowTitle = "Checking Logs for Errors..."
+$ErrorText = Get-EventLog -LogName System -EntryType Error
+$ErrorText | Out-GridView -Title "Windows System Log Error List"
+$ErrorText = Get-EventLog -LogName Application -EntryType Error
+$ErrorText | Out-GridView -Title "Windows Application Log Error List"
+$ErrorText = Get-EventLog -LogName Security -EntryType Error
+$ErrorText | Out-GridView -Title "Windows Security Log Error List"
+
 $host.ui.RawUI.WindowTitle = "Complete. System Information:"
+
 Write-Host "Drives: "
 Get-Volume | sort-object Size
 
