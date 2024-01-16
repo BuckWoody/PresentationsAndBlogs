@@ -98,8 +98,8 @@ Start-Process -FilePath CleanMgr.exe -ArgumentList '/sagerun:1' ##-WindowStyle H
 
 $host.ui.RawUI.WindowTitle = "Checking Logs for Errors..."
 Get-EventLog -LogName System -EntryType Error | Out-GridView -Title "Windows System Log Error List"
-Get-EventLog -LogName Application -EntryType Error  | Out-GridView -Title "Windows System Log Error List"
-Get-EventLog -LogName Security -EntryType Error | Out-GridView -Title "Windows System Log Error List"
+Get-EventLog -LogName Application -EntryType Error  | Out-GridView -Title "Windows Application Log Error List"
+Get-EventLog -LogName Security -EntryType Error | Out-GridView -Title "Windows Security Log Error List"
 
 $host.ui.RawUI.WindowTitle = "Complete. System Information:"
 
