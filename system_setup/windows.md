@@ -96,14 +96,10 @@ $host.ui.RawUI.WindowTitle = "Beginning File Cleanup with CleanMgr..."
 Write-Host "Running CleanMgr"
 Start-Process -FilePath CleanMgr.exe -ArgumentList '/sagerun:1' ##-WindowStyle Hidden
 
-
 $host.ui.RawUI.WindowTitle = "Checking Logs for Errors..."
-$ErrorText = Get-EventLog -LogName System -EntryType Error
-$ErrorText | Out-GridView -Title "Windows System Log Error List"
-$ErrorText = Get-EventLog -LogName Application -EntryType Error
-$ErrorText | Out-GridView -Title "Windows Application Log Error List"
-$ErrorText = Get-EventLog -LogName Security -EntryType Error
-$ErrorText | Out-GridView -Title "Windows Security Log Error List"
+Get-EventLog -LogName System -EntryType Error | Out-GridView -Title "Windows System Log Error List"
+Get-EventLog -LogName Application -EntryType Error  | Out-GridView -Title "Windows System Log Error List"
+Get-EventLog -LogName Security -EntryType Error | Out-GridView -Title "Windows System Log Error List"
 
 $host.ui.RawUI.WindowTitle = "Complete. System Information:"
 
