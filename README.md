@@ -11,6 +11,7 @@
 
 ## Presentations:
 
+- [AI-ML-DL-NLP-LLM - A Lab Notebook for Learning about AI](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/ai_ml_dl/AI-ML-DL-NLP-LLM.ipynb)
 - [An Introduction to AI, Machine Learning and Deep Learning](https://buckwoody.github.io/presentations/ai_ml_dl)
 
 - [SQL Server 2019 Big Data Clusters Workshop supporting materials](https://github.com/BuckWoody/presentations/tree/master/bdc)
