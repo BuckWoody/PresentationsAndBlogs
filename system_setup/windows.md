@@ -58,14 +58,17 @@ Install-Module -Name PSWindowsUpdate -Force
 Add-WUServiceManager -ServiceID 7971f918-a847-4430-9279-4a52d1efe18d
 </pre>
 
-# Put Windows 11 Full Context Menu back in Explorer
+# Put Windows 11 Full Context Menu back in Explorer and Disable Web Searching
 
 With all apologies to the Windows team (who are AWESOME), I like having the full menu available when  I right-click an item in the File Explorer in Windows. Again, do this at your own risk.
 
 **[Back up your registry if you try this on a test system! You should be doing that anyway. Click here to learn more.](https://support.microsoft.com/en-us/topic/how-to-back-up-and-restore-the-registry-in-windows-855140ad-e318-2a13-2829-d428a2ab0692)**
 
+The line after that adds a registry key to use only local search results, dramatically speeding up the Search function. 
 <pre>
 reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer"
+New-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "Enabled" -Value "1" -PropertyType DWord
 </pre>
 
 # Update Windows from Command Line 
