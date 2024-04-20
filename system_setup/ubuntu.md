@@ -8,5 +8,5 @@ sudo apt-get install localepurge
 # Update Ubuntu
 
 <pre> 
-sudo apt autoremove && sudo apt clean && sudo apt update && sudo apt full-upgrade && sudo do-release-upgrade
+sudo apt autoremove && sudo apt clean && sudo apt update && sudo apt full-upgrade && sudo do-release-upgrade -d
 </pre>
