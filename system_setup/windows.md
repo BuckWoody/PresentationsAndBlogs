@@ -10,7 +10,61 @@ This is for info and examples **only**. I explain a few things here, but if *any
 
 If you want to suggest something here, add an [Issue](https://docs.github.com/en/issues/tracking-your-work-with-issues/creating-an-issue) referencing this page and what you want to mention. If I like it, I'll put it here. I'll not close the Issue unless it's a bug you've found, that way you can see what other people do that I didn't include. 
 
-# Configure Powershell Environment
+# Windows System Maintenance Checklist
+
+1. **Create a System Restore Point**
+   - Open **Control Panel** > **System and Security** > **System**.
+   - Click **System protection** on the left.
+   - Click **Create** and follow the prompts to create a restore point.
+
+2. **Back Up Your Files**
+   - Use either the command line [**ROBOCOPY**](https://lazyadmin.nl/it/robocopy-ultimate-guide/) or [use an option listed here](https://support.microsoft.com/en-us/windows/choose-a-backup-solution-in-windows-10-31495e5d-370e-3631-c773-44de4301e070).
+
+3. **Backup BitLocker Keys**
+   - Open **Control Panel** > **System and Security** > **BitLocker Drive Encryption**.
+   - Click **Manage BitLocker**.
+   - Select **Back up your recovery key** and choose a safe location to save the key (e.g., USB drive, Microsoft account, or print it).
+
+4. **Update Windows**
+   - Go to **Settings** > **Update & Security** > **Windows Update**.
+   - Click **Check for updates** and install any available updates.
+   - (See below if you want a comand-line way to do this)
+
+5. **Run a Virus Scan**
+   - Open **Windows Security** from the Start menu.
+   - Go to **Virus & threat protection**.
+   - Click **Quick scan** or **Full scan** to check for malware.
+
+6. **Check for System File Integrity**
+   - Open **Command Prompt** as an administrator.
+   - Type `sfc /scannow` and press **Enter**.
+   - Wait for the scan to complete and follow any instructions provided.
+
+7. **Check Disk for Errors**
+   - Open **File Explorer** and right-click on the drive you want to check.
+   - Select **Properties** > **Tools** > **Check** under Error checking.
+   - Follow the prompts to scan and repair the drive if necessary.
+
+8. **Clean Up Disk Space**
+   - Open **Disk Cleanup** by typing it in the Start menu search bar.
+   - Select the drive you want to clean up and click **OK**.
+   - Check the boxes for the types of files you want to delete and click **OK**.
+
+9. **Defragment and Optimize Drives**
+   - Open **Defragment and Optimize Drives** by typing it in the Start menu search bar.
+   - Select the drive you want to optimize and click **Optimize**.
+
+10. **Update Windows**
+   - Open **Settings** by typing it in the Start menu search bar.
+   - Type **Update**.
+   - Select **Check for Updates** and follow the prompts.
+
+11. **Review Startup Programs**
+    - Open **Task Manager** by pressing **Ctrl + Shift + Esc**.
+    - Go to the **Startup** tab.
+    - Disable any unnecessary programs that start with Windows.
+
+# Initial Settup - Configure Powershell Environment
 
 I like interesting prompts and so on. I also use [Windows Terminal](https://apps.microsoft.com/detail/9N0DX20HK701?launch=true&mode=full&referrer=bingwebsearch&ocid=bingwebsearch&hl=en-us&gl=US), which is really useful. My prompt looks like this (I blanked out my domain name in this graphic, it shows if you use this script:)
 
@@ -39,7 +93,7 @@ function prompt {
 } 
 </pre>
 
-## Install Choco from PowerShell
+## Maintenance - Install Choco from PowerShell
 
 Package Managers are tools that help you install/configure/uninstall software from the command-line. 
 I primarily use [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) for that, since it's built into the latest Windows releases, but I really like the [chocolatey](https://chocolatey.org/) package manager for other things. Here's how I installed that on my system:
@@ -48,7 +102,7 @@ I primarily use [winget](https://learn.microsoft.com/en-us/windows/package-manag
 Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
 </pre>
 
-# Install PSWindowsUpdate
+# Maintenance - Install PSWindowsUpdate
 
 I keep my system up to date from the command line in PowerShell, and to completely do that I want to get the Windows Updates as well. I do that with a PowerShell module called [PSWindowsUpdate](https://woshub.com/pswindowsupdate-module/)
 
@@ -56,19 +110,6 @@ I keep my system up to date from the command line in PowerShell, and to complete
 Set-ExecutionPolicy -ExecutionPolicy Unrestricted
 Install-Module -Name PSWindowsUpdate -Force
 Add-WUServiceManager -ServiceID 7971f918-a847-4430-9279-4a52d1efe18d
-</pre>
-
-# Put Windows 11 Full Context Menu back in Explorer and Disable Web Searching
-
-With all apologies to the Windows team (who are AWESOME), I like having the full menu available when  I right-click an item in the File Explorer in Windows. Again, do this at your own risk.
-
-**[Back up your registry if you try this on a test system! You should be doing that anyway. Click here to learn more.](https://support.microsoft.com/en-us/topic/how-to-back-up-and-restore-the-registry-in-windows-855140ad-e318-2a13-2829-d428a2ab0692)**
-
-The line after that adds a registry key to use only local search results, dramatically speeding up the Search function. 
-<pre>
-reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
-New-Item -Path "Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer"
-New-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "Enabled" -Value "1" -PropertyType DWord
 </pre>
 
 # Update Windows from Command Line 
@@ -115,6 +156,20 @@ Get-NetIPConfiguration | format-table -autosize -Property InterfaceDescription, 
 Write-Host "GB of Memory om this system: " 
 (Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum /1gb
 </pre>
+
+# Configuration - Put Windows 11 Full Context Menu back in Explorer and Disable Web Searching
+
+With all apologies to the Windows team (who are AWESOME), I like having the full menu available when  I right-click an item in the File Explorer in Windows. Again, do this at your own risk.
+
+**[Back up your registry if you try this on a test system! You should be doing that anyway. Click here to learn more.](https://support.microsoft.com/en-us/topic/how-to-back-up-and-restore-the-registry-in-windows-855140ad-e318-2a13-2829-d428a2ab0692)**
+
+The line after that adds a registry key to use only local search results, dramatically speeding up the Search function. 
+<pre>
+reg.exe add "HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32" /f /ve
+New-Item -Path "Registry::HKEY_CURRENT_USER\Software\Policies\Microsoft\Windows\Explorer"
+New-ItemProperty -Path "HKCU:\Software\Policies\Microsoft\Windows\Explorer" -Name "Enabled" -Value "1" -PropertyType DWord
+</pre>
+
 
 ## So what's your deal?
 
