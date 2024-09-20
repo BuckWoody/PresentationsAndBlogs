@@ -54,12 +54,7 @@ If you want to suggest something here, add an [Issue](https://docs.github.com/en
    - Open **Defragment and Optimize Drives** by typing it in the Start menu search bar.
    - Select the drive you want to optimize and click **Optimize**.
 
-10. **Update Windows**
-   - Open **Settings** by typing it in the Start menu search bar.
-   - Type **Update**.
-   - Select **Check for Updates** and follow the prompts.
-
-11. **Review Startup Programs**
+10. **Review Startup Programs**
     - Open **Task Manager** by pressing **Ctrl + Shift + Esc**.
     - Go to the **Startup** tab.
     - Disable any unnecessary programs that start with Windows.
