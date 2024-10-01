@@ -18,7 +18,7 @@ sudo apt-get install localepurge
 </pre>
 
 # Update Ubuntu
-As I mentioned, I run a complete update script to keep my system up to date and secure. I also do things like making sure the time is sync'd first (super important), find out the drive space, do some cleanup, and show my network status. 
+As I mentioned, I run a complete update script to keep my system up to date and secure. Some of these might require an apt install, so examine them line by line to see what you want to scrape from here.  
 
 > This is the most dangerouse of the scripts, don't run this on your test system without understanding everything it does. Completely. You are on your own here.
 
