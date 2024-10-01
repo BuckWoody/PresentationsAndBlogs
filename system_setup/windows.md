@@ -118,39 +118,60 @@ $host.ui.RawUI.WindowTitle = "Synchronizing Clock..."
 net start w32time
 w32tm /resync
 
+$host.ui.RawUI.WindowTitle = "Safety Scan..."
+Write-Host "Running Windows Defender" -ForegroundColor Black -BackgroundColor DarkYellow
+CD "C:\Program Files\Windows Defender\"
+.\MpCmdRun.exe -scan -scantype 1
+
 $host.ui.RawUI.WindowTitle = "Beginning update with Choco..."
-Write-Host "Running Choco Upgrade"
+Write-Host "Running Choco Upgrade" -ForegroundColor Black -BackgroundColor DarkYellow
 choco upgrade all --confirm
 
 $host.ui.RawUI.WindowTitle = "Beginning update with Winget..."
-Write-Host "Running Winget Upgrade"
+Write-Host "Running Winget Upgrade" -ForegroundColor Black -BackgroundColor DarkYellow
 winget upgrade --all 
 
 $host.ui.RawUI.WindowTitle = "Beginning update with PSWindowsUpgrade..."
-Write-Host "Running PSWindowsUpgrade"
+Write-Host "Running PSWindowsUpgrade" -ForegroundColor Black -BackgroundColor DarkYellow 
 get-windowsupdate
 install-windowsupdate -acceptall | Format-Table -Property Result, Title, Description -wrap
 
 $host.ui.RawUI.WindowTitle = "Beginning File Cleanup with CleanMgr..."
-Write-Host "Running CleanMgr"
+Write-Host "Running CleanMgr" -ForegroundColor Black -BackgroundColor DarkYellow
 Start-Process -FilePath CleanMgr.exe -ArgumentList '/sagerun:1' ##-WindowStyle Hidden
 
-$host.ui.RawUI.WindowTitle = "Checking Logs for Errors..."
+$host.ui.RawUI.WindowTitle = "Checking Logs for Errors..." 
+Write-Host "Checking Event Logs... " -ForegroundColor Black -BackgroundColor DarkYellow
 Get-EventLog -LogName System -EntryType Error | Out-GridView -Title "Windows System Log Error List"
 Get-EventLog -LogName Application -EntryType Error  | Out-GridView -Title "Windows Application Log Error List"
 Get-EventLog -LogName Security -EntryType Error | Out-GridView -Title "Windows Security Log Error List"
 
-$host.ui.RawUI.WindowTitle = "Complete. System Information:"
+$host.ui.RawUI.WindowTitle = "Complete. System Information:" 
 
-Write-Host "Drives: "
+Write-Host "Drives: " -ForegroundColor Black -BackgroundColor DarkYellow
 Get-Volume | sort-object Size
 
-Write-Host "Network: " 
+Write-Host "Network: " -ForegroundColor Black -BackgroundColor DarkYellow 
 Get-NetIPConfiguration | format-table -autosize -Property InterfaceDescription, IPv4Address
 
-Write-Host "GB of Memory om this system: " 
+Write-Host "GB of Memory om this system: " -ForegroundColor Black -BackgroundColor DarkYellow
 (Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum /1gb
-</pre>
+
+pause
+
+#Clear the event log
+Write-Host "Stand by, clearing Event Logs...." -ForegroundColor Black -BackgroundColor DarkYellow 
+
+function clear-all-event-logs ($computerName="localhost")
+{
+   $logs = Get-EventLog -ComputerName $computername -List | ForEach-Object {$_.Log}
+   $logs | ForEach-Object {Clear-EventLog -ComputerName $computername -LogName $_ }
+   Get-EventLog -ComputerName $computername -list
+}
+
+clear-all-event-logs -ComputerName $computername
+Write-Host "Maintenance Complete. " -ForegroundColor Black -BackgroundColor DarkYellow 
+cd $HOME</pre>
 
 # Configuration - Put Windows 11 Full Context Menu back in Explorer and Disable Web Searching
 
