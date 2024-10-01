@@ -1,7 +1,7 @@
 
 # Linux System Setup
 
-These are a few of the scripts, commands, and other environment settings I use on my Windows systems. I'm currently running Windows 11 Enterprise, which is working well with these settings. Some of these commands won't run properly unless you are in "sudo" or "su" level, so be aware of that.
+These are a few of the scripts, commands, and other environment settings I use on my Linux systems. I'm currently running Ubuntu Dev release, which is working well with these settings. Some of these commands won't run properly unless you are in "sudo" or "su" level, so be aware of that.
 
 This is for info and examples **only**. I explain a few things here, but if *anything* is a new term or command, highlight it and look it up. Understand what your are doing if you want to try this - and you're on your own here - test first, don't run this in production first! 
 
