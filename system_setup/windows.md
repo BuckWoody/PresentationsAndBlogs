@@ -111,9 +111,13 @@ Add-WUServiceManager -ServiceID 7971f918-a847-4430-9279-4a52d1efe18d
 
 As I mentioned, I run a complete update script to keep my system up to date and secure. I also do things like making sure the time is sync'd first (super important), find out the drive space, do some cleanup, and show my network status. 
 
-> This is the most dangerouse of the scripts, don't run this on your test system without understanding everything it does. Completely. You are on your own here.
+> This is the most dangerous of the scripts, don't run this on your test system without understanding everything it does. Completely. You are on your own here.
 
 <pre>
+$host.ui.RawUI.WindowTitle = "Maintenance begins..."
+#Install-Module -Name PSCalendar -RequiredVersion 2.9.0
+get-calendar
+
 $host.ui.RawUI.WindowTitle = "Synchronizing Clock..."
 net start w32time
 w32tm /resync
@@ -169,9 +173,11 @@ function clear-all-event-logs ($computerName="localhost")
    Get-EventLog -ComputerName $computername -list
 }
 
-clear-all-event-logs -ComputerName $computername
+clear-all-event-logs -ComputerName COOMPUTERNAMEHERE
 Write-Host "Maintenance Complete. " -ForegroundColor Black -BackgroundColor DarkYellow 
-cd $HOME</pre>
+cd $HOME
+
+</pre>
 
 # Configuration - Put Windows 11 Full Context Menu back in Explorer and Disable Web Searching
 
