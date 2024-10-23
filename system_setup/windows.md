@@ -59,7 +59,7 @@ If you want to suggest something here, add an [Issue](https://docs.github.com/en
     - Go to the **Startup** tab.
     - Disable any unnecessary programs that start with Windows.
 
-# Initial Settup - Configure Powershell Environment
+# Initial Setup - Configure Powershell Environment
 
 I like interesting prompts and so on. I also use [Windows Terminal](https://apps.microsoft.com/detail/9N0DX20HK701?launch=true&mode=full&referrer=bingwebsearch&ocid=bingwebsearch&hl=en-us&gl=US), which is really useful. My prompt looks like this (I blanked out my domain name in this graphic, it shows if you use this script:)
 
