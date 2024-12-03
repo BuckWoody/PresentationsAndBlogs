@@ -114,6 +114,11 @@ As I mentioned, I run a complete update script to keep my system up to date and 
 > This is the most dangerous of the scripts, don't run this on your test system without understanding everything it does. Completely. You are on your own here.
 
 <pre>
+# updateme.ps1
+# Author: Buck Woody
+# Purpose: Windows 11 System Maintenance
+# Version: 11.05122024
+
 $host.ui.RawUI.WindowTitle = "Maintenance begins..."
 #Install-Module -Name PSCalendar -RequiredVersion 2.9.0
 get-calendar
@@ -140,6 +145,10 @@ Write-Host "Running PSWindowsUpgrade" -ForegroundColor Black -BackgroundColor Da
 get-windowsupdate
 install-windowsupdate -acceptall | Format-Table -Property Result, Title, Description -wrap
 
+$host.ui.RawUI.WindowTitle = "Upgrade WSL..."
+Write-Host "Upgrade WSL" -ForegroundColor Black -BackgroundColor DarkYellow 
+wsl --update
+   
 $host.ui.RawUI.WindowTitle = "Beginning File Cleanup with CleanMgr..."
 Write-Host "Running CleanMgr" -ForegroundColor Black -BackgroundColor DarkYellow
 Start-Process -FilePath CleanMgr.exe -ArgumentList '/sagerun:1' ##-WindowStyle Hidden
@@ -177,6 +186,7 @@ clear-all-event-logs -ComputerName COOMPUTERNAMEHERE
 Write-Host "Maintenance Complete. " -ForegroundColor Black -BackgroundColor DarkYellow 
 cd $HOME
 
+# EOF: updatement.ps1
 </pre>
 
 # Configuration - Put Windows 11 Full Context Menu back in Explorer and Disable Web Searching
