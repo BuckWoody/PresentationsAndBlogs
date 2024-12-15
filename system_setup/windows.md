@@ -154,10 +154,9 @@ Write-Host "Running CleanMgr" -ForegroundColor Black -BackgroundColor DarkYellow
 Start-Process -FilePath CleanMgr.exe -ArgumentList '/sagerun:1' ##-WindowStyle Hidden
 
 $host.ui.RawUI.WindowTitle = "Checking Logs for Errors..." 
-Write-Host "Checking Event Logs... " -ForegroundColor Black -BackgroundColor DarkYellow
-Get-EventLog -LogName System -EntryType Error | Out-GridView -Title "Windows System Log Error List"
-Get-EventLog -LogName Application -EntryType Error  | Out-GridView -Title "Windows Application Log Error List"
-Get-EventLog -LogName Security -EntryType Error | Out-GridView -Title "Windows Security Log Error List"
+Get-WinEvent -LogName System| Where-Object {$_.LevelDisplayName -eq "Error"} | Out-GridView -Title "Windows System Log Error List"
+Get-WinEvent -LogName Application | Where-Object {$_.LevelDisplayName -eq "Error"} | Out-GridView -Title "Windows Application Log Error List"
+Get-WinEvent -LogName Security | Where-Object {$_.LevelDisplayName -eq "Error"} | Out-GridView -Title "Windows SecurityLog Error List"
 
 $host.ui.RawUI.WindowTitle = "Complete. System Information:" 
 
@@ -175,14 +174,11 @@ pause
 #Clear the event log
 Write-Host "Stand by, clearing Event Logs...." -ForegroundColor Black -BackgroundColor DarkYellow 
 
-function clear-all-event-logs ($computerName="localhost")
-{
-   $logs = Get-EventLog -ComputerName $computername -List | ForEach-Object {$_.Log}
-   $logs | ForEach-Object {Clear-EventLog -ComputerName $computername -LogName $_ }
-   Get-EventLog -ComputerName $computername -list
-}
+wevtutil cl System
+wevtutil cl Application
+wevtutil cl Security
 
-clear-all-event-logs -ComputerName COOMPUTERNAMEHERE
+
 Write-Host "Maintenance Complete. " -ForegroundColor Black -BackgroundColor DarkYellow 
 cd $HOME
 
