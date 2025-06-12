@@ -16,6 +16,7 @@ If you want to suggest something here, add an [Issue](https://docs.github.com/en
    - Open **Control Panel** > **System and Security** > **System**.
    - Click **System protection** on the left.
    - Click **Create** and follow the prompts to create a restore point.
+   - Note: The script below can do this, [but you have to edit your registry first. Use at your own risk](https://www.thewindowsclub.com/how-to-schedule-system-restore-points-in-windows-10).
 
 2. **Back Up Your Files**
    - Use either the command line [**ROBOCOPY**](https://lazyadmin.nl/it/robocopy-ultimate-guide/) or [use an option listed here](https://support.microsoft.com/en-us/windows/choose-a-backup-solution-in-windows-10-31495e5d-370e-3631-c773-44de4301e070).
@@ -117,11 +118,15 @@ As I mentioned, I run a complete update script to keep my system up to date and 
 # updateme.ps1
 # Author: Buck Woody
 # Purpose: Windows 11 System Maintenance
-# Version: 11.05122024
+# Version: 11.06082025
 
-$host.ui.RawUI.WindowTitle = "Maintenance begins..."
+# Update Restore Point. Registry Edit required for this to work: https://www.thewindowsclub.com/how-to-schedule-system-restore-points-in-windows-10
+powershell.exe -ExecutionPolicy Bypass -NoExit -Command "Checkpoint-Computer -Description 'Weekly' -RestorePointType 'MODIFY_SETTINGS'"
+
+$host.ui.RawUI.WindowTitle = "Maintenance begins, connecting to network..."
 #Install-Module -Name PSCalendar -RequiredVersion 2.9.0
 get-calendar
+netsh wlan connect ssid=IfYouHaveWiredAndWifi name=IfYouHaveWiredAndWifi interface="Wi-Fi"
 
 $host.ui.RawUI.WindowTitle = "Synchronizing Clock..."
 net start w32time
@@ -148,15 +153,16 @@ install-windowsupdate -acceptall | Format-Table -Property Result, Title, Descrip
 $host.ui.RawUI.WindowTitle = "Upgrade WSL..."
 Write-Host "Upgrade WSL" -ForegroundColor Black -BackgroundColor DarkYellow 
 wsl --update
-   
+
 $host.ui.RawUI.WindowTitle = "Beginning File Cleanup with CleanMgr..."
 Write-Host "Running CleanMgr" -ForegroundColor Black -BackgroundColor DarkYellow
 Start-Process -FilePath CleanMgr.exe -ArgumentList '/sagerun:1' ##-WindowStyle Hidden
 
 $host.ui.RawUI.WindowTitle = "Checking Logs for Errors..." 
-Get-WinEvent -LogName System| Where-Object {$_.LevelDisplayName -eq "Error"} | Out-GridView -Title "Windows System Log Error List"
-Get-WinEvent -LogName Application | Where-Object {$_.LevelDisplayName -eq "Error"} | Out-GridView -Title "Windows Application Log Error List"
-Get-WinEvent -LogName Security | Where-Object {$_.LevelDisplayName -eq "Error"} | Out-GridView -Title "Windows SecurityLog Error List"
+Write-Host "Checking Event Logs... " -ForegroundColor Black -BackgroundColor DarkYellow
+Get-EventLog -LogName System -EntryType Error | Out-GridView -Title "Windows System Log Error List"
+Get-EventLog -LogName Application -EntryType Error  | Out-GridView -Title "Windows Application Log Error List"
+Get-EventLog -LogName Security -EntryType Error | Out-GridView -Title "Windows Security Log Error List"
 
 $host.ui.RawUI.WindowTitle = "Complete. System Information:" 
 
@@ -174,15 +180,19 @@ pause
 #Clear the event log
 Write-Host "Stand by, clearing Event Logs...." -ForegroundColor Black -BackgroundColor DarkYellow 
 
-wevtutil cl System
-wevtutil cl Application
-wevtutil cl Security
+function clear-all-event-logs ($computerName="localhost")
+{
+   $logs = Get-EventLog -ComputerName $computername -List | ForEach-Object {$_.Log}
+   $logs | ForEach-Object {Clear-EventLog -ComputerName $computername -LogName $_ }
+   Get-EventLog -ComputerName $computername -list
+}
 
-
+clear-all-event-logs -ComputerName BWOODY-STUDIO
 Write-Host "Maintenance Complete. " -ForegroundColor Black -BackgroundColor DarkYellow 
 cd $HOME
 
 # EOF: updatement.ps1
+
 </pre>
 
 # Configuration - Put Windows 11 Full Context Menu back in Explorer and Disable Web Searching
