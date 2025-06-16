@@ -118,14 +118,12 @@ As I mentioned, I run a complete update script to keep my system up to date and 
 # updateme.ps1
 # Author: Buck Woody
 # Purpose: Windows 11 System Maintenance
-# Version: 11.06082025
-
-# Update Restore Point. Registry Edit required for this to work: https://www.thewindowsclub.com/how-to-schedule-system-restore-points-in-windows-10
-powershell.exe -ExecutionPolicy Bypass -NoExit -Command "Checkpoint-Computer -Description 'Weekly' -RestorePointType 'MODIFY_SETTINGS'"
+# Version: 11.06162025
 
 $host.ui.RawUI.WindowTitle = "Maintenance begins, connecting to network..."
-#Install-Module -Name PSCalendar -RequiredVersion 2.9.0
+#Install-Module -Name PSCalendar
 get-calendar
+# I do this to force my wifi to connect because it doesn't if I have the wired connection working
 netsh wlan connect ssid=IfYouHaveWiredAndWifi name=IfYouHaveWiredAndWifi interface="Wi-Fi"
 
 $host.ui.RawUI.WindowTitle = "Synchronizing Clock..."
@@ -177,7 +175,7 @@ Write-Host "GB of Memory om this system: " -ForegroundColor Black -BackgroundCol
 
 pause
 
-#Clear the event log
+#Clear the event logs. May produce an error if they are empty. Need to come back and update this to catch the error. 
 Write-Host "Stand by, clearing Event Logs...." -ForegroundColor Black -BackgroundColor DarkYellow 
 
 function clear-all-event-logs ($computerName="localhost")
@@ -191,6 +189,9 @@ clear-all-event-logs -ComputerName BWOODY-STUDIO
 Write-Host "Maintenance Complete. " -ForegroundColor Black -BackgroundColor DarkYellow 
 cd $HOME
 
+# Create a new Restore Point. Registry Edit required for this to work: https://www.thewindowsclub.com/how-to-schedule-system-restore-points-in-windows-10
+powershell.exe -ExecutionPolicy Bypass -NoExit -Command "Checkpoint-Computer -Description 'Weekly' -RestorePointType 'MODIFY_SETTINGS'"
+   
 # EOF: updatement.ps1
 
 </pre>
