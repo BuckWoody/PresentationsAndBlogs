@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-initial-scale=1.0">
+    <title>LLM Prompt Builder</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font for better aesthetics */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        /* Style for the prompt output textarea */
+        #generatedPrompt {
+            min-height: 150px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body class="selection:bg-blue-200">
+    <div class="container mx-auto p-6 bg-white shadow-xl rounded-xl max-w-2xl w-full">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">LLM Prompt Builder</h1>
+
+        <form id="promptForm" class="space-y-4">
+            <!-- Role Input -->
+            <div>
+                <label for="role" class="block text-sm font-medium text-gray-700 mb-1">You are a:</label>
+                <input type="text" id="role" name="role" placeholder="Specify a role (e.g., expert web developer)"
+                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out">
+            </div>
+
+            <!-- Audience Input -->
+            <div>
+                <label for="audience" class="block text-sm font-medium text-gray-700 mb-1">I am a:</label>
+                <input type="text" id="audience" name="audience" placeholder="Who the audience will be (e.g., junior developer)"
+                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out">
+            </div>
+
+            <!-- Need Input -->
+            <div>
+                <label for="need" class="block text-sm font-medium text-gray-700 mb-1">I need a:</label>
+                <input type="text" id="need" name="need" placeholder="What you need (e.g., Python function)"
+                       class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out">
+            </div>
+
+            <!-- Task Input -->
+            <div>
+                <label for="task" class="block text-sm font-medium text-gray-700 mb-1">You will:</label>
+                <textarea id="task" name="task" rows="3" placeholder="Enter the task (e.g., write a script to parse logs)"
+                          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"></textarea>
+            </div>
+
+            <!-- Details Input -->
+            <div>
+                <label for="details" class="block text-sm font-medium text-gray-700 mb-1">In the process, you should:</label>
+                <textarea id="details" name="details" rows="3" placeholder="Enter details (e.g., handle edge cases, use comments)"
+                          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"></textarea>
+            </div>
+
+            <!-- Instructions Input -->
+            <div>
+                <label for="instructions" class="block text-sm font-medium text-gray-700 mb-1">Please:</label>
+                <textarea id="instructions" name="instructions" rows="3" placeholder="Enter instructions (e.g., explain the code, provide examples)"
+                          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"></textarea>
+            </div>
+
+            <!-- Format Select -->
+            <div>
+                <label for="format" class="block text-sm font-medium text-gray-700 mb-1">Show the final result in a:</label>
+                <select id="format" name="format"
+                        class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out">
+                    <option value="">Select a format</option>
+                    <option value="Table">Table</option>
+                    <option value="Grid">Grid</option>
+                    <option value="List">List</option>
+                    <option value="Paragraph">Paragraph</option>
+                    <option value="JSON">JSON</option>
+                    <option value="YAML">YAML</option>
+                </select>
+            </div>
+
+            <!-- Example Input -->
+            <div>
+                <label for="example" class="block text-sm font-medium text-gray-700 mb-1">Here is an example:</label>
+                <textarea id="example" name="example" rows="3" placeholder="Enter an example to guide the LLM"
+                          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm transition duration-150 ease-in-out"></textarea>
+            </div>
+
+            <button type="button" id="buildPromptBtn"
+                    class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 shadow-lg transition duration-200 ease-in-out transform hover:scale-105">
+                Build Prompt
+            </button>
+        </form>
+
+        <div class="mt-8">
+            <h2 class="text-xl font-semibold text-gray-800 mb-3">Generated Prompt:</h2>
+            <textarea id="generatedPrompt" readonly
+                      class="block w-full p-4 border border-gray-300 rounded-md bg-gray-50 text-gray-800 focus:outline-none"></textarea>
+            <button id="copyPromptBtn"
+                    class="mt-3 w-full bg-green-600 text-white py-2 px-4 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 shadow-lg transition duration-200 ease-in-out transform hover:scale-105">
+                Copy Prompt
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const promptForm = document.getElementById('promptForm');
+            const buildPromptBtn = document.getElementById('buildPromptBtn');
+            const generatedPromptOutput = document.getElementById('generatedPrompt');
+            const copyPromptBtn = document.getElementById('copyPromptBtn');
+
+            buildPromptBtn.addEventListener('click', () => {
+                // Get values from form inputs
+                const role = document.getElementById('role').value.trim();
+                const audience = document.getElementById('audience').value.trim();
+                const need = document.getElementById('need').value.trim();
+                const task = document.getElementById('task').value.trim();
+                const details = document.getElementById('details').value.trim();
+                const instructions = document.getElementById('instructions').value.trim();
+                const format = document.getElementById('format').value.trim();
+                const example = document.getElementById('example').value.trim();
+
+                let promptParts = [];
+
+                // Conditionally add parts if they are not empty
+                if (role) {
+                    promptParts.push(`You are a ${role}.`);
+                }
+                if (audience) {
+                    promptParts.push(`I am a ${audience}.`);
+                }
+                if (need) {
+                    promptParts.push(`I need a ${need}.`);
+                }
+                if (task) {
+                    promptParts.push(`You will ${task}.`);
+                }
+                if (details) {
+                    promptParts.push(`In the process, you should ${details}.`);
+                }
+                if (instructions) {
+                    promptParts.push(`Please ${instructions}.`);
+                }
+                if (format) {
+                    promptParts.push(`Show the final result in a ${format}.`);
+                }
+                if (example) {
+                    promptParts.push(`Here is an example: ${example}`);
+                }
+
+                // Join the parts to form the complete prompt
+                generatedPromptOutput.value = promptParts.join('\n');
+            });
+
+            // Function to copy text to clipboard
+            copyPromptBtn.addEventListener('click', () => {
+                if (generatedPromptOutput.value) {
+                    // Select the text in the textarea
+                    generatedPromptOutput.select();
+                    generatedPromptOutput.setSelectionRange(0, 99999); /* For mobile devices */
+
+                    // Copy the text to the clipboard
+                    document.execCommand('copy');
+
+                    // Provide feedback to the user
+                    const originalText = copyPromptBtn.textContent;
+                    copyPromptBtn.textContent = 'Copied!';
+                    copyPromptBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    copyPromptBtn.classList.add('bg-gray-500');
+
+                    setTimeout(() => {
+                        copyPromptBtn.textContent = originalText;
+                        copyPromptBtn.classList.remove('bg-gray-500');
+                        copyPromptBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                    }, 1500);
+                } else {
+                    // Inform the user that there's nothing to copy
+                    const originalText = copyPromptBtn.textContent;
+                    copyPromptBtn.textContent = 'Nothing to copy!';
+                    copyPromptBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+                    copyPromptBtn.classList.add('bg-red-500');
+
+                    setTimeout(() => {
+                        copyPromptBtn.textContent = originalText;
+                        copyPromptBtn.classList.remove('bg-red-500');
+                        copyPromptBtn.classList.add('bg-green-600', 'hover:bg-green-700');
+                    }, 1500);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

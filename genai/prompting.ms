@@ -1,3 +1,25 @@
+# Prompt Guides
+
+I tend to use the following format for my prompts: 
+You are a [Specify a role],
+I am a [Who the audience will be]
+I need a [What you need],
+you will [Enter the task],
+in the process, you should [Enter details],
+please [Enter instruc],
+Show the final result in a [Select a format, like Table or Grid],
+here is an example: [Enter an example]
+
+(There's a simple one-page example of building a prompt like this using a web page here.)[]
+
+You can also use the CREATE model for Prompt Engineering:
+	• Character
+	• Request
+	• Examples
+	• Adjustments
+	• Type of output desired
+Extras ("Ask me questions" or "Explain your thinking")
+
 # 🚀 Prompt Engineering Resources
 
 Welcome to this curated collection of resources on Prompt Engineering! 
@@ -7,6 +29,10 @@ these links will help you harness the full power of AI models.
 ---
 
 ## 📚 Core Concepts & Guides
+
+* **CoPilot Prompt Guide (Microsoft CoPilot):**
+    [https://copilot.cloud.microsoft/en-US/prompts](https://copilot.cloud.microsoft/en-US/prompts)
+    *A comprehensive guide on creating prompts for Microsoft CoPilot.*
 
 * **How to Research and Write Using Generative AI Tools (LinkedIn Learning):**
     [https://www.linkedin.com/learning-login/share?account=3322&forceAccount=false&redirect=https%3A%2F%2Fwww.linkedin.com%2Flearning%2Fhow-to-research-and-write-using-generative-ai-tools%3Ftrk%3Dshare_ent_url%26shareId%3DM%252BHX4w3QQxqpNk8WwfUS5w%253D%253D](https://www.linkedin.com/learning-login/share?account=3322&forceAccount=false&redirect=https%3A%2F%2Fwww.linkedin.com%2Flearning%2Fhow-to-research-and-write-using-generative-ai-tools%3Ftrk%3Dshare_ent_url%26shareId%3DM%252BHX4w3QQxqpNk8WwfUS5w%253D%253D)
