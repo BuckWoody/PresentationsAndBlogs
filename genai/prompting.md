@@ -1,4 +1,5 @@
-# Prompt Guides
+# https://aka.ms/bw-prompting  
+## Prompt Guides
 
 I tend to use the following format for my prompts:
 
