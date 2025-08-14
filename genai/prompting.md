@@ -55,6 +55,10 @@ Welcome to this curated collection of resources on Prompt Engineering\! Whether 
     [https://writings.stephenwolfram.com/2023/06/prompts-for-work-play-launching-the-wolfram-prompt-repository/](https://writings.stephenwolfram.com/2023/06/prompts-for-work-play-launching-the-wolfram-prompt-repository/)
     *Insights into the philosophy and utility of prompts, introducing a repository for diverse use cases.*
 
+  * **OpenAI Guide to Prompting GPT5:**
+    [https://cookbook.openai.com/examples/gpt-5/gpt-5_prompting_guide]
+    *Prompting for the GPT5 model. Good tips all around.*
+
 -----
 
 ## ✨ Examples & Practical Applications
