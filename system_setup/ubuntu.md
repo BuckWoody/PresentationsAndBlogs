@@ -23,13 +23,14 @@ As I mentioned, I run a complete update script to keep my system up to date and 
 > This is the most dangerouse of the scripts, don't run this on your test system without understanding everything it does. Completely. You are on your own here.
 
 <pre> 
+<pre> 
 #!/bin/bash
 
 clear
 
 # Detailed Logging and Versioning
 script_version="2.0"  # Increment this when making changes
-log_file="/var/log/maintain_ubuntu.log"
+log_file="/home/name/logs/updateme.log"
 log_message() {
     local timestamp=$(date +"%Y-%m-%d %H:%M:%S")
     local level="$1"  # INFO, WARNING, ERROR
@@ -38,25 +39,25 @@ log_message() {
 }
 
 # On systems where I stream my Calibre Library, I have to do a bit of maintenance here...
-# echo -e "\e[31;43m***** CLEAN AND START CALIBRE *****\e[0m"
+# echo -e "\e[30;47m***** CLEAN AND START CALIBRE *****\e[0m"
 # rm /mymedia/calibre/delete.log
 # calibre-server --daemonize /mymedia/calibre --log /mymedia/calibre/delete.log --enable-local-write /mymedia/calibre
 # echo ""
 
 # -Hostname information:
-echo -e "\e[31;43m***** Hostname *****\e[0m"
+echo -e "\e[30;47m***** Hostname *****\e[0m"
 hostnamectl
 echo ""
 
-echo -e "\e[31;43m***** Check Evening Shutdown from Cron Job *****\e[0m"
+echo -e "\e[30;47m***** Check Evening Shutdown from Cron Job *****\e[0m"
 cat ./evening.log
 echo ""
 
-echo -e "\e[31;43m***** Start Containers *****\e[0m"
+echo -e "\e[30;47m***** Start Containers *****\e[0m"
 ~/scripts/containerstart.sh
 echo ""
 
-echo -e "\e[31;43m***** Clean Packages *****\e[0m"
+echo -e "\e[30;47m***** Clean Packages *****\e[0m"
 sudo apt autoremove --purge -y
 sudo apt clean
 sudo rm -rf ~/.cache/thumbnails/*
@@ -64,50 +65,49 @@ sudo deborphan | xargs sudo apt-get -y remove --purge
 sudo journalctl --vacuum-time=1d
 echo ""
 
-echo -e "\e[31;43m***** Update Packages *****\e[0m"
+echo -e "\e[30;47m***** Update Packages *****\e[0m"
 log_message "INFO" "Upgrading packages"
 sudo apt update
 echo ""
 
-echo -e "\e[31;43m***** Upgrade Packages *****\e[0m"
+echo -e "\e[30;47m***** Upgrade Packages *****\e[0m"
 sudo apt upgrade -y
 echo ""
 
-echo -e "\e[31;43m***** Release Upgrade *****\e[0m"
+echo -e "\e[30;47m***** Release Upgrade *****\e[0m"
 sudo do-release-upgrade
 echo ""
 
 # -File system disk space usage:
-echo -e "\e[31;43m***** Disk Space *****\e[0m"
+echo -e "\e[30;47m***** Disk Space *****\e[0m"
 df -h
 echo ""
 
 # -Free and used memory in the system:
-echo -e "\e[31;43m ***** Memory Space *****\e[0m"
+echo -e "\e[30;47m ***** Memory Space *****\e[0m"
 free
 echo ""
 
 # -System uptime and load:
-echo -e "\e[31;43m***** Uptime and Load *****\e[0m"
+echo -e "\e[30;47m***** Uptime and Load *****\e[0m"
 uptime
 
 echo ""
 
 # -Logged-in users:
-echo -e "\e[31;43m***** Current Users *****\e[0m"
+echo -e "\e[30;47m***** Current Users *****\e[0m"
 who
 echo ""
 
 # -Top 5 processes as far as memory usage is concerned
-echo -e "\e[31;43m***** Top 5 Memory *****\e[0m"
+echo -e "\e[30;47m***** Top 5 Memory *****\e[0m"
 ps -eo %mem,%cpu,comm --sort=-%mem | head -n 6
 echo ""
 
-echo -e "\e[31;43m***** Containers Status *****\e[0m"
+echo -e "\e[30;47m***** Containers Status *****\e[0m"
 ~/scripts/containerstatus.sh
 echo ""
 
-echo -e "\e[1;32mMaintenance Complete.\e[0m"
-
+echo -e "\e[30;47m***** Maintenance Complete. *****\e[0m"
 
 </pre>
