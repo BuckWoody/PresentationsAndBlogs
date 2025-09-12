@@ -114,87 +114,352 @@ As I mentioned, I run a complete update script to keep my system up to date and 
 
 > This is the most dangerous of the scripts, don't run this on your test system without understanding everything it does. Completely. You are on your own here.
 
-<pre>
-# updateme.ps1
-# Author: Buck Woody
-# Purpose: Windows 11 System Maintenance
-# Version: 11.06162025
+```powershell
+<#
+.BOF - updateme.ps1
 
-$host.ui.RawUI.WindowTitle = "Maintenance begins, connecting to network..."
-#Install-Module -Name PSCalendar
-get-calendar
-# I do this to force my wifi to connect because it doesn't if I have the wired connection working
-netsh wlan connect ssid=IfYouHaveWiredAndWifi name=IfYouHaveWiredAndWifi interface="Wi-Fi"
+.DESCRIPTION
+Windows 11 System Maintenance (Buck Woody, version 09.12.2025)
 
-$host.ui.RawUI.WindowTitle = "Synchronizing Clock..."
-net start w32time
-w32tm /resync
+Performs maintenance tasks: 
+    - Logs each section to Windows Application log.
+    - Makes a Wi-Fi connect if both connected and wifi enabled
+    - clock sync
+    - Defender scan
+    - updates via Chocolatey/Winget/PSWindowsUpdate
+    - WSL update
+    - disk cleanup 
+    - log review
+    - Displays system info.
 
-$host.ui.RawUI.WindowTitle = "Safety Scan..."
-Write-Host "Running Windows Defender" -ForegroundColor Black -BackgroundColor DarkYellow
-CD "C:\Program Files\Windows Defender\"
-.\MpCmdRun.exe -scan -scantype 1
+Requires: 
+    - Chocolately
+    - PSCalendar
+    - PSWindowsUpdate
+#>
 
-$host.ui.RawUI.WindowTitle = "Beginning update with Choco..."
-Write-Host "Running Choco Upgrade" -ForegroundColor Black -BackgroundColor DarkYellow
-choco upgrade all --confirm
+[CmdletBinding(SupportsShouldProcess)]
+param(
+    [string]$WifiSSID = 'YourWifiSID',
+    [string]$WifiProfileName = 'YourWifiProfileName',
+    [string]$WifiInterface = 'Wi-Fi',
+    [switch]$ForceClearEventLogs,
+    [switch]$SkipWifi,
+    [switch]$SkipCalendar
+)
 
-$host.ui.RawUI.WindowTitle = "Beginning update with Winget..."
-Write-Host "Running Winget Upgrade" -ForegroundColor Black -BackgroundColor DarkYellow
-winget upgrade --all 
-
-$host.ui.RawUI.WindowTitle = "Beginning update with PSWindowsUpgrade..."
-Write-Host "Running PSWindowsUpgrade" -ForegroundColor Black -BackgroundColor DarkYellow 
-get-windowsupdate
-install-windowsupdate -acceptall | Format-Table -Property Result, Title, Description -wrap
-
-$host.ui.RawUI.WindowTitle = "Upgrade WSL..."
-Write-Host "Upgrade WSL" -ForegroundColor Black -BackgroundColor DarkYellow 
-wsl --update
-
-$host.ui.RawUI.WindowTitle = "Beginning File Cleanup with CleanMgr..."
-Write-Host "Running CleanMgr" -ForegroundColor Black -BackgroundColor DarkYellow
-Start-Process -FilePath CleanMgr.exe -ArgumentList '/sagerun:1' ##-WindowStyle Hidden
-
-$host.ui.RawUI.WindowTitle = "Checking Logs for Errors..." 
-Write-Host "Checking Event Logs... " -ForegroundColor Black -BackgroundColor DarkYellow
-Get-EventLog -LogName System -EntryType Error | Out-GridView -Title "Windows System Log Error List"
-Get-EventLog -LogName Application -EntryType Error  | Out-GridView -Title "Windows Application Log Error List"
-Get-EventLog -LogName Security -EntryType Error | Out-GridView -Title "Windows Security Log Error List"
-
-$host.ui.RawUI.WindowTitle = "Complete. System Information:" 
-
-Write-Host "Drives: " -ForegroundColor Black -BackgroundColor DarkYellow
-Get-Volume | sort-object Size
-
-Write-Host "Network: " -ForegroundColor Black -BackgroundColor DarkYellow 
-Get-NetIPConfiguration | format-table -autosize -Property InterfaceDescription, IPv4Address
-
-Write-Host "GB of Memory om this system: " -ForegroundColor Black -BackgroundColor DarkYellow
-(Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum /1gb
-
-pause
-
-#Clear the event logs. May produce an error if they are empty. Need to come back and update this to catch the error. 
-Write-Host "Stand by, clearing Event Logs...." -ForegroundColor Black -BackgroundColor DarkYellow 
-
-function clear-all-event-logs ($computerName="localhost")
-{
-   $logs = Get-EventLog -ComputerName $computername -List | ForEach-Object {$_.Log}
-   $logs | ForEach-Object {Clear-EventLog -ComputerName $computername -LogName $_ }
-   Get-EventLog -ComputerName $computername -list
+# --- Config ---
+$EventSource = 'Updateme.Script'
+$EventLogName = 'Application'
+$Evt = @{
+    SectionStart = 1000
+    SectionOK    = 1001
+    SectionWarn  = 1002
+    SectionErr   = 1003
 }
 
-clear-all-event-logs -ComputerName BWOODY-STUDIO
-Write-Host "Maintenance Complete. " -ForegroundColor Black -BackgroundColor DarkYellow 
-cd $HOME
+# --- Functions ---
+function Ensure-Admin {
+    # Ensures the script is running with admin rights; if not, relaunches as admin 
+    $id = [Security.Principal.WindowsIdentity]::GetCurrent()
+    $p  = New-Object Security.Principal.WindowsPrincipal($id)
+    if (-not $p.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+        Write-Host "Elevation required. Relaunching as Administrator..."
+        $psi = New-Object System.Diagnostics.ProcessStartInfo
+        $psi.FileName = (Get-Process -Id $PID).Path
+        $args = @()
+        if ($PSCommandPath) { $args += '-File', "`"$PSCommandPath`"" }
+        if ($MyInvocation.UnboundArguments) { $args += $MyInvocation.UnboundArguments }
+        $psi.Arguments = $args -join ' '
+        $psi.Verb = 'runas'
+        [Diagnostics.Process]::Start($psi) | Out-Null
+        exit
+    }
+}
 
-# Create a new Restore Point. Registry Edit required for this to work: https://www.thewindowsclub.com/how-to-schedule-system-restore-points-in-windows-10
-powershell.exe -ExecutionPolicy Bypass -NoExit -Command "Checkpoint-Computer -Description 'Weekly' -RestorePointType 'MODIFY_SETTINGS'"
+function Ensure-EventSource {
+    # Ensures the event source exists; if not, creates it
+    if (-not [System.Diagnostics.EventLog]::SourceExists($EventSource)) {
+        New-EventLog -LogName $EventLogName -Source $EventSource
+    }
+}
+
+function Set-WindowTitle {
+    # Sets the console window title if running interactively
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Title
+    )
+    try {
+        $host.UI.RawUI.WindowTitle = $Title
+    } catch {
+        # Non-interactive host; ignore
+    }
+}
+
+function Write-AppLog {
+    <#
+    .SYNOPSIS
+        Writes a line to console and (best-effort) to Windows Application log.
+    .PARAMETER Message
+        The text to log.
+    .PARAMETER Level
+        Information | Warning | Error
+    .PARAMETER EventId
+        Integer event id to write.
+    #>
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Message,
+
+        [ValidateSet('Information','Warning','Error')]
+        [string]$Level = 'Information',
+
+        [int]$EventId = $script:Evt_SectionOK  # assumes you've defined this earlier
+    )
+
+    # Console echo (avoid "$Level: ..." parsing issue)
+    Write-Host ("{0}: {1}" -f $Level, $Message)
+
+    # Event log write (best effort)
+    try {
+        if ([System.Diagnostics.EventLog]::SourceExists($script:EventSource)) {
+            $entryType = [System.Diagnostics.EventLogEntryType]::$Level
+            Write-EventLog -LogName $script:EventLogName `
+                           -Source  $script:EventSource `
+                           -EventId $EventId `
+                           -EntryType $entryType `
+                           -Message $Message
+        }
+    } catch {
+        # swallow to keep maintenance flow resilient
+    }
+}
+
+function Invoke-Step {
+    # Sets the window title, logs start, runs the script block, logs success or failure
+    param([string]$Name,[scriptblock]$Script)
+    Set-WindowTitle $Name
+    Write-AppLog "$Name - Running..." 'Information' $Evt.SectionStart
+    try {
+        & $Script
+        Write-AppLog "$Name - OK" 'Information' $Evt.SectionOK
+    } catch {
+        Write-AppLog "$Name - ERROR: $($_.Exception.Message)" 'Error' $Evt.SectionErr
+    }
+}
+
+# --- Maintenance Tasks ---
+function Show-Calendar {
+    # Displays calendar if PSCalendar is available - if not, you should install it
+    if ($SkipCalendar) { return }
+    if (Get-Command Get-Calendar -ErrorAction SilentlyContinue) {
+        Get-Calendar
+    } else {
+        Write-AppLog "PSCalendar not available, skipping" 'Warning' $Evt.SectionWarn
+    }
+}
+
+function Connect-Wifi {
+    # Connects to specified Wi-Fi SSID/profile/interface if not skipped. Change the name to your wifi profile.
+    param($SSID,$Profile,$Interface)
+    if ($SkipWifi) { return }
+    & netsh wlan connect ssid=$SSID name=$Profile interface=$Interface
+}
+
+function Sync-Clock {
+    # Syncs the system clock
+    net start w32time | Out-Null
+    w32tm /resync | Out-Null
+}
+
+function Defender-QuickScan {
+    # Runs a quick scan with Windows Defender
+    $mp = Get-ChildItem "$env:ProgramData\Microsoft\Windows Defender\Platform" -Recurse -Filter MpCmdRun.exe -ErrorAction SilentlyContinue |
+          Sort-Object LastWriteTime -Descending | Select-Object -First 1 -ExpandProperty FullName
+    if (-not $mp) { $mp = "$env:ProgramFiles\Windows Defender\MpCmdRun.exe" }
+    if (Test-Path $mp) { & $mp -Scan -ScanType 1 } else { Write-AppLog "Defender not found; skipping" 'Warning' }
+}
+
+function Upgrade-Choco {
+    # Upgrades all installed Chocolatey packages
+    if (Get-Command choco -ErrorAction SilentlyContinue) { choco upgrade all -y } else { Write-AppLog "Chocolatey not found" 'Warning' }
+}
+
+function Upgrade-Winget {
+    # Upgrades all installed Winget packages
+    if (Get-Command winget -ErrorAction SilentlyContinue) { winget upgrade --all --silent } else { Write-AppLog "Winget not found" 'Warning' }
+}
+
+function Upgrade-PSWindowsUpdate {
+    # Upgrades Windows via PSWindowsUpdate module. You should install it first.
+    try {
+        if (-not (Get-Module PSWindowsUpdate -ListAvailable)) {
+            Install-Module PSWindowsUpdate -Scope CurrentUser -Force
+        }
+        Import-Module PSWindowsUpdate
+        $updates = Get-WindowsUpdate
+        if ($updates) { Install-WindowsUpdate -AcceptAll -IgnoreReboot } else { Write-AppLog "No Windows Updates" }
+    } catch {
+        Write-AppLog "PSWindowsUpdate failed: $($_.Exception.Message)" 'Warning'
+    }
+}
+
+function Update-WSL {
+    # Updates Windows Subsystem for Linux if installed
+    if (Get-Command wsl -ErrorAction SilentlyContinue) { wsl --update } else { Write-AppLog "WSL not found" 'Warning' }
+}
+
+function Run-CleanMgr {
+    # Runs Disk Cleanup in silent mode with preset options
+    if (Get-Command CleanMgr.exe -ErrorAction SilentlyContinue) {
+        Start-Process CleanMgr.exe -ArgumentList '/sagerun:1' -Wait -WindowStyle Hidden
+    } else {
+        Write-AppLog "CleanMgr not found" 'Warning'
+    }
+}
+
+function Show-RecentErrors {
+    # Shows the most recent 50 errors from System, Application, and Security logs
+    foreach ($log in 'System','Application','Security') {
+        Write-Host "`nErrors in $log log:"
+        Get-EventLog -LogName $log -EntryType Error -Newest 50 |
+            Select-Object TimeGenerated,Source,EventID,Message
+    }
+}
+
+function Show-SystemInfo {
+<#
+.SYNOPSIS
+    Displays drive sizes and memory info in Gigabytes.
+.DESCRIPTION
+    - Drives: SizeGB, UsedGB, FreeGB, PercentUsed (sorted by SizeGB)
+    - Memory: Physical and Virtual totals, used, free, and % used
+    - All values in GB (1 GB = 1,073,741,824 bytes for drives; OS memory KB converted to GB)
+#>
+
+    try {
+        # Update console title
+        if (Get-Command -Name Set-WindowTitle -ErrorAction SilentlyContinue) {
+            Set-WindowTitle -Title 'Complete System Information (GB)'
+        }
+
+        Write-Host "`n=== Drives (GB) ==="
+        $drives = Get-CimInstance Win32_LogicalDisk -Filter "DriveType = 3" | ForEach-Object {
+            $sizeGB = if ($_.Size) { [math]::Round($_.Size / 1GB, 2) } else { $null }
+            $freeGB = if ($_.FreeSpace) { [math]::Round($_.FreeSpace / 1GB, 2) } else { $null }
+            $usedGB = if ($sizeGB -and $freeGB) { [math]::Round($sizeGB - $freeGB, 2) } else { $null }
+            $pctUsed = if ($sizeGB -gt 0) { [math]::Round(($usedGB / $sizeGB) * 100, 1) } else { $null }
+
+            [pscustomobject]@{
+                Drive       = $_.DeviceID
+                Label       = $_.VolumeName
+                FileSystem  = $_.FileSystem
+                SizeGB      = $sizeGB
+                UsedGB      = $usedGB
+                FreeGB      = $freeGB
+                PercentUsed = $pctUsed
+            }
+        }
+
+        $drives | Sort-Object -Property SizeGB -Descending | Format-Table -AutoSize
+
+        Write-Host "`n=== Memory (GB) ==="
+        $os = Get-CimInstance Win32_OperatingSystem
+        $physTotalGB = [math]::Round($os.TotalVisibleMemorySize / 1MB, 2)  # KB → GB
+        $physFreeGB  = [math]::Round($os.FreePhysicalMemory / 1MB, 2)
+        $physUsedGB  = [math]::Round($physTotalGB - $physFreeGB, 2)
+        $physPctUsed = if ($physTotalGB -gt 0) { [math]::Round(($physUsedGB / $physTotalGB) * 100, 1) } else { $null }
+
+        $virtTotalGB = [math]::Round($os.TotalVirtualMemorySize / 1MB, 2)
+        $virtFreeGB  = [math]::Round($os.FreeVirtualMemory / 1MB, 2)
+        $virtUsedGB  = [math]::Round($virtTotalGB - $virtFreeGB, 2)
+        $virtPctUsed = if ($virtTotalGB -gt 0) { [math]::Round(($virtUsedGB / $virtTotalGB) * 100, 1) } else { $null }
+
+        $procWSumGB  = [math]::Round((Get-Process | Measure-Object -Property WorkingSet64 -Sum).Sum / 1GB, 2)
+        $procPagedGB = [math]::Round((Get-Process | Measure-Object -Property PagedMemorySize64 -Sum).Sum / 1GB, 2)
+
+        $memTable = @(
+            [pscustomobject]@{
+                Category    = 'Physical'
+                TotalGB     = $physTotalGB
+                UsedGB      = $physUsedGB
+                FreeGB      = $physFreeGB
+                PercentUsed = $physPctUsed
+            }
+            [pscustomobject]@{
+                Category    = 'Virtual'
+                TotalGB     = $virtTotalGB
+                UsedGB      = $virtUsedGB
+                FreeGB      = $virtFreeGB
+                PercentUsed = $virtPctUsed
+            }
+            [pscustomobject]@{
+                Category    = 'Processes'
+                TotalGB     = 'N/A'
+                UsedGB      = $procWSumGB
+                FreeGB      = 'N/A'
+                PercentUsed = "Paged: $procPagedGB GB"
+            }
+        )
+
+        $memTable | Format-Table -AutoSize
+
+        if (Get-Command -Name Write-AppLog -ErrorAction SilentlyContinue) {
+            Write-AppLog -Message "System info in GB (drives + memory) collected" -Level Information -EventId $script:Evt.SectionOK
+        }
+    }
+    catch {
+        $msg = "Show-SystemInfo failed: $($_.Exception.Message)"
+        Write-Host "WARN: $msg"
+        if (Get-Command -Name Write-AppLog -ErrorAction SilentlyContinue) {
+            Write-AppLog -Message $msg -Level Warning -EventId $script:Evt.SectionWarn
+        }
+    }
+}
+
+function Clear-AllEventLogs {
+    # Clears all event logs if -ForceClearEventLogs is specified
+    if (-not $ForceClearEventLogs) {
+        Write-AppLog "Skipping event log clear (use -ForceClearEventLogs to enable)" 'Warning'
+        return
+    }
+    Get-EventLog -List | ForEach-Object { Clear-EventLog $_.Log }
+}
+
+function Create-RestorePoint {
+    # Creates a system restore point (requires admin)
+    powershell.exe -ExecutionPolicy Bypass -Command "Checkpoint-Computer -Description 'Weekly' -RestorePointType 'MODIFY_SETTINGS'"
+}
+
+# --- Main ---
+Ensure-Admin
+Ensure-EventSource
+clear-host
+Set-WindowTitle "System Maintenance Starting"
+Write-AppLog "System Maintenance Starting" 'Information'
+Invoke-Step "Calendar & Wi-Fi" { Show-Calendar; Connect-Wifi $WifiSSID $WifiProfileName $WifiInterface }
+Invoke-Step "Synchronizing Clock" { Sync-Clock }
+Invoke-Step "Create Restore Point" { Create-RestorePoint }
+Invoke-Step "Defender Scan" { Defender-QuickScan }
+Invoke-Step "Chocolatey Upgrade" { Upgrade-Choco }
+Invoke-Step "Winget Upgrade" { Upgrade-Winget }
+Invoke-Step "Windows Update" { Upgrade-PSWindowsUpdate }
+Invoke-Step "WSL Update" { Update-WSL }
+Invoke-Step "Disk Cleanup" { Run-CleanMgr }
+Invoke-Step "Check Logs" { Show-RecentErrors }
+Invoke-Step "System Info" { Show-SystemInfo }
+Invoke-Step "Clear Event Logs" { Clear-AllEventLogs }
+
+Set-WindowTitle "Maintenance Complete"
+Write-AppLog "Maintenance Complete" 'Information'
+
+#EOF - updateme.ps1
    
-# EOF: updatement.ps1
 
-</pre>
+```
 
 # Configuration - Put Windows 11 Full Context Menu back in Explorer and Disable Web Searching
 
