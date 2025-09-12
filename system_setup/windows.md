@@ -2,7 +2,7 @@
 
 These are a few of the scripts, commands, and other environment settings I use on my Windows systems. I'm currently running Windows 11 Enterprise, which is working well with these settings. I do everything in [PowerShell](https://learn.microsoft.com/en-us/powershell/) (Core) for my system management and configuration. Also, some of these commands won't run properly unless you are in "Elevated" or "Administrator" level, so be aware of that.
 
-This is for info and examples **only**. I explain a few things here, but if *anything* is a new term or command, highlight it and look it up. Understand what your are doing if you want to try this - and you're on your own here - test first, don't run this in production first! 
+This is for info and examples **only**. I explain a few things here, but if *anything* is a new term or command, highlight it and look it up. Understand what your are doing if you want to try this - and you're on your own here - test first, don't run this in production first! I highly [recommend using the Windows Sandbox feature](https://learn.microsoft.com/en-us/windows/security/application-security/application-isolation/windows-sandbox/) to test things if you are running Windows 11.
 
 ### Disclaimer, for people who need to be told this sort of thing: 
 
