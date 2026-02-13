@@ -114,7 +114,7 @@ This is a modular workshop, and in each section, you'll learn concepts, techniqu
   <tr><td style="background-color: AliceBlue; color: black;"><a href="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/mentoring/01%20-%20MentoringFoundations.md" target="_blank">01 - Mentoring Foundations</a></td>
   <td td style="background-color: AliceBlue; color: black;">Defines mentoring and distinguishes it from related developmental relationships. Explores different mentoring models and helps you develop your mentoring philosophy.</td></tr>
   
-  <tr><td><a href="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/mentoring/01%20-%20MentoringFoundations.md" target="_blank">02 - Core Mentoring Competencies</a></td>
+  <tr><td><a href="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/mentoring/02%20-%20CoreCompetencies.md" target="_blank">02 - Core Mentoring Competencies</a></td>
   <td>Develops the essential skills every mentor needs: active listening, powerful questioning, giving feedback, facilitating reflection, and building trust.</td></tr>
   
   <tr><td style="background-color: AliceBlue; color: black;"><a href="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/mentoring/03%20-%20StructuringSessions.md" target="_blank">03 - Structuring Effective Mentoring Sessions</a></td>
