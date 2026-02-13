@@ -120,7 +120,7 @@ This is a modular workshop, and in each section, you'll learn concepts, techniqu
   <tr><td style="background-color: AliceBlue; color: black;"><a href="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/mentoring/03%20-%20StructuringSessions.md" target="_blank">03 - Structuring Effective Mentoring Sessions</a></td>
   <td td style="background-color: AliceBlue; color: black;">Provides practical frameworks for conducting mentoring conversations, from initial meetings through ongoing sessions and closure. Includes conversation models and session templates.</td></tr>
   
-  <tr><td><a href="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/mentoring/04%20-%20NavigatingChallenges.md" target="_blank">04 - Navigating Challenges & Sustaining the Relationship</a></td>
+  <tr><td><a href="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/mentoring/04%20-%20NavigatingChallenges.md" target="_blank">04 - Navigating Challenges and Sustaining the Relationship</a></td>
   <td>Addresses common challenges in mentoring relationships, including boundary management, difficult conversations, and maintaining momentum. Includes strategies for closure and transition.</td></tr>
 
   <tr><td style="background-color: AliceBlue; color: black;"><a href="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/mentoring/Mentee-Guide.md" target="_blank">Mentee Guide</a></td>
