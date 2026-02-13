@@ -85,6 +85,7 @@ To make this relationship successful, you should:
 - Respect agreed-upon boundaries
 
 > Remember: You own your development. Your mentor is a guide and support, but you're responsible for your growth.
+> [Read this article to learn more](https://www.linkedin.com/pulse/your-career-fault-buck-woody)
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
