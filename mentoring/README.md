@@ -98,7 +98,7 @@ If you are new to these foundational concepts, here are a few resources you can 
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/bulletlist.png"> <h3>Setup</h3>
 
-<a href="https://github.com/yourusername/mentoring-workshop/blob/main/00%20-%20Pre-Requisites.md" target="_blank">A full pre-requisites document is located here</a>. These instructions should be reviewed before the workshop starts.
+<a href="https://github.com/BuckWoody/mentoring-workshop/blob/main/00%20-%20Pre-Requisites.md" target="_blank">A full pre-requisites document is located here</a>. These instructions should be reviewed before the workshop starts.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -109,21 +109,21 @@ This is a modular workshop, and in each section, you'll learn concepts, techniqu
 <table style="tr:nth-child(even) {background-color: #f2f2f2;}; text-align: left; display: table; border-collapse: collapse; border-spacing: 5px; border-color: gray;">
   <tr><td style="background-color: AliceBlue; color: black;"><b>Module</b></td><td style="background-color: AliceBlue; color: black;"><b>Topics</b></td></tr>
 
-  <tr><td><a href="https://github.com/yourusername/mentoring-workshop/blob/main/00%20-%20Pre-Requisites.md" target="_blank">00 - Pre-Requisites</a></td><td>Covers the preparation needed before attending the workshop, including key concepts to review and materials to prepare.</td></tr>
+  <tr><td><a href="https://github.com/BuckWoody/mentoring-workshop/blob/main/00%20-%20Pre-Requisites.md" target="_blank">00 - Pre-Requisites</a></td><td>Covers the preparation needed before attending the workshop, including key concepts to review and materials to prepare.</td></tr>
   
-  <tr><td style="background-color: AliceBlue; color: black;"><a href="https://github.com/yourusername/mentoring-workshop/blob/main/01%20-%20MentoringFoundations.md" target="_blank">01 - Mentoring Foundations</a></td>
+  <tr><td style="background-color: AliceBlue; color: black;"><a href="https://github.com/BuckWoody/mentoring-workshop/blob/main/01%20-%20MentoringFoundations.md" target="_blank">01 - Mentoring Foundations</a></td>
   <td td style="background-color: AliceBlue; color: black;">Defines mentoring and distinguishes it from related developmental relationships. Explores different mentoring models and helps you develop your mentoring philosophy.</td></tr>
   
-  <tr><td><a href="https://github.com/yourusername/mentoring-workshop/blob/main/02%20-%20CoreCompetencies.md" target="_blank">02 - Core Mentoring Competencies</a></td>
+  <tr><td><a href="https://github.com/BuckWoody/mentoring-workshop/blob/main/02%20-%20CoreCompetencies.md" target="_blank">02 - Core Mentoring Competencies</a></td>
   <td>Develops the essential skills every mentor needs: active listening, powerful questioning, giving feedback, facilitating reflection, and building trust.</td></tr>
   
-  <tr><td style="background-color: AliceBlue; color: black;"><a href="https://github.com/yourusername/mentoring-workshop/blob/main/03%20-%20StructuringSessions.md" target="_blank">03 - Structuring Effective Mentoring Sessions</a></td>
+  <tr><td style="background-color: AliceBlue; color: black;"><a href="https://github.com/BuckWoody/mentoring-workshop/blob/main/03%20-%20StructuringSessions.md" target="_blank">03 - Structuring Effective Mentoring Sessions</a></td>
   <td td style="background-color: AliceBlue; color: black;">Provides practical frameworks for conducting mentoring conversations, from initial meetings through ongoing sessions and closure. Includes conversation models and session templates.</td></tr>
   
-  <tr><td><a href="https://github.com/yourusername/mentoring-workshop/blob/main/04%20-%20NavigatingChallenges.md" target="_blank">04 - Navigating Challenges & Sustaining the Relationship</a></td>
+  <tr><td><a href="https://github.com/BuckWoody/mentoring-workshop/blob/main/04%20-%20NavigatingChallenges.md" target="_blank">04 - Navigating Challenges & Sustaining the Relationship</a></td>
   <td>Addresses common challenges in mentoring relationships, including boundary management, difficult conversations, and maintaining momentum. Includes strategies for closure and transition.</td></tr>
 
-  <tr><td style="background-color: AliceBlue; color: black;"><a href="https://github.com/yourusername/mentoring-workshop/blob/main/Mentee-Guide.md" target="_blank">Mentee Guide</a></td>
+  <tr><td style="background-color: AliceBlue; color: black;"><a href="https://github.com/BuckWoody/mentoring-workshop/blob/main/Mentee-Guide.md" target="_blank">Mentee Guide</a></td>
   <td td style="background-color: AliceBlue; color: black;">A comprehensive guide for mentees that trained mentors can share to establish expectations, structure sessions, and track development throughout the mentoring relationship.</td></tr>
 </table>
 
@@ -131,7 +131,7 @@ This is a modular workshop, and in each section, you'll learn concepts, techniqu
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
 
-Next, continue to <a href="https://github.com/yourusername/mentoring-workshop/blob/main/00%20-%20Pre-Requisites.md" target="_blank"><i>Pre-Requisites</i></a>
+Next, continue to <a href="https://github.com/BuckWoody/mentoring-workshop/blob/main/00%20-%20Pre-Requisites.md" target="_blank"><i>Pre-Requisites</i></a>
 
 # Contributing
 
