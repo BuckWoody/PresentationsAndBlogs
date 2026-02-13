@@ -6,7 +6,7 @@
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/textbubble.png"> <h2>04 - Navigating Challenges & Sustaining the Relationship</h2>
+<img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/textbubble.png"> <h2>04 - Navigating Challenges and Sustaining the Relationship</h2>
 
 In <a href="https://github.com/yourusername/mentoring-workshop" target="_blank">this workshop</a> you'll learn how to handle difficult situations and maintain healthy, productive mentoring relationships over time.
 
