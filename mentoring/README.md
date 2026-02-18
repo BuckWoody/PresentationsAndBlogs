@@ -14,7 +14,7 @@ The focus of this workshop is to enable professionals to become skilled, confide
 
 You'll start by understanding what mentoring is (and isn't), exploring different mentoring models and paradigms, and identifying your own mentoring philosophy. From there, you will work through modules covering the core competencies of effective mentors, practical session structures and conversation techniques, navigating challenging mentoring scenarios, and creating sustainable mentoring practices. The final module includes a comprehensive Mentee Guide that trained mentors can use to structure their ongoing mentoring relationships.
 
-This [github README.MD file](https://lab.github.com/githubtraining/introduction-to-github) explains how the workshop is laid out, what you will learn, and the resources you will use in this course. To download this course to your local computer, click the **Clone or Download** button you see at the top right side of this page. [More about that process is here](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository). 
+This [github README.MD file](https://learn.microsoft.com/en-us/training/github/) explains how the workshop is laid out, what you will learn, and the resources you will use in this course. To download this course to your local computer, click the **Clone or Download** button you see at the top right side of this page. [More about that process is here](https://www.codegenes.net/blog/how-do-i-export-my-project-as-a-zip-of-git-repository/#step-by-step-guide-to-exporting-a-git-repo-as-a-zip). 
 
 > It's best to right-click any links you see and select "Open in new Tab" for easier navigation.
 
@@ -131,7 +131,7 @@ This is a modular workshop, and in each section, you'll learn concepts, techniqu
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
 
-Next, continue to <a href="https://github.com/BuckWoody/mentoring-workshop/blob/main/00%20-%20Pre-Requisites.md" target="_blank"><i>Pre-Requisites</i></a>
+Next, continue to <a href="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/mentoring/00%20-%20Pre-Requisites.md" target="_blank"><i>Pre-Requisites</i></a>
 
 # Contributing
 
