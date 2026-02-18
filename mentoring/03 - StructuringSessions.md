@@ -799,4 +799,4 @@ Take turns:
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
 
-Next, Continue to <a href="https://github.com/yourusername/mentoring-workshop/blob/main/04%20-%20NavigatingChallenges.md" target="_blank"><i>04 - Navigating Challenges & Sustaining the Relationship</i></a>.
+Next, Continue to <a href="[https://github.com/yourusername/mentoring-workshop/blob/main/04%20-%20NavigatingChallenges.md](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/mentoring/04%20-%20NavigatingChallenges.md)" target="_blank"><i>04 - Navigating Challenges & Sustaining the Relationship</i></a>.
