@@ -245,4 +245,4 @@ This workshop involves personal reflection and vulnerability. We commit to:
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
 
-Next, continue to <a href="https://github.com/yourusername/mentoring-workshop/blob/main/01%20-%20MentoringFoundations.md" target="_blank"><i>01 - Mentoring Foundations</i></a>
+Next, continue to <a href="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/mentoring/01%20-%20MentoringFoundations.md" target="_blank"><i>01 - Mentoring Foundations</i></a>
