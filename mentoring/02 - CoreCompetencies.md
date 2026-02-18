@@ -746,4 +746,4 @@ Switch roles, new experience
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
 
-Next, Continue to <a href="https://github.com/yourusername/mentoring-workshop/blob/main/03%20-%20StructuringSessions.md" target="_blank"><i>03 - Structuring Effective Mentoring Sessions</i></a>.
+Next, Continue to <a href="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/mentoring/03%20-%20StructuringSessions.md" target="_blank"><i>03 - Structuring Effective Mentoring Sessions</i></a>.
