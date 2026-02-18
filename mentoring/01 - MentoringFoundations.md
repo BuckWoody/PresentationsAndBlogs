@@ -456,4 +456,4 @@ Write one commitment to yourself:
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
 
-Next, Continue to <a href="https://github.com/yourusername/mentoring-workshop/blob/main/02%20-%20CoreCompetencies.md" target="_blank"><i>02 - Core Mentoring Competencies</i></a>.
+Next, Continue to <a href="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/mentoring/02%20-%20CoreCompetencies.md" target="_blank"><i>02 - Core Mentoring Competencies</i></a>.
