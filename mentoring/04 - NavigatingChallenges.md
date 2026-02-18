@@ -911,7 +911,7 @@ Go around the group:
 
 **Immediate Actions:**
 1. Identify 1-2 potential mentees within the next 30 days
-2. Review the <a href="https://github.com/yourusername/mentoring-workshop/blob/main/Mentee-Guide.md" target="_blank"><i>Mentee Guide</i></a> to share with your mentees
+2. Review the <a href="https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/mentoring/Mentee-Guide.md" target="_blank"><i>Mentee Guide</i></a> to share with your mentees
 3. Connect with a fellow workshop participant for ongoing peer support
 
 **Within 60 Days:**
