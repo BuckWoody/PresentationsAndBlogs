@@ -835,6 +835,7 @@ Mentoring relationships often have friendship elements, but the primary purpose 
 <h2 id="resources"><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pencil2.png">Additional Resources</h2>
 
 <h3>Books</h3>
+
 - Ibarra, H. (2015). *Act Like a Leader, Think Like a Leader*
 - Grant, A. (2021). *Think Again: The Power of Knowing What You Don't Know*
 - Brown, B. (2018). *Dare to Lead*
@@ -842,11 +843,13 @@ Mentoring relationships often have friendship elements, but the primary purpose 
 - Dweck, C. (2006). *Mindset: The New Psychology of Success*
 
 <h3>Online Resources</h3>
+
 - <a href="https://www.ccl.org/articles/leading-effectively-articles/what-is-mentoring/" target="_blank">Center for Creative Leadership: What is Mentoring?</a>
 - <a href="https://hbr.org/topic/mentoring" target="_blank">Harvard Business Review: Mentoring Articles</a>
 - <a href="https://www.forbes.com/career-advice/" target="_blank">Forbes: Career and Mentoring Resources</a>
 
 <h3>Professional Development</h3>
+
 - LinkedIn Learning courses on career development
 - Industry-specific professional associations
 - Leadership development programs
