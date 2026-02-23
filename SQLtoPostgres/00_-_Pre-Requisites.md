@@ -2,7 +2,7 @@
 
 # Workshop: PostgreSQL for the SQL Server Database Professional
 
-#### <i>A Microsoft-style Course — SQL Server & PostgreSQL Track</i>
+#### <i>A SQL Server to PostgreSQL Skilling</i>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
