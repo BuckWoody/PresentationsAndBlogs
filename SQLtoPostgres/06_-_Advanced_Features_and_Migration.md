@@ -608,6 +608,9 @@ ORDER BY table_schema, table_name;
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/owl.png"><b>For Further Study</b></p>
 
+**Migrations**
+- [Migration Tooling from Tim Chapman](https://github.com/timchapman/sqlserver-to-postgresql)
+
 **JSONB and JSON:**
 - [PostgreSQL Documentation — JSON Functions and Operators](https://www.postgresql.org/docs/current/functions-json.html)
 - [PostgreSQL Documentation — JSON Types](https://www.postgresql.org/docs/current/datatype-json.html)
