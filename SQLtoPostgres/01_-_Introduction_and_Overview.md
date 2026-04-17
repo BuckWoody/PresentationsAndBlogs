@@ -29,7 +29,7 @@ The table below is your "Rosetta Stone" for the workshop:
 | Top-level container | Database | Database |
 | Namespace within database | Schema (dbo is default) | Schema (public is default) |
 | Admin superuser | `sa` | `postgres` |
-| Procedural language | T-SQL | SQL, PL/pgSQL (also PL/Python, PL/Perl, etc.) |
+| Procedural language | T-SQL | SQL, PL/pgSQL (also PL/Pythonu, PL/Perl, etc.) |
 | Interactive terminal | `sqlcmd` | `psql` |
 | Primary GUI | SSMS | pgAdmin 4 |
 | Execution plan tool | SSMS graphical plan / SET STATISTICS XML | `EXPLAIN` / `EXPLAIN ANALYZE` |
