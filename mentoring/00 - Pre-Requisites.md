@@ -103,6 +103,7 @@ Begin thinking about your own mentoring philosophy by answering:
 <h2 id="logistics"><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pencil2.png">Workshop Logistics</h2>
 
 <h3>Format</h3>
+
 - **Duration:** 4 hours (can be delivered as four 1-hour modules or two 2-hour sessions)
 - **Format:** Interactive with mix of presentation, discussion, paired practice, and group exercises
 - **Cohort Size:** 5-10 participants (optimal for interactive learning)
@@ -110,17 +111,20 @@ Begin thinking about your own mentoring philosophy by answering:
 <h3>What to Expect</h3>
 
 **Interactive Learning:**
+
 - Every 15-20 minutes of instruction includes an exercise
 - You'll practice skills with partners and small groups
 - Real-time feedback from facilitator and peers
 - Safe environment for trying new approaches
 
 **Time Breakdown:**
+
 - ~40% presentation and framework introduction
 - ~40% practice exercises and skill building
 - ~20% discussion, Q&A, and reflection
 
 **Participation Expectations:**
+
 - Active engagement in discussions
 - Willingness to practice with different partners
 - Respectful, constructive feedback to peers
@@ -141,6 +145,7 @@ Participants should plan to:
 If attending virtually, ensure you have:
 
 **Technology Requirements:**
+
 - Stable internet connection
 - Video camera (required for interactive exercises)
 - Microphone and speakers/headset
@@ -148,17 +153,20 @@ If attending virtually, ensure you have:
 - Ability to share your screen if needed
 
 **Workspace Setup:**
+
 - Quiet space with minimal distractions
 - Comfortable seating for 4 hours (with breaks)
 - Second screen or device helpful for viewing materials while practicing
 
 **Platform Familiarity:**
+
 - Know how to mute/unmute
 - Understand breakout room functionality
 - Can use chat feature
 - Able to give reactions/emoji feedback
 
 <h3>Pre-Workshop Technical Check</h3>
+
 - Test your video and audio 15 minutes before start time
 - Ensure you can access any shared documents or resources
 - Have facilitator contact information in case of technical issues
@@ -168,19 +176,21 @@ If attending virtually, ensure you have:
 <h2 id="expectations"><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pencil2.png">Setting Expectations</h2>
 
 <h3>What This Workshop Will Provide</h3>
-✅ Clear frameworks for effective mentoring<br>
-✅ Practical skills you can immediately apply<br>
-✅ Practice opportunities with feedback<br>
-✅ Resources for ongoing development<br>
-✅ A community of fellow mentors<br>
-✅ A comprehensive Mentee Guide for your use<br>
+
+- Clear frameworks for effective mentoring<br>
+- Practical skills you can immediately apply<br>
+- Practice opportunities with feedback<br>
+- Resources for ongoing development<br>
+- A community of fellow mentors<br>
+- A comprehensive Mentee Guide for your use<br>
 
 <h3>What This Workshop Will Not Provide</h3>
-❌ Therapy or counseling training<br>
-❌ Solutions to every possible mentoring scenario<br>
-❌ Formal certification (though you'll receive a completion certificate)<br>
-❌ Pre-matched mentees (you'll need to establish relationships independently)<br>
-❌ Ongoing supervision (though follow-up support may be available)<br>
+
+- Therapy or counseling training<br>
+- Solutions to every possible mentoring scenario<br>
+- Formal certification (though you'll receive a completion certificate)<br>
+- Pre-matched mentees (you'll need to establish relationships independently)<br>
+- Ongoing supervision (though follow-up support may be available)<br>
 
 <h3>Mentoring vs. Other Developmental Relationships</h3>
 
@@ -199,17 +209,20 @@ Before the workshop, understand that mentoring is distinct from:
 This workshop involves personal reflection and vulnerability. We commit to:
 
 **Confidentiality:**
+
 - What's shared in the workshop stays in the workshop
 - Examples may be discussed in general terms, but identifying details remain private
 - Facilitators will not share your participation or comments with your organization
 
 **Respect:**
+
 - All experiences and perspectives are valued
 - We challenge ideas, not people
 - We assume positive intent
 - We create space for all voices
 
 **Growth Mindset:**
+
 - Mistakes during practice are expected and welcomed
 - Feedback is a gift for development
 - We're all here to learn and improve
@@ -220,6 +233,7 @@ This workshop involves personal reflection and vulnerability. We commit to:
 <h2 id="resources"><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pencil2.png">Additional Resources</h2>
 
 <h3>Books on Mentoring</h3>
+
 - Zachary, L.J. (2012). *The Mentor's Guide: Facilitating Effective Learning Relationships* (2nd ed.)
 - Johnson, W.B. (2016). *On Being a Mentor: A Guide for Higher Education Faculty* (2nd ed.)
 - Huang, C.A. & Lynch, J. (1995). *Mentoring: The TAO of Giving and Receiving Wisdom*
@@ -227,11 +241,13 @@ This workshop involves personal reflection and vulnerability. We commit to:
 - Stone, D. & Heen, S. (2014). *Thanks for the Feedback: The Science and Art of Receiving Feedback Well*
 
 <h3>Research Organizations</h3>
+
 - <a href="https://www.ccl.org/" target="_blank">Center for Creative Leadership (CCL)</a>
 - <a href="https://mentoringgroup.com/" target="_blank">The Mentoring Group</a>
 - <a href="https://www.mentoringcomplete.com/" target="_blank">International Mentoring Association</a>
 
 <h3>Online Communities</h3>
+
 - <a href="https://www.linkedin.com/groups/" target="_blank">LinkedIn Groups: Search "Mentoring Professionals"</a>
 - <a href="https://www.reddit.com/r/mentors/" target="_blank">Reddit: r/mentors community</a>
 
