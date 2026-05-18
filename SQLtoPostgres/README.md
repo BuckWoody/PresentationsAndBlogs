@@ -8,11 +8,11 @@
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/textbubble.png"> <h2>About this Workshop</h2>
 
-Welcome to this one-day workshop on *PostgreSQL for the SQL Server Database Professional*. In this workshop, you'll learn how to apply your existing SQL Server knowledge to become productive with PostgreSQL quickly — understanding where the two platforms are similar, where they differ fundamentally, and how to translate your skills across both.
+Welcome to this one-day workshop on *PostgreSQL for the SQL Server Database Professional*. In this workshop, you'll learn how to apply your existing SQL Server knowledge to become productive with PostgreSQL quickly, and understand where the two platforms are similar, where they differ fundamentally, and how to translate your skills across both.
 
 The focus of this workshop is to give experienced SQL Server professionals a guided, hands-on path to PostgreSQL competency in a single day, covering architecture, query language, development patterns, indexing, administration, and advanced features.
 
-You'll start by understanding how the PostgreSQL engine differs from SQL Server at an architectural level, then progress through data types, T-SQL-to-PL/pgSQL translation, index strategies and query tuning, administration and security, and finally advanced features and migration tooling — with a focus on how to extrapolate what you have learned into production workloads at your organization.
+You'll start by understanding how the PostgreSQL engine differs from SQL Server at an architectural level, then progress through data types, T-SQL-to-PL/pgSQL translation, index strategies and query tuning, administration and security, and finally advanced features and migration tooling, with a focus on how to extrapolate what you have learned into production workloads at your organization.
 
 This [github README.MD file](https://lab.github.com/githubtraining/introduction-to-github) explains how the workshop is laid out, what you will learn, and the technologies you will use. To download this workshop to your local computer, click the **Clone or Download** button at the top right of this page. [More about that process is here](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/cloning-a-repository).
 
@@ -30,7 +30,7 @@ In this workshop you'll learn:
 - How to perform common DBA tasks in PostgreSQL: user/role management, backup and restore with `pg_dump`/`pg_basebackup`, VACUUM, and monitoring with `pg_stat_*` views
 - How to leverage PostgreSQL-specific advanced features including JSONB, extensions (PostGIS, pg_trgm, pgvector), Foreign Data Wrappers, and migration tooling
 
-The goal of this workshop is to train SQL Server professionals — DBAs, developers, and architects — who need to support, design, or migrate to PostgreSQL workloads.
+The goal of this workshop is to train SQL Server professionals, DBAs, developers, and architects, who need to support, design, or migrate to PostgreSQL workloads.
 
 The concepts and skills taught in this workshop form the starting points for:
 
@@ -55,11 +55,11 @@ Industry examples where this cross-platform expertise matters include financial 
   <tr><th style="background-color: #1b20a1; color: white;">Technology</th> <th style="background-color: #1b20a1; color: white;">Description</th></tr>
 
   <tr><td><i>PostgreSQL 16/17</i></td><td>The open-source object-relational database engine at the center of this workshop</td></tr>
-  <tr><td><i>psql</i></td><td>PostgreSQL's native interactive terminal — the counterpart to sqlcmd</td></tr>
+  <tr><td><i>psql</i></td><td>PostgreSQL's native interactive terminal, the counterpart to sqlcmd</td></tr>
   <tr><td><i>pgAdmin 4</i></td><td>Cross-platform GUI administration tool for PostgreSQL, comparable to SSMS</td></tr>
   <tr><td><i>DBeaver Community</i></td><td>Universal database IDE that supports both SQL Server and PostgreSQL side-by-side</td></tr>
   <tr><td>Microsoft SQL Server 2022 (Developer Edition)</td><td>Used as the reference platform for side-by-side comparisons throughout the workshop</td></tr>
-  <tr><td>Azure Database for PostgreSQL (Flexible Server)</td><td>Microsoft's managed PostgreSQL service — used to demonstrate cloud deployment differences</td></tr>
+  <tr><td>Azure Database for PostgreSQL (Flexible Server)</td><td>Microsoft's managed PostgreSQL service, used to demonstrate cloud deployment differences</td></tr>
   <tr><td><i>pg_dump / pg_restore / pg_basebackup</i></td><td>PostgreSQL's native backup and restore utilities</td></tr>
 
 </table>
@@ -81,7 +81,7 @@ This workshop expects that you understand:
 If you are new to SQL Server or relational databases, complete these references before attending:
 
 - [T-SQL Fundamentals (Microsoft Learn)](https://learn.microsoft.com/en-us/training/paths/get-started-querying-with-transact-sql/)
-- [SQL Server Administration Fundamentals (Microsoft Learn)](https://learn.microsoft.com/en-us/training/paths/sql-server-2022/)
+- [SQL Server Tutorial (Microsoft Learn)](https://learn.microsoft.com/en-us/sql/relational-databases/tutorial-getting-started-with-the-database-engine?view=sql-server-ver16)
 - [PostgreSQL Tutorial (Official)](https://www.postgresql.org/docs/current/tutorial.html)
 
 
@@ -99,7 +99,7 @@ This workshop uses PostgreSQL 16/17 and SQL Server 2022 Developer Edition for al
 
   <tr><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">Primary Audience:</td><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">SQL Server DBAs and Developers who need to support or migrate to PostgreSQL workloads</td></tr>
   <tr><td>Secondary Audience:</td><td>Data Engineers and Solution Architects evaluating PostgreSQL for new projects</td></tr>
-  <tr><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">Level:</td><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">200 (Intermediate — prior SQL Server experience required)</td></tr>
+  <tr><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">Level:</td><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">200 (Intermediate, prior SQL Server experience required)</td></tr>
   <tr><td>Type:</td><td>In-Person or self-paced from GitHub</td></tr>
   <tr><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">Length:</td><td style="background-color: Cornsilk; color: black; padding: 5px 5px;">6 hours (one module per hour)</td></tr>
 
@@ -112,7 +112,7 @@ This workshop uses PostgreSQL 16/17 and SQL Server 2022 Developer Edition for al
 - [Microsoft SQL Server Workshop Series](https://microsoft.github.io/sqlworkshops/)
 - [Azure Database for PostgreSQL Documentation](https://learn.microsoft.com/en-us/azure/postgresql/)
 - [PostgreSQL Official Documentation](https://www.postgresql.org/docs/)
-- [EDB Migration Portal (SQL Server to PostgreSQL)](https://www.enterprisedb.com/products/migration-portal)
+- [Migrate SQL Server to PostgreSQL](https://pradeepl.com/blog/migrating-from-sql-server-to-postgresql/)
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
