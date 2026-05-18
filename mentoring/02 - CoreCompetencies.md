@@ -734,14 +734,13 @@ Switch roles, new experience
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/owl.png"><b>For Further Study</b></p>
 
 <ul>
+    <li><a href="https://www.verywellmind.com/what-is-active-listening-3024343" target="_blank">What is Active Listening</a></li>
     <li><a href="https://www.ccl.org/articles/leading-effectively-articles/coaching-others-use-active-listening-skills/" target="_blank">CCL: Coaching Others - Use Active Listening Skills</a></li>
-    <li><a href="https://www.mindtools.com/CommSkll/ActiveListening.htm" target="_blank">MindTools: Active Listening</a></li>
-    <li><a href="https://coachingfederation.org/blog/art-of-powerful-questions" target="_blank">ICF: The Art of Powerful Questions</a></li>
-    <li><a href="https://hbr.org/2015/01/the-right-way-to-hold-people-accountable" target="_blank">HBR: The Right Way to Give Feedback</a></li>
+    <li><a href="https://www.amanet.org/resources/active-listening-download/?pcrid=&pmt=b&pkw=www.amanet.org&pmid=&Pcode=XCLQ&pgrid=1253444615155850&ptaid=kwd-2330140017854800:loc-4089&msclkid=c64725dd03f21a0e4fe64fd60b44c469" target="_blank"> AMA Active Listening PDF </a></li>
+    <li><a href="https://www.youtube.com/results?search_query=active+listening+demonstration" target="_blank">Video examples of active listening in practice</a></li>
     <li>Book: Stone, D. & Heen, S. (2014). <i>Thanks for the Feedback: The Science and Art of Receiving Feedback Well</i></li>
     <li>Book: Brown, B. (2018). <i>Dare to Lead</i> - Section on rumbling with vulnerability and feedback</li>
     <li>Book: Whitmore, J. (2017). <i>Coaching for Performance</i> (5th ed.) - GROW model and questioning</li>
-    <li><a href="https://www.youtube.com/results?search_query=active+listening+demonstration" target="_blank">Video examples of active listening in practice</a></li>
 </ul>
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
