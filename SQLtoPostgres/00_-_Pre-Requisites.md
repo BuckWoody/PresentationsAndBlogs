@@ -73,13 +73,26 @@ winget install --id=DBeaver.DBeaver.Community -e
 
 *Note: Unlike SQL Server, a PostgreSQL installation is called a **cluster** and runs as a single Windows Service (`postgresql-x64-17` or similar). A single cluster can host many databases.*
 
-Open a Command Prompt or PowerShell window. Add the PostgreSQL `bin` directory to your PATH if needed (e.g., `C:\Program Files\PostgreSQL\17\bin`), then connect:
+Open a PowerShell window. Add the PostgreSQL `bin` directory to your PATH (e.g., `C:\Program Files\PostgreSQL\17\bin`)
+
+```powershell
+# Run in an elevated PowerShell session
+$pgBin = "C:\Program Files\PostgreSQL\17\bin"
+[Environment]::SetEnvironmentVariable(
+    "Path",
+    [Environment]::GetEnvironmentVariable("Path","Machine") + ";$pgBin",
+    "Machine"
+)
+```
+Exit your terminal and start it back again. Then connect:
 
 ```bat
+psql --version
+pg_dump --version
 psql -U postgres -h localhost
 ```
 
-You will be prompted for the password you set during installation. If you see the `postgres=#` prompt, PostgreSQL is running correctly. Type `\q` to exit.
+You will be prompted for the password you set during installation (postgres if you did the winget install). If you see the `postgres=#` prompt, PostgreSQL is running correctly. Type `\q` to exit.
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 5 – Verify pgAdmin 4 Launches</b></p>
 
@@ -130,28 +143,6 @@ CREATE SCHEMA sales;
 
 Leave the database empty for now — each module will build on it progressively. The complete sample data script (`adventureworks_pg.sql`) is included in the workshop repository under `scripts/`.
 
-<p style="border-bottom: 1px solid lightgrey;"></p>
-
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 8: Add PostgreSQL bin Directory to Your System PATH</b></p>
-
-To run `psql`, `pg_dump`, `pg_restore`, and other PostgreSQL command-line tools from any directory, add the PostgreSQL `bin` folder to your Windows `PATH`:
-
-```powershell
-# Run in an elevated PowerShell session
-$pgBin = "C:\Program Files\PostgreSQL\17\bin"
-[Environment]::SetEnvironmentVariable(
-    "Path",
-    [Environment]::GetEnvironmentVariable("Path","Machine") + ";$pgBin",
-    "Machine"
-)
-```
-
-Then open a new terminal window and verify:
-
-```bat
-psql --version
-pg_dump --version
-```
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>(Optional) Set Up Azure Database for PostgreSQL Flexible Server</b></p>
