@@ -36,7 +36,6 @@ Install the latest version of SSMS for use as a reference tool throughout the wo
 - [Download SSMS](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms)
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
-
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 2: Install PostgreSQL on Windows</b></p>
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 1 – Download and Install PostgreSQL 16 or 17</b></p>
@@ -72,7 +71,7 @@ winget install --id=DBeaver.DBeaver.Community -e
 
 *Note: Unlike SQL Server, a PostgreSQL installation is called a **cluster** and runs as a single Windows Service (`postgresql-x64-17` or similar). A single cluster can host many databases.*
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Activity 4 – Verify the Installation with psql</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 4 – Verify the Installation with psql</b></p>
 
 Open a Command Prompt or PowerShell window. Add the PostgreSQL `bin` directory to your PATH if needed (e.g., `C:\Program Files\PostgreSQL\17\bin`), then connect:
 
@@ -82,14 +81,14 @@ psql -U postgres -h localhost
 
 You will be prompted for the password you set during installation. If you see the `postgres=#` prompt, PostgreSQL is running correctly. Type `\q` to exit.
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Activity 5 – Verify pgAdmin 4 Launches</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 5 – Verify pgAdmin 4 Launches</b></p>
 
 pgAdmin 4 is included with the EDB installer. Launch it from the Start menu. Connect to the local PostgreSQL server using the `postgres` superuser credentials. You should see the server tree on the left with your new cluster.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Activity 6 – Restore the AdventureWorks2022 Sample Database</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 6 – Restore the AdventureWorks2022 Sample Database</b></p>
 
 The workshop exercises use AdventureWorks as the SQL Server reference database.
 
