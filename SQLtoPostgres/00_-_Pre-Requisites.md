@@ -132,7 +132,7 @@ Leave the database empty for now — each module will build on it progressively.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 9: Add PostgreSQL bin Directory to Your System PATH</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 8: Add PostgreSQL bin Directory to Your System PATH</b></p>
 
 To run `psql`, `pg_dump`, `pg_restore`, and other PostgreSQL command-line tools from any directory, add the PostgreSQL `bin` folder to your Windows `PATH`:
 
