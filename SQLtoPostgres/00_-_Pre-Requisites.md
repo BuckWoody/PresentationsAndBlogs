@@ -12,6 +12,8 @@ The **PostgreSQL for the SQL Server Database Professional** workshop is taught u
 
 *All examples in this workshop use Microsoft Windows as the base operating system. PostgreSQL runs natively on Windows, Linux, and macOS; the hands-on exercises will work on any platform, but screenshots and path examples reference Windows.*
 
+(**Note:** You will find a series of winget commands below if you want a command-line scripted installation)
+
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 1: Install SQL Server 2022 Developer Edition (Windows)</b></p>
@@ -33,22 +35,6 @@ Install the latest version of SSMS for use as a reference tool throughout the wo
 
 - [Download SSMS](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms)
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 3 – Restore the AdventureWorks2022 Sample Database</b></p>
-
-The workshop exercises use AdventureWorks as the SQL Server reference database.
-
-- [Download AdventureWorks2022.bak](https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure)
-
-Restore the backup using SSMS or T-SQL:
-
-```sql
-RESTORE DATABASE AdventureWorks2022
-FROM DISK = 'C:\Downloads\AdventureWorks2022.bak'
-WITH MOVE 'AdventureWorks2022'   TO 'C:\SQLData\AdventureWorks2022.mdf',
-     MOVE 'AdventureWorks2022_log' TO 'C:\SQLData\AdventureWorks2022_log.ldf',
-     REPLACE, RECOVERY;
-```
-
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 2: Install PostgreSQL on Windows</b></p>
@@ -67,9 +53,26 @@ During installation:
 - Accept the default port **5432**.
 - Accept the default locale.
 
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 3: Install DBeaver Community Edition</b></p>
+
+DBeaver Community is a free, cross-database IDE that supports both SQL Server and PostgreSQL. During the workshop you will use it to compare the two platforms side by side.
+
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 1 – Download and Install DBeaver</b></p>
+
+- [Download DBeaver Community for Windows](https://dbeaver.io/download/)
+
+**WINGET Alternative Installation:**
+You can also use the Windows Package Manager called "winget" to install software. The commands for all of the previous packages are:
+```
+winget install Microsoft.SQLServer.2022.Developer
+winget install --id=Microsoft.SQLServerManagementStudio -e
+winget install --id=PostgreSQL.PostgreSQL.17 -e
+winget install --id=DBeaver.DBeaver.Community -e
+```
+
 *Note: Unlike SQL Server, a PostgreSQL installation is called a **cluster** and runs as a single Windows Service (`postgresql-x64-17` or similar). A single cluster can host many databases.*
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 2 – Verify the Installation with psql</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Activity 4 – Verify the Installation with psql</b></p>
 
 Open a Command Prompt or PowerShell window. Add the PostgreSQL `bin` directory to your PATH if needed (e.g., `C:\Program Files\PostgreSQL\17\bin`), then connect:
 
@@ -79,20 +82,28 @@ psql -U postgres -h localhost
 
 You will be prompted for the password you set during installation. If you see the `postgres=#` prompt, PostgreSQL is running correctly. Type `\q` to exit.
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 3 – Verify pgAdmin 4 Launches</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Activity 5 – Verify pgAdmin 4 Launches</b></p>
 
 pgAdmin 4 is included with the EDB installer. Launch it from the Start menu. Connect to the local PostgreSQL server using the `postgres` superuser credentials. You should see the server tree on the left with your new cluster.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 3: Install DBeaver Community Edition</b></p>
 
-DBeaver Community is a free, cross-database IDE that supports both SQL Server and PostgreSQL. During the workshop you will use it to compare the two platforms side by side.
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Activity 6 – Restore the AdventureWorks2022 Sample Database</b></p>
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 1 – Download and Install DBeaver</b></p>
+The workshop exercises use AdventureWorks as the SQL Server reference database.
 
-- [Download DBeaver Community for Windows](https://dbeaver.io/download/)
+- [Download AdventureWorks2022.bak](https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure)
 
+Restore the backup using SSMS or T-SQL:
+
+```sql
+RESTORE DATABASE AdventureWorks2022
+FROM DISK = 'C:\Downloads\AdventureWorks2022.bak'
+WITH MOVE 'AdventureWorks2022'   TO 'C:\SQLData\AdventureWorks2022.mdf',
+     MOVE 'AdventureWorks2022_log' TO 'C:\SQLData\AdventureWorks2022_log.ldf',
+     REPLACE, RECOVERY;
+```
 After installation, create two database connections — one for SQL Server and one for PostgreSQL. DBeaver will prompt you to download the required JDBC drivers automatically on first connection.
 
 *SQL Server connection string example:* `jdbc:sqlserver://localhost:1433;databaseName=AdventureWorks2022`
@@ -101,7 +112,7 @@ After installation, create two database connections — one for SQL Server and o
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 4: Create the Workshop Sample Database in PostgreSQL</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 7: Create the Workshop Sample Database in PostgreSQL</b></p>
 
 The workshop uses a simplified version of AdventureWorks ported to PostgreSQL. Run the following commands in psql to create the workshop database and sample schema:
 
@@ -122,7 +133,7 @@ Leave the database empty for now — each module will build on it progressively.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 5: (Optional) Set Up Azure Database for PostgreSQL Flexible Server</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 8: (Optional) Set Up Azure Database for PostgreSQL Flexible Server</b></p>
 
 Module 06 demonstrates cloud-managed PostgreSQL. If you want to follow along with the Azure sections, create a Flexible Server instance before the workshop.
 
@@ -144,7 +155,7 @@ Choose the **Burstable B1ms** tier for workshop purposes to minimize cost. **Tur
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 6: Add PostgreSQL bin Directory to Your System PATH</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 9: Add PostgreSQL bin Directory to Your System PATH</b></p>
 
 To run `psql`, `pg_dump`, `pg_restore`, and other PostgreSQL command-line tools from any directory, add the PostgreSQL `bin` folder to your Windows `PATH`:
 
