@@ -103,45 +103,30 @@ pgAdmin 4 is included with the EDB installer. Launch it from the Start menu. Con
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 6 – Restore the AdventureWorks2022 Sample Database</b></p>
 
-The workshop exercises use AdventureWorks as the SQL Server reference database.
+The workshop exercises use the pubs sample database as the SQL Server reference database.
 
-- [Download AdventureWorks2022.bak](https://learn.microsoft.com/en-us/sql/samples/adventureworks-install-configure)
-
-Restore the backup using SSMS or T-SQL:
-
-```sql
-RESTORE DATABASE AdventureWorks2022
-FROM DISK = 'C:\Downloads\AdventureWorks2022.bak'
-WITH MOVE 'AdventureWorks2022'   TO 'C:\SQLData\AdventureWorks2022.mdf',
-     MOVE 'AdventureWorks2022_log' TO 'C:\SQLData\AdventureWorks2022_log.ldf',
-     REPLACE, RECOVERY;
-```
-After installation, create two database connections — one for SQL Server and one for PostgreSQL. DBeaver will prompt you to download the required JDBC drivers automatically on first connection.
-
-*SQL Server connection string example:* `jdbc:sqlserver://localhost:1433;databaseName=AdventureWorks2022`
-
-*PostgreSQL connection string example:* `jdbc:postgresql://localhost:5432/postgres`
+- Navigate to this resource and copy the script into memory.
+- Open SQL Server Management Studio and connect to the "master" database.
+- Right-click the *master* database and select *New Query*
+- Press CTRL-V to paste the pubs database script.
+- Run the query using the F5 key.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 7: Create the Workshop Sample Database in PostgreSQL</b></p>
 
-The workshop uses a simplified version of AdventureWorks ported to PostgreSQL. Run the following commands in psql to create the workshop database and sample schema:
+The workshop uses the pubs database ported to PostgreSQL. Run the following commands in psql to create the workshop database and sample schema:
 
-```sql
--- Connect as postgres superuser, then:
-CREATE DATABASE adventureworks;
-\c adventureworks
+Open DBeaver, create two database connections — one for SQL Server and one for PostgreSQL. DBeaver will prompt you to download the required JDBC drivers automatically on first connection.
 
--- Create schemas that mirror the SQL Server version
-CREATE SCHEMA humanresources;
-CREATE SCHEMA person;
-CREATE SCHEMA production;
-CREATE SCHEMA purchasing;
-CREATE SCHEMA sales;
-```
+- *SQL Server connection string example:* `jdbc:sqlserver://localhost:1433;databaseName=pubs`
+- *PostgreSQL connection string example:* `jdbc:postgresql://localhost:5432/postgres`
 
-Leave the database empty for now — each module will build on it progressively. The complete sample data script (`adventureworks_pg.sql`) is included in the workshop repository under `scripts/`.
+- Navigate to this resource and copy the script into memory.
+- In DBeaver, connect to the "*postgres* server and *postgres* database.
+- Left-click the *postgres* database and press *CTRL-ALT-ENTER*
+- Press CTRL-V to paste the pubs database script.
+- Run the query using the small red arrow at the left side the query window.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
