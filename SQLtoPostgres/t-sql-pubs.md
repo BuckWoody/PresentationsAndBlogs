@@ -1,3 +1,4 @@
+```sql
 /*                                                                        */
 /*              InstPubs.SQL - Creates the Pubs database                  */
 /*                                                                        */
@@ -2162,4 +2163,4 @@ select  @dttm=convert(varchar,getdate(),113)
 raiserror('Ending InstPubs.SQL at %s ....',1,1,@dttm) with nowait
 
 GO
--- -
+```
