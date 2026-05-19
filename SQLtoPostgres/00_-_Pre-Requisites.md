@@ -123,10 +123,12 @@ Open DBeaver, create two database connections — one for SQL Server and one for
 - *PostgreSQL connection string example:* `jdbc:postgresql://localhost:5432/postgres`
 
 - Navigate to this resource and copy the script into memory.
-- In DBeaver, connect to the "*postgres* server and *postgres* database.
-- Left-click the *postgres* database and press *CTRL-ALT-ENTER*
-- Press CTRL-V to paste the pubs database script.
-- Run the query using the small red arrow at the left side the query window.
+- In DBeaver, right-click the Server name and select *Create Database*
+- Type the name *pubs* and create the database
+- Left-click the *Databases* node and select *Refresh*. You should see the *pubs* database listed. 
+- Left-click the *pubs* database and press *CTRL-ALT-ENTER* to enter a new query file.
+- Press CTRL-V to paste the pubs database script from above.
+- Run the query using the third small red arrow at the left side the query window - hover over it so that it says "Run Script" before you click it.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
