@@ -38,8 +38,6 @@ Install the latest version of SSMS for use as a reference tool throughout the wo
 <p style="border-bottom: 1px solid lightgrey;"></p>
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 2: Install PostgreSQL on Windows</b></p>
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 1 – Download and Install PostgreSQL 16 or 17</b></p>
-
 The recommended installer for Windows is the EnterpriseDB (EDB) interactive installer, which includes PostgreSQL, pgAdmin 4, the Stack Builder utility, and command-line tools.
 
 - [Download PostgreSQL for Windows (EDB Installer)](https://www.postgresql.org/download/windows/)
@@ -56,9 +54,9 @@ During installation:
 
 DBeaver Community is a free, cross-database IDE that supports both SQL Server and PostgreSQL. During the workshop you will use it to compare the two platforms side by side.
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 1 – Download and Install DBeaver</b></p>
-
 - [Download DBeaver Community for Windows](https://dbeaver.io/download/)
+
+<p style="border-bottom: 1px solid lightgrey;"></p>
 
 **WINGET Alternative Installation:**
 You can also use the Windows Package Manager called "winget" to install software. The commands for all of the previous packages are:
@@ -68,10 +66,12 @@ winget install --id=Microsoft.SQLServerManagementStudio -e
 winget install --id=PostgreSQL.PostgreSQL.17 -e
 winget install --id=DBeaver.DBeaver.Community -e
 ```
+<p style="border-bottom: 1px solid lightgrey;"></p>
 
-*Note: Unlike SQL Server, a PostgreSQL installation is called a **cluster** and runs as a single Windows Service (`postgresql-x64-17` or similar). A single cluster can host many databases.*
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 4 – Verify the Installation with psql</b></p>
+
+*Note: Unlike SQL Server, a PostgreSQL installation is called a **cluster** and runs as a single Windows Service (`postgresql-x64-17` or similar). A single cluster can host many databases.*
 
 Open a Command Prompt or PowerShell window. Add the PostgreSQL `bin` directory to your PATH if needed (e.g., `C:\Program Files\PostgreSQL\17\bin`), then connect:
 
