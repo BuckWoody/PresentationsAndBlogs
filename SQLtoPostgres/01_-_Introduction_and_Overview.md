@@ -11,7 +11,7 @@
 
 *Estimated Time: 60 minutes (≈20 minutes lecture, ≈40 minutes hands-on)*
 
-In this module you will build a mental map of PostgreSQL by comparing it directly to SQL Server. The goal is not to make you an expert yet — it is to eliminate the "unknown unknowns" so that the rest of the day's exercises make sense. By the end of this module you will be able to connect to PostgreSQL, navigate its hierarchy of objects, and use its primary client tools.
+In this module you will build a mental map of PostgreSQL by comparing it directly to SQL Server. The goal is not to make you an expert yet, it is to eliminate the "unknown unknowns" so that the rest of the day's exercises make sense. By the end of this module you will be able to connect to PostgreSQL, navigate its hierarchy of objects, and use its primary client tools.
 
 Make sure you have completed the <a href="00_-_Pre-Requisites.md">Pre-Requisites</a> before starting this module.
 
@@ -19,7 +19,7 @@ Make sure you have completed the <a href="00_-_Pre-Requisites.md">Pre-Requisites
 
 <h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pencil2.png">1.1 – How PostgreSQL Compares to SQL Server at a Glance</h2>
 
-Both SQL Server and PostgreSQL are full ACID-compliant relational database management systems that support standard SQL, stored procedures, triggers, views, indexing, replication, and role-based security. For a working SQL Server professional, most of the concepts transfer directly — the vocabulary and the mechanics differ in important ways.
+Both SQL Server and PostgreSQL are full ACID-compliant relational database management systems that support standard SQL, stored procedures, triggers, views, indexing, replication, and role-based security. For a working SQL Server professional, most of the concepts transfer directly, the vocabulary and the mechanics differ in important ways.
 
 The table below is your "Rosetta Stone" for the workshop:
 
@@ -45,17 +45,17 @@ The table below is your "Rosetta Stone" for the workshop:
 
 <h3>Process Model vs. Thread Model</h3>
 
-One of the most important architectural differences is how each system handles client connections. SQL Server uses a **thread-based model**: a pool of OS threads managed within a single process (`sqlservr.exe`) handles all client connections. PostgreSQL uses a **process-based model**: each client connection spawns a dedicated OS process (`postgres` backend process). This means that on a system with 500 concurrent connections, PostgreSQL will have approximately 500 OS processes. The process model provides strong isolation — a crashing backend affects only that connection — but it also means connection pooling is far more critical in PostgreSQL than in SQL Server. Tools such as **PgBouncer** or **pgpool-II** are used in production PostgreSQL environments for the same reason that SQL Server's built-in connection pool is less of a concern for SQL Server developers.
+One of the most important architectural differences is how each system handles client connections. SQL Server uses a **thread-based model**: a pool of OS threads managed within a single process (`sqlservr.exe`) handles all client connections. PostgreSQL uses a **process-based model**: each client connection spawns a dedicated OS process (`postgres` backend process). This means that on a system with 500 concurrent connections, PostgreSQL will have approximately 500 OS processes. The process model provides strong isolation — a crashing backend affects only that connection, but it also means connection pooling is far more critical in PostgreSQL than in SQL Server. Tools such as **PgBouncer** or **pgpool-II** are used in production PostgreSQL environments for the same reason that SQL Server's built-in connection pool is less of a concern for SQL Server developers.
 
 <h3>MVCC vs. Lock-Based Concurrency</h3>
 
 SQL Server's default transaction isolation level (`READ COMMITTED`) acquires shared read locks on rows as they are read and releases them when the statement completes. Readers can block writers and writers can block readers (unless `READ_COMMITTED_SNAPSHOT` is enabled at the database level).
 
-PostgreSQL uses **Multi-Version Concurrency Control (MVCC)** by default. When a row is updated, PostgreSQL creates a *new physical version* of that row (called a "tuple") rather than overwriting the existing one. Readers always see a consistent snapshot of the data at their transaction start time, and **readers never block writers, and writers never block readers**. The tradeoff is that "dead" old row versions accumulate on disk and must be reclaimed by the **VACUUM** process — something that has no direct SQL Server equivalent and is covered in Module 05.
+PostgreSQL uses **Multi-Version Concurrency Control (MVCC)** by default. When a row is updated, PostgreSQL creates a *new physical version* of that row (called a "tuple") rather than overwriting the existing one. Readers always see a consistent snapshot of the data at their transaction start time, and **readers never block writers, and writers never block readers**. The tradeoff is that "dead" old row versions accumulate on disk and must be reclaimed by the **VACUUM** process, something that has no direct SQL Server equivalent and is covered in Module 05.
 
 <h3>WAL vs. Transaction Log</h3>
 
-SQL Server writes all changes to a per-database transaction log (`.ldf` file) before writing to data pages. PostgreSQL writes all changes to the cluster-wide **Write-Ahead Log (WAL)** before writing to data pages. The principle is identical — durability and crash recovery — but because the WAL is cluster-wide rather than per-database, PostgreSQL backup, replication, and PITR (Point-In-Time Recovery) all work at the cluster level rather than the database level.
+SQL Server writes all changes to a per-database transaction log (`.ldf` file) before writing to data pages. PostgreSQL writes all changes to the cluster-wide **Write-Ahead Log (WAL)** before writing to data pages. The principle is identical: Durability and crash recovery, but because the WAL is cluster-wide rather than per-database, PostgreSQL backup, replication, and PITR (Point-In-Time Recovery) all work at the cluster level rather than the database level.
 
 **Practical implication:** `pg_basebackup` (the equivalent of a SQL Server full backup) backs up the entire cluster, not a single database. `pg_dump` is used to back up individual databases (covered in Module 05).
 
@@ -65,7 +65,7 @@ SQL Server writes all changes to a per-database transaction log (`.ldf` file) be
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Description</b></p>
 
-In this activity you will use `psql` — PostgreSQL's command-line client — to connect to your local cluster and explore the object hierarchy. This mirrors what you would do with `sqlcmd` in SQL Server.
+In this activity you will use `psql` shich is PostgreSQL's command-line client, to connect to your local cluster and explore the object hierarchy. This mirrors what you would do with `sqlcmd` in SQL Server.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
@@ -101,7 +101,7 @@ The prompt changes to `adventureworks=#`.
 \dn
 ```
 
-You should see the schemas you created: `humanresources`, `person`, `production`, `purchasing`, `sales`, and `public`.
+You should see the schemas you created.
 
 **Step 5 — Explore system catalog views (equivalent to `sys.*` in SQL Server):**
 
@@ -157,7 +157,7 @@ SELECT current_database(),
 - Server-level administration (roles, tablespaces, replication) lives under the server node.
 - The **Dashboard** tab shows real-time activity equivalent to SQL Server's Activity Monitor.
 
-**DBeaver Community** is recommended for side-by-side comparison work because you can have both a SQL Server and a PostgreSQL connection open simultaneously in separate editor tabs. The SQL auto-complete is dialect-aware, and the ER diagram tool works across both platforms.
+**DBeaver Community** is recommended for side-by-side comparison work because you can have both a SQL Server and a PostgreSQL connection open simultaneously in separate editor tabs. The SQL auto-complete is dialect-aware, and the ER diagram tool works across both platforms. It has some very fundamental differences in operation from SQL Server Management Studio, so it is worth wandering through for a bit to understand how it works. 
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 1.2 – Explore pgAdmin 4 and Compare with SSMS</b></p>
 
@@ -226,7 +226,7 @@ The `pg_stat_activity` view is PostgreSQL's equivalent of `sys.dm_exec_sessions`
 
 SQL Server configuration is managed primarily through SQL Server Configuration Manager and `sp_configure`. In PostgreSQL, configuration lives in two key text files inside the data directory:
 
-**`postgresql.conf`** — The main parameter file. Equivalent to SQL Server's sp_configure settings. Important parameters you will encounter during the workshop:
+**`postgresql.conf`** — The main parameter file. Equivalent to SQL Server's `sp_configure` settings. Important parameters you will encounter during the workshop:
 
 ```
 # Memory
@@ -245,7 +245,7 @@ max_wal_size = 1GB
 random_page_cost = 4.0          # Lower for SSD: set to 1.1
 ```
 
-**`pg_hba.conf`** — The Host-Based Authentication file. Controls *who* can connect, from *where*, and *how* they authenticate. There is no direct SQL Server equivalent — this level of granularity is handled by SQL Server's firewall rules + login security combined. This file is covered in detail in Module 05.
+**`pg_hba.conf`** — The Host-Based Authentication file. Controls *who* can connect, from *where*, and *how* they authenticate. There is no direct SQL Server equivalent, so this level of granularity is handled by SQL Server's firewall rules + login security combined. This file is covered in detail in Module 05.
 
 You can query and change most parameters at runtime without a restart:
 
