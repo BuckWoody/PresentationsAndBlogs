@@ -87,13 +87,13 @@ You will be prompted for the password you set during installation. A successful 
 
 You should see the default databases: `postgres`, `template0`, and `template1`. The `adventureworks` database you created in pre-requisites should also appear.
 
-**Step 3 — Connect to the adventureworks database:**
+**Step 3 — Connect to the pubs database:**
 
 ```sql
-\c adventureworks
+\c pubs
 ```
 
-The prompt changes to `adventureworks=#`.
+The prompt changes to `pubs=#`.
 
 **Step 4 — List all schemas (equivalent to `SELECT * FROM sys.schemas`):**
 
@@ -136,12 +136,18 @@ SELECT current_database(),
 
 **Step 7 — List useful psql meta-commands (there is no SSMS toolbar here!):**
 
+Note: The PSQL_EDITOR system variable sets the editor that pgsql will use to edit files. For instance, to set that from PowerShell in Windows, you would run: 
+
+`$env:PSQL_EDITOR = "notepad.exe"`
+
+To use Notepad as your editor. 
+
 ```sql
 \?          -- help on psql backslash commands
 \h SELECT   -- help on any SQL command
 \timing     -- toggle query execution time display (like SSMS status bar)
 \x          -- toggle expanded output (like flipping to column output)
-\e          -- open last query in your editor (uses $EDITOR env var)
+\e          -- open last query in your editor (uses $PSQL_EDITOR env var)
 \i filename -- execute a SQL file (like sqlcmd -i)
 \q          -- quit
 ```
