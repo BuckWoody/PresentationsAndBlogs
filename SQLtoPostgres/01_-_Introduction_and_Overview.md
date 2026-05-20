@@ -175,7 +175,7 @@ Open pgAdmin 4 and replicate the following SQL Server SSMS tasks in pgAdmin, not
 
 **Step 1 — Open pgAdmin and connect to your local PostgreSQL server.**
 
-Launch pgAdmin from the Start menu. In the Browser panel on the left, expand **Servers → PostgreSQL 17 → Databases → adventureworks**. Note the parallel structure to SSMS's Object Explorer.
+Launch pgAdmin from the Start menu. In the Browser panel on the left, expand **Servers → PostgreSQL 17 → Databases → pubs**. Note the parallel structure to SSMS's Object Explorer.
 
 **Step 2 — Open the Query Tool and run a catalog query.**
 
