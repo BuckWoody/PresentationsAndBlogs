@@ -85,7 +85,7 @@ You will be prompted for the password you set during installation. A successful 
 \list
 ```
 
-You should see the default databases: `postgres`, `template0`, and `template1`. The `adventureworks` database you created in pre-requisites should also appear.
+You should see the default databases: `postgres`, `template0`, and `template1`. The `pubs` database you created in pre-requisites should also appear.
 
 **Step 3 — Connect to the pubs database:**
 
@@ -179,7 +179,7 @@ Launch pgAdmin from the Start menu. In the Browser panel on the left, expand **S
 
 **Step 2 — Open the Query Tool and run a catalog query.**
 
-Right-click the `adventureworks` database node, choose **Query Tool**, then run:
+Right-click the `pubs` database node, choose **Query Tool**, then run:
 
 ```sql
 SELECT schemaname, tablename, tableowner
@@ -192,7 +192,7 @@ This is equivalent to browsing the Tables node in SSMS.
 
 **Step 3 — View the Server Dashboard.**
 
-Click the **adventureworks** database node, then click the **Dashboard** tab at the top. You will see graphs for connections, transactions per second, and block I/O. This is pgAdmin's equivalent of SSMS Activity Monitor.
+Click the **pubs** database node, then click the **Dashboard** tab at the top. You will see graphs for connections, transactions per second, and block I/O. This is pgAdmin's equivalent of SSMS Activity Monitor.
 
 **Step 4 — View current sessions (equivalent to SQL Server's sp_who2).**
 
