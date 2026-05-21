@@ -66,33 +66,33 @@ SQL Server's `IDENTITY(seed, increment)` column attribute has three PostgreSQL e
 
 ```sql
 -- SQL Server:
-CREATE TABLE orders (
-    order_id   INT          IDENTITY(1,1) NOT NULL,
-    order_date DATE         NOT NULL
+CREATE TABLE jobs (
+    job_id   SMALLINT     IDENTITY(1,1) NOT NULL,
+    job_desc VARCHAR(50)  NOT NULL
 );
 
 -- PostgreSQL (SERIAL shorthand):
-CREATE TABLE orders (
-    order_id   SERIAL       NOT NULL,     -- expands to INT with a sequence
-    order_date DATE         NOT NULL
+CREATE TABLE jobs (
+    job_id   SMALLSERIAL  NOT NULL,     -- expands to SMALLINT with a sequence
+    job_desc VARCHAR(50)  NOT NULL
 );
 -- BIGSERIAL is the BIGINT version; SMALLSERIAL is the SMALLINT version
 ```
 
-`SERIAL` is syntactic sugar that creates a sequence object and sets the column default to `nextval('orders_order_id_seq')`. The sequence is named `<table>_<column>_seq` automatically.
+`SERIAL` is syntactic sugar that creates a sequence object and sets the column default to `nextval('jobs_job_id_seq')`. The sequence is named `<table>_<column>_seq` automatically.
 
 **Option 2: GENERATED ALWAYS AS IDENTITY (SQL standard, preferred for new code)**
 
 ```sql
-CREATE TABLE orders (
-    order_id   INT          GENERATED ALWAYS AS IDENTITY,
-    order_date DATE         NOT NULL
+CREATE TABLE jobs (
+    job_id   SMALLINT     GENERATED ALWAYS AS IDENTITY,
+    job_desc VARCHAR(50)  NOT NULL
 );
 
 -- Or with explicit start/increment:
-CREATE TABLE orders (
-    order_id   INT          GENERATED ALWAYS AS IDENTITY (START WITH 1000 INCREMENT BY 1),
-    order_date DATE         NOT NULL
+CREATE TABLE jobs (
+    job_id   SMALLINT     GENERATED ALWAYS AS IDENTITY (START WITH 1 INCREMENT BY 1),
+    job_desc VARCHAR(50)  NOT NULL
 );
 ```
 
@@ -101,11 +101,11 @@ CREATE TABLE orders (
 **Sequences directly (equivalent to SQL Server's CREATE SEQUENCE):**
 
 ```sql
-CREATE SEQUENCE order_id_seq START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE job_id_seq START WITH 1 INCREMENT BY 1;
 
-SELECT nextval('order_id_seq');      -- Get next value
-SELECT currval('order_id_seq');      -- Current value in this session
-SELECT setval('order_id_seq', 1000); -- Reset (e.g., after a bulk load)
+SELECT nextval('job_id_seq');      -- Get next value
+SELECT currval('job_id_seq');      -- Current value in this session
+SELECT setval('job_id_seq', 14);   -- Reset (e.g., after a bulk load)
 ```
 
 SQL Server also supports `CREATE SEQUENCE` (since SQL Server 2012) — the syntax is nearly identical.
@@ -114,17 +114,17 @@ SQL Server also supports `CREATE SEQUENCE` (since SQL Server 2012) — the synta
 
 **Default schema:** In SQL Server, the default schema for a user is typically `dbo`. In PostgreSQL, the default schema is `public`. This difference matters in connection strings, ORMs, and migration scripts.
 
-**Quoting identifiers:** PostgreSQL treats unquoted identifiers as **lowercase**. This is the opposite of SQL Server, which is case-insensitive. If you create a table as `CREATE TABLE "Orders"`, you must always quote it: `SELECT * FROM "Orders"`. Best practice: use all-lowercase, snake_case names in PostgreSQL and avoid quoted identifiers.
+**Quoting identifiers:** PostgreSQL treats unquoted identifiers as **lowercase**. This is the opposite of SQL Server, which is case-insensitive. If you create a table as `CREATE TABLE "Authors"`, you must always quote it: `SELECT * FROM "Authors"`. Best practice: use all-lowercase, snake_case names in PostgreSQL and avoid quoted identifiers.
 
 **Computed columns:** SQL Server supports `AS (expression) PERSISTED` computed columns. PostgreSQL supports generated columns using a similar syntax:
 
 ```sql
 -- SQL Server:
-ALTER TABLE person ADD full_name AS (first_name + ' ' + last_name) PERSISTED;
+ALTER TABLE authors ADD full_name AS (au_fname + ' ' + au_lname) PERSISTED;
 
 -- PostgreSQL (generated column, always stored):
-ALTER TABLE person ADD COLUMN full_name TEXT
-    GENERATED ALWAYS AS (first_name || ' ' || last_name) STORED;
+ALTER TABLE authors ADD COLUMN full_name TEXT
+    GENERATED ALWAYS AS (au_fname || ' ' || au_lname) STORED;
 ```
 
 **CHECK, DEFAULT, and UNIQUE constraints:** Syntax is nearly identical in both systems. PRIMARY KEY and FOREIGN KEY syntax is the same.
@@ -133,157 +133,179 @@ ALTER TABLE person ADD COLUMN full_name TEXT
 
 ```sql
 -- SQL Server:
-CREATE TABLE #temp_orders (order_id INT, amount DECIMAL(10,2));
+CREATE TABLE #temp_sales (stor_id CHAR(4), qty INT, amount DECIMAL(10,2));
 
 -- PostgreSQL:
-CREATE TEMP TABLE temp_orders (order_id INT, amount NUMERIC(10,2));
+CREATE TEMP TABLE temp_sales (stor_id CHAR(4), qty INT, amount NUMERIC(10,2));
 -- or:
-CREATE TEMPORARY TABLE temp_orders (order_id INT, amount NUMERIC(10,2));
+CREATE TEMPORARY TABLE temp_sales (stor_id CHAR(4), qty INT, amount NUMERIC(10,2));
 ```
 
 PostgreSQL temporary tables are session-scoped by default (same as SQL Server's `#` temp tables). There is no equivalent to SQL Server's `##` global temp tables.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 2.1 – Create the AdventureWorks Sample Schema in PostgreSQL</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 2.1 – Create the Pubs Sample Schema in PostgreSQL</b></p>
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Description</b></p>
 
-In this activity you will translate several SQL Server `CREATE TABLE` statements from AdventureWorks into PostgreSQL DDL, applying the type-mapping rules from section 2.1. You will then verify the schema in both psql and pgAdmin.
+In this activity you will translate several SQL Server `CREATE TABLE` statements from the pubs sample database into PostgreSQL DDL, applying the type-mapping rules from section 2.1. You will then verify the schema in both psql and pgAdmin.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
-**Step 1 — Connect to the adventureworks database in psql:**
+**Step 1 — Connect to the pubs database in psql:**
 
 ```bash
-psql -U postgres -h localhost -d adventureworks
+psql -U postgres -h localhost -d pubs
 ```
 
-**Step 2 — Create the `person.address` table. Study the type translations:**
+**Step 2 — Observe the `authors` table. Study the type translations:**
+Hint: You can use the meta-command of `!` to call to the OS shell, and use this command to list the DDL used for the creation of an object: 
+
+`\! pg_dump -U postgres -d pubs --schema-only -t authors --no-owner --no-privileges`
 
 ```sql
--- Original SQL Server DDL (from AdventureWorks2022):
--- CREATE TABLE [Person].[Address](
---     [AddressID]    [int] IDENTITY(1,1) NOT NULL,
---     [AddressLine1] [nvarchar](60)      NOT NULL,
---     [AddressLine2] [nvarchar](60)      NULL,
---     [City]         [nvarchar](30)      NOT NULL,
---     [PostalCode]   [nvarchar](15)      NOT NULL,
---     [ModifiedDate] [datetime]          NOT NULL DEFAULT(getdate()),
---     [rowguid]      [uniqueidentifier]  NOT NULL DEFAULT(newid())
+-- Original SQL Server DDL (from pubs):
+-- CREATE TABLE [dbo].[authors](
+--     [au_id]    [varchar](11)   NOT NULL,
+--     [au_lname] [varchar](40)   NOT NULL,
+--     [au_fname] [varchar](20)   NOT NULL,
+--     [phone]    [char](12)      NOT NULL DEFAULT ('UNKNOWN'),
+--     [address]  [varchar](40)   NULL,
+--     [city]     [varchar](20)   NULL,
+--     [state]    [char](2)       NULL,
+--     [zip]      [char](5)       NULL,
+--     [contract] [bit]           NOT NULL
 -- );
 
 -- PostgreSQL equivalent:
-CREATE TABLE person.address (
-    address_id    INTEGER      GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    address_line1 VARCHAR(60)  NOT NULL,
-    address_line2 VARCHAR(60)  NULL,
-    city          VARCHAR(30)  NOT NULL,
-    postal_code   VARCHAR(15)  NOT NULL,
-    modified_date TIMESTAMP    NOT NULL DEFAULT now(),
-    rowguid       UUID         NOT NULL DEFAULT gen_random_uuid()
+CREATE TABLE authors (
+    au_id    VARCHAR(11)  NOT NULL
+                 CONSTRAINT UPKCL_auidind PRIMARY KEY
+                 CHECK (au_id ~ '^\d{3}-\d{2}-\d{4}$'),
+    au_lname VARCHAR(40)  NOT NULL,
+    au_fname VARCHAR(20)  NOT NULL,
+    phone    CHAR(12)     NOT NULL DEFAULT 'UNKNOWN',
+    address  VARCHAR(40)  NULL,
+    city     VARCHAR(20)  NULL,
+    state    CHAR(2)      NULL,
+    zip      CHAR(5)      NULL
+                 CHECK (zip ~ '^\d{5}$'),
+    contract SMALLINT     NOT NULL    -- BIT → SMALLINT (0/1)
 );
 ```
 
 Note the key differences:
-- `[nvarchar]` → `VARCHAR` (PostgreSQL is always Unicode)
-- `IDENTITY(1,1)` → `GENERATED ALWAYS AS IDENTITY`
-- `getdate()` → `now()` or `CURRENT_TIMESTAMP`
-- `newid()` → `gen_random_uuid()` (requires `pgcrypto` extension, or use `uuid-ossp`)
+- `[varchar]` / `[char]` → `VARCHAR` / `CHAR` (PostgreSQL is always Unicode — no N-prefix needed)
+- `[bit]` → `SMALLINT` (pubs uses 0/1 convention; alternatively use `BOOLEAN`)
 - Square bracket quoting → no quoting needed (use snake_case)
+- `CHECK` constraints using regex (`~`) replace the original T-SQL constraints
 
-**Step 3 — Enable the uuid-ossp extension (if gen_random_uuid() is unavailable on your PostgreSQL version):**
-
-```sql
--- gen_random_uuid() is built-in since PostgreSQL 13.
--- For older versions, enable this extension:
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
--- Then use uuid_generate_v4() instead of gen_random_uuid()
-```
-
-**Step 4 — Create more tables with additional type mappings:**
+**Step 3 — Observe the `publishers` and `titles` tables with additional type mappings:**
 
 ```sql
-CREATE TABLE person.person (
-    business_entity_id  INTEGER      GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    person_type         CHAR(2)      NOT NULL,
-    first_name          VARCHAR(50)  NOT NULL,
-    middle_name         VARCHAR(50)  NULL,
-    last_name           VARCHAR(50)  NOT NULL,
-    email_promotion     SMALLINT     NOT NULL DEFAULT 0,    -- was TINYINT
-    is_active           BOOLEAN      NOT NULL DEFAULT TRUE, -- was BIT
-    demographics        XML          NULL,
-    modified_date       TIMESTAMP    NOT NULL DEFAULT now()
+CREATE TABLE publishers (
+    pub_id   CHAR(4)      NOT NULL
+                 CONSTRAINT UPKCL_pubind PRIMARY KEY
+                 CHECK (pub_id IN ('1389','0736','0877','1622','1756')
+                        OR pub_id LIKE '99%'),
+    pub_name VARCHAR(40)  NULL,
+    city     VARCHAR(20)  NULL,
+    state    CHAR(2)      NULL,
+    country  VARCHAR(30)  NULL DEFAULT 'USA'
 );
 
-CREATE TABLE sales.currency (
-    currency_code  CHAR(3)      NOT NULL PRIMARY KEY,   -- was NCHAR(3)
-    name           VARCHAR(50)  NOT NULL,
-    modified_date  TIMESTAMP    NOT NULL DEFAULT now()
-);
-
-CREATE TABLE sales.sales_order_header (
-    sales_order_id          INTEGER          GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    order_date              TIMESTAMP        NOT NULL DEFAULT now(),
-    ship_date               TIMESTAMP        NULL,
-    status                  SMALLINT         NOT NULL DEFAULT 1,  -- was TINYINT
-    online_order_flag       BOOLEAN          NOT NULL DEFAULT TRUE,
-    sales_order_number      VARCHAR(25)      NOT NULL,
-    customer_id             INTEGER          NOT NULL,
-    ship_to_address_id      INTEGER          NULL,
-    subtotal                NUMERIC(19,4)    NOT NULL DEFAULT 0.00,  -- was MONEY
-    tax_amt                 NUMERIC(19,4)    NOT NULL DEFAULT 0.00,
-    freight                 NUMERIC(19,4)    NOT NULL DEFAULT 0.00,
-    total_due               NUMERIC(19,4)    GENERATED ALWAYS AS
-                                (subtotal + tax_amt + freight) STORED,
-    modified_date           TIMESTAMP        NOT NULL DEFAULT now()
+CREATE TABLE titles (
+    title_id  VARCHAR(6)      NOT NULL CONSTRAINT UPKCL_titleidind PRIMARY KEY,
+    title     VARCHAR(80)     NOT NULL,
+    type      CHAR(12)        NOT NULL DEFAULT 'UNDECIDED',
+    pub_id    CHAR(4)         NULL REFERENCES publishers(pub_id),
+    price     NUMERIC(10,4)   NULL,      -- was MONEY
+    advance   NUMERIC(10,4)   NULL,      -- was MONEY
+    royalty   INT             NULL,
+    ytd_sales INT             NULL,
+    notes     VARCHAR(200)    NULL,
+    pubdate   TIMESTAMP       NOT NULL DEFAULT CURRENT_TIMESTAMP  -- was DATETIME / getdate()
 );
 ```
 
-Note how `MONEY` becomes `NUMERIC(19,4)` and `TINYINT` becomes `SMALLINT`. The computed column syntax (`total_due`) uses `GENERATED ALWAYS AS ... STORED`.
+Note how `MONEY` becomes `NUMERIC(10,4)` and `getdate()` becomes `CURRENT_TIMESTAMP`.
 
-**Step 5 — Add a foreign key constraint:**
+**Step 4 — Observe the `jobs` table using SMALLSERIAL (auto-increment):**
 
 ```sql
-ALTER TABLE sales.sales_order_header
-    ADD CONSTRAINT fk_soh_address
-    FOREIGN KEY (ship_to_address_id)
-    REFERENCES person.address (address_id)
+CREATE TABLE jobs (
+    job_id   SMALLSERIAL  PRIMARY KEY,                                        -- was IDENTITY(1,1)
+    job_desc VARCHAR(50)  NOT NULL DEFAULT 'New Position - title not formalized yet',
+    min_lvl  SMALLINT     NOT NULL CHECK (min_lvl >= 10),                     -- was TINYINT
+    max_lvl  SMALLINT     NOT NULL CHECK (max_lvl <= 250)                     -- was TINYINT
+);
+```
+
+Note how `TINYINT` becomes `SMALLINT` (PostgreSQL has no 1-byte integer type).
+
+**Step 5 — Observe the `employee` table with a foreign key and regex CHECK:**
+
+```sql
+CREATE TABLE employee (
+    emp_id    VARCHAR(9)   NOT NULL CONSTRAINT PK_emp_id PRIMARY KEY
+                               CHECK (emp_id ~ '^[A-Z]{3}[1-9][0-9]{4}[FM]$'
+                                   OR emp_id ~ '^[A-Z]-[A-Z][1-9][0-9]{4}[FM]$'),
+    fname     VARCHAR(20)  NOT NULL,
+    minit     CHAR(1)      NULL,
+    lname     VARCHAR(30)  NOT NULL,
+    job_id    SMALLINT     NOT NULL DEFAULT 1 REFERENCES jobs(job_id),
+    job_lvl   SMALLINT     NULL DEFAULT 10,                                   -- was TINYINT
+    pub_id    CHAR(4)      NOT NULL DEFAULT '9952' REFERENCES publishers(pub_id),
+    hire_date TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP                 -- was DATETIME / getdate()
+);
+```
+
+**Step 6 — Observe the foreign key constraint between tables:**
+
+```sql
+ALTER TABLE titles
+    ADD CONSTRAINT fk_titles_publishers
+    FOREIGN KEY (pub_id)
+    REFERENCES publishers (pub_id)
     ON DELETE SET NULL;
 ```
 
-**Step 6 — Inspect the created objects:**
+**Step 7 — Inspect the created objects:**
 
 ```sql
 -- List tables (psql):
-\dt person.*
-\dt sales.*
+\dt public.*
 
 -- Describe a table's columns and constraints:
-\d sales.sales_order_header
+\d titles
+\d employee
 
 -- Or using information_schema:
 SELECT column_name, data_type, character_maximum_length,
        is_nullable, column_default
 FROM information_schema.columns
-WHERE table_schema = 'sales'
-  AND table_name   = 'sales_order_header'
+WHERE table_schema = 'public'
+  AND table_name   = 'titles'
 ORDER BY ordinal_position;
 ```
 
-**Step 7 — Insert a test row and verify the generated column:**
+**Step 8 — Insert test rows and verify defaults and constraints:**
 
 ```sql
-INSERT INTO person.address (address_line1, city, postal_code)
-VALUES ('123 Main St', 'Seattle', '98101');
+-- Insert a publisher:
+INSERT INTO publishers (pub_id, pub_name, city, state)
+VALUES ('1389', 'Algodata Infosystems', 'Berkeley', 'CA');
 
-INSERT INTO sales.sales_order_header
-    (sales_order_number, customer_id, subtotal, tax_amt, freight)
-VALUES ('SO-0001', 1, 100.00, 10.00, 5.00);
+-- Insert a title (price uses NUMERIC, pubdate defaults to now()):
+INSERT INTO titles (title_id, title, type, pub_id, price, advance, royalty, ytd_sales)
+VALUES ('BU1032', 'The Busy Executive''s Database Guide', 'business', '1389',
+        19.99, 5000.00, 10, 4095);
 
-SELECT sales_order_id, subtotal, tax_amt, freight, total_due
-FROM sales.sales_order_header;
--- total_due should be 115.00, computed automatically
+-- Verify the inserted data:
+SELECT title_id, title, type, price, pubdate
+FROM titles;
+-- pubdate should be automatically set to the current timestamp
 ```
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
@@ -295,42 +317,51 @@ FROM sales.sales_order_header;
 **Step 1 — Demonstrate case sensitivity:**
 
 ```sql
--- Insert rows with mixed case names:
-INSERT INTO person.person (person_type, first_name, last_name)
-VALUES ('IN', 'John',  'Smith'),
-       ('IN', 'JOHN',  'SMITH'),
-       ('IN', 'john',  'smith');
+-- Insert rows with mixed case last names:
+INSERT INTO authors (au_id, au_lname, au_fname, phone, contract)
+VALUES ('111-11-1111', 'Smith',  'John',  '415 000-0001', 1),
+       ('222-22-2222', 'SMITH',  'Jane',  '415 000-0002', 1),
+       ('333-33-3333', 'smith',  'Bob',   '415 000-0003', 1);
 
 -- Case-sensitive match (PostgreSQL default):
-SELECT first_name, last_name
-FROM person.person
-WHERE first_name = 'John';     -- Returns only 'John', NOT 'JOHN' or 'john'
+SELECT au_fname, au_lname
+FROM authors
+WHERE au_lname = 'Smith';     -- Returns only 'Smith', NOT 'SMITH' or 'smith'
 
 -- Case-insensitive with ILIKE (PostgreSQL-specific):
-SELECT first_name, last_name
-FROM person.person
-WHERE first_name ILIKE 'john';  -- Returns all three rows
+SELECT au_fname, au_lname
+FROM authors
+WHERE au_lname ILIKE 'smith';  -- Returns all three rows
 
 -- Case-insensitive with LOWER():
-SELECT first_name, last_name
-FROM person.person
-WHERE LOWER(first_name) = 'john';  -- Returns all three rows
+SELECT au_fname, au_lname
+FROM authors
+WHERE LOWER(au_lname) = 'smith';  -- Returns all three rows
 
 -- SQL Server equivalent of ILIKE:
--- WHERE first_name = 'john' COLLATE SQL_Latin1_General_CP1_CI_AS
+-- WHERE au_lname = 'smith' COLLATE SQL_Latin1_General_CP1_CI_AS
 ```
 
-**Step 2 — Demonstrate Boolean vs. BIT:**
+**Step 2 — Demonstrate SMALLINT (BIT) vs. PostgreSQL BOOLEAN:**
 
 ```sql
--- PostgreSQL BOOLEAN accepts TRUE/FALSE, 'true'/'false', 't'/'f', 1/0
-SELECT is_active FROM person.person WHERE is_active = TRUE;
-SELECT is_active FROM person.person WHERE is_active = 'true';
-SELECT is_active FROM person.person WHERE is_active;   -- Short form works!
-SELECT is_active FROM person.person WHERE NOT is_active;
+-- pubs uses SMALLINT with 0/1 for the contract column (mirroring T-SQL BIT)
+SELECT au_fname, au_lname, contract
+FROM authors
+WHERE contract = 1;    -- Under contract
 
--- In SQL Server you would write: WHERE is_active = 1
--- The PostgreSQL short form (WHERE is_active) has no SQL Server equivalent
+SELECT au_fname, au_lname, contract
+FROM authors
+WHERE contract = 0;    -- Not under contract
+
+-- If you prefer native PostgreSQL BOOLEAN semantics, you can cast:
+SELECT au_fname, au_lname, contract::boolean
+FROM authors
+WHERE contract::boolean = TRUE;
+
+-- In SQL Server you would write: WHERE contract = 1
+-- PostgreSQL BOOLEAN short form (WHERE is_active) has no SQL Server equivalent,
+-- but it is available if you convert the column type to BOOLEAN.
 ```
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
