@@ -8,7 +8,7 @@
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/textbubble.png"> <h2>00 – Pre-Requisites</h2>
 
-The **PostgreSQL for the SQL Server Database Professional** workshop is taught using the components listed below. You should install and configure each section *before* attending the workshop — there will not be time to complete setup during class.
+The **PostgreSQL for the SQL Server Database Professional** workshop is taught using the components listed below. You should install and configure each section *before* attending the workshop — there will not be time to complete setup during class. Note that in this pre-requisite, and in the entire course, you will switch between using various grpahical clients and also various command-line tools. This is inefficient, but will help you get familiarized with multiple tools. 
 
 *All examples in this workshop use Microsoft Windows as the base operating system. PostgreSQL runs natively on Windows, Linux, and macOS; the hands-on exercises will work on any platform, but screenshots and path examples reference Windows.*
 
@@ -59,7 +59,7 @@ DBeaver Community is a free, cross-database IDE that supports both SQL Server an
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 **WINGET Alternative Installation:**
-You can also use the Windows Package Manager called "winget" to install software. The commands for all of the previous packages are:
+You can also use the Windows Package Manager called [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) to install software. The commands you can use instead of Activities 1-3 are:
 ```
 winget install Microsoft.SQLServer.2022.Developer
 winget install --id=Microsoft.SQLServerManagementStudio -e
@@ -84,7 +84,7 @@ $pgBin = "C:\Program Files\PostgreSQL\17\bin"
     "Machine"
 )
 ```
-Exit your terminal and start it back again. Then connect:
+Exit your terminal and start it back up again. Then connect to Postgres using the Command Line tool `pgsql`:
 
 ```bat
 psql --version
@@ -92,7 +92,7 @@ pg_dump --version
 psql -U postgres -h localhost
 ```
 
-You will be prompted for the password you set during installation (postgres if you did the winget install). If you see the `postgres=#` prompt, PostgreSQL is running correctly. Type `\q` to exit.
+You will be prompted for the password you set during installation (`postgres` if you did the winget install). If you see the `postgres=#` prompt, PostgreSQL is running correctly. Type `\q` to exit.
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 5 – Verify pgAdmin 4 Launches</b></p>
 
@@ -100,12 +100,11 @@ pgAdmin 4 is included with the EDB installer. Launch it from the Start menu. Con
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 6 – Create the pubs Sample Database in SQL Server</b></p>
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 6 – Restore the AdventureWorks2022 Sample Database</b></p>
+The workshop exercises use the *pubs* sample database as the SQL Server reference database for this course.
 
-The workshop exercises use the pubs sample database as the SQL Server reference database.
-
-- Navigate to this resource and copy the script into memory.
+- [Navigate to this resource](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/SQLtoPostgres/pubs-tsql.md) and copy the script into memory.
 - Open SQL Server Management Studio and connect to the "master" database.
 - Right-click the *master* database and select *New Query*
 - Press CTRL-V to paste the pubs database script.
@@ -113,16 +112,16 @@ The workshop exercises use the pubs sample database as the SQL Server reference 
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 7: Create the Workshop Sample Database in PostgreSQL</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 7: Create the pubs Sample Database in Postgres</b></p>
 
-The workshop uses the pubs database ported to PostgreSQL. Run the following commands in psql to create the workshop database and sample schema:
+The workshop uses the `pubs` sample database ported to PostgreSQL. Run the following commands in pgsql to create the workshop database and sample schema:
 
-Open DBeaver, create two database connections — one for SQL Server and one for PostgreSQL. DBeaver will prompt you to download the required JDBC drivers automatically on first connection.
+Open DBeaver from your Start menu, and create two database connections — one for SQL Server and one for PostgreSQL. DBeaver will prompt you to download the required JDBC drivers automatically on first connection.
 
 - *SQL Server connection string example:* `jdbc:sqlserver://localhost:1433;databaseName=pubs`
 - *PostgreSQL connection string example:* `jdbc:postgresql://localhost:5432/postgres`
 
-- Navigate to this resource and copy the script into memory.
+- [Navigate to this resource](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/SQLtoPostgres/pubs-pgsql.md) and copy the script into memory.
 - In DBeaver, right-click the Server name and select *Create Database*
 - Type the name *pubs* and create the database
 - Left-click the *Databases* node and select *Refresh*. You should see the *pubs* database listed. 
@@ -153,7 +152,6 @@ Follow the quickstart to create a Flexible Server instance in the Azure Portal:
 Choose the **Burstable B1ms** tier for workshop purposes to minimize cost. **Turn off the server when not in use** from the Azure Portal to avoid charges.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
-
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
