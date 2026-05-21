@@ -1,8 +1,8 @@
 ![](graphics/microsoftlogo.png)
 
-# Workshop: PostgreSQL for the SQL Server Database Professional
+# Workshop: Postgres for the SQL Server Database Professional
 
-#### <i>A SQL Server to PostgreSQL Skilling</i>
+#### <i>A SQL Server to Postgres Skilling</i>
 
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
@@ -11,21 +11,21 @@
 
 *Estimated Time: 60 minutes (≈20 minutes lecture, ≈40 minutes hands-on)*
 
-In this module you will build a mental map of PostgreSQL by comparing it directly to SQL Server. The goal is not to make you an expert yet, it is to eliminate the "unknown unknowns" so that the rest of the day's exercises make sense. By the end of this module you will be able to connect to PostgreSQL, navigate its hierarchy of objects, and use its primary client tools.
+In this module you will build a mental map of Postgres by comparing it directly to SQL Server. The goal is not to make you an expert yet, it is to eliminate the "unknown unknowns" so that the rest of the day's exercises make sense. By the end of this module you will be able to connect to Postgres, navigate its hierarchy of objects, and use its primary client tools.
 
 Make sure you have completed the <a href="00_-_Pre-Requisites.md">Pre-Requisites</a> before starting this module.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pencil2.png">1.1 – How PostgreSQL Compares to SQL Server at a Glance</h2>
+<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pencil2.png">1.1 – How Postgres Compares to SQL Server at a Glance</h2>
 
-Both SQL Server and PostgreSQL are full ACID-compliant relational database management systems that support standard SQL, stored procedures, triggers, views, indexing, replication, and role-based security. For a working SQL Server professional, most of the concepts transfer directly, the vocabulary and the mechanics differ in important ways.
+Both SQL Server and Postgres are full ACID-compliant relational database management systems that support standard SQL, stored procedures, triggers, views, indexing, replication, and role-based security. For a working SQL Server professional, most of the concepts transfer directly, the vocabulary and the mechanics differ in important ways.
 
 The table below is your "Rosetta Stone" for the workshop:
 
-| Concept | SQL Server | PostgreSQL |
+| Concept | SQL Server | Postgres |
 |---|---|---|
-| Server instance | SQL Server instance (one per port, default 1433) | PostgreSQL cluster (one per port, default 5432) |
+| Server instance | SQL Server instance (one per port, default 1433) | Postgres cluster (one per port, default 5432) |
 | Top-level container | Database | Database |
 | Namespace within database | Schema (dbo is default) | Schema (public is default) |
 | Admin superuser | `sa` | `postgres` |
@@ -39,23 +39,23 @@ The table below is your "Rosetta Stone" for the workshop:
 | Catalog tables | `sys.*` views | `pg_catalog.*` and `information_schema.*` views |
 | Jobs/scheduling | SQL Server Agent | `pg_cron` extension, or OS-level cron |
 | Linked servers | Linked Servers / OPENROWSET | Foreign Data Wrappers (FDW) |
-| Licensing | Commercial (free Developer/Express editions) | Open source (PostgreSQL License) |
+| Licensing | Commercial (free Developer/Express editions) | Open source (Postgres License) |
 
-**Key Insight — The Cluster/Database/Schema hierarchy is the same:** In both systems the hierarchy is: *server instance → database → schema → object*. The word "cluster" in PostgreSQL is simply the term for what SQL Server calls an "instance." You connect to a PostgreSQL cluster on port 5432, then choose a database, exactly as you connect to a SQL Server instance and choose a database.
+**Key Insight — The Cluster/Database/Schema hierarchy is the same:** In both systems the hierarchy is: *server instance → database → schema → object*. The word "cluster" in Postgres is simply the term for what SQL Server calls an "instance." You connect to a Postgres cluster on port 5432, then choose a database, exactly as you connect to a SQL Server instance and choose a database.
 
 <h3>Process Model vs. Thread Model</h3>
 
-One of the most important architectural differences is how each system handles client connections. SQL Server uses a **thread-based model**: a pool of OS threads managed within a single process (`sqlservr.exe`) handles all client connections. PostgreSQL uses a **process-based model**: each client connection spawns a dedicated OS process (`postgres` backend process). This means that on a system with 500 concurrent connections, PostgreSQL will have approximately 500 OS processes. The process model provides strong isolation — a crashing backend affects only that connection, but it also means connection pooling is far more critical in PostgreSQL than in SQL Server. Tools such as **PgBouncer** or **pgpool-II** are used in production PostgreSQL environments for the same reason that SQL Server's built-in connection pool is less of a concern for SQL Server developers.
+One of the most important architectural differences is how each system handles client connections. SQL Server uses a **thread-based model**: a pool of OS threads managed within a single process (`sqlservr.exe`) handles all client connections. Postgres uses a **process-based model**: each client connection spawns a dedicated OS process (`postgres` backend process). This means that on a system with 500 concurrent connections, Postgres will have approximately 500 OS processes. The process model provides strong isolation — a crashing backend affects only that connection, but it also means connection pooling is far more critical in Postgres than in SQL Server. Tools such as **PgBouncer** or **pgpool-II** are used in production Postgres environments for the same reason that SQL Server's built-in connection pool is less of a concern for SQL Server developers.
 
 <h3>MVCC vs. Lock-Based Concurrency</h3>
 
 SQL Server's default transaction isolation level (`READ COMMITTED`) acquires shared read locks on rows as they are read and releases them when the statement completes. Readers can block writers and writers can block readers (unless `READ_COMMITTED_SNAPSHOT` is enabled at the database level).
 
-PostgreSQL uses **Multi-Version Concurrency Control (MVCC)** by default. When a row is updated, PostgreSQL creates a *new physical version* of that row (called a "tuple") rather than overwriting the existing one. Readers always see a consistent snapshot of the data at their transaction start time, and **readers never block writers, and writers never block readers**. The tradeoff is that "dead" old row versions accumulate on disk and must be reclaimed by the **VACUUM** process, something that has no direct SQL Server equivalent and is covered in Module 05.
+Postgres uses **Multi-Version Concurrency Control (MVCC)** by default. When a row is updated, Postgres creates a *new physical version* of that row (called a "tuple") rather than overwriting the existing one. Readers always see a consistent snapshot of the data at their transaction start time, and **readers never block writers, and writers never block readers**. The tradeoff is that "dead" old row versions accumulate on disk and must be reclaimed by the **VACUUM** process, something that has no direct SQL Server equivalent and is covered in Module 05.
 
 <h3>WAL vs. Transaction Log</h3>
 
-SQL Server writes all changes to a per-database transaction log (`.ldf` file) before writing to data pages. PostgreSQL writes all changes to the cluster-wide **Write-Ahead Log (WAL)** before writing to data pages. The principle is identical: Durability and crash recovery, but because the WAL is cluster-wide rather than per-database, PostgreSQL backup, replication, and PITR (Point-In-Time Recovery) all work at the cluster level rather than the database level.
+SQL Server writes all changes to a per-database transaction log (`.ldf` file) before writing to data pages. Postgres writes all changes to the cluster-wide **Write-Ahead Log (WAL)** before writing to data pages. The principle is identical: Durability and crash recovery, but because the WAL is cluster-wide rather than per-database, Postgres backup, replication, and PITR (Point-In-Time Recovery) all work at the cluster level rather than the database level.
 
 **Practical implication:** `pg_basebackup` (the equivalent of a SQL Server full backup) backs up the entire cluster, not a single database. `pg_dump` is used to back up individual databases (covered in Module 05).
 
@@ -63,9 +63,7 @@ SQL Server writes all changes to a per-database transaction log (`.ldf` file) be
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 1.1 – Connect with psql and Explore the Cluster Hierarchy</b></p>
 
-<p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Description</b></p>
-
-In this activity you will use `psql` shich is PostgreSQL's command-line client, to connect to your local cluster and explore the object hierarchy. This mirrors what you would do with `sqlcmd` in SQL Server.
+In this activity you will use `psql` shich is Postgres's command-line client, to connect to your local cluster and explore the object hierarchy. This mirrors what you would do with `sqlcmd` in SQL Server.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
@@ -75,7 +73,7 @@ In this activity you will use `psql` shich is PostgreSQL's command-line client, 
 psql -U postgres -h localhost -p 5432
 ```
 
-You will be prompted for the password you set during installation. A successful connection displays the `postgres=#` prompt.
+You will be prompted for the password you set during installation (`postgres` is the default for both super-user and password). A successful connection displays the `postgres=#` prompt.
 
 **Step 2 — List all databases (equivalent to `SELECT name FROM sys.databases`):**
 
@@ -156,14 +154,14 @@ To use Notepad as your editor.
 
 <h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pencil2.png">1.2 – Tour of pgAdmin 4 and DBeaver</h2>
 
-**pgAdmin 4** is the standard PostgreSQL GUI, comparable to SSMS. It is a web-application that runs locally in your browser (served by a bundled Python web server). Key differences from SSMS to know about:
+**pgAdmin 4** is the standard Postgres GUI, comparable to SSMS. It is a web-application that runs locally in your browser (served by a bundled Python web server). Key differences from SSMS to know about:
 
 - The **Query Tool** is opened per-database by right-clicking a database and choosing "Query Tool."
 - **Execution plans** are shown via the Explain / Explain Analyze buttons in the toolbar — the output is a graphical tree and a table of nodes, similar to SSMS's graphical plan.
 - Server-level administration (roles, tablespaces, replication) lives under the server node.
 - The **Dashboard** tab shows real-time activity equivalent to SQL Server's Activity Monitor.
 
-**DBeaver Community** is recommended for side-by-side comparison work because you can have both a SQL Server and a PostgreSQL connection open simultaneously in separate editor tabs. The SQL auto-complete is dialect-aware, and the ER diagram tool works across both platforms. It has some very fundamental differences in operation from SQL Server Management Studio, so it is worth wandering through for a bit to understand how it works. 
+**DBeaver Community** is recommended for side-by-side comparison work because you can have both a SQL Server and a Postgres connection open simultaneously in separate editor tabs. The SQL auto-complete is dialect-aware, and the ER diagram tool works across both platforms. It has some very fundamental differences in operation from SQL Server Management Studio, so it is worth wandering through for a bit to understand how it works. 
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 1.2 – Explore pgAdmin 4 and Compare with SSMS</b></p>
 
@@ -173,9 +171,9 @@ Open pgAdmin 4 and replicate the following SQL Server SSMS tasks in pgAdmin, not
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
-**Step 1 — Open pgAdmin and connect to your local PostgreSQL server.**
+**Step 1 — Open pgAdmin and connect to your local Postgres server.**
 
-Launch pgAdmin from the Start menu. In the Browser panel on the left, expand **Servers → PostgreSQL 17 → Databases → pubs**. Note the parallel structure to SSMS's Object Explorer.
+Launch pgAdmin from the Start menu. In the Browser panel on the left, expand **Servers → Postgres 17 → Databases → pubs**. Note the parallel structure to SSMS's Object Explorer.
 
 **Step 2 — Open the Query Tool and run a catalog query.**
 
@@ -211,7 +209,7 @@ WHERE state <> 'idle'
 ORDER BY query_start;
 ```
 
-The `pg_stat_activity` view is PostgreSQL's equivalent of `sys.dm_exec_sessions` + `sys.dm_exec_requests`.
+The `pg_stat_activity` view is Postgres's equivalent of `sys.dm_exec_sessions` + `sys.dm_exec_requests`.
 
 **Step 5 — Review the SSMS-to-pgAdmin equivalence table:**
 
@@ -228,11 +226,11 @@ The `pg_stat_activity` view is PostgreSQL's equivalent of `sys.dm_exec_sessions`
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pencil2.png">1.3 – PostgreSQL Configuration Files</h2>
+<h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pencil2.png">1.3 – Postgres Configuration Files</h2>
 
-SQL Server configuration is managed primarily through SQL Server Configuration Manager and `sp_configure`. In PostgreSQL, configuration lives in two key text files inside the data directory:
+SQL Server configuration is managed primarily through SQL Server Configuration Manager and `sp_configure`. In Postgres, configuration lives in two key text files inside the data directory:
 
-**`postgresql.conf`** — The main parameter file. Equivalent to SQL Server's `sp_configure` settings. Important parameters you will encounter during the workshop:
+**`Postgres.conf`** — The main parameter file. Equivalent to SQL Server's `sp_configure` settings. Important parameters you will encounter during the workshop:
 
 ```
 # Memory
@@ -263,12 +261,12 @@ SHOW all;   -- Show all configuration parameters
 -- Change a parameter for the current session
 SET work_mem = '64MB';
 
--- Change a parameter permanently (writes to postgresql.conf, requires reload)
+-- Change a parameter permanently (writes to Postgres.conf, requires reload)
 ALTER SYSTEM SET shared_buffers = '512MB';
 SELECT pg_reload_conf();   -- Reload config without restart (for most parameters)
 ```
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 1.3 – Explore PostgreSQL Configuration</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 1.3 – Explore Postgres Configuration</b></p>
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
@@ -281,7 +279,7 @@ SHOW config_file;
 SHOW hba_file;
 ```
 
-Open the `postgresql.conf` file in a text editor to inspect it. Note that it is heavily commented — the default values are shown next to each parameter name.
+Open the `Postgres.conf` file in a text editor to inspect it. Note that it is heavily commented — the default values are shown next to each parameter name.
 
 **Step 2 — Query the current parameter settings via SQL:**
 
@@ -300,7 +298,7 @@ WHERE name IN (
 ORDER BY name;
 ```
 
-The `pg_settings` view is the PostgreSQL equivalent of `sys.configurations`.
+The `pg_settings` view is the Postgres equivalent of `sys.configurations`.
 
 **Step 3 — Enable query logging for slow queries (equivalent to SQL Server Profiler's duration filter):**
 
@@ -313,20 +311,20 @@ SELECT pg_reload_conf();
 SHOW log_min_duration_statement;
 ```
 
-This writes slow queries to the PostgreSQL log file in the `log` subdirectory of your data directory.
+This writes slow queries to the Postgres log file in the `log` subdirectory of your data directory.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/owl.png"><b>For Further Study</b></p>
 
-- [PostgreSQL Documentation — Architecture](https://www.postgresql.org/docs/current/overview.html)
-- [PostgreSQL Documentation — psql Reference](https://www.postgresql.org/docs/current/app-psql.html)
-- [PostgreSQL Documentation — Server Configuration](https://www.postgresql.org/docs/current/runtime-config.html)
+- [Postgres Documentation — Architecture](https://www.Postgres.org/docs/current/overview.html)
+- [Postgres Documentation — psql Reference](https://www.Postgres.org/docs/current/app-psql.html)
+- [Postgres Documentation — Server Configuration](https://www.Postgres.org/docs/current/runtime-config.html)
 - [pgAdmin 4 Documentation](https://www.pgadmin.org/docs/pgadmin4/latest/)
-- [EDB Blog — SQL Server vs. PostgreSQL Comparison](https://www.enterprisedb.com/blog/microsoft-sql-server-mssql-vs-postgresql-comparison-details-what-differences)
-- [SQLpassion — Top 5 Differences Between SQL Server and PostgreSQL](https://www.sqlpassion.at/archive/2024/10/09/the-top-5-key-differences-between-sql-server-and-postgresql/)
-- [Microsoft Learn — Azure Database for PostgreSQL Overview](https://learn.microsoft.com/en-us/azure/postgresql/)
-- [PgBouncer — Connection Pooling for PostgreSQL](https://www.pgbouncer.org/)
+- [EDB Blog — SQL Server vs. Postgres Comparison](https://www.enterprisedb.com/blog/microsoft-sql-server-mssql-vs-Postgres-comparison-details-what-differences)
+- [SQLpassion — Top 5 Differences Between SQL Server and Postgres](https://www.sqlpassion.at/archive/2024/10/09/the-top-5-key-differences-between-sql-server-and-Postgres/)
+- [Microsoft Learn — Azure Database for Postgres Overview](https://learn.microsoft.com/en-us/azure/Postgres/)
+- [PgBouncer — Connection Pooling for Postgres](https://www.pgbouncer.org/)
 - [DBeaver Community Edition](https://dbeaver.io/)
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
