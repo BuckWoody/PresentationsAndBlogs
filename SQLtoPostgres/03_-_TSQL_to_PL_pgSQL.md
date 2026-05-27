@@ -187,7 +187,7 @@ SELECT au_fname || ' ' || au_lname          AS full_name_pipe,
        CONCAT(au_fname, ' ', au_lname)      AS full_name_concat,
        COALESCE(address, '(no address)')    AS address_or_none,
        contract::TEXT                       AS contract_as_text,
-       contract::BOOLEAN                    AS contract_as_bool
+       (contract = 1)                       AS contract_as_bool
 FROM authors;
 ```
 
@@ -551,8 +551,6 @@ ORDER BY p.proname;
 - [PostgreSQL Documentation — Date/Time Functions](https://www.postgresql.org/docs/current/functions-datetime.html)
 - [PostgreSQL Documentation — Window Functions](https://www.postgresql.org/docs/current/tutorial-window.html)
 - [PostgreSQL Documentation — Error Codes](https://www.postgresql.org/docs/current/errcodes-appendix.html)
-- [EDB Blog — T-SQL to PL/pgSQL Migration Guide](https://www.enterprisedb.com/blog/how-migrate-sql-server-postgresql)
-- [Use the Pipes — PostgreSQL for SQL Server DBAs](https://use-the-index-luke.com/sql/postgresql-for-sql-server-dbas)
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
 
