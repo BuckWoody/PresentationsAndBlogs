@@ -50,29 +50,29 @@ Most of your `SELECT` queries will work with minor modifications. The table belo
 
 ```sql
 -- SQL Server:
-SELECT first_name + ' ' + last_name AS full_name FROM person.person;
+SELECT au_fname + ' ' + au_lname AS full_name FROM authors;
 
 -- PostgreSQL (using ||):
-SELECT first_name || ' ' || last_name AS full_name FROM person.person;
+SELECT au_fname || ' ' || au_lname AS full_name FROM authors;
 
 -- PostgreSQL (using CONCAT — null-safe, works in both systems):
-SELECT CONCAT(first_name, ' ', last_name) AS full_name FROM person.person;
+SELECT CONCAT(au_fname, ' ', au_lname) AS full_name FROM authors;
 ```
 
 **Getting the last inserted identity value** is handled very differently in PostgreSQL:
 
 ```sql
 -- SQL Server:
-INSERT INTO orders (customer_id) VALUES (42);
+INSERT INTO jobs (job_desc, min_lvl, max_lvl) VALUES ('Data Engineer', 50, 150);
 SELECT SCOPE_IDENTITY();
 
 -- PostgreSQL Option 1: RETURNING clause (preferred — atomic with the INSERT):
-INSERT INTO orders (customer_id) VALUES (42)
-RETURNING order_id;
+INSERT INTO jobs (job_desc, min_lvl, max_lvl) VALUES ('Data Engineer', 50, 150)
+RETURNING job_id;
 
 -- PostgreSQL Option 2: currval() (requires sequence name, session-specific):
-INSERT INTO orders (customer_id) VALUES (42);
-SELECT currval(pg_get_serial_sequence('orders', 'order_id'));
+INSERT INTO jobs (job_desc, min_lvl, max_lvl) VALUES ('Data Engineer', 50, 150);
+SELECT currval(pg_get_serial_sequence('jobs', 'job_id'));
 ```
 
 The `RETURNING` clause is the PostgreSQL best practice. It is safer than `SCOPE_IDENTITY()` because it returns the value atomically with the insert and works correctly in multi-row inserts.
@@ -116,26 +116,26 @@ CTEs (`WITH` clauses) and window functions work in both systems. The syntax is m
 ```sql
 -- Recursive CTE (almost identical syntax):
 -- SQL Server:
-WITH org_hierarchy AS (
-    SELECT employee_id, manager_id, 1 AS level
-    FROM employees WHERE manager_id IS NULL
+WITH job_hierarchy AS (
+    SELECT job_id, job_desc, min_lvl, 1 AS level
+    FROM jobs WHERE min_lvl = 10
     UNION ALL
-    SELECT e.employee_id, e.manager_id, h.level + 1
-    FROM employees e
-    JOIN org_hierarchy h ON e.manager_id = h.employee_id
+    SELECT j.job_id, j.job_desc, j.min_lvl, h.level + 1
+    FROM jobs j
+    JOIN job_hierarchy h ON j.min_lvl = h.min_lvl + 50
 )
-SELECT * FROM org_hierarchy;
+SELECT * FROM job_hierarchy;
 
 -- PostgreSQL (add RECURSIVE keyword):
-WITH RECURSIVE org_hierarchy AS (
-    SELECT employee_id, manager_id, 1 AS level
-    FROM employees WHERE manager_id IS NULL
+WITH RECURSIVE job_hierarchy AS (
+    SELECT job_id, job_desc, min_lvl, 1 AS level
+    FROM jobs WHERE min_lvl = 10
     UNION ALL
-    SELECT e.employee_id, e.manager_id, h.level + 1
-    FROM employees e
-    JOIN org_hierarchy h ON e.manager_id = h.employee_id
+    SELECT j.job_id, j.job_desc, j.min_lvl, h.level + 1
+    FROM jobs j
+    JOIN job_hierarchy h ON j.min_lvl = h.min_lvl + 50
 )
-SELECT * FROM org_hierarchy;
+SELECT * FROM job_hierarchy;
 ```
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
@@ -144,38 +144,38 @@ SELECT * FROM org_hierarchy;
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
-Open psql or pgAdmin Query Tool connected to the `adventureworks` database and run each pair of queries. Observe the syntax differences.
+Open psql or pgAdmin Query Tool connected to the `pubs` database and run each pair of queries. Observe the syntax differences.
 
-**Step 1 — Connect to adventureworks and load sample data:**
+**Step 1 — Connect to pubs and verify sample data:**
 
 ```sql
--- Insert sample data for exercises (if not already present):
-INSERT INTO person.person (person_type, first_name, last_name, email_promotion)
-VALUES
-    ('IN', 'Kim',     'Abercrombie',  0),
-    ('IN', 'Hazem',   'Abolrous',     1),
-    ('IN', 'Pilar',   'Ackerman',     2),
-    ('IN', 'Frances', 'Adams',        0),
-    ('IN', 'Margaret','Smith',        1),
-    ('IN', 'Carla',   'Adams',        2);
+-- Confirm the authors table is populated:
+SELECT au_id, au_fname, au_lname, city, state, contract
+FROM authors
+ORDER BY au_lname;
+
+-- Confirm the titles table is populated:
+SELECT title_id, title, type, pub_id, price, ytd_sales
+FROM titles
+ORDER BY title;
 ```
 
 **Step 2 — TOP vs. LIMIT:**
 
 ```sql
 -- T-SQL equivalent:
--- SELECT TOP 3 first_name, last_name FROM person.person ORDER BY last_name;
+-- SELECT TOP 3 au_fname, au_lname FROM authors ORDER BY au_lname;
 
 -- PostgreSQL:
-SELECT first_name, last_name
-FROM person.person
-ORDER BY last_name
+SELECT au_fname, au_lname
+FROM authors
+ORDER BY au_lname
 LIMIT 3;
 
 -- OFFSET (paging) — no T-SQL equivalent without ROW_NUMBER workaround:
-SELECT first_name, last_name
-FROM person.person
-ORDER BY last_name
+SELECT au_fname, au_lname
+FROM authors
+ORDER BY au_lname
 LIMIT 3 OFFSET 3;   -- Rows 4-6 (second page)
 ```
 
@@ -183,72 +183,67 @@ LIMIT 3 OFFSET 3;   -- Rows 4-6 (second page)
 
 ```sql
 -- Build a display name with concatenation:
-SELECT first_name || ' ' || last_name       AS full_name_pipe,
-       CONCAT(first_name, ' ', last_name)   AS full_name_concat,
-       COALESCE(middle_name, '(none)')       AS middle_or_none,
-       email_promotion::TEXT                AS promo_as_text,
-       email_promotion::BOOLEAN             AS promo_as_bool
-FROM person.person;
+SELECT au_fname || ' ' || au_lname          AS full_name_pipe,
+       CONCAT(au_fname, ' ', au_lname)      AS full_name_concat,
+       COALESCE(address, '(no address)')    AS address_or_none,
+       contract::TEXT                       AS contract_as_text,
+       contract::BOOLEAN                    AS contract_as_bool
+FROM authors;
 ```
 
 **Step 4 — Date functions:**
 
 ```sql
--- Insert a test order to work with dates:
-INSERT INTO sales.sales_order_header
-    (sales_order_number, customer_id, order_date, ship_date, subtotal, tax_amt, freight)
-VALUES
-    ('SO-0010', 1, '2024-01-15 09:00:00', '2024-01-22 14:00:00', 500.00, 50.00, 15.00),
-    ('SO-0011', 2, '2024-03-01 11:00:00', '2024-03-08 10:00:00', 750.00, 75.00, 20.00);
-
--- Date arithmetic and extraction:
-SELECT sales_order_number,
-       order_date,
-       ship_date,
-       (ship_date::DATE - order_date::DATE)  AS days_to_ship,
-       EXTRACT(YEAR  FROM order_date)        AS order_year,
-       EXTRACT(MONTH FROM order_date)        AS order_month,
-       DATE_TRUNC('month', order_date)       AS month_start,
-       order_date + INTERVAL '30 days'       AS payment_due
-FROM sales.sales_order_header;
+-- Use the titles pubdate column for date arithmetic:
+SELECT title,
+       pubdate,
+       pubdate::DATE                                  AS pub_date_only,
+       (CURRENT_DATE - pubdate::DATE)                AS days_since_pub,
+       EXTRACT(YEAR  FROM pubdate)                   AS pub_year,
+       EXTRACT(MONTH FROM pubdate)                   AS pub_month,
+       DATE_TRUNC('month', pubdate)                  AS month_start,
+       pubdate + INTERVAL '365 days'                 AS one_year_after_pub
+FROM titles
+WHERE pubdate IS NOT NULL;
 ```
 
 **Step 5 — RETURNING clause (getting inserted ID):**
 
 ```sql
--- Insert and get the generated ID back atomically:
-INSERT INTO person.address (address_line1, city, postal_code)
-VALUES ('456 Oak Ave', 'Portland', '97201')
-RETURNING address_id, address_line1, city;
+-- Insert a new job and get the generated job_id back atomically:
+INSERT INTO jobs (job_desc, min_lvl, max_lvl)
+VALUES ('Database Administrator', 100, 200)
+RETURNING job_id, job_desc;
 
 -- Multi-row insert with RETURNING:
-INSERT INTO person.person (person_type, first_name, last_name)
+INSERT INTO jobs (job_desc, min_lvl, max_lvl)
 VALUES
-    ('SP', 'Alex',  'Johnson'),
-    ('SP', 'Maria', 'Garcia')
-RETURNING business_entity_id, first_name, last_name;
+    ('Data Engineer',   75, 175),
+    ('Analytics Lead', 100, 200)
+RETURNING job_id, job_desc, min_lvl, max_lvl;
 ```
 
 **Step 6 — Window functions with FILTER:**
 
 ```sql
 -- Standard window functions (identical to T-SQL):
-SELECT first_name,
-       last_name,
-       email_promotion,
-       ROW_NUMBER()    OVER (ORDER BY last_name, first_name)                AS row_num,
-       RANK()          OVER (PARTITION BY email_promotion ORDER BY last_name) AS rank_in_group,
-       COUNT(*)        OVER (PARTITION BY email_promotion)                  AS group_count,
-       SUM(email_promotion) OVER (ORDER BY last_name ROWS UNBOUNDED PRECEDING) AS running_sum
-FROM person.person;
+SELECT au_fname,
+       au_lname,
+       state,
+       contract,
+       ROW_NUMBER()  OVER (ORDER BY au_lname, au_fname)          AS row_num,
+       RANK()        OVER (PARTITION BY state ORDER BY au_lname)  AS rank_in_state,
+       COUNT(*)      OVER (PARTITION BY state)                    AS authors_in_state,
+       SUM(contract) OVER (ORDER BY au_lname ROWS UNBOUNDED PRECEDING) AS running_contracted
+FROM authors;
 
 -- FILTER clause on aggregates (PostgreSQL-specific, no T-SQL equivalent):
 SELECT
-    COUNT(*)                                      AS total_people,
-    COUNT(*) FILTER (WHERE email_promotion = 0)   AS no_promo,
-    COUNT(*) FILTER (WHERE email_promotion > 0)   AS some_promo,
-    AVG(email_promotion)                          AS avg_promo_level
-FROM person.person;
+    COUNT(*)                                      AS total_authors,
+    COUNT(*) FILTER (WHERE contract = 1)          AS under_contract,
+    COUNT(*) FILTER (WHERE contract = 0)          AS no_contract,
+    COUNT(*) FILTER (WHERE state = 'CA')          AS california_authors
+FROM authors;
 ```
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
@@ -280,90 +275,100 @@ PostgreSQL's procedural language is **PL/pgSQL**. It is similar in spirit to T-S
 
 ```sql
 -- SQL Server equivalent:
--- CREATE PROCEDURE dbo.usp_get_order_total
---     @customer_id INT,
---     @total       MONEY OUTPUT
+-- CREATE PROCEDURE dbo.usp_get_author_sales_total
+--     @au_id    VARCHAR(11),
+--     @total    MONEY OUTPUT
 -- AS BEGIN
---     SELECT @total = SUM(total_due) FROM sales.SalesOrderHeader
---     WHERE CustomerID = @customer_id;
+--     SELECT @total = SUM(t.price * s.qty)
+--     FROM titleauthor ta
+--     JOIN titles t  ON t.title_id = ta.title_id
+--     JOIN sales  s  ON s.title_id = ta.title_id
+--     WHERE ta.au_id = @au_id;
 -- END;
 
 -- PostgreSQL FUNCTION (for scalar returns):
-CREATE OR REPLACE FUNCTION sales.get_order_total(p_customer_id INTEGER)
-RETURNS NUMERIC(19,4)
+CREATE OR REPLACE FUNCTION get_author_sales_total(p_au_id VARCHAR(11))
+RETURNS NUMERIC(10,4)
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    v_total NUMERIC(19,4);
+    v_total NUMERIC(10,4);
 BEGIN
-    SELECT COALESCE(SUM(subtotal + tax_amt + freight), 0)
+    SELECT COALESCE(SUM(t.price * s.qty), 0)
     INTO   v_total
-    FROM   sales.sales_order_header
-    WHERE  customer_id = p_customer_id;
+    FROM   titleauthor ta
+    JOIN   titles t ON t.title_id = ta.title_id
+    JOIN   sales  s ON s.title_id = ta.title_id
+    WHERE  ta.au_id = p_au_id;
 
     RETURN v_total;
 END;
 $$;
 
 -- Call it:
-SELECT sales.get_order_total(1);
+SELECT get_author_sales_total('409-56-7008');
 ```
 
 **Important:** In PostgreSQL, stored procedures (`CREATE PROCEDURE`) cannot return result sets in the same way SQL Server procedures can. To return a result set, you write a **function** using `RETURNS TABLE(...)` or `RETURNS SETOF record`. Procedures are used for transactions and side effects; functions are used for returning data.
 
 ```sql
 -- Function returning a table (equivalent to a SQL Server SP that does SELECT):
-CREATE OR REPLACE FUNCTION sales.get_orders_for_customer(p_customer_id INTEGER)
+CREATE OR REPLACE FUNCTION get_titles_for_author(p_au_id VARCHAR(11))
 RETURNS TABLE (
-    order_id   INTEGER,
-    order_date TIMESTAMP,
-    total      NUMERIC(19,4)
+    title_id   VARCHAR(6),
+    title      VARCHAR(80),
+    type       CHAR(12),
+    price      NUMERIC(10,4),
+    ytd_sales  INT
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
     RETURN QUERY
-    SELECT sales_order_id,
-           order_date,
-           (subtotal + tax_amt + freight)
-    FROM   sales.sales_order_header
-    WHERE  customer_id = p_customer_id
-    ORDER BY order_date;
+    SELECT t.title_id,
+           t.title,
+           t.type,
+           t.price,
+           t.ytd_sales
+    FROM   titles t
+    JOIN   titleauthor ta ON ta.title_id = t.title_id
+    WHERE  ta.au_id = p_au_id
+    ORDER BY t.title;
 END;
 $$;
 
 -- Call like a table:
-SELECT * FROM sales.get_orders_for_customer(1);
+SELECT * FROM get_titles_for_author('409-56-7008');
 ```
 
 **Error handling:**
 
 ```sql
-CREATE OR REPLACE FUNCTION sales.safe_insert_order(
-    p_customer_id     INTEGER,
-    p_order_number    VARCHAR(25),
-    p_subtotal        NUMERIC(19,4)
+CREATE OR REPLACE FUNCTION safe_insert_title(
+    p_title_id    VARCHAR(6),
+    p_title       VARCHAR(80),
+    p_type        CHAR(12),
+    p_pub_id      CHAR(4),
+    p_price       NUMERIC(10,4)
 )
-RETURNS INTEGER
+RETURNS VARCHAR(6)
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    v_new_id  INTEGER;
+    v_new_id  VARCHAR(6);
 BEGIN
-    INSERT INTO sales.sales_order_header
-        (customer_id, sales_order_number, subtotal, tax_amt, freight)
-    VALUES
-        (p_customer_id, p_order_number, p_subtotal, p_subtotal * 0.1, 15.00)
-    RETURNING sales_order_id INTO v_new_id;
+    INSERT INTO titles (title_id, title, type, pub_id, price)
+    VALUES (p_title_id, p_title, p_type, p_pub_id, p_price)
+    RETURNING title_id INTO v_new_id;
 
     RETURN v_new_id;
 
 EXCEPTION
     WHEN unique_violation THEN
-        RAISE NOTICE 'Order number % already exists', p_order_number;
-        RETURN -1;
+        RAISE NOTICE 'Title ID % already exists', p_title_id;
+        RETURN NULL;
     WHEN foreign_key_violation THEN
-        RAISE EXCEPTION 'Customer ID % does not exist', p_customer_id;
+        RAISE EXCEPTION 'Publisher ID % does not exist', p_pub_id;
     WHEN OTHERS THEN
         RAISE EXCEPTION 'Unexpected error: %', SQLERRM;
 END;
@@ -403,50 +408,57 @@ $$;
 
 ```sql
 -- Create the function from section 3.4:
-CREATE OR REPLACE FUNCTION sales.get_order_total(p_customer_id INTEGER)
-RETURNS NUMERIC(19,4)
+CREATE OR REPLACE FUNCTION get_author_sales_total(p_au_id VARCHAR(11))
+RETURNS NUMERIC(10,4)
 LANGUAGE plpgsql
 AS $$
 DECLARE
-    v_total NUMERIC(19,4);
+    v_total NUMERIC(10,4);
 BEGIN
-    SELECT COALESCE(SUM(subtotal + tax_amt + freight), 0)
+    SELECT COALESCE(SUM(t.price * s.qty), 0)
     INTO   v_total
-    FROM   sales.sales_order_header
-    WHERE  customer_id = p_customer_id;
+    FROM   titleauthor ta
+    JOIN   titles t ON t.title_id = ta.title_id
+    JOIN   sales  s ON s.title_id = ta.title_id
+    WHERE  ta.au_id = p_au_id;
     RETURN v_total;
 END;
 $$;
 
--- Call with an existing customer:
-SELECT sales.get_order_total(1);
-SELECT sales.get_order_total(999);   -- Customer that doesn't exist — returns 0 due to COALESCE
+-- Call with an existing author:
+SELECT get_author_sales_total('409-56-7008');
+SELECT get_author_sales_total('999-99-9999');   -- Author that doesn't exist — returns 0 due to COALESCE
 ```
 
 **Step 2 — Create the table-returning function:**
 
 ```sql
-CREATE OR REPLACE FUNCTION sales.get_orders_for_customer(p_customer_id INTEGER)
+CREATE OR REPLACE FUNCTION get_titles_for_author(p_au_id VARCHAR(11))
 RETURNS TABLE (
-    order_id   INTEGER,
-    order_date TIMESTAMP,
-    total      NUMERIC(19,4)
+    title_id   VARCHAR(6),
+    title      VARCHAR(80),
+    type       CHAR(12),
+    price      NUMERIC(10,4),
+    ytd_sales  INT
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
     RETURN QUERY
-    SELECT sales_order_id,
-           order_date,
-           (subtotal + tax_amt + freight)
-    FROM   sales.sales_order_header
-    WHERE  customer_id = p_customer_id
-    ORDER BY order_date;
+    SELECT t.title_id,
+           t.title,
+           t.type,
+           t.price,
+           t.ytd_sales
+    FROM   titles t
+    JOIN   titleauthor ta ON ta.title_id = t.title_id
+    WHERE  ta.au_id = p_au_id
+    ORDER BY t.title;
 END;
 $$;
 
-SELECT * FROM sales.get_orders_for_customer(1);
-SELECT * FROM sales.get_orders_for_customer(2);
+SELECT * FROM get_titles_for_author('409-56-7008');
+SELECT * FROM get_titles_for_author('267-41-2394');
 ```
 
 **Step 3 — Create a PostgreSQL PROCEDURE with transaction control:**
@@ -454,32 +466,31 @@ SELECT * FROM sales.get_orders_for_customer(2);
 ```sql
 -- Procedures in PostgreSQL (11+) support COMMIT/ROLLBACK inside them
 -- This is something SQL Server procedures also support
-CREATE OR REPLACE PROCEDURE sales.transfer_order(
-    p_source_customer INTEGER,
-    p_target_customer INTEGER,
-    p_order_id        INTEGER
+CREATE OR REPLACE PROCEDURE transfer_title_to_publisher(
+    p_title_id      VARCHAR(6),
+    p_source_pub    CHAR(4),
+    p_target_pub    CHAR(4)
 )
 LANGUAGE plpgsql
 AS $$
 BEGIN
-    -- Update the customer on the order
-    UPDATE sales.sales_order_header
-    SET    customer_id = p_target_customer,
-           modified_date = NOW()
-    WHERE  sales_order_id = p_order_id
-      AND  customer_id    = p_source_customer;
+    -- Update the publisher on the title
+    UPDATE titles
+    SET    pub_id = p_target_pub
+    WHERE  title_id = p_title_id
+      AND  pub_id   = p_source_pub;
 
     IF NOT FOUND THEN
-        RAISE EXCEPTION 'Order % not found for customer %', p_order_id, p_source_customer;
+        RAISE EXCEPTION 'Title % not found for publisher %', p_title_id, p_source_pub;
     END IF;
 
-    RAISE NOTICE 'Order % transferred from customer % to customer %',
-        p_order_id, p_source_customer, p_target_customer;
+    RAISE NOTICE 'Title % transferred from publisher % to publisher %',
+        p_title_id, p_source_pub, p_target_pub;
 END;
 $$;
 
 -- Call a procedure with CALL (not SELECT!):
-CALL sales.transfer_order(1, 2, 1);
+CALL transfer_title_to_publisher('BU1032', '1389', '0736');
 ```
 
 **Step 4 — Use a DO block for a one-time data migration task:**
@@ -491,29 +502,30 @@ DECLARE
     v_rec     RECORD;
     v_count   INTEGER := 0;
 BEGIN
-    -- Standardize email_promotion values: set any value > 2 to 2
+    -- Standardize title types: set any UNDECIDED type to 'UNASSIGNED'
+    -- and report which titles were updated
     FOR v_rec IN
-        SELECT business_entity_id, email_promotion
-        FROM person.person
-        WHERE email_promotion > 2
+        SELECT title_id, title, type
+        FROM titles
+        WHERE TRIM(type) = 'UNDECIDED'
     LOOP
-        UPDATE person.person
-        SET    email_promotion = 2
-        WHERE  business_entity_id = v_rec.business_entity_id;
+        UPDATE titles
+        SET    type = 'UNASSIGNED  '   -- CHAR(12), pad to length
+        WHERE  title_id = v_rec.title_id;
         v_count := v_count + 1;
     END LOOP;
 
-    RAISE NOTICE 'Standardized % records', v_count;
+    RAISE NOTICE 'Standardized % title records', v_count;
 END;
 $$;
 ```
 
-**Step 5 — List all functions in the sales schema (equivalent to sys.procedures in SQL Server):**
+**Step 5 — List all functions in the public schema (equivalent to sys.procedures in SQL Server):**
 
 ```sql
 SELECT routine_name, routine_type, data_type
 FROM information_schema.routines
-WHERE routine_schema = 'sales'
+WHERE routine_schema = 'public'
 ORDER BY routine_name;
 
 -- Or using pg_proc for more details:
@@ -523,7 +535,7 @@ SELECT p.proname   AS function_name,
 FROM pg_proc p
 JOIN pg_namespace n ON n.oid = p.pronamespace
 JOIN pg_language  l ON l.oid = p.prolang
-WHERE n.nspname = 'sales'
+WHERE n.nspname = 'public'
 ORDER BY p.proname;
 ```
 
