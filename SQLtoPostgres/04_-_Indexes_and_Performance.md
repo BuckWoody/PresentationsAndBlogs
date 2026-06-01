@@ -325,16 +325,62 @@ VACUUM FULL authors;       -- Use sparingly; like DBCC SHRINKFILE but safer
 
 **pg_stat_statements — the equivalent of Query Store:**
 
-Enable the extension to track query performance:
+Unlike SQL Server's Query Store (enabled with a single `ALTER DATABASE` command), `pg_stat_statements` requires two separate phases: a server configuration change followed by a restart, then a per-database `CREATE EXTENSION`. Running `CREATE EXTENSION` without completing Phase 1 first produces the error `pg_stat_statements must be loaded via shared_preload_libraries`.
+
+**Phase 1 — Server configuration (requires a PostgreSQL restart):**
+
+First, find your `postgresql.conf` location:
 
 ```sql
--- In postgresql.conf, add:
--- shared_preload_libraries = 'pg_stat_statements'
--- (requires a restart)
+-- Run this in psql or any query tool to find the config file path:
+SHOW config_file;
+```
 
--- Then in your database:
+Open that file in a text editor and add or update this line:
+
+```
+shared_preload_libraries = 'pg_stat_statements'
+```
+
+If `shared_preload_libraries` already exists with other values, append to it:
+
+```
+shared_preload_libraries = 'pg_stat_statements,other_existing_library'
+```
+
+Then restart PostgreSQL. On Linux with systemd:
+
+```bash
+sudo systemctl restart postgresql
+```
+
+On Windows, restart the PostgreSQL service from Services (services.msc) or:
+
+```cmd
+net stop postgresql-x64-16 && net start postgresql-x64-16
+```
+
+(Replace `postgresql-x64-16` with your installed service name.)
+
+Verify the library loaded after restart:
+
+```sql
+SHOW shared_preload_libraries;
+```
+
+**Phase 2 — Enable in the database (run once per database, no restart needed):**
+
+```sql
+-- Enable the extension in the pubs database:
 CREATE EXTENSION IF NOT EXISTS pg_stat_statements;
 
+-- Confirm it is active:
+SELECT * FROM pg_extension WHERE extname = 'pg_stat_statements';
+```
+
+**Querying pg_stat_statements:**
+
+```sql
 -- Top 10 slowest queries by total execution time:
 SELECT LEFT(query, 80)           AS query_snippet,
        calls,
