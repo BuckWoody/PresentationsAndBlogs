@@ -790,10 +790,10 @@ Take turns:
 
 <ul>
     <li>Book: Whitmore, J. (2017). <i>Coaching for Performance</i> (5th ed.) - Detailed GROW model</li>
-    <li><a href="https://www.ccl.org/articles/leading-effectively-articles/coaching-model-grow/" target="_blank">CCL: GROW Model for Coaching and Mentoring</a></li>
+    <li><a href="https://simply.coach/learn-coaching-models/grow-coaching-model-explained-with-tips-and-real-examples/" target="_blank">GROW Model for Coaching and Mentoring</a></li>
     <li>Book: Zachary, L.J. (2012). <i>The Mentor's Guide</i> - Chapter on structuring conversations</li>
-    <li><a href="https://www.ica-usa.com/resources/focused-conversation-method" target="_blank">Focused Conversation Method (ORID)</a></li>
-    <li><a href="https://hbr.org/2016/02/how-to-make-sure-your-one-on-ones-with-employees-are-productive" target="_blank">HBR: Making One-on-Ones Productive</a></li>
+    <li><a href="https://www.betterevaluation.org/methods-approaches/methods/orid" target="_blank">Focused Conversation Method (ORID)</a></li>
+    <li><a href="https://trainingmag.com/how-to-make-one-on-ones-productive-for-individual-contributors-and-people-leaders/" target="_blank">Making One-on-Ones Productive</a></li>
     <li><a href="https://www.mindtools.com/pages/article/newTMC_5W.htm" target="_blank">MindTools: 5 Whys Technique</a></li>
 </ul>
 
