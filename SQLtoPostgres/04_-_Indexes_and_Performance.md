@@ -29,7 +29,7 @@ SQL Server has two primary index categories: **clustered** (the table is the ind
 | **GIN** (Generalized Inverted Index) | Full-text index | JSONB, array containment, full-text search |
 | **BRIN** (Block Range Index) | (none) | Very large tables with naturally ordered data (time-series, IoT) |
 | **Partial index** | Filtered index (`WHERE` clause on index) | Indexes on a subset of rows — very powerful |
-| **Expression index** | Computed column index | Index on `LOWER(email)`, `EXTRACT(YEAR FROM d)` |
+| **Expression index** | Computed column index | Index on `LOWER(au_lname)`, `EXTRACT(YEAR FROM pubdate)` |
 | **Covering index** (`INCLUDE`) | Nonclustered index with `INCLUDE` columns | Satisfy queries from index alone (index-only scan) |
 
 **The clustered vs. heap difference matters for performance.** In SQL Server, a clustered index seek goes directly to the data row. In PostgreSQL, an index scan must follow a pointer from the index leaf to the heap page (a "heap fetch"). For this reason, PostgreSQL has the concept of an **Index Only Scan** — when the index contains all the columns needed by the query (a covering index), PostgreSQL can return results without touching the heap. This is controlled by the **visibility map**, which is maintained by VACUUM.
@@ -38,40 +38,39 @@ SQL Server has two primary index categories: **clustered** (the table is the ind
 
 ```sql
 -- SQL Server:
-CREATE INDEX IX_Person_LastName ON Person.Person (LastName ASC);
-CREATE UNIQUE INDEX UX_Sales_OrderNumber ON Sales.SalesOrderHeader (SalesOrderNumber);
-CREATE INDEX IX_SOH_OrderDate_INC ON Sales.SalesOrderHeader (OrderDate)
-    INCLUDE (SubTotal, TaxAmt, Freight);
+CREATE INDEX IX_Author_LastName ON dbo.authors (au_lname ASC);
+CREATE UNIQUE INDEX UX_Publisher_Name ON dbo.publishers (pub_name);
+CREATE INDEX IX_Titles_PubDate ON dbo.titles (pubdate)
+    INCLUDE (price, ytd_sales);
 
 -- PostgreSQL:
-CREATE INDEX idx_person_last_name        ON person.person          (last_name ASC);
-CREATE UNIQUE INDEX ux_sales_order_number ON sales.sales_order_header (sales_order_number);
-CREATE INDEX idx_soh_order_date          ON sales.sales_order_header (order_date)
-    INCLUDE (subtotal, tax_amt, freight);  -- Covering index (PostgreSQL 11+)
+CREATE INDEX idx_authors_lname         ON authors    (au_lname ASC);
+CREATE UNIQUE INDEX ux_publishers_name ON publishers (pub_name);
+CREATE INDEX idx_titles_pubdate        ON titles     (pubdate)
+    INCLUDE (price, ytd_sales);   -- Covering index (PostgreSQL 11+)
 ```
 
 **Partial indexes** are one of PostgreSQL's most powerful features and correspond to SQL Server's filtered indexes:
 
 ```sql
--- Only index active, un-shipped orders (not the full history):
-CREATE INDEX idx_soh_unshipped
-    ON sales.sales_order_header (order_date)
-    WHERE ship_date IS NULL;
+-- Only index authors not yet under contract (not the full author list):
+CREATE INDEX idx_authors_no_contract
+    ON authors (au_lname)
+    WHERE contract = 0;
 
 -- This index is tiny but very fast for:
-SELECT * FROM sales.sales_order_header WHERE order_date > NOW() - INTERVAL '30 days'
-  AND ship_date IS NULL;
+SELECT * FROM authors WHERE au_lname > 'M' AND contract = 0;
 ```
 
 **Expression (functional) indexes** — index a computed expression rather than a raw column:
 
 ```sql
 -- Case-insensitive search index (eliminates full table scans on LOWER() queries):
-CREATE INDEX idx_person_last_name_lower
-    ON person.person (LOWER(last_name));
+CREATE INDEX idx_authors_lname_lower
+    ON authors (LOWER(au_lname));
 
 -- Now this query uses the index:
-SELECT * FROM person.person WHERE LOWER(last_name) = 'smith';
+SELECT * FROM authors WHERE LOWER(au_lname) = 'smith';
 
 -- SQL Server equivalent: computed column + index, or a filtered index with a persisted column
 ```
@@ -80,12 +79,12 @@ SELECT * FROM person.person WHERE LOWER(last_name) = 'smith';
 
 ```sql
 -- For full-text search (covered more in Module 06):
-ALTER TABLE person.person ADD COLUMN search_vector TSVECTOR;
+ALTER TABLE titles ADD COLUMN search_vector TSVECTOR;
 
-CREATE INDEX idx_person_fts ON person.person USING GIN (search_vector);
+CREATE INDEX idx_titles_fts ON titles USING GIN (search_vector);
 
 -- For JSONB columns (Module 06):
--- CREATE INDEX idx_demographics_gin ON person.person USING GIN (demographics);
+-- CREATE INDEX idx_pub_info_gin ON pub_info USING GIN (pr_info_json);
 ```
 
 <h3>4.2 – Concurrent Index Builds</h3>
@@ -94,11 +93,11 @@ SQL Server builds indexes with locks that can block concurrent DML (depending on
 
 ```sql
 -- Build index without blocking production traffic:
-CREATE INDEX CONCURRENTLY idx_soh_customer_id
-    ON sales.sales_order_header (customer_id);
+CREATE INDEX CONCURRENTLY idx_employee_pub_id
+    ON employee (pub_id);
 
 -- DROP INDEX CONCURRENTLY works similarly:
-DROP INDEX CONCURRENTLY idx_soh_customer_id;
+DROP INDEX CONCURRENTLY idx_employee_pub_id;
 ```
 
 `CREATE INDEX CONCURRENTLY` cannot be run inside a transaction block.
@@ -110,9 +109,9 @@ DROP INDEX CONCURRENTLY idx_soh_customer_id;
 `EXPLAIN` shows the estimated execution plan without running the query (equivalent to SSMS's "Display Estimated Execution Plan" button). `EXPLAIN ANALYZE` runs the query and shows both estimated and actual statistics (equivalent to "Include Actual Execution Plan").
 
 ```sql
-EXPLAIN SELECT * FROM person.person WHERE last_name = 'Smith';
-EXPLAIN ANALYZE SELECT * FROM person.person WHERE last_name = 'Smith';
-EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT) SELECT * FROM person.person WHERE last_name = 'Smith';
+EXPLAIN SELECT * FROM authors WHERE au_lname = 'Smith';
+EXPLAIN ANALYZE SELECT * FROM authors WHERE au_lname = 'Smith';
+EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT) SELECT * FROM authors WHERE au_lname = 'Smith';
 ```
 
 **Reading the plan — key concepts:**
@@ -120,8 +119,8 @@ EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT) SELECT * FROM person.person WHERE last_n
 The plan is a tree of nodes read from **innermost (deepest) to outermost**. Each node shows:
 
 ```
-Seq Scan on person  (cost=0.00..12.50 rows=3 width=92) (actual time=0.012..0.025 rows=3 loops=1)
-  Filter: ((last_name)::text = 'Smith'::text)
+Seq Scan on authors  (cost=0.00..12.50 rows=3 width=92) (actual time=0.012..0.025 rows=3 loops=1)
+  Filter: ((au_lname)::text = 'Smith'::text)
   Rows Removed by Filter: 3
 ```
 
@@ -166,20 +165,31 @@ Seq Scan on person  (cost=0.00..12.50 rows=3 width=92) (actual time=0.012..0.025
 **Step 1 — Load a larger dataset for meaningful plan analysis:**
 
 ```sql
--- Insert 10,000 rows of synthetic person data
-INSERT INTO person.person (person_type, first_name, last_name, email_promotion, is_active)
+-- The pubs authors table ships with an index on (au_lname, au_fname) called aunmind.
+-- Drop it before the demo so we can observe the full sequence of plan changes
+-- as we add indexes step by step. It will be recreated at the end of this activity.
+DROP INDEX IF EXISTS aunmind;
+
+-- Insert 9,999 rows of synthetic author data.
+-- au_id must match the format ^\d{3}-\d{2}-\d{4}$ and be unique.
+-- The formula below produces values like '000-01-0001' through '999-09-9999',
+-- none of which conflict with the 23 real pubs authors (whose middle segments
+-- are all >= 17, while ours are 00-09).
+INSERT INTO authors (au_id, au_lname, au_fname, phone, contract)
 SELECT
-    CASE (i % 3) WHEN 0 THEN 'IN' WHEN 1 THEN 'SP' ELSE 'SC' END,
-    'FirstName_' || i::TEXT,
+    LPAD((i / 10)::TEXT, 3, '0') || '-' ||
+    LPAD((i % 10)::TEXT, 2, '0') || '-' ||
+    LPAD(i::TEXT, 4, '0'),
     CASE (i % 10)
-        WHEN 0 THEN 'Smith'  WHEN 1 THEN 'Jones'    WHEN 2 THEN 'Williams'
-        WHEN 3 THEN 'Brown'  WHEN 4 THEN 'Taylor'   WHEN 5 THEN 'Wilson'
-        WHEN 6 THEN 'Johnson' WHEN 7 THEN 'Davies'  WHEN 8 THEN 'Evans'
+        WHEN 0 THEN 'Smith'   WHEN 1 THEN 'Jones'    WHEN 2 THEN 'Williams'
+        WHEN 3 THEN 'Brown'   WHEN 4 THEN 'Taylor'   WHEN 5 THEN 'Wilson'
+        WHEN 6 THEN 'Johnson' WHEN 7 THEN 'Davies'   WHEN 8 THEN 'Evans'
         ELSE 'Thomas'
     END,
-    i % 3,
-    (i % 5 <> 0)
-FROM generate_series(1, 10000) AS s(i);
+    'FirstName_' || i::TEXT,
+    'UNKNOWN',
+    i % 2
+FROM generate_series(1, 9999) AS s(i);
 ```
 
 `generate_series()` is PostgreSQL's equivalent of a tally/numbers table. It generates a set of integers from start to stop.
@@ -188,13 +198,13 @@ FROM generate_series(1, 10000) AS s(i);
 
 ```sql
 -- Update statistics (equivalent to UPDATE STATISTICS in SQL Server):
-ANALYZE person.person;
+ANALYZE authors;
 
--- Check the plan for a query without an index on last_name:
+-- Check the plan for a query without an index on au_lname:
 EXPLAIN ANALYZE
-SELECT business_entity_id, first_name, last_name
-FROM person.person
-WHERE last_name = 'Smith';
+SELECT au_id, au_fname, au_lname
+FROM authors
+WHERE au_lname = 'Smith';
 ```
 
 You should see a **Seq Scan** (full table scan). Note the estimated vs. actual rows.
@@ -202,13 +212,13 @@ You should see a **Seq Scan** (full table scan). Note the estimated vs. actual r
 **Step 3 — Create an index and re-check the plan:**
 
 ```sql
-CREATE INDEX idx_person_last_name ON person.person (last_name);
+CREATE INDEX idx_authors_lname ON authors (au_lname);
 
 -- Re-run the same query:
 EXPLAIN ANALYZE
-SELECT business_entity_id, first_name, last_name
-FROM person.person
-WHERE last_name = 'Smith';
+SELECT au_id, au_fname, au_lname
+FROM authors
+WHERE au_lname = 'Smith';
 ```
 
 The plan should now show an **Index Scan** or **Bitmap Index Scan** depending on selectivity. Note the difference in cost and actual time.
@@ -217,15 +227,15 @@ The plan should now show an **Index Scan** or **Bitmap Index Scan** depending on
 
 ```sql
 -- Drop the old index, create a covering index:
-DROP INDEX idx_person_last_name;
+DROP INDEX idx_authors_lname;
 
-CREATE INDEX idx_person_last_name_covering
-    ON person.person (last_name) INCLUDE (first_name, business_entity_id);
+CREATE INDEX idx_authors_lname_covering
+    ON authors (au_lname) INCLUDE (au_fname, phone);
 
 EXPLAIN ANALYZE
-SELECT business_entity_id, first_name, last_name
-FROM person.person
-WHERE last_name = 'Smith';
+SELECT au_fname, au_lname, phone
+FROM authors
+WHERE au_lname = 'Smith';
 ```
 
 You should now see an **Index Only Scan** — the query is satisfied entirely from the index without touching the heap.
@@ -233,42 +243,52 @@ You should now see an **Index Only Scan** — the query is satisfied entirely fr
 **Step 5 — Create and test a partial index:**
 
 ```sql
--- Index only the inactive persons (is_active = FALSE):
-CREATE INDEX idx_person_inactive
-    ON person.person (last_name)
-    WHERE is_active = FALSE;
+-- Index only authors not under contract (contract = 0):
+CREATE INDEX idx_authors_no_contract
+    ON authors (au_lname)
+    WHERE contract = 0;
 
 EXPLAIN ANALYZE
-SELECT * FROM person.person
-WHERE is_active = FALSE
-  AND last_name = 'Smith';
+SELECT * FROM authors
+WHERE contract = 0
+  AND au_lname = 'Smith';
 
--- Compare plan for active persons (partial index not used):
+-- Compare plan for contracted authors (partial index not used):
 EXPLAIN ANALYZE
-SELECT * FROM person.person
-WHERE is_active = TRUE
-  AND last_name = 'Smith';
+SELECT * FROM authors
+WHERE contract = 1
+  AND au_lname = 'Smith';
 ```
 
 **Step 6 — Demonstrate expression index:**
 
 ```sql
--- Create expression index on LOWER(last_name):
-CREATE INDEX idx_person_last_name_ci ON person.person (LOWER(last_name));
+-- Create expression index on LOWER(au_lname):
+CREATE INDEX idx_authors_lname_ci ON authors (LOWER(au_lname));
 
 -- Case-insensitive search using the expression index:
 EXPLAIN ANALYZE
-SELECT * FROM person.person
-WHERE LOWER(last_name) = 'smith';   -- Uses index
+SELECT * FROM authors
+WHERE LOWER(au_lname) = 'smith';   -- Uses index
 
 EXPLAIN ANALYZE
-SELECT * FROM person.person
-WHERE last_name ILIKE 'smith';       -- May or may not use index (ILIKE is different)
+SELECT * FROM authors
+WHERE au_lname ILIKE 'smith';       -- May or may not use index (ILIKE is different)
 ```
 
 **Step 7 — Use pgAdmin's graphical EXPLAIN:**
 
 In pgAdmin Query Tool, paste the query from Step 3 and click the **Explain Analyze** button (the lightning bolt with magnifying glass). Switch between the **Graphical**, **Table**, and **Statistics** tabs. This is the closest experience to the SSMS graphical execution plan.
+
+```sql
+-- Cleanup: remove synthetic rows and restore the original pubs index
+-- so subsequent modules see the standard pubs authors table.
+DELETE FROM authors WHERE au_fname LIKE 'FirstName_%';
+DROP INDEX IF EXISTS idx_authors_lname_covering;
+DROP INDEX IF EXISTS idx_authors_no_contract;
+DROP INDEX IF EXISTS idx_authors_lname_ci;
+CREATE INDEX aunmind ON authors (au_lname, au_fname);
+```
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -290,17 +310,17 @@ ORDER BY name;
 
 ```sql
 -- Reclaim dead space (like shrink/reorganize — but not to shrink the file):
-VACUUM person.person;
-VACUUM VERBOSE person.person;    -- Shows detailed output
+VACUUM authors;
+VACUUM VERBOSE authors;    -- Shows detailed output
 
 -- Update statistics (equivalent to UPDATE STATISTICS in SQL Server):
-ANALYZE person.person;
+ANALYZE authors;
 
 -- Both at once:
-VACUUM ANALYZE person.person;
+VACUUM ANALYZE authors;
 
 -- Full vacuum — reclaims space to OS, rewrites the table, exclusive lock required:
-VACUUM FULL person.person;       -- Use sparingly; like DBCC SHRINKFILE but safer
+VACUUM FULL authors;       -- Use sparingly; like DBCC SHRINKFILE but safer
 ```
 
 **pg_stat_statements — the equivalent of Query Store:**
@@ -361,27 +381,28 @@ SELECT relname          AS table_name,
        last_analyze,
        last_autoanalyze
 FROM pg_stat_user_tables
-WHERE schemaname IN ('person', 'sales')
+WHERE schemaname = 'public'
 ORDER BY n_dead_tup DESC;
 ```
 
 **Step 2 — Deliberately create dead rows and observe:**
 
 ```sql
--- Create dead rows by updating every person:
-UPDATE person.person SET modified_date = NOW();
+-- Touch every row to create dead tuple versions
+-- (self-assignment changes nothing but forces MVCC to write new row versions):
+UPDATE authors SET phone = phone;
 
 -- Check dead rows (will show before autovacuum runs):
 SELECT relname, n_live_tup, n_dead_tup
 FROM pg_stat_user_tables
-WHERE relname = 'person';
+WHERE relname = 'authors';
 
 -- Run manual vacuum and re-check:
-VACUUM person.person;
+VACUUM authors;
 
 SELECT relname, n_live_tup, n_dead_tup
 FROM pg_stat_user_tables
-WHERE relname = 'person';
+WHERE relname = 'authors';
 ```
 
 **Step 3 — Check index usage statistics:**
@@ -395,7 +416,7 @@ SELECT schemaname,
        idx_tup_read     AS rows_read,
        idx_tup_fetch    AS rows_fetched
 FROM pg_stat_user_indexes
-WHERE schemaname IN ('person', 'sales')
+WHERE schemaname = 'public'
 ORDER BY idx_scan DESC;
 ```
 
