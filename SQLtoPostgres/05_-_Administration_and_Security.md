@@ -39,7 +39,7 @@ SQL Server has a two-layer security model: **Logins** (server-level principals t
 -- SQL Server:
 -- CREATE LOGIN app_user WITH PASSWORD = 'SecurePass123!';
 -- CREATE USER app_user FOR LOGIN app_user;
--- GRANT SELECT ON SCHEMA::sales TO app_user;
+-- GRANT SELECT ON SCHEMA::dbo TO app_user;
 
 -- PostgreSQL Step 1: Create a login role:
 CREATE ROLE app_user
@@ -51,22 +51,20 @@ CREATE ROLE app_user
     VALID UNTIL '2025-12-31';    -- No SQL Server equivalent for logins; use for accounts
 
 -- PostgreSQL Step 2: Grant connection to the database:
-GRANT CONNECT ON DATABASE adventureworks TO app_user;
+GRANT CONNECT ON DATABASE pubs TO app_user;
 
 -- PostgreSQL Step 3: Grant schema usage (required before table-level grants):
-GRANT USAGE ON SCHEMA sales TO app_user;
-GRANT USAGE ON SCHEMA person TO app_user;
+GRANT USAGE ON SCHEMA public TO app_user;
 
 -- PostgreSQL Step 4: Grant object-level permissions:
-GRANT SELECT ON ALL TABLES IN SCHEMA sales   TO app_user;
-GRANT SELECT ON ALL TABLES IN SCHEMA person  TO app_user;
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO app_user;
 
 -- Grant future tables too (SQL Server has no equivalent — you must re-grant):
-ALTER DEFAULT PRIVILEGES IN SCHEMA sales
+ALTER DEFAULT PRIVILEGES IN SCHEMA public
     GRANT SELECT ON TABLES TO app_user;
 
 -- PostgreSQL Step 5: Grant execute on functions:
-GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA sales TO app_user;
+GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO app_user;
 ```
 
 **Role groups (equivalent to SQL Server database roles):**
@@ -76,9 +74,9 @@ GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA sales TO app_user;
 CREATE ROLE reporting_role;
 
 -- Grant permissions to the group:
-GRANT CONNECT ON DATABASE adventureworks TO reporting_role;
-GRANT USAGE   ON SCHEMA sales            TO reporting_role;
-GRANT SELECT  ON ALL TABLES IN SCHEMA sales TO reporting_role;
+GRANT CONNECT ON DATABASE pubs            TO reporting_role;
+GRANT USAGE   ON SCHEMA public            TO reporting_role;
+GRANT SELECT  ON ALL TABLES IN SCHEMA public TO reporting_role;
 
 -- Add users to the group:
 GRANT reporting_role TO app_user;
@@ -91,19 +89,20 @@ REVOKE reporting_role FROM app_user;
 
 ```sql
 -- Enable RLS on a table:
-ALTER TABLE sales.sales_order_header ENABLE ROW LEVEL SECURITY;
+ALTER TABLE sales ENABLE ROW LEVEL SECURITY;
 
--- Create a policy (equivalent to SQL Server security predicate):
-CREATE POLICY sales_policy ON sales.sales_order_header
+-- Create a policy (equivalent to SQL Server security predicate).
+-- Here each store sees only its own sales rows, keyed on stor_id:
+CREATE POLICY sales_policy ON sales
     FOR SELECT
-    USING (customer_id = current_setting('app.current_customer_id')::INTEGER);
+    USING (stor_id = current_setting('app.current_store_id'));
 
 -- Set the session variable in application code:
--- SET app.current_customer_id = '42';
--- SELECT * FROM sales.sales_order_header;  -- Returns only customer 42's orders
+-- SET app.current_store_id = '7066';
+-- SELECT * FROM sales;  -- Returns only store 7066's sales
 
 -- Superusers bypass RLS by default; to enforce on table owner:
-ALTER TABLE sales.sales_order_header FORCE ROW LEVEL SECURITY;
+ALTER TABLE sales FORCE ROW LEVEL SECURITY;
 ```
 
 <h3>5.2 – pg_hba.conf: Host-Based Authentication</h3>
@@ -151,36 +150,36 @@ PostgreSQL has three primary backup tools — each with a different scope and us
 
 ```sql
 -- Backup a single database to a custom-format archive (compressed, supports parallel restore):
-pg_dump -U postgres -h localhost -d adventureworks -F c -f adventureworks.dump
+pg_dump -U postgres -h localhost -d pubs -F c -f pubs.dump
 
 -- Backup to plain SQL (readable, portable, slower to restore):
-pg_dump -U postgres -h localhost -d adventureworks -F p -f adventureworks.sql
+pg_dump -U postgres -h localhost -d pubs -F p -f pubs.sql
 
 -- Backup only a specific schema:
-pg_dump -U postgres -h localhost -d adventureworks -n sales -F c -f sales_schema.dump
+pg_dump -U postgres -h localhost -d pubs -n public -F c -f public_schema.dump
 
 -- Backup only specific tables:
-pg_dump -U postgres -h localhost -d adventureworks -t sales.sales_order_header -F c -f orders.dump
+pg_dump -U postgres -h localhost -d pubs -t sales -F c -f sales.dump
 
 -- Parallel dump (faster for large databases, requires directory format):
-pg_dump -U postgres -h localhost -d adventureworks -F d -j 4 -f adventureworks_dir/
+pg_dump -U postgres -h localhost -d pubs -F d -j 4 -f pubs_dir/
 ```
 
 **pg_restore — restoring from custom-format archives:**
 
 ```sql
 -- Restore to a new database:
-createdb -U postgres adventureworks_restored
-pg_restore -U postgres -h localhost -d adventureworks_restored adventureworks.dump
+createdb -U postgres pubs_restored
+pg_restore -U postgres -h localhost -d pubs_restored pubs.dump
 
 -- Restore only specific schemas or tables:
-pg_restore -U postgres -h localhost -d adventureworks_restored -n sales adventureworks.dump
+pg_restore -U postgres -h localhost -d pubs_restored -n public pubs.dump
 
 -- Parallel restore:
-pg_restore -U postgres -h localhost -d adventureworks_restored -j 4 adventureworks_dir/
+pg_restore -U postgres -h localhost -d pubs_restored -j 4 pubs_dir/
 
 -- List contents of a dump file (like looking at a SQL Server backup file):
-pg_restore -l adventureworks.dump
+pg_restore -l pubs.dump
 ```
 
 **pg_basebackup — physical cluster backup:**
@@ -211,52 +210,53 @@ To recover to a point in time: take a base backup, configure `recovery.conf` (or
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
-**Step 1 — Create roles for the AdventureWorks application:**
+**Step 1 — Create roles for the pubs application:**
 
 ```sql
 -- Connect as postgres superuser
-\c adventureworks postgres
+\c pubs postgres
 
 -- Create an application read-only role:
-CREATE ROLE aw_readonly;
-GRANT CONNECT ON DATABASE adventureworks TO aw_readonly;
-GRANT USAGE   ON SCHEMA person, sales, production, humanresources, purchasing TO aw_readonly;
-GRANT SELECT  ON ALL TABLES IN SCHEMA person, sales, production, humanresources, purchasing
-    TO aw_readonly;
+CREATE ROLE pubs_readonly;
+GRANT CONNECT ON DATABASE pubs TO pubs_readonly;
+GRANT USAGE   ON SCHEMA public TO pubs_readonly;
+GRANT SELECT  ON ALL TABLES IN SCHEMA public TO pubs_readonly;
 
 -- Create a reporting user that uses the read-only role:
 CREATE ROLE report_user
     WITH LOGIN PASSWORD 'ReportPass1!';
-GRANT aw_readonly TO report_user;
+GRANT pubs_readonly TO report_user;
 
 -- Create an application write role:
-CREATE ROLE aw_appwrite;
-GRANT CONNECT ON DATABASE adventureworks TO aw_appwrite;
-GRANT USAGE   ON SCHEMA sales, person TO aw_appwrite;
-GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA sales, person TO aw_appwrite;
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA sales, person TO aw_appwrite;
+CREATE ROLE pubs_appwrite;
+GRANT CONNECT ON DATABASE pubs TO pubs_appwrite;
+GRANT USAGE   ON SCHEMA public TO pubs_appwrite;
+GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA public TO pubs_appwrite;
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO pubs_appwrite;
 
 -- Create an application user:
 CREATE ROLE app_user
     WITH LOGIN PASSWORD 'AppPass1!';
-GRANT aw_appwrite TO app_user;
+GRANT pubs_appwrite TO app_user;
 ```
 
 **Step 2 — Test the roles:**
 
 ```sql
 -- Connect as the report user and verify read access:
-\c adventureworks report_user
+\c pubs report_user
 
-SELECT COUNT(*) FROM person.person;         -- Should succeed
-SELECT COUNT(*) FROM sales.sales_order_header; -- Should succeed
+SELECT COUNT(*) FROM authors;     -- Should succeed
+SELECT COUNT(*) FROM sales;       -- Should succeed
 
--- Try to write (should fail with permission denied):
-INSERT INTO person.person (person_type, first_name, last_name)
-VALUES ('IN', 'Test', 'User');              -- Should FAIL
+-- Try to write (should fail with permission denied).
+-- The row below is valid for the authors CHECK constraints, so the ONLY
+-- reason it fails is the missing INSERT privilege:
+INSERT INTO authors (au_id, au_lname, au_fname, phone, contract)
+VALUES ('111-22-3333', 'Test', 'User', 'UNKNOWN', 0);   -- Should FAIL
 
 -- Reconnect as postgres:
-\c adventureworks postgres
+\c pubs postgres
 ```
 
 **Step 3 — Inspect role memberships (equivalent to sys.database_role_members):**
@@ -288,7 +288,7 @@ SELECT grantee,
        table_name,
        privilege_type
 FROM information_schema.role_table_grants
-WHERE table_schema IN ('sales', 'person')
+WHERE table_schema = 'public'
 ORDER BY table_schema, table_name, grantee;
 ```
 
@@ -306,60 +306,60 @@ Open a Command Prompt (not psql) and run:
 REM Create a backup directory
 mkdir C:\PGBackup
 
-REM Backup the adventureworks database in custom format
-pg_dump -U postgres -h localhost -d adventureworks -F c -f C:\PGBackup\adventureworks.dump
+REM Backup the pubs database in custom format
+pg_dump -U postgres -h localhost -d pubs -F c -f C:\PGBackup\pubs.dump
 
 REM Backup in plain SQL format as well:
-pg_dump -U postgres -h localhost -d adventureworks -F p -f C:\PGBackup\adventureworks.sql
+pg_dump -U postgres -h localhost -d pubs -F p -f C:\PGBackup\pubs.sql
 
 REM List the contents of the dump (equivalent to viewing a SQL Server backup set):
-pg_restore -l C:\PGBackup\adventureworks.dump
+pg_restore -l C:\PGBackup\pubs.dump
 ```
 
 **Step 2 — Restore to a new database:**
 
 ```bat
 REM Create the target database
-createdb -U postgres -h localhost adventureworks_test
+createdb -U postgres -h localhost pubs_test
 
 REM Restore the backup
-pg_restore -U postgres -h localhost -d adventureworks_test C:\PGBackup\adventureworks.dump
+pg_restore -U postgres -h localhost -d pubs_test C:\PGBackup\pubs.dump
 ```
 
 Verify the restore in psql:
 
 ```sql
-\c adventureworks_test
-\dt sales.*
-SELECT COUNT(*) FROM sales.sales_order_header;
+\c pubs_test
+\dt public.*
+SELECT COUNT(*) FROM sales;
 ```
 
 **Step 3 — Schema-only backup (equivalent to scripting the database in SSMS):**
 
 ```bat
 REM Schema only — no data:
-pg_dump -U postgres -h localhost -d adventureworks --schema-only -F p -f C:\PGBackup\adventureworks_schema.sql
+pg_dump -U postgres -h localhost -d pubs --schema-only -F p -f C:\PGBackup\pubs_schema.sql
 
 REM Data only — no DDL:
-pg_dump -U postgres -h localhost -d adventureworks --data-only -F p -f C:\PGBackup\adventureworks_data.sql
+pg_dump -U postgres -h localhost -d pubs --data-only -F p -f C:\PGBackup\pubs_data.sql
 ```
 
 **Step 4 — Monitor active connections and block/terminate them (equivalent to kill spid in SQL Server):**
 
 ```sql
-\c adventureworks postgres
+\c pubs postgres
 
 -- View active connections:
 SELECT pid, usename, application_name, state, query_start,
        LEFT(query, 60) AS query
 FROM pg_stat_activity
-WHERE datname = 'adventureworks'
+WHERE datname = 'pubs'
 ORDER BY query_start;
 
 -- Terminate a specific connection (equivalent to KILL spid):
 SELECT pg_terminate_backend(pid)
 FROM pg_stat_activity
-WHERE datname = 'adventureworks'
+WHERE datname = 'pubs'
   AND usename = 'report_user'
   AND state = 'idle';
 
@@ -373,7 +373,7 @@ SELECT pg_cancel_backend(<pid>);
 \c postgres
 
 -- You cannot drop a database while connected to it (same as SQL Server)
-DROP DATABASE adventureworks_test;
+DROP DATABASE pubs_test;
 ```
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
