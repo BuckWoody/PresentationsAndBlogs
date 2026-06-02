@@ -158,6 +158,38 @@ $Evt = @{
     SectionErr   = 1003
 }
 
+# Export BitLocker Recovery Key for a specific drive (e.g., C:)
+# Save it to a secure location
+
+try {
+    $driveLetter = "C:"  # Change if needed
+    $outputPath  = "C:\BitLockerRecoveryKey.txt"  # Change to a secure location
+
+    # Get BitLocker volume info
+    $bitlockerInfo = Get-BitLockerVolume -MountPoint $driveLetter
+
+    if (-not $bitlockerInfo) {
+        Write-Error "No BitLocker information found for $driveLetter."
+        exit
+    }
+
+    # Extract recovery password protector
+    $recoveryProtector = $bitlockerInfo.KeyProtector | Where-Object { $_.KeyProtectorType -eq 'RecoveryPassword' }
+
+    if (-not $recoveryProtector) {
+        Write-Error "No recovery password found for $driveLetter."
+        exit
+    }
+
+    # Export to file
+    $recoveryProtector | Out-File -FilePath $outputPath -Encoding UTF8 -Force
+
+    Write-Host "BitLocker recovery key for $driveLetter has been saved to: $outputPath" -ForegroundColor Green
+}
+catch {
+    Write-Error "An error occurred: $_"
+}
+
 # --- Functions ---
 function Ensure-Admin {
     # Ensures the script is running with admin rights; if not, relaunches as admin 
