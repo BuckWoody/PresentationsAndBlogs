@@ -62,38 +62,37 @@ SELECT jsonb_set('{"name":"Alice","age":30}'::jsonb, '{age}', '31');
 **Working with JSONB columns:**
 
 ```sql
--- Add a JSONB column to the person table:
-ALTER TABLE person.person ADD COLUMN profile JSONB;
+-- Add a JSONB column to the authors table:
+ALTER TABLE authors ADD COLUMN profile JSONB;
 
--- Update with JSON data:
-UPDATE person.person
+-- Update with JSON data (target a single author by primary key):
+UPDATE authors
 SET profile = '{
-    "contact": {"phone": "555-1234", "email": "jsmith@example.com"},
+    "contact": {"phone": "555-1234", "email": "abennet@example.com"},
     "preferences": {"newsletter": true, "theme": "dark"},
-    "orders": [{"year": 2023, "count": 5}, {"year": 2024, "count": 12}]
+    "sales": [{"year": 2023, "count": 5}, {"year": 2024, "count": 12}]
 }'
-WHERE last_name = 'Smith'
-LIMIT 1;
+WHERE au_id = '409-56-7008';
 
 -- Query JSON fields:
-SELECT business_entity_id,
-       first_name,
+SELECT au_id,
+       au_fname,
        profile->>'contact'                             AS contact_json,
        profile #>> '{contact,email}'                  AS email,
        profile #>> '{preferences,theme}'              AS theme,
-       jsonb_array_length(profile->'orders')           AS order_year_count
-FROM person.person
+       jsonb_array_length(profile->'sales')            AS sales_year_count
+FROM authors
 WHERE profile IS NOT NULL;
 
 -- Filter on a JSON field value:
-SELECT * FROM person.person
+SELECT * FROM authors
 WHERE profile @> '{"preferences": {"newsletter": true}}';
 
 -- Create a GIN index for fast containment queries:
-CREATE INDEX idx_person_profile_gin ON person.person USING GIN (profile);
+CREATE INDEX idx_authors_profile_gin ON authors USING GIN (profile);
 
 -- Create a B-tree index on a specific JSON path:
-CREATE INDEX idx_person_email ON person.person ((profile #>> '{contact,email}'));
+CREATE INDEX idx_authors_email ON authors ((profile #>> '{contact,email}'));
 ```
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
@@ -107,6 +106,83 @@ Install an extension with `CREATE EXTENSION`:
 ```sql
 CREATE EXTENSION IF NOT EXISTS <extension_name>;
 ```
+
+**Important — `CREATE EXTENSION` does not download anything.** This is the single biggest surprise for SQL Server professionals. `CREATE EXTENSION` only *registers* an extension whose binary files (a `.dll` plus `.control` and `.sql` script files) are **already present on the server**. If those files are not on disk, you get an error like:
+
+```
+ERROR:  could not open extension control file
+"C:/Program Files/PostgreSQL/16/share/extension/vector.control": No such file or directory
+```
+
+So there are always two phases: **(1) acquire the extension's files onto the server at the OS level, then (2) register it in each database with `CREATE EXTENSION`.** On Windows, how you accomplish phase 1 depends on which of three tiers the extension falls into.
+
+**Tier 1 — Bundled `contrib` extensions (already on disk):**
+
+Many extensions ship with the standard PostgreSQL Windows installer (the EDB build from <https://www.postgresql.org/download/windows/>) as part of the `contrib` modules. These require **no acquisition step at all** — the files are already in `C:\Program Files\PostgreSQL\<version>\share\extension\`. You only run `CREATE EXTENSION`.
+
+This tier includes `pg_stat_statements`, `pg_trgm`, `tablefunc`, `postgres_fdw`, `uuid-ossp`, `pgcrypto`, `hstore`, `ltree`, and `intarray` — every extension used in this module's activities except PostGIS and pgvector. You can confirm what is available on your server with:
+
+```sql
+-- Lists every extension whose files are present and installable:
+SELECT name, default_version, installed_version, comment
+FROM pg_available_extensions
+ORDER BY name;
+```
+
+If an extension appears in this view, phase 1 is already done and you can skip straight to `CREATE EXTENSION`.
+
+**Tier 2 — Stack Builder extensions (downloaded via a GUI):**
+
+**PostGIS** is the headline example. It is not in the base installer, but the EDB Windows installer ships a companion utility called **Stack Builder** (Start menu → *PostgreSQL <version>* → *Application Stack Builder*, or `StackBuilder.exe` in the `bin` folder) that downloads and installs it for you:
+
+1. Launch **Application Stack Builder**.
+2. Select your PostgreSQL installation from the dropdown, then **Next**.
+3. Expand the **Spatial Extensions** category.
+4. Check the latest **PostGIS … Bundle** for your PostgreSQL version, then **Next**.
+5. Accept the defaults; Stack Builder downloads and runs the bundle installer, placing `postgis*.dll` and the control/script files into your PostgreSQL `lib` and `share\extension` folders.
+
+If Stack Builder is blocked by a corporate firewall, you can instead download the standalone PostGIS bundle installer directly from <https://postgis.net/documentation/getting_started/install_windows/> and run it against your existing PostgreSQL installation. **Version-match matters:** a PostGIS bundle built for PostgreSQL 16 will not load into PostgreSQL 17, so always pick the bundle that matches your server's major version. Only after the files are on disk does this work:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS postgis;
+```
+
+**Tier 3 — Build-from-source extensions (compiler required):**
+
+**pgvector** is the example used later in this module. There is no Stack Builder entry and no bundled binary, so on Windows you compile it with the Microsoft Visual C++ toolchain:
+
+1. Install **Visual Studio** (Community edition is fine) with the **"Desktop development with C++"** workload, which provides `nmake` and the MSVC compiler.
+2. Open the **x64 Native Tools Command Prompt for VS** as Administrator (a regular PowerShell or `cmd` window will not have `nmake` on its path).
+3. Point the build at your PostgreSQL installation and compile:
+
+```bat
+REM Tell the build where PostgreSQL lives (adjust the version):
+set "PGROOT=C:\Program Files\PostgreSQL\16"
+
+REM Fetch the source and build it:
+cd %TEMP%
+git clone --branch v0.8.0 https://github.com/pgvector/pgvector.git
+cd pgvector
+nmake /F Makefile.win
+nmake /F Makefile.win install
+```
+
+That `install` step copies `vector.dll` into the PostgreSQL `lib` folder and `vector.control` into `share\extension`. You can verify before registering:
+
+```bat
+dir "C:\Program Files\PostgreSQL\16\lib\vector.dll"
+dir "C:\Program Files\PostgreSQL\16\share\extension\vector.control"
+```
+
+Only then will this succeed:
+
+```sql
+CREATE EXTENSION IF NOT EXISTS vector;
+```
+
+**A note on `pg_cron`:** it appears in the table below for completeness as the conceptual analog of SQL Server Agent, but the upstream project targets Linux and is **not officially supported on Windows**. On a Windows server, use SQL Server Agent's true PostgreSQL counterpart — **pgAgent** (available through Stack Builder under *Add-ons, tools and utilities*) — or the Windows Task Scheduler driving `psql` scripts.
+
+**One more reminder — extensions that also preload a library:** `pg_stat_statements` (and `pg_cron` where supported) are special. Even though their files ship with the installer, they must additionally be listed in `shared_preload_libraries` in `postgresql.conf` and require a service restart *before* `CREATE EXTENSION` will work — see the detailed two-phase procedure in Module 04, section 4.4. Most other extensions (PostGIS, pg_trgm, tablefunc, postgres_fdw, pgvector, etc.) need only the file acquisition above plus `CREATE EXTENSION`, with no preload or restart.
 
 **Commonly used extensions and their SQL Server analogs:**
 
@@ -128,28 +204,30 @@ CREATE EXTENSION IF NOT EXISTS <extension_name>;
 
 **PostGIS — Spatial data (most important extension for enterprise work):**
 
+On Windows, acquire the PostGIS files first via Stack Builder (Tier 2 above) — the `CREATE EXTENSION` below will fail until the bundle is installed and version-matched to your server.
+
 ```sql
 CREATE EXTENSION IF NOT EXISTS postgis;
 
--- Add a geometry column:
-ALTER TABLE person.address ADD COLUMN geolocation GEOMETRY(Point, 4326);
+-- Add a geometry column to the authors table:
+ALTER TABLE authors ADD COLUMN geolocation GEOMETRY(Point, 4326);
 
--- Update with coordinates (latitude/longitude):
-UPDATE person.address
-SET geolocation = ST_SetSRID(ST_MakePoint(-122.3321, 47.6062), 4326)
-WHERE city = 'Seattle';
+-- Update with coordinates (latitude/longitude) for Berkeley, CA authors:
+UPDATE authors
+SET geolocation = ST_SetSRID(ST_MakePoint(-122.2730, 37.8716), 4326)
+WHERE city = 'Berkeley';
 
--- Find addresses within 50km of a point:
-SELECT address_line1, city
-FROM person.address
+-- Find authors within 50km of a point (downtown San Francisco):
+SELECT address, city
+FROM authors
 WHERE ST_DWithin(
     geolocation::geography,
-    ST_SetSRID(ST_MakePoint(-122.3321, 47.6062), 4326)::geography,
+    ST_SetSRID(ST_MakePoint(-122.4194, 37.7749), 4326)::geography,
     50000  -- 50km in meters
 );
 
 -- Create a spatial index:
-CREATE INDEX idx_address_geolocation ON person.address USING GIST (geolocation);
+CREATE INDEX idx_authors_geolocation ON authors USING GIST (geolocation);
 ```
 
 **pg_trgm — Fuzzy text matching (very useful for search-as-you-type):**
@@ -158,42 +236,43 @@ CREATE INDEX idx_address_geolocation ON person.address USING GIST (geolocation);
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 -- Find names similar to a misspelling:
-SELECT last_name,
-       similarity(last_name, 'Smyth') AS sim_score
-FROM person.person
-WHERE similarity(last_name, 'Smyth') > 0.3
+SELECT au_lname,
+       similarity(au_lname, 'Smyth') AS sim_score
+FROM authors
+WHERE similarity(au_lname, 'Smyth') > 0.3
 ORDER BY sim_score DESC;
 
 -- Create a trigram index for fast similarity searches:
-CREATE INDEX idx_person_last_name_trgm
-    ON person.person USING GIN (last_name gin_trgm_ops);
+CREATE INDEX idx_authors_lname_trgm
+    ON authors USING GIN (au_lname gin_trgm_ops);
 
 -- Now LIKE with leading wildcard is fast (impossible to index in SQL Server):
-SELECT * FROM person.person WHERE last_name LIKE '%ith%';
+SELECT * FROM authors WHERE au_lname LIKE '%ee%';
 ```
 
 **pgvector — AI vector embeddings:**
 
 ```sql
--- Install pgvector (requires separate installation: https://github.com/pgvector/pgvector)
+-- On Windows, build and install pgvector first (Tier 3 above: Visual C++ + nmake).
+-- This CREATE EXTENSION fails until vector.dll and vector.control are on disk:
 CREATE EXTENSION IF NOT EXISTS vector;
 
 -- Create a table with a vector column (for AI embeddings):
-CREATE TABLE product_embeddings (
-    product_id  INTEGER PRIMARY KEY,
+CREATE TABLE title_embeddings (
+    title_id    VARCHAR(6) PRIMARY KEY,
     description TEXT,
     embedding   vector(1536)   -- OpenAI Ada-002 dimension
 );
 
--- Find the 5 most similar products to a given embedding:
-SELECT product_id, description,
+-- Find the 5 most similar titles to a given embedding:
+SELECT title_id, description,
        embedding <=> '[0.1, 0.2, ...]'::vector AS distance
-FROM product_embeddings
+FROM title_embeddings
 ORDER BY distance
 LIMIT 5;
 
 -- Create an approximate nearest-neighbor index (HNSW):
-CREATE INDEX ON product_embeddings USING hnsw (embedding vector_cosine_ops);
+CREATE INDEX ON title_embeddings USING hnsw (embedding vector_cosine_ops);
 ```
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
@@ -215,16 +294,17 @@ CREATE USER MAPPING FOR app_user
     OPTIONS (user 'remote_user', password 'remote_password');
 
 -- Create a foreign table (equivalent to a Linked Server table):
-CREATE FOREIGN TABLE remote_orders (
-    order_id   INTEGER,
-    order_date TIMESTAMP,
-    customer_id INTEGER
+CREATE FOREIGN TABLE remote_sales (
+    stor_id   CHAR(4),
+    ord_num   VARCHAR(20),
+    ord_date  TIMESTAMP,
+    title_id  VARCHAR(6)
 )
 SERVER remote_pg_server
-OPTIONS (schema_name 'sales', table_name 'sales_order_header');
+OPTIONS (schema_name 'public', table_name 'sales');
 
 -- Query it just like a local table:
-SELECT COUNT(*) FROM remote_orders WHERE order_date > '2024-01-01';
+SELECT COUNT(*) FROM remote_sales WHERE ord_date > '1994-01-01';
 ```
 
 **Connecting to SQL Server from PostgreSQL using tds_fdw:**
@@ -235,21 +315,21 @@ CREATE EXTENSION tds_fdw;
 
 CREATE SERVER sqlserver_link
     FOREIGN DATA WRAPPER tds_fdw
-    OPTIONS (servername '192.168.1.100', port '1433', database 'AdventureWorks2022');
+    OPTIONS (servername '192.168.1.100', port '1433', database 'pubs');
 
 CREATE USER MAPPING FOR postgres
     SERVER sqlserver_link
     OPTIONS (username 'sa', password 'YourSQLPassword');
 
-CREATE FOREIGN TABLE sqlserver_contacts (
-    business_entity_id INTEGER,
-    first_name         VARCHAR(50),
-    last_name          VARCHAR(50)
+CREATE FOREIGN TABLE sqlserver_authors (
+    au_id     VARCHAR(11),
+    au_fname  VARCHAR(20),
+    au_lname  VARCHAR(40)
 )
 SERVER sqlserver_link
-OPTIONS (query 'SELECT BusinessEntityID, FirstName, LastName FROM Person.Person');
+OPTIONS (query 'SELECT au_id, au_fname, au_lname FROM dbo.authors');
 
-SELECT * FROM sqlserver_contacts LIMIT 10;
+SELECT * FROM sqlserver_authors LIMIT 10;
 ```
 
 **Logical Replication — PostgreSQL equivalent of transactional replication:**
@@ -258,12 +338,12 @@ SELECT * FROM sqlserver_contacts LIMIT 10;
 -- On the publisher (source) server:
 -- Set wal_level = logical in postgresql.conf
 
-CREATE PUBLICATION aw_pub FOR TABLE person.person, sales.sales_order_header;
+CREATE PUBLICATION pubs_pub FOR TABLE authors, sales;
 
 -- On the subscriber (destination) server:
-CREATE SUBSCRIPTION aw_sub
-    CONNECTION 'host=publisher-host port=5432 dbname=adventureworks user=replicator password=ReplicaPass1!'
-    PUBLICATION aw_pub;
+CREATE SUBSCRIPTION pubs_sub
+    CONNECTION 'host=publisher-host port=5432 dbname=pubs user=replicator password=ReplicaPass1!'
+    PUBLICATION pubs_pub;
 ```
 
 This replicates specific tables from one PostgreSQL instance to another, supporting cross-version replication and selective table replication — something SQL Server transactional replication also supports but with more configuration overhead.
@@ -274,90 +354,98 @@ This replicates specific tables from one PostgreSQL instance to another, support
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
-**Step 1 — Load JSONB profile data for multiple persons:**
+**Step 1 — Load JSONB profile data for multiple authors:**
 
 ```sql
-\c adventureworks
+\c pubs
 
--- Update several persons with JSONB profile data:
-WITH updates AS (
-    SELECT business_entity_id,
+-- Update authors with JSONB profile data.
+-- The authors primary key (au_id) is a text value, so we derive an integer
+-- seed with ROW_NUMBER() to drive the synthetic data generation:
+WITH numbered AS (
+    SELECT au_id,
+           ROW_NUMBER() OVER (ORDER BY au_id) AS n
+    FROM authors
+),
+updates AS (
+    SELECT au_id,
            jsonb_build_object(
                'contact', jsonb_build_object(
-                   'email', 'person' || business_entity_id || '@example.com',
-                   'phone', '555-' || LPAD((business_entity_id * 37 % 10000)::TEXT, 4, '0')
+                   'email', 'author' || n || '@example.com',
+                   'phone', '555-' || LPAD((n * 37 % 10000)::TEXT, 4, '0')
                ),
                'preferences', jsonb_build_object(
-                   'newsletter', (business_entity_id % 2 = 0),
-                   'theme', CASE WHEN business_entity_id % 3 = 0 THEN 'dark'
-                                 WHEN business_entity_id % 3 = 1 THEN 'light'
+                   'newsletter', (n % 2 = 0),
+                   'theme', CASE WHEN n % 3 = 0 THEN 'dark'
+                                 WHEN n % 3 = 1 THEN 'light'
                                  ELSE 'auto' END
                ),
                'tags', jsonb_build_array(
-                   CASE (business_entity_id % 3) WHEN 0 THEN 'vip' WHEN 1 THEN 'standard' ELSE 'new' END
+                   CASE (n % 3) WHEN 0 THEN 'vip' WHEN 1 THEN 'standard' ELSE 'new' END
                )
            ) AS profile_data
-    FROM person.person
-    LIMIT 100
+    FROM numbered
 )
-UPDATE person.person p
+UPDATE authors a
 SET    profile = u.profile_data
 FROM   updates u
-WHERE  p.business_entity_id = u.business_entity_id;
+WHERE  a.au_id = u.au_id;
 ```
 
 **Step 2 — Query JSONB fields:**
 
 ```sql
 -- Extract specific fields using JSONB operators:
-SELECT business_entity_id,
-       first_name,
-       last_name,
+SELECT au_id,
+       au_fname,
+       au_lname,
        profile ->> 'preferences'                       AS preferences_json,
        (profile -> 'preferences' ->> 'newsletter')::BOOLEAN AS newsletter,
        profile -> 'preferences' ->> 'theme'            AS theme,
        profile -> 'tags' ->> 0                         AS first_tag
-FROM person.person
+FROM authors
 WHERE profile IS NOT NULL
 LIMIT 10;
 
--- Filter: find all VIP customers who want newsletters:
-SELECT first_name, last_name
-FROM person.person
+-- Filter: find all VIP authors who want newsletters:
+SELECT au_fname, au_lname
+FROM authors
 WHERE profile @> '{"tags": ["vip"]}'::jsonb
   AND profile @> '{"preferences": {"newsletter": true}}'::jsonb;
 
--- Count persons by theme preference:
+-- Count authors by theme preference:
 SELECT profile -> 'preferences' ->> 'theme' AS theme,
-       COUNT(*) AS person_count
-FROM person.person
+       COUNT(*) AS author_count
+FROM authors
 WHERE profile IS NOT NULL
 GROUP BY theme
-ORDER BY person_count DESC;
+ORDER BY author_count DESC;
 ```
 
 **Step 3 — Install and use pg_trgm for fuzzy search:**
+
+`pg_trgm` is a bundled `contrib` extension (Tier 1), so its files already ship with the Windows installer — `CREATE EXTENSION` works with no prior download:
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
 
 -- Find names similar to a misspelling:
-SELECT last_name,
-       ROUND(similarity(last_name, 'Smyth')::NUMERIC, 3) AS score
-FROM person.person
-WHERE similarity(last_name, 'Smyth') > 0.2
+SELECT au_lname,
+       ROUND(similarity(au_lname, 'Smyth')::NUMERIC, 3) AS score
+FROM authors
+WHERE similarity(au_lname, 'Smyth') > 0.2
 ORDER BY score DESC
 LIMIT 10;
 
 -- Create trigram index for LIKE acceleration:
-CREATE INDEX idx_person_last_name_trgm
-    ON person.person USING GIN (last_name gin_trgm_ops);
+CREATE INDEX idx_authors_lname_trgm
+    ON authors USING GIN (au_lname gin_trgm_ops);
 
 -- A LIKE with a leading wildcard — normally impossible to index:
 EXPLAIN ANALYZE
-SELECT first_name, last_name
-FROM person.person
-WHERE last_name LIKE '%son%';   -- Can use GIN trigram index
+SELECT au_fname, au_lname
+FROM authors
+WHERE au_lname LIKE '%ee%';   -- Can use GIN trigram index
 ```
 
 **Step 4 — Use the tablefunc extension for PIVOT-like operations:**
@@ -366,20 +454,21 @@ WHERE last_name LIKE '%son%';   -- Can use GIN trigram index
 -- The PostgreSQL equivalent of SQL Server's PIVOT operator:
 CREATE EXTENSION IF NOT EXISTS tablefunc;
 
--- Count persons by person_type and email_promotion level (pivot):
+-- Count authors by state and contract status (pivot):
 SELECT *
 FROM crosstab(
-    'SELECT person_type, email_promotion, COUNT(*)::INT
-     FROM person.person
-     GROUP BY person_type, email_promotion
+    'SELECT state, contract, COUNT(*)::INT
+     FROM authors
+     WHERE state IS NOT NULL
+     GROUP BY state, contract
      ORDER BY 1, 2',
-    'VALUES (0), (1), (2)'
-) AS ct(person_type TEXT, promo_0 INT, promo_1 INT, promo_2 INT);
+    'VALUES (0), (1)'
+) AS ct(state TEXT, no_contract INT, under_contract INT);
 
 -- SQL Server equivalent:
--- SELECT person_type, [0], [1], [2]
--- FROM (SELECT person_type, email_promotion FROM person.person) src
--- PIVOT (COUNT(email_promotion) FOR email_promotion IN ([0],[1],[2])) pvt;
+-- SELECT state, [0], [1]
+-- FROM (SELECT state, contract FROM dbo.authors) src
+-- PIVOT (COUNT(contract) FOR contract IN ([0],[1])) pvt;
 ```
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
@@ -409,7 +498,7 @@ An open-source tool that can migrate data and schema from SQL Server (via ODBC/F
 
 ```bat
 REM pgLoader command-line migration (Linux/macOS primarily):
-pgloader mssql://sa:password@192.168.1.100/AdventureWorks2022 postgresql://postgres:password@localhost/adventureworks_migrated
+pgloader mssql://sa:password@192.168.1.100/pubs postgresql://postgres:password@localhost/pubs_migrated
 ```
 
 - [pgLoader Documentation](https://pgloader.io/)
@@ -462,32 +551,32 @@ Phase 5 – Cutover
 
 ```sql
 -- SQL Server trigger:
--- CREATE TRIGGER trg_orders_audit
--- ON sales.SalesOrderHeader
+-- CREATE TRIGGER trg_titles_audit
+-- ON dbo.titles
 -- AFTER INSERT, UPDATE
 -- AS BEGIN
 --     INSERT INTO audit_log (table_name, action, row_id)
---     SELECT 'SalesOrderHeader', 'INSERT/UPDATE', i.SalesOrderID
+--     SELECT 'titles', 'INSERT/UPDATE', i.title_id
 --     FROM inserted i;
 -- END;
 
 -- PostgreSQL requires a trigger FUNCTION + a trigger binding:
-CREATE OR REPLACE FUNCTION sales.trg_orders_audit_fn()
+CREATE OR REPLACE FUNCTION trg_titles_audit_fn()
 RETURNS TRIGGER
 LANGUAGE plpgsql
 AS $$
 BEGIN
     INSERT INTO audit_log (table_name, action, row_id, changed_at)
-    VALUES ('sales_order_header', TG_OP, NEW.sales_order_id, NOW());
+    VALUES ('titles', TG_OP, NEW.title_id, NOW());
     RETURN NEW;    -- RETURN OLD for DELETE triggers
 END;
 $$;
 
-CREATE TRIGGER trg_orders_audit
+CREATE TRIGGER trg_titles_audit
     AFTER INSERT OR UPDATE
-    ON sales.sales_order_header
+    ON titles
     FOR EACH ROW
-    EXECUTE FUNCTION sales.trg_orders_audit_fn();
+    EXECUTE FUNCTION trg_titles_audit_fn();
 ```
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 6.2 – Migration Simulation: Convert a SQL Server Object to PostgreSQL</b></p>
@@ -501,55 +590,55 @@ CREATE TABLE audit_log (
     audit_id    INTEGER      GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     table_name  VARCHAR(128) NOT NULL,
     action      VARCHAR(10)  NOT NULL,
-    row_id      INTEGER      NOT NULL,
+    row_id      VARCHAR(6)   NOT NULL,
     changed_at  TIMESTAMP    NOT NULL DEFAULT NOW(),
     changed_by  VARCHAR(100) NOT NULL DEFAULT current_user
 );
 ```
 
-**Step 2 — Create an audit trigger on sales_order_header:**
+**Step 2 — Create an audit trigger on titles:**
 
 ```sql
-CREATE OR REPLACE FUNCTION sales.trg_orders_audit_fn()
+CREATE OR REPLACE FUNCTION trg_titles_audit_fn()
 RETURNS TRIGGER
 LANGUAGE plpgsql
 AS $$
 BEGIN
     IF TG_OP = 'INSERT' OR TG_OP = 'UPDATE' THEN
         INSERT INTO audit_log (table_name, action, row_id)
-        VALUES ('sales_order_header', TG_OP, NEW.sales_order_id);
+        VALUES ('titles', TG_OP, NEW.title_id);
         RETURN NEW;
     ELSIF TG_OP = 'DELETE' THEN
         INSERT INTO audit_log (table_name, action, row_id)
-        VALUES ('sales_order_header', TG_OP, OLD.sales_order_id);
+        VALUES ('titles', TG_OP, OLD.title_id);
         RETURN OLD;
     END IF;
 END;
 $$;
 
-CREATE TRIGGER trg_orders_audit
+CREATE TRIGGER trg_titles_audit
     AFTER INSERT OR UPDATE OR DELETE
-    ON sales.sales_order_header
+    ON titles
     FOR EACH ROW
-    EXECUTE FUNCTION sales.trg_orders_audit_fn();
+    EXECUTE FUNCTION trg_titles_audit_fn();
 ```
 
 **Step 3 — Test the trigger:**
 
 ```sql
--- Insert a new order:
-INSERT INTO sales.sales_order_header
-    (sales_order_number, customer_id, subtotal, tax_amt, freight)
-VALUES ('SO-AUDIT-001', 1, 200.00, 20.00, 10.00);
+-- Insert a new title (publisher 1389 already exists in pubs):
+INSERT INTO titles
+    (title_id, title, type, pub_id, price)
+VALUES ('AUD001', 'Auditing for Fun and Profit', 'business', '1389', 29.99);
 
--- Update an order:
-UPDATE sales.sales_order_header
-SET subtotal = 250.00
-WHERE sales_order_number = 'SO-AUDIT-001';
+-- Update the title:
+UPDATE titles
+SET price = 34.99
+WHERE title_id = 'AUD001';
 
--- Delete an order:
-DELETE FROM sales.sales_order_header
-WHERE sales_order_number = 'SO-AUDIT-001';
+-- Delete the title:
+DELETE FROM titles
+WHERE title_id = 'AUD001';
 
 -- Check the audit log:
 SELECT * FROM audit_log ORDER BY audit_id;
@@ -560,37 +649,39 @@ SELECT * FROM audit_log ORDER BY audit_id;
 ```sql
 -- SQL Server MERGE equivalent in PostgreSQL:
 -- In SQL Server:
--- MERGE INTO sales.currency AS target
--- USING (VALUES ('USD','US Dollar'),('EUR','Euro'),('GBP','British Pound')) AS src(code,name)
--- ON target.currency_code = src.code
--- WHEN MATCHED THEN UPDATE SET name = src.name
--- WHEN NOT MATCHED THEN INSERT (currency_code, name) VALUES (src.code, src.name);
+-- MERGE INTO dbo.publishers AS target
+-- USING (VALUES ('9970','Tech Press Books','Austin'),
+--               ('9971','Data Lake Media','Denver')) AS src(pub_id, pub_name, city)
+-- ON target.pub_id = src.pub_id
+-- WHEN MATCHED THEN UPDATE SET pub_name = src.pub_name, city = src.city
+-- WHEN NOT MATCHED THEN INSERT (pub_id, pub_name, city) VALUES (src.pub_id, src.pub_name, src.city);
 
--- PostgreSQL INSERT ... ON CONFLICT (UPSERT):
-INSERT INTO sales.currency (currency_code, name)
+-- PostgreSQL INSERT ... ON CONFLICT (UPSERT).
+-- Note: pub_id has a CHECK constraint allowing the fixed set or any '99%' value,
+-- so the new publishers below use 99-prefixed IDs. Publisher 1389 already exists,
+-- which exercises the UPDATE-on-match path:
+INSERT INTO publishers (pub_id, pub_name, city, country)
 VALUES
-    ('USD', 'US Dollar'),
-    ('EUR', 'Euro'),
-    ('GBP', 'British Pound'),
-    ('JPY', 'Japanese Yen')
-ON CONFLICT (currency_code)
+    ('9970', 'Tech Press Books', 'Austin',  'USA'),
+    ('9971', 'Data Lake Media',  'Denver',  'USA'),
+    ('1389', 'Algodata Infosystems (updated)', 'Berkeley', 'USA')
+ON CONFLICT (pub_id)
 DO UPDATE SET
-    name          = EXCLUDED.name,
-    modified_date = NOW();
+    pub_name = EXCLUDED.pub_name,
+    city     = EXCLUDED.city;
 
 -- Verify:
-SELECT * FROM sales.currency ORDER BY currency_code;
+SELECT pub_id, pub_name, city, country FROM publishers ORDER BY pub_id;
 ```
 
 The `EXCLUDED` table (equivalent to `source` in SQL Server MERGE) contains the values that would have been inserted.
 
-**Step 5 — Review the full workshop by examining the adventureworks schema:**
+**Step 5 — Review the full workshop by examining the pubs schema:**
 
 ```sql
 -- What we have built today:
-\dt person.*
-\dt sales.*
-\df sales.*     -- List all functions
+\dt public.*
+\df public.*     -- List all functions
 \dT             -- List all custom types/extensions
 
 -- Final schema summary:
