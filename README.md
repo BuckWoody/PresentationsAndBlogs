@@ -1,6 +1,6 @@
 # Presentations, Courses and Blogs from Buck
 
-#### Buck Woody, Applied Data Scientist, Microsoft
+#### Buck Woody
 
 ## System Setup
 
