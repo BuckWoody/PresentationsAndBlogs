@@ -901,10 +901,6 @@ Go around the group:
     <li>Book: Zachary, L.J. (2012). <i>The Mentor's Guide: Facilitating Effective Learning Relationships</i> (2nd ed.) - Complete resource</li>
     <li>Book: Johnson, W.B. (2016). <i>On Being a Mentor: A Guide for Higher Education Faculty</i> (2nd ed.)</li>
     <li>Book: Brown, B. (2018). <i>Dare to Lead</i> - Courage, vulnerability, and difficult conversations</li>
-    <li><a href="https://www.ccl.org/articles/white-papers/blueprint-mentoring-program-toolkit/" target="_blank">CCL: Blueprint for Mentoring Program Toolkit</a></li>
-    <li><a href="https://hbr.org/topic/mentoring" target="_blank">Harvard Business Review: Mentoring Articles</a></li>
-    <li><a href="https://www.mentoringcomplete.com/" target="_blank">International Mentoring Association</a></li>
-    <li><a href="https://www.td.org/insights/mentoring-matters" target="_blank">ATD: Mentoring Resources</a></li>
 </ul>
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
