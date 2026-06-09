@@ -842,12 +842,6 @@ Mentoring relationships often have friendship elements, but the primary purpose 
 - Newport, C. (2016). *Deep Work*
 - Dweck, C. (2006). *Mindset: The New Psychology of Success*
 
-<h3>Online Resources</h3>
-
-- <a href="https://www.ccl.org/articles/leading-effectively-articles/what-is-mentoring/" target="_blank">Center for Creative Leadership: What is Mentoring?</a>
-- <a href="https://hbr.org/topic/mentoring" target="_blank">Harvard Business Review: Mentoring Articles</a>
-- <a href="https://www.forbes.com/career-advice/" target="_blank">Forbes: Career and Mentoring Resources</a>
-
 <h3>Professional Development</h3>
 
 - LinkedIn Learning courses on career development
