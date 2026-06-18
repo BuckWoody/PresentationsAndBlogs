@@ -63,7 +63,7 @@ SQL Server writes all changes to a per-database transaction log (`.ldf` file) be
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 1.1 – Connect with psql and Explore the Cluster Hierarchy</b></p>
 
-In this activity you will use `psql` shich is Postgres's command-line client, to connect to your local cluster and explore the object hierarchy. This mirrors what you would do with `sqlcmd` in SQL Server.
+In this activity you will use `psql` which is Postgres's command-line client, to connect to your local cluster and explore the object hierarchy. This mirrors what you would do with `sqlcmd` in SQL Server.
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
