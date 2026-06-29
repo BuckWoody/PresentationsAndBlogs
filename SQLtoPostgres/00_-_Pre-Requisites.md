@@ -36,11 +36,11 @@ Install the latest version of SSMS for use as a reference tool throughout the wo
 - [Download SSMS](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms)
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 2: Install PostgreSQL on Windows</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 2: Install PostgreSQL 17 on Windows</b></p>
 
 The recommended installer for Windows is the EnterpriseDB (EDB) interactive installer, which includes PostgreSQL, pgAdmin 4, the Stack Builder utility, and command-line tools.
 
-- [Download PostgreSQL for Windows (EDB Installer)](https://www.postgresql.org/download/windows/)
+- [Download PostgreSQL 17 for Windows (EDB Installer)](https://www.postgresql.org/download/windows/)
 - [Official PostgreSQL Windows Installation Guide](https://www.postgresql.org/docs/current/install-windows.html)
 
 During installation:
