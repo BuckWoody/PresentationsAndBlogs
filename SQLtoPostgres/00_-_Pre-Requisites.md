@@ -8,7 +8,7 @@
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/textbubble.png"> <h2>00 – Pre-Requisites</h2>
 
-The **PostgreSQL for the SQL Server Database Professional** workshop is taught using the components listed below. You should install and configure each section *before* attending the workshop — there will not be time to complete setup during class. Note that in this pre-requisite, and in the entire course, you will switch between using various grpahical clients and also various command-line tools. This is inefficient, but will help you get familiarized with multiple tools. 
+The **PostgreSQL for the SQL Server Database Professional** workshop is taught using the components listed below. You should install and configure each section *before* attending the workshop — there will not be time to complete setup during class. Note that in this pre-requisite, and in the entire course, you will switch between using various graphical clients and also various command-line tools. This is inefficient, but will help you get familiarized with multiple tools. 
 
 *All examples in this workshop use Microsoft Windows as the base operating system. PostgreSQL runs natively on Windows, Linux, and macOS; the hands-on exercises will work on any platform, but screenshots and path examples reference Windows and will not work on Linux, Mac or other platforms. Also note that we are standardizing on Postgres 17 to be consistent with instructions and screenshots at the time of course creation.*
 
@@ -84,7 +84,7 @@ $pgBin = "C:\Program Files\PostgreSQL\17\bin"
     "Machine"
 )
 ```
-Exit your terminal and start it back up again. Then connect to Postgres using the Command Line tool `pgsql`:
+Exit your terminal and start it back up again. Then connect to Postgres using the Command Line tool `psql`:
 
 ```bat
 psql --version
