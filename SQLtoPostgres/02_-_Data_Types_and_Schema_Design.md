@@ -60,7 +60,7 @@ The table below maps the most common SQL Server data types to their PostgreSQL e
 
 <h3>2.2 – Auto-Increment Columns: IDENTITY vs. SERIAL vs. GENERATED</h3>
 
-SQL Server's `IDENTITY(seed, increment)` column attribute has three PostgreSQL equivalents. Understanding all three is important because you will encounter all of them in real-world code:
+SQL Server's `IDENTITY(seed, increment)` column attribute has three PostgreSQL equivalents. Understanding all three is important because you will encounter all of them in real-world code. Note, the code below is for review, you will get errors if you run them since the data already exists. These statements are meant to illustrate a concept:
 
 **Option 1: SERIAL / BIGSERIAL (traditional, pre-SQL-standard)**
 
@@ -81,7 +81,7 @@ CREATE TABLE jobs (
 
 `SERIAL` is syntactic sugar that creates a sequence object and sets the column default to `nextval('jobs_job_id_seq')`. The sequence is named `<table>_<column>_seq` automatically.
 
-**Option 2: GENERATED ALWAYS AS IDENTITY (SQL standard, preferred for new code)**
+**Option 2: GENERATED ALWAYS AS IDENTITY (SQL standard, preferred for new code - This is for Postgres)**
 
 ```sql
 CREATE TABLE jobs (
