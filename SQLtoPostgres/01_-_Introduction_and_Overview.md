@@ -321,9 +321,9 @@ This writes slow queries to the Postgres log file in the `log` subdirectory of y
 - [Postgres Documentation — psql Reference](https://www.Postgres.org/docs/current/app-psql.html)
 - [Postgres Documentation — Server Configuration](https://www.Postgres.org/docs/current/runtime-config.html)
 - [pgAdmin 4 Documentation](https://www.pgadmin.org/docs/pgadmin4/latest/)
-- [EDB Blog — SQL Server vs. Postgres Comparison](https://www.enterprisedb.com/blog/microsoft-sql-server-mssql-vs-Postgres-comparison-details-what-differences)
+- [EDB Blog — SQL Server vs. Postgres Comparison](https://www.enterprisedb.com/blog/microsoft-sql-server-mssql-vs-postgresql-comparison-details-what-differences)
 - [SQLpassion — Top 5 Differences Between SQL Server and Postgres](https://www.sqlpassion.at/archive/2024/10/09/the-top-5-key-differences-between-sql-server-and-Postgres/)
-- [Microsoft Learn — Azure Database for Postgres Overview](https://learn.microsoft.com/en-us/azure/Postgres/)
+- [Microsoft Learn — Azure Database for Postgres Overview](https://learn.microsoft.com/en-us/azure/postgresql/overview)
 - [PgBouncer — Connection Pooling for Postgres](https://www.pgbouncer.org/)
 - [DBeaver Community Edition](https://dbeaver.io/)
 
