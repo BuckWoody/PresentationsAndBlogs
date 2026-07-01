@@ -127,7 +127,7 @@ host  all       all   0.0.0.0/0     scram-sha-256
 -- After editing pg_hba.conf, reload without restart:
 SELECT pg_reload_conf();
 
--- Check current connections and their auth method:
+-- Check current connections:
 SELECT usename, client_addr
 FROM pg_stat_activity
 WHERE client_addr IS NOT NULL;
