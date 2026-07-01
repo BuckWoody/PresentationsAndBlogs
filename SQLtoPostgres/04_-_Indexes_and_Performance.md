@@ -273,8 +273,9 @@ WHERE LOWER(au_lname) = 'smith';   -- Uses index
 
 EXPLAIN ANALYZE
 SELECT * FROM authors
-WHERE au_lname ILIKE 'smith';       -- May or may not use index (ILIKE is different)
+WHERE au_lname ILIKE 'smith';       
 ```
+*Note:A standard B-tree expression index on LOWER(au_lname) cannot serve an ILIKE predicate. The planner does not rewrite ILIKE into a LOWER(au_lname) = … form, so this index will not be used. To index ILIKE/pattern matching you need a pg_trgm GIN/GiST index (gin_trgm_ops).*
 
 **Step 7 — Use pgAdmin's graphical EXPLAIN:**
 
