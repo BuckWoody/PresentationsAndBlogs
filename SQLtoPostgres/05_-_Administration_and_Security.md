@@ -24,7 +24,7 @@ SQL Server has a two-layer security model: **Logins** (server-level principals t
 | SQL Server Concept | PostgreSQL Equivalent |
 |---|---|
 | Login | Role with `LOGIN` attribute |
-| User (database) | Role with `LOGIN` granted access to a database via `GRANT CONNECT` |
+| User (database) | Role with `LOGIN` that is granted access to a database via `GRANT CONNECT` |
 | Role (server-level) | Role without `LOGIN` (a group role) |
 | `sysadmin` fixed server role | `SUPERUSER` attribute |
 | `db_owner` fixed database role | Role with `GRANT ALL PRIVILEGES ON DATABASE` |
@@ -128,7 +128,7 @@ host  all       all   0.0.0.0/0     scram-sha-256
 SELECT pg_reload_conf();
 
 -- Check current connections and their auth method:
-SELECT usename, client_addr, auth_method
+SELECT usename, client_addr
 FROM pg_stat_activity
 WHERE client_addr IS NOT NULL;
 ```
@@ -142,7 +142,7 @@ PostgreSQL has three primary backup tools — each with a different scope and us
 | Backup Type | PostgreSQL Tool | SQL Server Equivalent |
 |---|---|---|
 | Logical (single database) | `pg_dump` | `BACKUP DATABASE ... TO DISK` |
-| Logical (entire cluster) | `pg_dumpall` | `BACKUP DATABASE ALL` (plus system DBs) |
+| Logical (entire cluster) | `pg_dumpall` | *No single-statement equivalent — per-database BACKUP DATABASE or a maintenance plan/script* |
 | Physical (entire cluster) | `pg_basebackup` | Full database backup (all databases) |
 | Point-in-time recovery | WAL archiving + `pg_basebackup` | Transaction log backup chain |
 
@@ -189,7 +189,7 @@ pg_restore -l pubs.dump
 pg_basebackup -U postgres -h localhost -D C:\PGBackup\base -P -Xs -R
 ```
 
-Flags: `-D` = destination directory, `-P` = show progress, `-Xs` = include WAL via streaming, `-R` = write `recovery.conf` for standby setup.
+Flags: `-D` = destination directory, `-P` = show progress, `-Xs` = include WAL via streaming, -R = write standby.signal and append connection settings to postgresql.auto.conf (pre-12: recovery.conf).
 
 **Point-In-Time Recovery (PITR):**
 
@@ -385,10 +385,10 @@ PostgreSQL exposes rich monitoring information through a family of `pg_stat_*` c
 | pg_stat View | SQL Server Equivalent |
 |---|---|
 | `pg_stat_activity` | `sys.dm_exec_sessions` + `sys.dm_exec_requests` |
-| `pg_stat_user_tables` | `sys.dm_db_index_usage_stats` + `sys.dm_db_table_space_usage` |
+| `pg_stat_user_tables` | `sys.dm_db_partition_stats` (row/page counts per partition) or `sys.dm_db_file_space_usage` (tempdb-oriented) + `sys.dm_db_partition_stats` |
 | `pg_stat_user_indexes` | `sys.dm_db_index_usage_stats` |
 | `pg_stat_bgwriter` | Performance Monitor: checkpoint/buffer counters |
-| `pg_stat_replication` | `sys.dm_hadr_log_send_queue` / Always On DMVs |
+| `pg_stat_replication` | `sys.dm_hadr_database_replica_states`, exposing `log_send_queue_size` / Always On DMVs" |
 | `pg_locks` | `sys.dm_tran_locks` |
 | `pg_stat_statements` | Query Store / `sys.dm_exec_query_stats` |
 | `pg_statio_user_tables` | Buffer pool hit ratio counters |
