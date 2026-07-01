@@ -45,7 +45,7 @@ The table below is your "Rosetta Stone" for the workshop:
 
 <h3>Process Model vs. Thread Model</h3>
 
-One of the most important architectural differences is how each system handles client connections. SQL Server uses a **thread-based model**: a pool of OS threads managed within a single process (`sqlservr.exe`) handles all client connections. Postgres uses a **process-based model**: each client connection spawns a dedicated OS process (`postgres` backend process). This means that on a system with 500 concurrent connections, Postgres will have approximately 500 OS processes. The process model provides strong isolation — a crashing backend affects only that connection, but it also means connection pooling is far more critical in Postgres than in SQL Server. Tools such as **PgBouncer** or **pgpool-II** are used in production Postgres environments for the same reason that SQL Server's built-in connection pool is less of a concern for SQL Server developers.
+One of the most important architectural differences is how each system handles client connections. SQL Server uses a **thread-based model**: a pool of OS threads managed within a single process (`sqlservr.exe`) handles all client connections. Postgres uses a **process-based model**: each client connection spawns a dedicated OS process (`postgres` backend process). This means that on a system with 500 concurrent connections, Postgres will have approximately 500 OS processes. The process model provides strong isolation — a crashing backend affects only that connection, but it also means connection pooling is far more critical in Postgres than in SQL Server. Tools such as **PgBouncer** or **pgpool-II** …are used in production Postgres environments to provide the connection pooling that is built into SQL Server's client stack.
 
 <h3>MVCC vs. Lock-Based Concurrency</h3>
 
@@ -73,7 +73,7 @@ In this activity you will use `psql` which is Postgres's command-line client, to
 psql -U postgres -h localhost -p 5432
 ```
 
-You will be prompted for the password you set during installation (`postgres` is the default for both super-user and password). A successful connection displays the `postgres=#` prompt.
+You will be prompted for the password you set during installation (`postgres` is the default for both the super-user name and password in many cases). A successful connection displays the `postgres=#` prompt.
 
 **Step 2 — List all databases (equivalent to `SELECT name FROM sys.databases`):**
 
@@ -134,7 +134,7 @@ SELECT current_database(),
 
 **Step 7 — List useful psql meta-commands (there is no SSMS toolbar here!):**
 
-Note: The PSQL_EDITOR system variable sets the editor that pgsql will use to edit files. For instance, to set that from PowerShell in Windows, you would run: 
+Note: The PSQL_EDITOR system variable sets the editor that psql will use to edit files. For instance, to set that from PowerShell in Windows, you would run: 
 
 `$env:PSQL_EDITOR = "notepad.exe"`
 
@@ -230,7 +230,7 @@ The `pg_stat_activity` view is Postgres's equivalent of `sys.dm_exec_sessions` +
 
 SQL Server configuration is managed primarily through SQL Server Configuration Manager and `sp_configure`. In Postgres, configuration lives in two key text files inside the data directory:
 
-**`Postgres.conf`** — The main parameter file. Equivalent to SQL Server's `sp_configure` settings. Important parameters you will encounter during the workshop:
+**`postgresql.conf`** — The main parameter file. Equivalent to SQL Server's `sp_configure` settings. Important parameters you will encounter during the workshop:
 
 ```
 # Memory
@@ -249,7 +249,7 @@ max_wal_size = 1GB
 random_page_cost = 4.0          # Lower for SSD: set to 1.1
 ```
 
-**`pg_hba.conf`** — The Host-Based Authentication file. Controls *who* can connect, from *where*, and *how* they authenticate. There is no direct SQL Server equivalent, so this level of granularity is handled by SQL Server's firewall rules + login security combined. This file is covered in detail in Module 05.
+**`pg_hba.conf`** — The Host-Based Authentication file. Controls *who* can connect, from *where*, and *how* they authenticate. There is no single direct SQL Server equivalent; this granularity is handled in SQL Server by firewall rules and login security combined. This file is covered in detail in Module 05.
 
 You can query and change most parameters at runtime without a restart:
 
@@ -261,10 +261,12 @@ SHOW all;   -- Show all configuration parameters
 -- Change a parameter for the current session
 SET work_mem = '64MB';
 
--- Change a parameter permanently (writes to Postgres.conf, requires reload)
+-- Change a parameter permanently (writes to postgresql.conf, requires reload)
 ALTER SYSTEM SET shared_buffers = '512MB';
 SELECT pg_reload_conf();   -- Reload config without restart (for most parameters)
 ```
+
+*Note: ALTER SYSTEM writes to postgresql.auto.conf, never to the main postgresql.conf. Per the PostgreSQL docs, ALTER SYSTEM "is used for changing server configuration parameters across the entire database cluster" by writing them to postgresql.auto.conf.*
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 1.3 – Explore Postgres Configuration</b></p>
 
