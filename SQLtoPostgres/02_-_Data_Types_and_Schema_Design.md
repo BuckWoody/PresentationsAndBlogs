@@ -33,9 +33,9 @@ The table below maps the most common SQL Server data types to their PostgreSQL e
 | `CHAR(n)` | `CHAR(n)` | Direct equivalent (blank-padded) |
 | `VARCHAR(n)` | `VARCHAR(n)` | Direct equivalent |
 | `VARCHAR(MAX)` | `TEXT` | PostgreSQL TEXT has no length limit |
-| `NCHAR(n)` | `CHAR(n)` | PostgreSQL is always UTF-8; no N-prefix needed |
-| `NVARCHAR(n)` | `VARCHAR(n)` | PostgreSQL is always UTF-8 |
-| `NVARCHAR(MAX)` | `TEXT` | PostgreSQL TEXT is always Unicode |
+| `NCHAR(n)` | `CHAR(n)` | PostgreSQL databases are typically created as UTF-8 (encoding is chosen per database), so no N-prefix is needed. |
+| `NVARCHAR(n)` | `VARCHAR(n)` | PostgreSQL databases are typically created as UTF-8 (encoding is chosen per database), so no N-prefix is needed.|
+| `NVARCHAR(MAX)` | `TEXT` | PostgreSQL databases are typically created as UTF-8 (encoding is chosen per database), so no N-prefix is needed. |
 | `TEXT` (deprecated in SS) | `TEXT` | Same name, similar behavior |
 | `DATETIME` | `TIMESTAMP` | PostgreSQL TIMESTAMP has microsecond precision |
 | `DATETIME2(7)` | `TIMESTAMP(6)` | 6 decimal places = microseconds (max in PG) |
@@ -114,7 +114,7 @@ SQL Server also supports `CREATE SEQUENCE` (since SQL Server 2012) — the synta
 
 **Default schema:** In SQL Server, the default schema for a user is typically `dbo`. In PostgreSQL, the default schema is `public`. This difference matters in connection strings, ORMs, and migration scripts.
 
-**Quoting identifiers:** PostgreSQL treats unquoted identifiers as **lowercase**. This is the opposite of SQL Server, which is case-insensitive. If you create a table as `CREATE TABLE "Authors"`, you must always quote it: `SELECT * FROM "Authors"`. Best practice: use all-lowercase, snake_case names in PostgreSQL and avoid quoted identifiers.
+**Quoting identifiers:** PostgreSQL folds unquoted identifiers to lowercase (Authors becomes authors); SQL Server preserves the original case and compares case-insensitively by default.
 
 **Computed columns:** SQL Server supports `AS (expression) PERSISTED` computed columns. PostgreSQL supports generated columns using a similar syntax:
 
@@ -196,7 +196,7 @@ CREATE TABLE authors (
 ```
 
 Note the key differences:
-- `[varchar]` / `[char]` → `VARCHAR` / `CHAR` (PostgreSQL is always Unicode — no N-prefix needed)
+- `[varchar]` / `[char]` → `VARCHAR` / `CHAR` (PostgreSQL databases are typically created as UTF-8 (encoding is chosen per database), so no N-prefix is needed.)
 - `[bit]` → `SMALLINT` (pubs uses 0/1 convention; alternatively use `BOOLEAN`)
 - Square bracket quoting → no quoting needed (use snake_case)
 - `CHECK` constraints using regex (`~`) replace the original T-SQL constraints
