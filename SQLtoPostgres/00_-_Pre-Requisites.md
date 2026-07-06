@@ -24,7 +24,7 @@ SQL Server 2022 Developer Edition is free for development and testing. You will 
 
 Follow the official Microsoft instructions to download and install SQL Server 2022 Developer Edition on Windows:
 
-- [Download SQL Server 2022 Developer Edition](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
+- [Download SQL Server 2022 Developer Edition](https://download.microsoft.com/download/c/c/9/cc9c6797-383c-4b24-8920-dc057c1de9d3/SQL2022-SSEI-Dev.exe)
 - [SQL Server Installation Guide (Windows)](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16)
 
 During installation, select the **Database Engine Services** feature at minimum. Accept the default instance name (`MSSQLSERVER`) or note the instance name you choose — you will reference it throughout the workshop.
