@@ -360,10 +360,10 @@ sudo systemctl restart postgresql
 On Windows, restart the PostgreSQL service from Services (services.msc) or:
 
 ```cmd
-net stop postgresql-x64-16 && net start postgresql-x64-16
+net stop postgresql-x64-17 && net start postgresql-x64-17
 ```
 
-(Replace `postgresql-x64-16` with your installed service name.)
+(Replace `postgresql-x64-17` with your installed service name.)
 
 Verify the library loaded after restart:
 
