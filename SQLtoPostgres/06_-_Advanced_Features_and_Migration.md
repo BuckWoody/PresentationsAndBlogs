@@ -504,11 +504,11 @@ pgloader mssql://sa:password@192.168.1.100/pubs postgresql://postgres:password@l
 - [pgLoader Documentation](https://pgloader.io/)
 - [pgLoader SQL Server to PostgreSQL](https://pgloader.readthedocs.io/en/latest/ref/mssql.html)
 
-**4. Microsoft SSMA (SQL Server Migration Assistant)**
+**4. Microsoft Database Migration Service**
 
 Microsoft's own free tool for migrating from SQL Server to Azure Database for PostgreSQL.
 
-- [SSMA for PostgreSQL](https://learn.microsoft.com/en-us/sql/ssma/postgresql/sql-server-migration-assistant-for-postgresql-sybasetosql)
+- [Database Migration Assistant for PostgreSQL](https://azure.microsoft.com/en-us/products/database-migration)
 
 **Migration checklist for a SQL Server-to-PostgreSQL migration:**
 
@@ -530,7 +530,7 @@ Phase 2 – Schema Migration
 
 Phase 3 – Data Migration
   ☐ Disable FK constraints and indexes for bulk load
-  ☐ Use COPY or pg_dump from SQL Server export for initial load
+  ☐ Use COPY (from a bcp/CSV export of SQL Server), or pgLoader, for the initial load
   ☐ Re-enable constraints, run ANALYZE
   ☐ Validate row counts and key samples
   ☐ Reset sequences to max(id) + 1
@@ -725,8 +725,7 @@ ORDER BY table_schema, table_name;
 - [AWS Schema Conversion Tool](https://docs.aws.amazon.com/SchemaConversionTool/latest/userguide/CHAP_UserInterface.html)
 - [EDB Migration Portal](https://www.enterprisedb.com/products/migration-portal)
 - [pgLoader](https://pgloader.io/)
-- [Microsoft SSMA for PostgreSQL](https://learn.microsoft.com/en-us/sql/ssma/postgresql/sql-server-migration-assistant-for-postgresql-sybasetosql)
-- [Azure Database Migration Service](https://learn.microsoft.com/en-us/azure/dms/tutorial-sql-server-to-azure-postgresql)
+- [Microsoft Azure Database Migration Service](https://azure.microsoft.com/en-us/products/database-migration)
 
 **General PostgreSQL for SQL Server Professionals:**
 - [Use The Index, Luke — SQL Performance for PostgreSQL](https://use-the-index-luke.com/)
