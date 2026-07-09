@@ -105,7 +105,7 @@ CREATE SEQUENCE job_id_seq START WITH 1 INCREMENT BY 1;
 
 SELECT nextval('job_id_seq');      -- Get next value
 SELECT currval('job_id_seq');      -- Current value in this session
-SELECT setval('job_id_seq', 14);   -- Reset (e.g., after a bulk load)
+SELECT setval('jobs_id_seq', 14);   -- Reset (e.g., after a bulk load)
 ```
 
 SQL Server also supports `CREATE SEQUENCE` (since SQL Server 2012) — the syntax is nearly identical.
