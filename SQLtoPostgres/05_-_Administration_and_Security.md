@@ -436,7 +436,7 @@ ORDER BY l.pid;
 - [PostgreSQL Documentation — Continuous Archiving and PITR](https://www.postgresql.org/docs/current/continuous-archiving.html)
 - [PostgreSQL Documentation — Monitoring Database Activity](https://www.postgresql.org/docs/current/monitoring-stats.html)
 - [PostgreSQL Documentation — Routine Vacuuming](https://www.postgresql.org/docs/current/routine-vacuuming.html)
-- [Crunchy Data — PostgreSQL Security Best Practices](https://www.crunchydata.com/blog/postgres-security-best-practices)
+- [PostgreSQL Security Best Practices](https://www.percona.com/blog/postgresql-database-security-best-practices/)
 - [pgBackRest — Advanced PostgreSQL Backup Tool](https://pgbackrest.org/)
 - [Barman — Backup and Recovery Manager for PostgreSQL](https://pgbarman.org/)
 
