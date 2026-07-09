@@ -48,7 +48,7 @@ CREATE ROLE app_user
     NOSUPERUSER
     NOCREATEDB
     NOCREATEROLE
-    VALID UNTIL '2025-12-31';    -- No SQL Server equivalent for logins; use for accounts
+    VALID UNTIL '2037-12-31';    -- No SQL Server equivalent for logins; use for accounts
 
 -- PostgreSQL Step 2: Grant connection to the database:
 GRANT CONNECT ON DATABASE pubs TO app_user;
