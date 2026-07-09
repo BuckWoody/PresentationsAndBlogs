@@ -91,6 +91,8 @@ CREATE INDEX idx_titles_fts ON titles USING GIN (search_vector);
 
 SQL Server builds indexes with locks that can block concurrent DML (depending on edition). PostgreSQL has `CREATE INDEX CONCURRENTLY`, which builds the index without blocking reads or writes (at the cost of taking longer and using more resources):
 
+> Note: Each of the following steps should be run individually. If you run UPDATE and SELECT from `pg_stat_user_tables` as a batch, the dead rows may not show up in the results. It's best-practice to run the UPDATE first, then separately run the stats query.
+
 ```sql
 -- Build index without blocking production traffic:
 CREATE INDEX CONCURRENTLY idx_employee_pub_id
