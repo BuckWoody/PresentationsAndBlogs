@@ -281,7 +281,7 @@ WHERE au_lname ILIKE 'smith';
 
 **Step 7 — Use pgAdmin's graphical EXPLAIN:**
 
-In pgAdmin Query Tool, paste the query from Step 3 and click the **Explain Analyze** button (the lightning bolt with magnifying glass). Switch between the **Graphical**, **Table**, and **Statistics** tabs. This is the closest experience to the SSMS graphical execution plan.
+In pgAdmin Query Tool, paste the query from Step 3 and click the **Explain Analyze** button (depending on version, may like a bar graph next to an "E" block.). Switch between the **Graphical**, **Table**, and **Statistics** tabs. This is the closest experience to the SSMS graphical execution plan.
 
 ```sql
 -- Cleanup: remove synthetic rows and restore the original pubs index
