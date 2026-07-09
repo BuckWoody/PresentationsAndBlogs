@@ -354,11 +354,6 @@ SELECT au_fname, au_lname, contract
 FROM authors
 WHERE contract = 0;    -- Not under contract
 
--- If you prefer native PostgreSQL BOOLEAN semantics, you can cast:
-SELECT au_fname, au_lname, contract::boolean
-FROM authors
-WHERE contract::boolean = TRUE;
-
 -- In SQL Server you would write: WHERE contract = 1
 -- PostgreSQL BOOLEAN short form (WHERE is_active) has no SQL Server equivalent,
 -- but it is available if you convert the column type to BOOLEAN.
