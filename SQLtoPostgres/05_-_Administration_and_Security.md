@@ -234,9 +234,17 @@ GRANT USAGE   ON SCHEMA public TO pubs_appwrite;
 GRANT SELECT, INSERT, UPDATE ON ALL TABLES IN SCHEMA public TO pubs_appwrite;
 GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO pubs_appwrite;
 
--- Create an application user:
-CREATE ROLE app_user
-    WITH LOGIN PASSWORD 'AppPass1!';
+-- Create an application user if it does not already exist:
+
+DO $$
+BEGIN
+   IF NOT EXISTS (SELECT FROM pg_catalog.pg_roles WHERE rolname = 'app_user') THEN
+      CREATE ROLE app_user
+      WITH LOGIN PASSWORD 'AppPass1!';
+   END IF;
+END
+$$;
+
 GRANT pubs_appwrite TO app_user;
 ```
 
