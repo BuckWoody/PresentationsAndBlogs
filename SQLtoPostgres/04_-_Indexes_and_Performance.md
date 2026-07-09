@@ -344,6 +344,7 @@ Open that file in a text editor and add or update this line:
 ```
 shared_preload_libraries = 'pg_stat_statements'
 ```
+> Note: Un-comment the parameter by removing the "#" sign.
 
 If `shared_preload_libraries` already exists with other values, append to it:
 
