@@ -147,7 +147,7 @@ If Stack Builder is blocked by a corporate firewall, you can instead download th
 CREATE EXTENSION IF NOT EXISTS postgis;
 ```
 
-**Tier 3 — Build-from-source extensions (compiler required):**
+**Tier 3 — Build-from-source extensions (compiler required - optional):**
 
 **pgvector** is the example used later in this module. There is no Stack Builder entry and no bundled binary, so on Windows you compile it with the Microsoft Visual C++ toolchain:
 
