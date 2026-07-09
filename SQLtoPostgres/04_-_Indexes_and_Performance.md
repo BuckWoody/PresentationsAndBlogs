@@ -482,7 +482,7 @@ Indexes with zero `idx_scan` are candidates for removal (just like SQL Server's 
 - [Use The Index, Luke — PostgreSQL Index Guide](https://use-the-index-luke.com/)
 - [Explain.dalibo.com — Graphical EXPLAIN ANALYZE Visualizer](https://explain.dalibo.com/)
 - [pgMustard — EXPLAIN ANALYZE Advisor](https://www.pgmustard.com/)
-- [Percona — PostgreSQL Index Bloat and Vacuum](https://www.percona.com/blog/postgresql-bloat-autovacuum-and-vacuum/)
+- [Percona — PostgreSQL Index Bloat and Vacuum](https://www.percona.com/blog/postgresql-vacuuming-to-optimize-database-performance-and-reclaim-space/)
 - [Microsoft Learn — SQL Server Index Architecture](https://learn.microsoft.com/en-us/sql/relational-databases/indexes/clustered-and-nonclustered-indexes-described)
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
