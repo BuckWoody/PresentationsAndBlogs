@@ -111,7 +111,7 @@ CREATE EXTENSION IF NOT EXISTS <extension_name>;
 
 ```
 ERROR:  could not open extension control file
-"C:/Program Files/PostgreSQL/16/share/extension/vector.control": No such file or directory
+"C:/Program Files/PostgreSQL/17/share/extension/vector.control": No such file or directory
 ```
 
 So there are always two phases: **(1) acquire the extension's files onto the server at the OS level, then (2) register it in each database with `CREATE EXTENSION`.** On Windows, how you accomplish phase 1 depends on which of three tiers the extension falls into.
@@ -141,7 +141,7 @@ If an extension appears in this view, phase 1 is already done and you can skip s
 4. Check the latest **PostGIS … Bundle** for your PostgreSQL version, then **Next**.
 5. Accept the defaults; Stack Builder downloads and runs the bundle installer, placing `postgis*.dll` and the control/script files into your PostgreSQL `lib` and `share\extension` folders.
 
-If Stack Builder is blocked by a corporate firewall, you can instead download the standalone PostGIS bundle installer directly from <https://postgis.net/documentation/getting_started/install_windows/> and run it against your existing PostgreSQL installation. **Version-match matters:** a PostGIS bundle built for PostgreSQL 16 will not load into PostgreSQL 17, so always pick the bundle that matches your server's major version. Only after the files are on disk does this work:
+If Stack Builder is blocked by a corporate firewall, you can instead download the standalone PostGIS bundle installer directly from <https://postgis.net/documentation/getting_started/install_windows/> and run it against your existing PostgreSQL installation. **Version-match matters:** a PostGIS bundle built for PostgreSQL 17 will not load into PostgreSQL 17, so always pick the bundle that matches your server's major version. Only after the files are on disk does this work:
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS postgis;
@@ -157,7 +157,7 @@ CREATE EXTENSION IF NOT EXISTS postgis;
 
 ```bat
 REM Tell the build where PostgreSQL lives (adjust the version):
-set "PGROOT=C:\Program Files\PostgreSQL\16"
+set "PGROOT=C:\Program Files\PostgreSQL\17"
 
 REM Fetch the source and build it:
 cd %TEMP%
@@ -170,8 +170,8 @@ nmake /F Makefile.win install
 That `install` step copies `vector.dll` into the PostgreSQL `lib` folder and `vector.control` into `share\extension`. You can verify before registering:
 
 ```bat
-dir "C:\Program Files\PostgreSQL\16\lib\vector.dll"
-dir "C:\Program Files\PostgreSQL\16\share\extension\vector.control"
+dir "C:\Program Files\PostgreSQL\17\lib\vector.dll"
+dir "C:\Program Files\PostgreSQL\17\share\extension\vector.control"
 ```
 
 Only then will this succeed:
