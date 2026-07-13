@@ -75,6 +75,8 @@ winget install --id=DBeaver.DBeaver.Community -e
 
 Open a PowerShell window. Add the PostgreSQL `bin` directory to your PATH (e.g., `C:\Program Files\PostgreSQL\17\bin`)
 
+> Note: throughout the course, whenever PowerShell is mentioned, you must use a PowerShell command window - ISE will not work, and is currently not being updated from Microsoft.
+
 ```powershell
 # Run in an elevated PowerShell session
 $pgBin = "C:\Program Files\PostgreSQL\17\bin"
