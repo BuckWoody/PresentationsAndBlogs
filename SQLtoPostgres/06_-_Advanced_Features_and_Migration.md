@@ -265,10 +265,10 @@ CREATE TABLE title_embeddings (
 );
 
 -- Find the 5 most similar titles to a given embedding:
-SELECT title_id, description,
-       embedding <=> '[0.1, 0.2, ...]'::vector AS distance
-FROM title_embeddings
-ORDER BY distance
+SELECT title_id, description,         
+       embedding <=> '[0.1, 0.2, 0.3]'::vector AS distance  
+FROM title_embeddings  
+ORDER BY distance  
 LIMIT 5;
 
 -- Create an approximate nearest-neighbor index (HNSW):
