@@ -86,15 +86,14 @@ $pgBin = "C:\Program Files\PostgreSQL\17\bin"
     "Machine"
 )
 ```
-Exit your terminal and start it back up again. Then connect to Postgres using the Command Line tool `psql`:
+Open the command line again and run:
 
-```bat
+```powershell
 psql --version
 pg_dump --version
 psql -U postgres -h localhost
-```
-
 You will be prompted for the password you set during installation (`postgres` if you did the winget install). If you see the `postgres=#` prompt, PostgreSQL is running correctly. Type `\q` to exit.
+```
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 5 – Verify pgAdmin 4 Launches</b></p>
 
