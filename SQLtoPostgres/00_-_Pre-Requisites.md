@@ -132,6 +132,8 @@ Open DBeaver from your Start menu, and create two database connections — one f
 - Press CTRL-V to paste the pubs database script from above.
 - Run the query using the third small red arrow at the left side the query window - hover over it so that it says "Run Script" before you click it.
 
+>  DBeaver has a `Run` and a `Run Script` icon. The former only runs a highlighted line, the latter runs all statements.
+
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>(Optional) Set Up Azure Database for PostgreSQL Flexible Server</b></p>
