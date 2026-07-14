@@ -122,7 +122,7 @@ Open DBeaver from your Start menu, and create two database connections — one f
 - *SQL Server connection string example:* `jdbc:sqlserver://localhost:1433;databaseName=pubs`
 - *PostgreSQL connection string example:* `jdbc:postgresql://localhost:5432/postgres`
 
-> Note: You may need to click on the "show all databases" checkbox before you add the `pubs` database
+> Note: You may need to click on the "show all databases" checkbox before you add the `pubs` database. Similar to SQL Server's Management Studio (SSMS), you may need to right-click a tree object and click `Refresh` for a given object to appear after creation.
 
 - [Navigate to this resource](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/SQLtoPostgres/pubs-pgsql.md) and copy the script into memory.
 - In DBeaver, right-click the Server name and select *Create Database*
