@@ -148,6 +148,8 @@ PostgreSQL has three primary backup tools — each with a different scope and us
 
 **pg_dump — the everyday backup tool:**
 
+You can see the use of this utility at the Command-Line (PowerShell):
+
 ```sql
 -- Backup a single database to a custom-format archive (compressed, supports parallel restore):
 pg_dump -U postgres -h localhost -d pubs -F c -f pubs.dump
