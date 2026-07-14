@@ -299,6 +299,8 @@ CREATE INDEX aunmind ON authors (au_lname, au_fname);
 
 **Autovacuum** is PostgreSQL's background maintenance process. Because MVCC keeps dead row versions on disk, autovacuum reclaims that space and updates statistics. It runs automatically in the background and you should normally not need to disable it — but you must understand it to avoid table bloat and statistics drift.
 
+> Note: These statements should be run individually as a separate block.
+
 Key autovacuum parameters (in `postgresql.conf`):
 
 ```sql
@@ -315,13 +317,19 @@ ORDER BY name;
 -- Reclaim dead space (like shrink/reorganize — but not to shrink the file):
 VACUUM authors;
 VACUUM VERBOSE authors;    -- Shows detailed output
+```
 
+```sql
 -- Update statistics (equivalent to UPDATE STATISTICS in SQL Server):
 ANALYZE authors;
+```
 
+```sql
 -- Both at once:
 VACUUM ANALYZE authors;
+```
 
+```sql
 -- Full vacuum — reclaims space to OS, rewrites the table, exclusive lock required:
 VACUUM FULL authors;       -- Use sparingly; like DBCC SHRINKFILE but safer
 ```
