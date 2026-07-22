@@ -103,8 +103,9 @@ Open the command line again and run:
 psql --version
 pg_dump --version
 psql -U postgres -h localhost
-You will be prompted for the password you set during installation (`postgres` if you did the winget install). If you see the `postgres=#` prompt, PostgreSQL is running correctly. Type `\q` to exit.
 ```
+
+You will be prompted for the password you set during installation (`postgres` if you did the winget install). If you see the `postgres=#` prompt, PostgreSQL is running correctly. Type `\q` to exit.
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 5 – Verify pgAdmin 4 Launches</b></p>
 
