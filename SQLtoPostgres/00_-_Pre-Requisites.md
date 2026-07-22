@@ -12,11 +12,33 @@ The **PostgreSQL for the SQL Server Database Professional** workshop is taught u
 
 *All examples in this workshop use Microsoft Windows as the base operating system. PostgreSQL runs natively on Windows, Linux, and macOS; the hands-on exercises will work on any platform, but screenshots and path examples reference Windows and will not work on Linux, Mac or other platforms. Also note that we are standardizing on Postgres 17 to be consistent with instructions and screenshots at the time of course creation.*
 
-(**Note:** You will find a series of winget commands below if you want a command-line scripted installation)
+(**Note:** You will find a series of graphical commands below if you want a GUI installation)
 
+## Option 1: Use the Windows Package Manager (winget) for a complete course installation
+
+You can use the Windows Package Manager called [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) to install all the software required for this course. 
+
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 1a: Install SQL Server 2022 Developer Edition (Windows), PostgresQL version 17, and DBeaver Community Edition using winget</b></p>
+
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 1 – Use PowerShell to install all course software</b></p>
+
+> Note: throughout the course, whenever PowerShell is mentioned, you must use a PowerShell command window - ISE will not work, and is currently not being updated from Microsoft.
+
+Open PowerShell (elavated) and run the following commands:
+
+```
+winget install Microsoft.SQLServer.2022.Developer
+winget install --id=Microsoft.SQLServerManagementStudio -e
+winget install --id=PostgreSQL.PostgreSQL.17 -e
+winget install --id=DBeaver.DBeaver.Community -e
+```
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 1: Install SQL Server 2022 Developer Edition (Windows)</b></p>
+## Option 2: Use Graphical tools for course software installation
+
+Use this option *only* if you did not choose the winget commands in Option 1. You do *not* need to run both options.  
+
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 1b: Install SQL Server 2022 Developer Edition (Windows)</b></p>
 
 SQL Server 2022 Developer Edition is free for development and testing. You will use it as the reference platform for side-by-side comparisons throughout the workshop.
 
@@ -36,7 +58,7 @@ Install the latest version of SSMS for use as a reference tool throughout the wo
 - [Download SSMS](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms)
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 2: Install PostgreSQL 17 on Windows</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 2b: Install PostgreSQL 17 on Windows</b></p>
 
 The recommended installer for Windows is the EnterpriseDB (EDB) interactive installer, which includes PostgreSQL, pgAdmin 4, the Stack Builder utility, and command-line tools.
 
@@ -50,7 +72,7 @@ During installation:
 - Accept the default port **5432**.
 - Accept the default locale.
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 3: Install DBeaver Community Edition</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 3b: Install DBeaver Community Edition</b></p>
 
 DBeaver Community is a free, cross-database IDE that supports both SQL Server and PostgreSQL. During the workshop you will use it to compare the two platforms side by side.
 
@@ -58,24 +80,13 @@ DBeaver Community is a free, cross-database IDE that supports both SQL Server an
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
-**WINGET Alternative Installation:**
-You can also use the Windows Package Manager called [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) to install software. The commands you can use instead of Activities 1-3 are:
-```
-winget install Microsoft.SQLServer.2022.Developer
-winget install --id=Microsoft.SQLServerManagementStudio -e
-winget install --id=PostgreSQL.PostgreSQL.17 -e
-winget install --id=DBeaver.DBeaver.Community -e
-```
-<p style="border-bottom: 1px solid lightgrey;"></p>
-
+## Regardless of Option 1 or 2, perform the following steps:
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 4 – Verify the Installation with psql</b></p>
 
 *Note: Unlike SQL Server, a PostgreSQL installation is called a **cluster** and runs as a single Windows Service (`postgresql-x64-17` or similar). A single cluster can host many databases.*
 
 Open a PowerShell window. Add the PostgreSQL `bin` directory to your PATH (e.g., `C:\Program Files\PostgreSQL\17\bin`)
-
-> Note: throughout the course, whenever PowerShell is mentioned, you must use a PowerShell command window - ISE will not work, and is currently not being updated from Microsoft.
 
 ```powershell
 # Run in an elevated PowerShell session
