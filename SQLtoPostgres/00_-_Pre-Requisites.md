@@ -26,7 +26,7 @@ You can use the Windows Package Manager called [winget](https://learn.microsoft.
 
 Open PowerShell (elavated) and run the following commands:
 
-```
+```powershell
 winget install Microsoft.SQLServer.2022.Developer
 winget install --id=Microsoft.SQLServerManagementStudio -e
 winget install --id=PostgreSQL.PostgreSQL.17 -e
