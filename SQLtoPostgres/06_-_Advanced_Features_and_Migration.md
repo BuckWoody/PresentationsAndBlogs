@@ -734,6 +734,7 @@ ORDER BY table_schema, table_name;
 - [Citus Data Blog](https://www.citusdata.com/blog/)
 - [depesz Blog — Postgresql DBA Resources](https://www.depesz.com/)
 - [Microsoft Resource Center for Postgres](https://techcommunity.microsoft.com/blog/adforpostgresql/introducing-postgresql-hub-for-azure-developers/4522897)
+- [A fun, interactive guide to the PostgreSQL engine. You can zoom in, fly around, and click objects to see the documentation for it.](https://nikolays.github.io/PGSimCity/)
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
