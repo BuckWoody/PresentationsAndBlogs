@@ -93,6 +93,11 @@ You should see the default databases: `postgres`, `template0`, and `template1`. 
 
 The prompt changes to `pubs=#`.
 
+> It's a common practice when using the psql prompt to edit it to show the current conection context, including the database name. After you enter the psql shell, you can run the following command to do that: 
+
+`\set PROMPT1 '%n@%M:%/%R%# ' `
+
+
 **Step 4 — List all schemas (equivalent to `SELECT * FROM sys.schemas`):**
 
 ```sql
