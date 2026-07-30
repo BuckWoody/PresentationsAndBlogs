@@ -10,7 +10,12 @@
 
 The **PostgreSQL for the SQL Server Database Professional** workshop is taught using the components listed below. You should install and configure each section *before* attending the workshop — there will not be time to complete setup during class. Note that in this pre-requisite, and in the entire course, you will switch between using various graphical clients and also various command-line tools. This is inefficient, but will help you get familiarized with multiple tools. 
 
-*All examples in this workshop use Microsoft Windows as the base operating system. PostgreSQL runs natively on Windows, Linux, and macOS; the hands-on exercises will work on any platform, but screenshots and path examples reference Windows and will not work on Linux, Mac or other platforms. Also note that we are standardizing on Postgres 17 to be consistent with instructions and screenshots at the time of course creation.*
+*All examples in this workshop use Microsoft Windows, Linux, Containers or Cloud Platforms as the base operating system. PostgreSQL runs natively on Windows, Linux, and macOS; the hands-on exercises will work on any platform, but screenshots and path examples my reference Windows . Also note that we are standardizing on Postgres 17 to be consistent with instructions and screenshots at the time of course creation.*
+
+- Installing the Course Systems on [Linux Pre-requisites are here](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/SQLtoPostgres/00_-_Pre-Requisites-Linux.md). 
+- Installing the Course Systems on [Containers Pre-requisites are here](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/SQLtoPostgres/00_-_Pre-Requisites-Container.md). 
+- Installing the Course Systems on [Cloud Platforms Pre-requisites are here](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/SQLtoPostgres/00_-_Pre-Requisites-Cloud.md). 
+
 
 (**Note:** You will find a series of graphical commands below if you want a GUI installation)
 
@@ -145,30 +150,6 @@ Open DBeaver from your Start menu, and create two database connections — one f
 - Run the query using the third small red arrow at the left side the query window - hover over it so that it says "Run Script" before you click it.
 
 >  DBeaver has a `Run` and a `Run Script` icon. The former only runs a highlighted line, the latter runs all statements.
-
-<p style="border-bottom: 1px solid lightgrey;"></p>
-
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>(Optional) Set Up Azure Database for PostgreSQL Flexible Server</b></p>
-
-Module 06 demonstrates cloud-managed PostgreSQL. If you want to follow along with the Azure sections, create a Flexible Server instance before the workshop.
-
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 1 – Create an Azure Account</b></p>
-
-You need a Microsoft Azure account. Use one of the following options:
-
-- **Free Account (12 months + $200 credit):** [https://azure.microsoft.com/en-us/free/](https://azure.microsoft.com/en-us/free/)
-- **MSDN/Visual Studio Subscriber Credit:** [https://azure.microsoft.com/en-us/pricing/member-offers/credit-for-visual-studio-subscribers/](https://azure.microsoft.com/en-us/pricing/member-offers/credit-for-visual-studio-subscribers/)
-- **Pay-as-you-go:** [https://azure.microsoft.com/en-us/pricing/purchase-options/pay-as-you-go/](https://azure.microsoft.com/en-us/pricing/purchase-options/pay-as-you-go/)
-
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 2 – Create Azure Database for PostgreSQL – Flexible Server</b></p>
-
-Follow the quickstart to create a Flexible Server instance in the Azure Portal:
-
-- [Quickstart: Create Azure Database for PostgreSQL – Flexible Server](https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/quickstart-create-server-portal)
-
-Choose the **Burstable B1ms** tier for workshop purposes to minimize cost. **Turn off the server when not in use** from the Azure Portal to avoid charges.
-
-<p style="border-bottom: 1px solid lightgrey;"></p>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
