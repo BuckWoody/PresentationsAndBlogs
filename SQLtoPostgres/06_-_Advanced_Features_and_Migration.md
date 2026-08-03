@@ -728,6 +728,7 @@ ORDER BY table_schema, table_name;
 - [Microsoft Azure Database Migration Service](https://azure.microsoft.com/en-us/products/database-migration)
 
 **General PostgreSQL for SQL Server Professionals:**
+- [Excellent Resource - "Just use Postgres"](https://ebellani.github.io/blog/2026/all-you-need-is-postgresql/)
 - [Use The Index, Luke — SQL Performance for PostgreSQL](https://use-the-index-luke.com/)
 - [The Art of PostgreSQL (book)](https://theartofpostgresql.com/)
 - [Postgres Weekly Newsletter](https://postgresweekly.com/)
