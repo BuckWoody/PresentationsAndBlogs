@@ -490,6 +490,7 @@ Indexes with zero `idx_scan` are candidates for removal (just like SQL Server's 
 - [PostgreSQL Documentation — VACUUM](https://www.postgresql.org/docs/current/sql-vacuum.html)
 - [PostgreSQL Documentation — pg_stat_statements](https://www.postgresql.org/docs/current/pgstatstatements.html)
 - [PostgreSQL Documentation — Autovacuum](https://www.postgresql.org/docs/current/routine-vacuuming.html)
+- [Interactive Explainer on Index Maintenance and Recovering Space](https://claude.ai/public/artifacts/8a251e82-2737-47d7-bed1-f66423cab3eb)
 - [Use The Index, Luke — PostgreSQL Index Guide](https://use-the-index-luke.com/)
 - [Explain.dalibo.com — Graphical EXPLAIN ANALYZE Visualizer](https://explain.dalibo.com/)
 - [pgMustard — EXPLAIN ANALYZE Advisor](https://www.pgmustard.com/)
