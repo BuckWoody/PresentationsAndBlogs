@@ -447,6 +447,7 @@ ORDER BY l.pid;
 - [PostgreSQL Documentation — Monitoring Database Activity](https://www.postgresql.org/docs/current/monitoring-stats.html)
 - [PostgreSQL Documentation — Routine Vacuuming](https://www.postgresql.org/docs/current/routine-vacuuming.html)
 - [PostgreSQL Security Best Practices](https://www.percona.com/blog/postgresql-database-security-best-practices/)
+- [Massively Parallel Postgres Backups](https://planetscale.com/blog/massively-parallel-postgres-backups)
 - [pgBackRest — Advanced PostgreSQL Backup Tool](https://pgbackrest.org/)
 - [Barman — Backup and Recovery Manager for PostgreSQL](https://pgbarman.org/)
 
