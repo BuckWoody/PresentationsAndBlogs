@@ -18,13 +18,13 @@ As of this workshop, Anthropic organizes Claude into a small set of tiers, each 
 |---|---|---|
 | **Claude Haiku 4.5** | Fastest and cheapest; near-frontier intelligence for high-volume or latency-sensitive work | Rarely something you pick directly in Claude.ai,  matters more when building automation later |
 | **Claude Sonnet 5** | The default, balanced model,  frontier-level intelligence for coding, agents, and everyday enterprise work | **This is what you'll use for almost everything today** |
-| **Claude Opus 5** | The flagship for complex agentic coding and the hardest enterprise reasoning tasks | Worth reaching for on your genuinely hardest troubleshooting or design problems |
-| **Claude Fable 5 / Claude Mythos 5** | The most capable tier, positioned for long-running agentic work; Mythos shares Fable's capability without some safety classifiers and is limited-release | Not needed for this lab; mentioned so the names aren't a surprise later |
+| **Claude Opus 5** | The flagship for complex agentic coding and the hardest enterprise reasoning tasks | You must get approval to use this model. Costs are tracked. |
+| **Claude Fable 5 / Claude Mythos 5** | The most capable tier, positioned for long-running agentic work; Mythos shares Fable's capability without some safety classifiers and is limited-release | You must get approval to use this model. Costs are tracked. |
 
 Two things worth knowing as a consultant, not a model-spec collector:
 
 1. **The default model on Claude.ai is almost always the right choice.** Don't spend engagement time picking a model unless you have a specific reason,  a genuinely hard, long, multi-step reasoning problem,  to reach for a heavier tier.
-2. **Model names and pricing change on a timescale of months, not years.** If a customer asks you which model to use, or what something costs, the honest answer is "let me check the current docs with you",  treat [docs.claude.com](https://docs.claude.com) and [claude.com/pricing](https://claude.com/pricing) as the source of truth, not your memory of this slide.
+2. **Model names and pricing change on a timescale of months, not years.** If a customer asks you which model to use, or what something costs, the honest answer is "let me check the current docs with you",  treat [docs.claude.com](https://docs.claude.com) and [claude.com/pricing](https://claude.com/pricing) as the source of truth, not your memory of this information.
 
 ### The three Claude.ai features this workshop uses
 
