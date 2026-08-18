@@ -11,7 +11,7 @@
 
 *Estimated Time: 60 minutes (≈20 minutes lecture, ≈40 minutes hands-on)*
 
-In this final module you will explore the features that make PostgreSQL stand apart — not just as a SQL Server replacement, but as a platform with capabilities that go beyond SQL Server's defaults. You will also review the tools and strategies for migrating existing SQL Server workloads to PostgreSQL.
+In this final module you will explore the features that make PostgreSQL stand apart,  not just as a SQL Server replacement, but as a platform with capabilities that go beyond SQL Server's defaults. You will also review the tools and strategies for migrating existing SQL Server workloads to PostgreSQL.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -19,8 +19,8 @@ In this final module you will explore the features that make PostgreSQL stand ap
 
 SQL Server stores JSON as `NVARCHAR(MAX)` and provides a set of functions (`JSON_VALUE`, `JSON_QUERY`, `OPENJSON`) to parse it at query time. PostgreSQL has two native JSON types:
 
-- **`JSON`** — Stores the input text exactly (including whitespace and duplicate keys). Parsing happens at query time.
-- **`JSONB`** — Stores JSON in a decomposed binary format. Parsed once on insert; subsequent queries are faster. Supports indexing. This is the recommended type for nearly all use cases.
+- **`JSON`**,  Stores the input text exactly (including whitespace and duplicate keys). Parsing happens at query time.
+- **`JSONB`**,  Stores JSON in a decomposed binary format. Parsed once on insert; subsequent queries are faster. Supports indexing. This is the recommended type for nearly all use cases.
 
 **JSONB vs. SQL Server JSON:**
 
@@ -107,7 +107,7 @@ Install an extension with `CREATE EXTENSION`:
 CREATE EXTENSION IF NOT EXISTS <extension_name>;
 ```
 
-**Important — `CREATE EXTENSION` does not download anything.** This is the single biggest surprise for SQL Server professionals. `CREATE EXTENSION` only *registers* an extension whose binary files (a `.dll` plus `.control` and `.sql` script files) are **already present on the server**. If those files are not on disk, you get an error like:
+**Important,  `CREATE EXTENSION` does not download anything.** This is the single biggest surprise for SQL Server professionals. `CREATE EXTENSION` only *registers* an extension whose binary files (a `.dll` plus `.control` and `.sql` script files) are **already present on the server**. If those files are not on disk, you get an error like:
 
 ```
 ERROR:  could not open extension control file
@@ -116,11 +116,11 @@ ERROR:  could not open extension control file
 
 So there are always two phases: **(1) acquire the extension's files onto the server at the OS level, then (2) register it in each database with `CREATE EXTENSION`.** On Windows, how you accomplish phase 1 depends on which of three tiers the extension falls into.
 
-**Tier 1 — Bundled `contrib` extensions (already on disk):**
+**Tier 1,  Bundled `contrib` extensions (already on disk):**
 
-Many extensions ship with the standard PostgreSQL Windows installer (the EDB build from <https://www.postgresql.org/download/windows/>) as part of the `contrib` modules. These require **no acquisition step at all** — the files are already in `C:\Program Files\PostgreSQL\<version>\share\extension\`. You only run `CREATE EXTENSION`.
+Many extensions ship with the standard PostgreSQL Windows installer (the EDB build from <https://www.postgresql.org/download/windows/>) as part of the `contrib` modules. These require **no acquisition step at all**,  the files are already in `C:\Program Files\PostgreSQL\<version>\share\extension\`. You only run `CREATE EXTENSION`.
 
-This tier includes `pg_stat_statements`, `pg_trgm`, `tablefunc`, `postgres_fdw`, `uuid-ossp`, `pgcrypto`, `hstore`, `ltree`, and `intarray` — every extension used in this module's activities except PostGIS and pgvector. You can confirm what is available on your server with:
+This tier includes `pg_stat_statements`, `pg_trgm`, `tablefunc`, `postgres_fdw`, `uuid-ossp`, `pgcrypto`, `hstore`, `ltree`, and `intarray`,  every extension used in this module's activities except PostGIS and pgvector. You can confirm what is available on your server with:
 
 ```sql
 -- Lists every extension whose files are present and installable:
@@ -131,7 +131,7 @@ ORDER BY name;
 
 If an extension appears in this view, phase 1 is already done and you can skip straight to `CREATE EXTENSION`.
 
-**Tier 2 — Stack Builder extensions (downloaded via a GUI):**
+**Tier 2,  Stack Builder extensions (downloaded via a GUI):**
 
 **PostGIS** is the headline example. It is not in the base installer, but the EDB Windows installer ships a companion utility called **Stack Builder** (Start menu → *PostgreSQL <version>* → *Application Stack Builder*, or `StackBuilder.exe` in the `bin` folder) that downloads and installs it for you:
 
@@ -147,7 +147,7 @@ If Stack Builder is blocked by a corporate firewall, you can instead download th
 CREATE EXTENSION IF NOT EXISTS postgis;
 ```
 
-**Tier 3 — Build-from-source extensions (compiler required - optional):**
+**Tier 3,  Build-from-source extensions (compiler required - optional):**
 
 **pgvector** is the example used later in this module. There is no Stack Builder entry and no bundled binary, so on Windows you compile it with the Microsoft Visual C++ toolchain:
 
@@ -180,9 +180,9 @@ Only then will this succeed:
 CREATE EXTENSION IF NOT EXISTS vector;
 ```
 
-**A note on `pg_cron`:** it appears in the table below for completeness as the conceptual analog of SQL Server Agent, but the upstream project targets Linux and is **not officially supported on Windows**. On a Windows server, use SQL Server Agent's true PostgreSQL counterpart — **pgAgent** (available through Stack Builder under *Add-ons, tools and utilities*) — or the Windows Task Scheduler driving `psql` scripts.
+**A note on `pg_cron`:** it appears in the table below for completeness as the conceptual analog of SQL Server Agent, but the upstream project targets Linux and is **not officially supported on Windows**. On a Windows server, use SQL Server Agent's true PostgreSQL counterpart,  **pgAgent** (available through Stack Builder under *Add-ons, tools and utilities*),  or the Windows Task Scheduler driving `psql` scripts.
 
-**One more reminder — extensions that also preload a library:** `pg_stat_statements` (and `pg_cron` where supported) are special. Even though their files ship with the installer, they must additionally be listed in `shared_preload_libraries` in `postgresql.conf` and require a service restart *before* `CREATE EXTENSION` will work — see the detailed two-phase procedure in Module 04, section 4.4. Most other extensions (PostGIS, pg_trgm, tablefunc, postgres_fdw, pgvector, etc.) need only the file acquisition above plus `CREATE EXTENSION`, with no preload or restart.
+**One more reminder,  extensions that also preload a library:** `pg_stat_statements` (and `pg_cron` where supported) are special. Even though their files ship with the installer, they must additionally be listed in `shared_preload_libraries` in `postgresql.conf` and require a service restart *before* `CREATE EXTENSION` will work,  see the detailed two-phase procedure in Module 04, section 4.4. Most other extensions (PostGIS, pg_trgm, tablefunc, postgres_fdw, pgvector, etc.) need only the file acquisition above plus `CREATE EXTENSION`, with no preload or restart.
 
 **Commonly used extensions and their SQL Server analogs:**
 
@@ -202,9 +202,9 @@ CREATE EXTENSION IF NOT EXISTS vector;
 | `ltree` | Hierarchical label tree type | HierarchyID |
 | `intarray` | Integer array operations | No equivalent |
 
-**PostGIS — Spatial data (most important extension for enterprise work):**
+**PostGIS,  Spatial data (most important extension for enterprise work):**
 
-On Windows, acquire the PostGIS files first via Stack Builder (Tier 2 above) — the `CREATE EXTENSION` below will fail until the bundle is installed and version-matched to your server.
+On Windows, acquire the PostGIS files first via Stack Builder (Tier 2 above),  the `CREATE EXTENSION` below will fail until the bundle is installed and version-matched to your server.
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS postgis;
@@ -230,7 +230,7 @@ WHERE ST_DWithin(
 CREATE INDEX idx_authors_geolocation ON authors USING GIST (geolocation);
 ```
 
-**pg_trgm — Fuzzy text matching (very useful for search-as-you-type):**
+**pg_trgm,  Fuzzy text matching (very useful for search-as-you-type):**
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
@@ -250,7 +250,7 @@ CREATE INDEX idx_authors_lname_trgm
 SELECT * FROM authors WHERE au_lname LIKE '%ee%';
 ```
 
-**pgvector — AI vector embeddings:**
+**pgvector,  AI vector embeddings:**
 
 ```sql
 -- On Windows, build and install pgvector first (Tier 3 above: Visual C++ + nmake).
@@ -279,7 +279,7 @@ CREATE INDEX ON title_embeddings USING hnsw (embedding vector_cosine_ops);
 
 <h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pencil2.png">6.3 – Foreign Data Wrappers and Logical Replication</h2>
 
-**Foreign Data Wrappers (FDW)** are PostgreSQL's equivalent of SQL Server Linked Servers. They allow you to query remote data sources — including other PostgreSQL instances, SQL Server, MySQL, Oracle, flat files, and REST APIs — as if they were local tables.
+**Foreign Data Wrappers (FDW)** are PostgreSQL's equivalent of SQL Server Linked Servers. They allow you to query remote data sources,  including other PostgreSQL instances, SQL Server, MySQL, Oracle, flat files, and REST APIs,  as if they were local tables.
 
 ```sql
 -- Connect one PostgreSQL instance to another:
@@ -332,7 +332,7 @@ OPTIONS (query 'SELECT au_id, au_fname, au_lname FROM dbo.authors');
 SELECT * FROM sqlserver_authors LIMIT 10;
 ```
 
-**Logical Replication — PostgreSQL equivalent of transactional replication:**
+**Logical Replication,  PostgreSQL equivalent of transactional replication:**
 
 ```sql
 -- On the publisher (source) server:
@@ -346,7 +346,7 @@ CREATE SUBSCRIPTION pubs_sub
     PUBLICATION pubs_pub;
 ```
 
-This replicates specific tables from one PostgreSQL instance to another, supporting cross-version replication and selective table replication — something SQL Server transactional replication also supports but with more configuration overhead.
+This replicates specific tables from one PostgreSQL instance to another, supporting cross-version replication and selective table replication,  something SQL Server transactional replication also supports but with more configuration overhead.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -354,7 +354,7 @@ This replicates specific tables from one PostgreSQL instance to another, support
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
-**Step 1 — Load JSONB profile data for multiple authors:**
+**Step 1,  Load JSONB profile data for multiple authors:**
 
 ```sql
 \c pubs
@@ -392,7 +392,7 @@ FROM   updates u
 WHERE  a.au_id = u.au_id;
 ```
 
-**Step 2 — Query JSONB fields:**
+**Step 2,  Query JSONB fields:**
 
 ```sql
 -- Extract specific fields using JSONB operators:
@@ -422,9 +422,9 @@ GROUP BY theme
 ORDER BY author_count DESC;
 ```
 
-**Step 3 — Install and use pg_trgm for fuzzy search:**
+**Step 3,  Install and use pg_trgm for fuzzy search:**
 
-`pg_trgm` is a bundled `contrib` extension (Tier 1), so its files already ship with the Windows installer — `CREATE EXTENSION` works with no prior download:
+`pg_trgm` is a bundled `contrib` extension (Tier 1), so its files already ship with the Windows installer,  `CREATE EXTENSION` works with no prior download:
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS pg_trgm;
@@ -441,14 +441,14 @@ LIMIT 10;
 CREATE INDEX idx_authors_lname_trgm
     ON authors USING GIN (au_lname gin_trgm_ops);
 
--- A LIKE with a leading wildcard — normally impossible to index:
+-- A LIKE with a leading wildcard,  normally impossible to index:
 EXPLAIN ANALYZE
 SELECT au_fname, au_lname
 FROM authors
 WHERE au_lname LIKE '%ee%';   -- Can use GIN trigram index
 ```
 
-**Step 4 — Use the tablefunc extension for PIVOT-like operations:**
+**Step 4,  Use the tablefunc extension for PIVOT-like operations:**
 
 ```sql
 -- The PostgreSQL equivalent of SQL Server's PIVOT operator:
@@ -547,7 +547,7 @@ Phase 5 – Cutover
   ☐ Monitor pg_stat_activity and pg_stat_statements post-cutover
 ```
 
-**Trigger syntax — a common migration pain point:**
+**Trigger syntax,  a common migration pain point:**
 
 ```sql
 -- SQL Server trigger:
@@ -583,7 +583,7 @@ CREATE TRIGGER trg_titles_audit
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
-**Step 1 — Create an audit log table:**
+**Step 1,  Create an audit log table:**
 
 ```sql
 CREATE TABLE audit_log (
@@ -596,7 +596,7 @@ CREATE TABLE audit_log (
 );
 ```
 
-**Step 2 — Create an audit trigger on titles:**
+**Step 2,  Create an audit trigger on titles:**
 
 ```sql
 CREATE OR REPLACE FUNCTION trg_titles_audit_fn()
@@ -623,7 +623,7 @@ CREATE TRIGGER trg_titles_audit
     EXECUTE FUNCTION trg_titles_audit_fn();
 ```
 
-**Step 3 — Test the trigger:**
+**Step 3,  Test the trigger:**
 
 ```sql
 -- Insert a new title (publisher 1389 already exists in pubs):
@@ -644,7 +644,7 @@ WHERE title_id = 'AUD001';
 SELECT * FROM audit_log ORDER BY audit_id;
 ```
 
-**Step 4 — Simulate the MERGE statement (SQL Server) in PostgreSQL using INSERT ... ON CONFLICT:**
+**Step 4,  Simulate the MERGE statement (SQL Server) in PostgreSQL using INSERT ... ON CONFLICT:**
 
 ```sql
 -- SQL Server MERGE equivalent in PostgreSQL:
@@ -676,7 +676,7 @@ SELECT pub_id, pub_name, city, country FROM publishers ORDER BY pub_id;
 
 The `EXCLUDED` table (equivalent to `source` in SQL Server MERGE) contains the values that would have been inserted.
 
-**Step 5 — Review the full workshop by examining the pubs schema:**
+**Step 5,  Review the full workshop by examining the pubs schema:**
 
 ```sql
 -- What we have built today:
@@ -703,23 +703,23 @@ ORDER BY table_schema, table_name;
 - [Migration Tooling from Tim Chapman](https://github.com/timchapman/sqlserver-to-postgresql)
 
 **JSONB and JSON:**
-- [PostgreSQL Documentation — JSON Functions and Operators](https://www.postgresql.org/docs/current/functions-json.html)
-- [PostgreSQL Documentation — JSON Types](https://www.postgresql.org/docs/current/datatype-json.html)
+- [PostgreSQL Documentation,  JSON Functions and Operators](https://www.postgresql.org/docs/current/functions-json.html)
+- [PostgreSQL Documentation,  JSON Types](https://www.postgresql.org/docs/current/datatype-json.html)
 
 **Extensions:**
 - [PostgreSQL Extension Network (PGXN)](https://pgxn.org/)
 - [PostGIS Documentation](https://postgis.net/documentation/)
-- [pgvector — Vector Similarity Search](https://github.com/pgvector/pgvector)
+- [pgvector,  Vector Similarity Search](https://github.com/pgvector/pgvector)
 - [pg_trgm Documentation](https://www.postgresql.org/docs/current/pgtrgm.html)
-- [pg_cron — Job Scheduling](https://github.com/citusdata/pg_cron)
-- [tablefunc — crosstab/pivot](https://www.postgresql.org/docs/current/tablefunc.html)
+- [pg_cron,  Job Scheduling](https://github.com/citusdata/pg_cron)
+- [tablefunc,  crosstab/pivot](https://www.postgresql.org/docs/current/tablefunc.html)
 
 **Foreign Data Wrappers:**
-- [PostgreSQL Documentation — Foreign Data](https://www.postgresql.org/docs/current/ddl-foreign-data.html)
-- [tds_fdw — SQL Server/Sybase FDW](https://github.com/tds-fdw/tds_fdw)
+- [PostgreSQL Documentation,  Foreign Data](https://www.postgresql.org/docs/current/ddl-foreign-data.html)
+- [tds_fdw,  SQL Server/Sybase FDW](https://github.com/tds-fdw/tds_fdw)
 
 **Replication:**
-- [PostgreSQL Documentation — Logical Replication](https://www.postgresql.org/docs/current/logical-replication.html)
+- [PostgreSQL Documentation,  Logical Replication](https://www.postgresql.org/docs/current/logical-replication.html)
 
 **Migration Tools:**
 - [AWS Schema Conversion Tool](https://docs.aws.amazon.com/SchemaConversionTool/latest/userguide/CHAP_UserInterface.html)
@@ -729,11 +729,11 @@ ORDER BY table_schema, table_name;
 
 **General PostgreSQL for SQL Server Professionals:**
 - [Excellent Resource - "Just use Postgres"](https://ebellani.github.io/blog/2026/all-you-need-is-postgresql/)
-- [Use The Index, Luke — SQL Performance for PostgreSQL](https://use-the-index-luke.com/)
+- [Use The Index, Luke,  SQL Performance for PostgreSQL](https://use-the-index-luke.com/)
 - [The Art of PostgreSQL (book)](https://theartofpostgresql.com/)
 - [Postgres Weekly Newsletter](https://postgresweekly.com/)
 - [Citus Data Blog](https://www.citusdata.com/blog/)
-- [depesz Blog — Postgresql DBA Resources](https://www.depesz.com/)
+- [depesz Blog,  Postgresql DBA Resources](https://www.depesz.com/)
 - [Microsoft Resource Center for Postgres](https://techcommunity.microsoft.com/blog/adforpostgresql/introducing-postgresql-hub-for-azure-developers/4522897)
 - [A fun, interactive guide to the PostgreSQL engine. You can zoom in, fly around, and click objects to see the documentation for it.](https://nikolays.github.io/PGSimCity/)
 

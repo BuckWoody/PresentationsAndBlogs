@@ -1,0 +1,26 @@
+Contoso Retail,  wait statistics snapshot
+Captured via sys.dm_os_wait_stats, cleared at the start of the flash-sale window, pulled at the end (~90 min duration)
+(Fabricated for training use,  not a real customer's data)
+
+wait_type            wait_time_ms   waiting_tasks_count   avg_wait_ms   pct_of_total
+-------------------- -------------- --------------------- ------------- ------------
+PAGELATCH_EX         4,812,330      118,220                40.7         38.6%
+LCK_M_X               3,105,940       9,410                330.1        24.9%
+WRITELOG              1,940,215      201,330                 9.6        15.6%
+PAGEIOLATCH_SH          812,050      22,105                 36.7         6.5%
+CXPACKET                610,415      88,010                  6.9         4.9%
+ASYNC_NETWORK_IO        402,300      31,880                 12.6         3.2%
+SOS_SCHEDULER_YIELD     215,900     441,220                  0.5         1.7%
+(remaining wait types omitted,  each individually under 1% of total)
+
+Additional detail the DBA included:
+- Top PAGELATCH_EX waits, when correlated to page IDs in a follow-up trace, mostly pointed at
+  (a) the last page of the clustered index on dbo.Orders, and
+  (b) pages inside tempdb (PFS/GAM/SGAM-range page IDs).
+- tempdb has 1 data file. tempdb sizing had been increased after a prior incident but autogrow
+  events still occurred throughout this window (see error log excerpt).
+- LCK_M_X waits correlate in time with the "Lock request time out" messages in the error log,
+  concentrated on dbo.Orders / dbo.OrderStatus during checkout writes.
+- The checkout stored procedure (`dbo.usp_CompleteCheckout`) creates two local temp tables
+  (`#cartItems`, `#priceCalc`) on every single execution and this procedure runs on every checkout.
+- dbo.Orders uses an ever-increasing IDENTITY column as its clustering key.

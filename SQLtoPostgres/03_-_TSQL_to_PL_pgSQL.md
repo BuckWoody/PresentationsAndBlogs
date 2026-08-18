@@ -11,7 +11,7 @@
 
 *Estimated Time: 60 minutes (≈20 minutes lecture, ≈40 minutes hands-on)*
 
-This module is the practical heart of the workshop for developers. You will work through the most common T-SQL constructs and their PL/pgSQL (and standard SQL) equivalents — from basic `SELECT` differences through stored functions, procedures, error handling, and anonymous blocks.
+This module is the practical heart of the workshop for developers. You will work through the most common T-SQL constructs and their PL/pgSQL (and standard SQL) equivalents,  from basic `SELECT` differences through stored functions, procedures, error handling, and anonymous blocks.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -37,7 +37,7 @@ Most of your `SELECT` queries will work with minor modifications. The table belo
 | `STUFF(col, 1, 3, 'abc')` | `OVERLAY(col PLACING 'abc' FROM 1 FOR 3)` | |
 | `REPLICATE('x', 5)` | `REPEAT('x', 5)` | |
 | `LTRIM(RTRIM(col))` | `TRIM(col)` or `BTRIM(col)` | PostgreSQL TRIM removes both ends |
-| `DATEDIFF(day, d1, d2)` | `d2::DATE - d1::DATE` or `EXTRACT(DAY FROM (d2-d1))` | *Note: If d1/d2 are timestamps, d2 - d1 yields an interval, and EXTRACT(DAY FROM interval) returns only the days field of the normalized interval — e.g. EXTRACT(DAY FROM (TIMESTAMP '2024-03-01' - TIMESTAMP '2024-01-01')) = 0, not 60, because the interval is normalised to 2 mons. (DATEDIFF(day,…) would return 60.)
+| `DATEDIFF(day, d1, d2)` | `d2::DATE - d1::DATE` or `EXTRACT(DAY FROM (d2-d1))` | *Note: If d1/d2 are timestamps, d2 - d1 yields an interval, and EXTRACT(DAY FROM interval) returns only the days field of the normalized interval,  e.g. EXTRACT(DAY FROM (TIMESTAMP '2024-03-01' - TIMESTAMP '2024-01-01')) = 0, not 60, because the interval is normalised to 2 mons. (DATEDIFF(day,…) would return 60.)
 If d1/d2 are dates, d2 - d1 is already an integer count of days, so wrapping it in EXTRACT(DAY FROM …) is wrong (EXTRACT does not take an integer).
 The first alternative, d2::DATE - d1::DATE, is correct (returns integer days).* |
 | `DATEADD(day, 7, d)` | `d + INTERVAL '7 days'` | |
@@ -57,7 +57,7 @@ SELECT au_fname + ' ' + au_lname AS full_name FROM authors;
 -- PostgreSQL (using ||):
 SELECT au_fname || ' ' || au_lname AS full_name FROM authors;
 
--- PostgreSQL (using CONCAT — null-safe, works in both systems):
+-- PostgreSQL (using CONCAT,  null-safe, works in both systems):
 SELECT CONCAT(au_fname, ' ', au_lname) AS full_name FROM authors;
 ```
 
@@ -68,7 +68,7 @@ SELECT CONCAT(au_fname, ' ', au_lname) AS full_name FROM authors;
 INSERT INTO jobs (job_desc, min_lvl, max_lvl) VALUES ('Data Engineer', 50, 150);
 SELECT SCOPE_IDENTITY();
 
--- PostgreSQL Option 1: RETURNING clause (preferred — atomic with the INSERT):
+-- PostgreSQL Option 1: RETURNING clause (preferred,  atomic with the INSERT):
 INSERT INTO jobs (job_desc, min_lvl, max_lvl) VALUES ('Data Engineer', 50, 150)
 RETURNING job_id;
 
@@ -148,7 +148,7 @@ SELECT * FROM job_hierarchy;
 
 Open psql or pgAdmin Query Tool connected to the `pubs` database and run each pair of queries. Observe the syntax differences.
 
-**Step 1 — Connect to pubs and verify sample data:**
+**Step 1,  Connect to pubs and verify sample data:**
 
 ```sql
 -- Confirm the authors table is populated:
@@ -162,7 +162,7 @@ FROM titles
 ORDER BY title;
 ```
 
-**Step 2 — TOP vs. LIMIT:**
+**Step 2,  TOP vs. LIMIT:**
 
 ```sql
 -- T-SQL equivalent:
@@ -174,14 +174,14 @@ FROM authors
 ORDER BY au_lname
 LIMIT 3;
 
--- OFFSET (paging) — no T-SQL equivalent without ROW_NUMBER workaround:
+-- OFFSET (paging),  no T-SQL equivalent without ROW_NUMBER workaround:
 SELECT au_fname, au_lname
 FROM authors
 ORDER BY au_lname
 LIMIT 3 OFFSET 3;   -- Rows 4-6 (second page)
 ```
 
-**Step 3 — String concatenation, COALESCE, and casting:**
+**Step 3,  String concatenation, COALESCE, and casting:**
 
 ```sql
 -- Build a display name with concatenation:
@@ -193,7 +193,7 @@ SELECT au_fname || ' ' || au_lname          AS full_name_pipe,
 FROM authors;
 ```
 
-**Step 4 — Date functions:**
+**Step 4,  Date functions:**
 
 ```sql
 -- Use the titles pubdate column for date arithmetic:
@@ -209,7 +209,7 @@ FROM titles
 WHERE pubdate IS NOT NULL;
 ```
 
-**Step 5 — RETURNING clause (getting inserted ID):**
+**Step 5,  RETURNING clause (getting inserted ID):**
 
 ```sql
 -- Insert a new job and get the generated job_id back atomically:
@@ -225,7 +225,7 @@ VALUES
 RETURNING job_id, job_desc, min_lvl, max_lvl;
 ```
 
-**Step 6 — Window functions with FILTER:**
+**Step 6,  Window functions with FILTER:**
 
 ```sql
 -- Standard window functions (identical to T-SQL):
@@ -377,7 +377,7 @@ END;
 $$;
 ```
 
-**DO blocks (anonymous PL/pgSQL — equivalent to ad-hoc T-SQL scripts with variables):**
+**DO blocks (anonymous PL/pgSQL,  equivalent to ad-hoc T-SQL scripts with variables):**
 
 ```sql
 -- SQL Server ad-hoc:
@@ -406,7 +406,7 @@ $$;
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
-**Step 1 — Create and call the scalar function:**
+**Step 1,  Create and call the scalar function:**
 
 ```sql
 -- Create the function from section 3.4:
@@ -429,10 +429,10 @@ $$;
 
 -- Call with an existing author:
 SELECT get_author_sales_total('409-56-7008');
-SELECT get_author_sales_total('999-99-9999');   -- Author that doesn't exist — returns 0 due to COALESCE
+SELECT get_author_sales_total('999-99-9999');   -- Author that doesn't exist,  returns 0 due to COALESCE
 ```
 
-**Step 2 — Create the table-returning function:**
+**Step 2,  Create the table-returning function:**
 
 ```sql
 CREATE OR REPLACE FUNCTION get_titles_for_author(p_au_id VARCHAR(11))
@@ -463,7 +463,7 @@ SELECT * FROM get_titles_for_author('409-56-7008');
 SELECT * FROM get_titles_for_author('267-41-2394');
 ```
 
-**Step 3 — Create a PostgreSQL PROCEDURE with transaction control:**
+**Step 3,  Create a PostgreSQL PROCEDURE with transaction control:**
 
 ```sql
 -- Procedures in PostgreSQL (11+) support COMMIT/ROLLBACK inside them
@@ -495,7 +495,7 @@ $$;
 CALL transfer_title_to_publisher('BU1032', '1389', '0736');
 ```
 
-**Step 4 — Use a DO block for a one-time data migration task:**
+**Step 4,  Use a DO block for a one-time data migration task:**
 
 ```sql
 -- Equivalent to an ad-hoc T-SQL migration script
@@ -522,7 +522,7 @@ END;
 $$;
 ```
 
-**Step 5 — List all functions in the public schema (equivalent to sys.procedures in SQL Server):**
+**Step 5,  List all functions in the public schema (equivalent to sys.procedures in SQL Server):**
 
 ```sql
 SELECT routine_name, routine_type, data_type
@@ -545,14 +545,14 @@ ORDER BY p.proname;
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/owl.png"><b>For Further Study</b></p>
 
-- [PostgreSQL Documentation — PL/pgSQL](https://www.postgresql.org/docs/current/plpgsql.html)
-- [PostgreSQL Documentation — SQL Functions](https://www.postgresql.org/docs/current/sql-createfunction.html)
-- [PostgreSQL Documentation — Stored Procedures](https://www.postgresql.org/docs/current/sql-createprocedure.html)
-- [PostgreSQL Documentation — RETURNING Clause](https://www.postgresql.org/docs/current/dml-returning.html)
-- [PostgreSQL Documentation — String Functions](https://www.postgresql.org/docs/current/functions-string.html)
-- [PostgreSQL Documentation — Date/Time Functions](https://www.postgresql.org/docs/current/functions-datetime.html)
-- [PostgreSQL Documentation — Window Functions](https://www.postgresql.org/docs/current/tutorial-window.html)
-- [PostgreSQL Documentation — Error Codes](https://www.postgresql.org/docs/current/errcodes-appendix.html)
+- [PostgreSQL Documentation,  PL/pgSQL](https://www.postgresql.org/docs/current/plpgsql.html)
+- [PostgreSQL Documentation,  SQL Functions](https://www.postgresql.org/docs/current/sql-createfunction.html)
+- [PostgreSQL Documentation,  Stored Procedures](https://www.postgresql.org/docs/current/sql-createprocedure.html)
+- [PostgreSQL Documentation,  RETURNING Clause](https://www.postgresql.org/docs/current/dml-returning.html)
+- [PostgreSQL Documentation,  String Functions](https://www.postgresql.org/docs/current/functions-string.html)
+- [PostgreSQL Documentation,  Date/Time Functions](https://www.postgresql.org/docs/current/functions-datetime.html)
+- [PostgreSQL Documentation,  Window Functions](https://www.postgresql.org/docs/current/tutorial-window.html)
+- [PostgreSQL Documentation,  Error Codes](https://www.postgresql.org/docs/current/errcodes-appendix.html)
 - [PostgreSQL by Example](https://github.com/boringcollege/postgres-by-example)
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>

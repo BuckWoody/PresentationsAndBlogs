@@ -1,0 +1,23 @@
+From: Priya Nandakumar, IT Director, Contoso Retail
+To: [Your Consulting Team]
+Subject: Checkout was crawling again during Saturday's sale
+
+Hi team,
+
+Saturday's flash sale was rough. Customers were complaining on social media that checkout was
+spinning for 30+ seconds, and a few carts apparently just errored out entirely. This is the third
+time this has happened during a big sale event. Our DBA pulled some logs and a wait-stats snapshot
+(attached) but honestly none of us are SQL Server experts and we don't know what we're looking at.
+
+Two things I need from you:
+
+1. What actually happened? I need to understand it well enough to explain it to my VP, who does
+   not want to hear the word "latch."
+2. What do we do about it before the next sale, which is in about three weeks?
+
+Also,  separately, and no rush on this one,  we've been putting off the "should we move to Azure"
+conversation for about a year now and I'd like to finally get a real answer, with actual trade-offs,
+not just a sales pitch.
+
+Thanks,
+Priya

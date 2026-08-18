@@ -41,11 +41,11 @@ The table below is your "Rosetta Stone" for the workshop:
 | Linked servers | Linked Servers / OPENROWSET | Foreign Data Wrappers (FDW) |
 | Licensing | Commercial (free Developer/Express editions) | Open source (Postgres License) |
 
-**Key Insight — The Cluster/Database/Schema hierarchy is the same:** In both systems the hierarchy is: *server instance → database → schema → object*. The word "cluster" in Postgres is simply the term for what SQL Server calls an "instance." You connect to a Postgres cluster on port 5432, then choose a database, exactly as you connect to a SQL Server instance and choose a database.
+**Key Insight,  The Cluster/Database/Schema hierarchy is the same:** In both systems the hierarchy is: *server instance → database → schema → object*. The word "cluster" in Postgres is simply the term for what SQL Server calls an "instance." You connect to a Postgres cluster on port 5432, then choose a database, exactly as you connect to a SQL Server instance and choose a database.
 
 <h3>Process Model vs. Thread Model</h3>
 
-One of the most important architectural differences is how each system handles client connections. SQL Server uses a **thread-based model**: a pool of OS threads managed within a single process (`sqlservr.exe`) handles all client connections. Postgres uses a **process-based model**: each client connection spawns a dedicated OS process (`postgres` backend process). This means that on a system with 500 concurrent connections, Postgres will have approximately 500 OS processes. The process model provides strong isolation — a crashing backend affects only that connection, but it also means connection pooling is far more critical in Postgres than in SQL Server. Tools such as **PgBouncer** or **pgpool-II** …are used in production Postgres environments to provide the connection pooling that is built into SQL Server's client stack.
+One of the most important architectural differences is how each system handles client connections. SQL Server uses a **thread-based model**: a pool of OS threads managed within a single process (`sqlservr.exe`) handles all client connections. Postgres uses a **process-based model**: each client connection spawns a dedicated OS process (`postgres` backend process). This means that on a system with 500 concurrent connections, Postgres will have approximately 500 OS processes. The process model provides strong isolation,  a crashing backend affects only that connection, but it also means connection pooling is far more critical in Postgres than in SQL Server. Tools such as **PgBouncer** or **pgpool-II** …are used in production Postgres environments to provide the connection pooling that is built into SQL Server's client stack.
 
 <h3>MVCC vs. Lock-Based Concurrency</h3>
 
@@ -67,7 +67,7 @@ In this activity you will use `psql` which is Postgres's command-line client, to
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
-**Step 1 — Connect to the cluster as the postgres superuser:**
+**Step 1,  Connect to the cluster as the postgres superuser:**
 
 ```bash
 psql -U postgres -h localhost -p 5432
@@ -75,7 +75,7 @@ psql -U postgres -h localhost -p 5432
 
 You will be prompted for the password you set during installation (`postgres` is the default for both the super-user name and password in many cases). A successful connection displays the `postgres=#` prompt.
 
-**Step 2 — List all databases (equivalent to `SELECT name FROM sys.databases`):**
+**Step 2,  List all databases (equivalent to `SELECT name FROM sys.databases`):**
 
 ```sql
 \l
@@ -85,7 +85,7 @@ You will be prompted for the password you set during installation (`postgres` is
 
 You should see the default databases: `postgres`, `template0`, and `template1`. The `pubs` database you created in pre-requisites should also appear.
 
-**Step 3 — Connect to the pubs database:**
+**Step 3,  Connect to the pubs database:**
 
 ```sql
 \c pubs
@@ -98,7 +98,7 @@ The prompt changes to `pubs=#`.
 `\set PROMPT1 '%n@%M:%/%R%# ' `
 
 
-**Step 4 — List all schemas (equivalent to `SELECT * FROM sys.schemas`):**
+**Step 4,  List all schemas (equivalent to `SELECT * FROM sys.schemas`):**
 
 ```sql
 \dn
@@ -106,7 +106,7 @@ The prompt changes to `pubs=#`.
 
 You should see the schemas you created.
 
-**Step 5 — Explore system catalog views (equivalent to `sys.*` in SQL Server):**
+**Step 5,  Explore system catalog views (equivalent to `sys.*` in SQL Server):**
 
 ```sql
 -- List all tables in the public schema
@@ -126,7 +126,7 @@ WHERE table_type = 'BASE TABLE'
 ORDER BY table_schema, table_name;
 ```
 
-**Step 6 — Query the pg_catalog for server version and connection info:**
+**Step 6,  Query the pg_catalog for server version and connection info:**
 
 ```sql
 SELECT version();
@@ -137,7 +137,7 @@ SELECT current_database(),
        inet_server_port();
 ```
 
-**Step 7 — List useful psql meta-commands (there is no SSMS toolbar here!):**
+**Step 7,  List useful psql meta-commands (there is no SSMS toolbar here!):**
 
 Note: The PSQL_EDITOR system variable sets the editor that psql will use to edit files. For instance, to set that from PowerShell in Windows, you would run: 
 
@@ -162,7 +162,7 @@ To use Notepad as your editor.
 **pgAdmin 4** is the standard Postgres GUI, comparable to SSMS. It is a web-application that runs locally in your browser (served by a bundled Python web server). Key differences from SSMS to know about:
 
 - The **Query Tool** is opened per-database by right-clicking a database and choosing "Query Tool."
-- **Execution plans** are shown via the Explain / Explain Analyze buttons in the toolbar — the output is a graphical tree and a table of nodes, similar to SSMS's graphical plan.
+- **Execution plans** are shown via the Explain / Explain Analyze buttons in the toolbar,  the output is a graphical tree and a table of nodes, similar to SSMS's graphical plan.
 - Server-level administration (roles, tablespaces, replication) lives under the server node.
 - The **Dashboard** tab shows real-time activity equivalent to SQL Server's Activity Monitor.
 
@@ -176,11 +176,11 @@ Open pgAdmin 4 and replicate the following SQL Server SSMS tasks in pgAdmin, not
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
-**Step 1 — Open pgAdmin and connect to your local Postgres server.**
+**Step 1,  Open pgAdmin and connect to your local Postgres server.**
 
 Launch pgAdmin from the Start menu. In the Browser panel on the left, expand **Servers → Postgres 17 → Databases → pubs**. Note the parallel structure to SSMS's Object Explorer.
 
-**Step 2 — Open the Query Tool and run a catalog query.**
+**Step 2,  Open the Query Tool and run a catalog query.**
 
 Right-click the `pubs` database node, choose **Query Tool**, then run:
 
@@ -193,11 +193,11 @@ ORDER BY schemaname, tablename;
 
 This is equivalent to browsing the Tables node in SSMS.
 
-**Step 3 — View the Server Dashboard.**
+**Step 3,  View the Server Dashboard.**
 
 Click the **pubs** database node, then click the **Dashboard** tab at the top. You will see graphs for connections, transactions per second, and block I/O. This is pgAdmin's equivalent of SSMS Activity Monitor.
 
-**Step 4 — View current sessions (equivalent to SQL Server's sp_who2).**
+**Step 4,  View current sessions (equivalent to SQL Server's sp_who2).**
 
 In the Query Tool, run:
 
@@ -216,7 +216,7 @@ ORDER BY query_start;
 
 The `pg_stat_activity` view is Postgres's equivalent of `sys.dm_exec_sessions` + `sys.dm_exec_requests`.
 
-**Step 5 — Review the SSMS-to-pgAdmin equivalence table:**
+**Step 5,  Review the SSMS-to-pgAdmin equivalence table:**
 
 | SSMS Task | pgAdmin Equivalent |
 |---|---|
@@ -235,12 +235,12 @@ The `pg_stat_activity` view is Postgres's equivalent of `sys.dm_exec_sessions` +
 
 SQL Server configuration is managed primarily through SQL Server Configuration Manager and `sp_configure`. In Postgres, configuration lives in two key text files inside the data directory:
 
-**`postgresql.conf`** — The main parameter file. Equivalent to SQL Server's `sp_configure` settings. Important parameters you will encounter during the workshop:
+**`postgresql.conf`**,  The main parameter file. Equivalent to SQL Server's `sp_configure` settings. Important parameters you will encounter during the workshop:
 
 ```
 # Memory
 shared_buffers = 256MB          # SQL Server equivalent: max server memory (but much smaller)
-work_mem = 4MB                  # Per-sort-or-hash memory — very different from SQL Server
+work_mem = 4MB                  # Per-sort-or-hash memory,  very different from SQL Server
 effective_cache_size = 1GB      # Planner hint for OS cache
 
 # Connections
@@ -254,7 +254,7 @@ max_wal_size = 1GB
 random_page_cost = 4.0          # Lower for SSD: set to 1.1
 ```
 
-**`pg_hba.conf`** — The Host-Based Authentication file. Controls *who* can connect, from *where*, and *how* they authenticate. There is no single direct SQL Server equivalent; this granularity is handled in SQL Server by firewall rules and login security combined. This file is covered in detail in Module 05.
+**`pg_hba.conf`**,  The Host-Based Authentication file. Controls *who* can connect, from *where*, and *how* they authenticate. There is no single direct SQL Server equivalent; this granularity is handled in SQL Server by firewall rules and login security combined. This file is covered in detail in Module 05.
 
 You can query and change most parameters at runtime without a restart:
 
@@ -277,7 +277,7 @@ SELECT pg_reload_conf();   -- Reload config without restart (for most parameters
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
-**Step 1 — Find the data directory and config file locations:**
+**Step 1,  Find the data directory and config file locations:**
 
 ```sql
 -- In psql or pgAdmin Query Tool:
@@ -286,9 +286,9 @@ SHOW config_file;
 SHOW hba_file;
 ```
 
-Open the `Postgres.conf` file in a text editor to inspect it. Note that it is heavily commented — the default values are shown next to each parameter name.
+Open the `Postgres.conf` file in a text editor to inspect it. Note that it is heavily commented,  the default values are shown next to each parameter name.
 
-**Step 2 — Query the current parameter settings via SQL:**
+**Step 2,  Query the current parameter settings via SQL:**
 
 ```sql
 SELECT name, setting, unit, short_desc
@@ -307,7 +307,7 @@ ORDER BY name;
 
 The `pg_settings` view is the Postgres equivalent of `sys.configurations`.
 
-**Step 3 — Enable query logging for slow queries (equivalent to SQL Server Profiler's duration filter):**
+**Step 3,  Enable query logging for slow queries (equivalent to SQL Server Profiler's duration filter):**
 
 ```sql
 -- Log any query taking longer than 1 second
@@ -324,14 +324,14 @@ This writes slow queries to the Postgres log file in the `log` subdirectory of y
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/owl.png"><b>For Further Study</b></p>
 
-- [Postgres Documentation — Architecture](https://www.Postgres.org/docs/current/overview.html)
-- [Postgres Documentation — psql Reference](https://www.Postgres.org/docs/current/app-psql.html)
-- [Postgres Documentation — Server Configuration](https://www.Postgres.org/docs/current/runtime-config.html)
+- [Postgres Documentation,  Architecture](https://www.Postgres.org/docs/current/overview.html)
+- [Postgres Documentation,  psql Reference](https://www.Postgres.org/docs/current/app-psql.html)
+- [Postgres Documentation,  Server Configuration](https://www.Postgres.org/docs/current/runtime-config.html)
 - [pgAdmin 4 Documentation](https://www.pgadmin.org/docs/pgadmin4/latest/)
-- [EDB Blog — SQL Server vs. Postgres Comparison](https://www.enterprisedb.com/blog/microsoft-sql-server-mssql-vs-postgresql-comparison-details-what-differences)
-- [SQLpassion — Top 5 Differences Between SQL Server and Postgres](https://www.sqlpassion.at/archive/2024/10/09/the-top-5-key-differences-between-sql-server-and-Postgres/)
-- [Microsoft Learn — Azure Database for Postgres Overview](https://learn.microsoft.com/en-us/azure/postgresql/overview)
-- [PgBouncer — Connection Pooling for Postgres](https://www.pgbouncer.org/)
+- [EDB Blog,  SQL Server vs. Postgres Comparison](https://www.enterprisedb.com/blog/microsoft-sql-server-mssql-vs-postgresql-comparison-details-what-differences)
+- [SQLpassion,  Top 5 Differences Between SQL Server and Postgres](https://www.sqlpassion.at/archive/2024/10/09/the-top-5-key-differences-between-sql-server-and-Postgres/)
+- [Microsoft Learn,  Azure Database for Postgres Overview](https://learn.microsoft.com/en-us/azure/postgresql/overview)
+- [PgBouncer,  Connection Pooling for Postgres](https://www.pgbouncer.org/)
 - [DBeaver Community Edition](https://dbeaver.io/)
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>

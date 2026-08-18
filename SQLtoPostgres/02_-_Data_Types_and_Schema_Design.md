@@ -17,7 +17,7 @@ In this module you will build the workshop sample schema in PostgreSQL, translat
 
 <h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pencil2.png">2.1 – Data Type Mapping: SQL Server to PostgreSQL</h2>
 
-The table below maps the most common SQL Server data types to their PostgreSQL equivalents. Study this carefully — type mismatches are the most common source of errors in migrations.
+The table below maps the most common SQL Server data types to their PostgreSQL equivalents. Study this carefully,  type mismatches are the most common source of errors in migrations.
 
 | SQL Server Type | PostgreSQL Equivalent | Notes |
 |---|---|---|
@@ -54,7 +54,7 @@ The table below maps the most common SQL Server data types to their PostgreSQL e
 **Important type behavior differences:**
 
 - **String comparisons:** PostgreSQL string comparisons are **case-sensitive** by default. `WHERE name = 'Smith'` will *not* match `'smith'`. SQL Server is case-insensitive by default (based on collation). Use `LOWER()` or the `ILIKE` operator for case-insensitive matching in PostgreSQL: `WHERE name ILIKE 'smith'`.
-- **NULL comparisons:** Standard SQL — no difference. Both require `IS NULL` / `IS NOT NULL`.
+- **NULL comparisons:** Standard SQL,  no difference. Both require `IS NULL` / `IS NOT NULL`.
 - **Boolean literals:** PostgreSQL uses `TRUE`/`FALSE` or `'t'`/`'f'`. SQL Server uses `1`/`0` or the BIT type.
 - **Date literals:** PostgreSQL prefers ISO 8601: `'2024-01-15'`. SQL Server accepts many formats; standardize on ISO 8601 in both.
 
@@ -108,7 +108,7 @@ SELECT currval('job_id_seq');      -- Current value in this session
 SELECT setval('jobs_id_seq', 14);   -- Reset (e.g., after a bulk load)
 ```
 
-SQL Server also supports `CREATE SEQUENCE` (since SQL Server 2012) — the syntax is nearly identical.
+SQL Server also supports `CREATE SEQUENCE` (since SQL Server 2012),  the syntax is nearly identical.
 
 <h3>2.3 – Schema Design Differences</h3>
 
@@ -153,13 +153,13 @@ In this activity you will translate several SQL Server `CREATE TABLE` statements
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
-**Step 1 — Connect to the pubs database in psql:**
+**Step 1,  Connect to the pubs database in psql:**
 
 ```bash
 psql -U postgres -h localhost -d pubs
 ```
 
-**Step 2 — Observe the `authors` table. Study the type translations:**
+**Step 2,  Observe the `authors` table. Study the type translations:**
 Hint: You can use the meta-command of `!` to call to the OS shell, and use this command to list the DDL used for the creation of an object: 
 
 `\! pg_dump -U postgres -d pubs --schema-only -t authors --no-owner --no-privileges`
@@ -201,7 +201,7 @@ Note the key differences:
 - Square bracket quoting → no quoting needed (use snake_case)
 - `CHECK` constraints using regex (`~`) replace the original T-SQL constraints
 
-**Step 3 — Observe the `publishers` and `titles` tables with additional type mappings:**
+**Step 3,  Observe the `publishers` and `titles` tables with additional type mappings:**
 
 ```sql
 CREATE TABLE publishers (
@@ -231,7 +231,7 @@ CREATE TABLE titles (
 
 Note how `MONEY` becomes `NUMERIC(10,4)` and `getdate()` becomes `CURRENT_TIMESTAMP`.
 
-**Step 4 — Observe the `jobs` table using SMALLSERIAL (auto-increment):**
+**Step 4,  Observe the `jobs` table using SMALLSERIAL (auto-increment):**
 
 ```sql
 CREATE TABLE jobs (
@@ -244,7 +244,7 @@ CREATE TABLE jobs (
 
 Note how `TINYINT` becomes `SMALLINT` (PostgreSQL has no 1-byte integer type).
 
-**Step 5 — Observe the `employee` table with a foreign key and regex CHECK:**
+**Step 5,  Observe the `employee` table with a foreign key and regex CHECK:**
 
 ```sql
 CREATE TABLE employee (
@@ -261,7 +261,7 @@ CREATE TABLE employee (
 );
 ```
 
-**Step 6 — Observe the foreign key constraint between tables:**
+**Step 6,  Observe the foreign key constraint between tables:**
 
 ```sql
 ALTER TABLE titles
@@ -271,7 +271,7 @@ ALTER TABLE titles
     ON DELETE SET NULL;
 ```
 
-**Step 7 — Inspect the created objects:**
+**Step 7,  Inspect the created objects:**
 
 ```sql
 -- List tables (psql):
@@ -290,7 +290,7 @@ WHERE table_schema = 'public'
 ORDER BY ordinal_position;
 ```
 
-**Step 8 — Insert test rows and verify defaults and constraints:**
+**Step 8,  Insert test rows and verify defaults and constraints:**
 
 ```sql
 -- Insert a publisher:
@@ -314,7 +314,7 @@ FROM titles;
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
-**Step 1 — Demonstrate case sensitivity:**
+**Step 1,  Demonstrate case sensitivity:**
 
 ```sql
 -- Insert rows with mixed case last names:
@@ -342,7 +342,7 @@ WHERE LOWER(au_lname) = 'smith';  -- Returns all three rows
 -- WHERE au_lname = 'smith' COLLATE SQL_Latin1_General_CP1_CI_AS
 ```
 
-**Step 2 — Demonstrate SMALLINT (BIT) vs. PostgreSQL BOOLEAN:**
+**Step 2,  Demonstrate SMALLINT (BIT) vs. PostgreSQL BOOLEAN:**
 
 ```sql
 -- pubs uses SMALLINT with 0/1 for the contract column (mirroring T-SQL BIT)
@@ -363,14 +363,14 @@ WHERE contract = 0;    -- Not under contract
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/owl.png"><b>For Further Study</b></p>
 
-- [PostgreSQL Documentation — Data Types](https://www.postgresql.org/docs/current/datatype.html)
-- [PostgreSQL Documentation — CREATE TABLE](https://www.postgresql.org/docs/current/sql-createtable.html)
-- [PostgreSQL Documentation — Sequences](https://www.postgresql.org/docs/current/sql-createsequence.html)
-- [PostgreSQL Documentation — Generated Columns](https://www.postgresql.org/docs/current/ddl-generated-columns.html)
-- [EDB — SQL Server to PostgreSQL Type Mapping](https://www.enterprisedb.com/blog/microsoft-sql-server-mssql-vs-postgresql-comparison-details-what-differences)
-- [AWS — Schema Conversion Tool Documentation](https://docs.aws.amazon.com/SchemaConversionTool/latest/userguide/CHAP_UserInterface.html)
-- [Microsoft — SQL Server Data Types Reference](https://learn.microsoft.com/en-us/sql/t-sql/data-types/data-types-transact-sql)
-- [PostgreSQL Documentation — Collation Support](https://www.postgresql.org/docs/current/collation.html)
+- [PostgreSQL Documentation,  Data Types](https://www.postgresql.org/docs/current/datatype.html)
+- [PostgreSQL Documentation,  CREATE TABLE](https://www.postgresql.org/docs/current/sql-createtable.html)
+- [PostgreSQL Documentation,  Sequences](https://www.postgresql.org/docs/current/sql-createsequence.html)
+- [PostgreSQL Documentation,  Generated Columns](https://www.postgresql.org/docs/current/ddl-generated-columns.html)
+- [EDB,  SQL Server to PostgreSQL Type Mapping](https://www.enterprisedb.com/blog/microsoft-sql-server-mssql-vs-postgresql-comparison-details-what-differences)
+- [AWS,  Schema Conversion Tool Documentation](https://docs.aws.amazon.com/SchemaConversionTool/latest/userguide/CHAP_UserInterface.html)
+- [Microsoft,  SQL Server Data Types Reference](https://learn.microsoft.com/en-us/sql/t-sql/data-types/data-types-transact-sql)
+- [PostgreSQL Documentation,  Collation Support](https://www.postgresql.org/docs/current/collation.html)
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
 

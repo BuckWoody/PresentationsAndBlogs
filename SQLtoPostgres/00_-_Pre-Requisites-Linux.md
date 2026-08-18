@@ -8,7 +8,7 @@
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/textbubble.png"> <h2>00 – Pre-Requisites - Linux</h2>
 
-The **PostgreSQL for the SQL Server Database Professional** workshop is taught using the components listed below. You should install and configure each section *before* attending the workshop — there will not be time to complete setup during class. Note that in this pre-requisite, and in the entire course, you will switch between using various graphical clients and also various command-line tools. This is inefficient, but will help you get familiarized with multiple tools. 
+The **PostgreSQL for the SQL Server Database Professional** workshop is taught using the components listed below. You should install and configure each section *before* attending the workshop,  there will not be time to complete setup during class. Note that in this pre-requisite, and in the entire course, you will switch between using various graphical clients and also various command-line tools. This is inefficient, but will help you get familiarized with multiple tools. 
 
 *All examples in this workshop use Microsoft Windows as the base operating system. PostgreSQL runs natively on Windows, Linux, and macOS; the hands-on exercises will work on any platform, but screenshots and path examples reference Windows and will not work on Linux, Mac or other platforms. Also note that we are standardizing on Postgres 17 to be consistent with instructions and screenshots at the time of course creation.*
 
@@ -49,7 +49,7 @@ Follow the official Microsoft instructions to download and install SQL Server 20
 - [Download SQL Server 2022 Developer Edition](https://download.microsoft.com/download/c/c/9/cc9c6797-383c-4b24-8920-dc057c1de9d3/SQL2022-SSEI-Dev.exe)
 - [SQL Server Installation Guide (Windows)](https://learn.microsoft.com/en-us/sql/database-engine/install-windows/install-sql-server?view=sql-server-ver16)
 
-During installation, select the **Database Engine Services** feature at minimum. Accept the default instance name (`MSSQLSERVER`) or note the instance name you choose — you will reference it throughout the workshop.
+During installation, select the **Database Engine Services** feature at minimum. Accept the default instance name (`MSSQLSERVER`) or note the instance name you choose,  you will reference it throughout the workshop.
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 2 – Install SQL Server Management Studio (SSMS)</b></p>
 
@@ -68,7 +68,7 @@ The recommended installer for Windows is the EnterpriseDB (EDB) interactive inst
 During installation:
 
 - Set the **data directory** to a dedicated drive/folder (e.g., `C:\PostgreSQL\17\data`).
-- Set a strong password for the `postgres` superuser — **remember this password**, you will need it throughout the workshop.
+- Set a strong password for the `postgres` superuser,  **remember this password**, you will need it throughout the workshop.
 - Accept the default port **5432**.
 - Accept the default locale.
 
@@ -129,7 +129,7 @@ The workshop exercises use the *pubs* sample database as the SQL Server referenc
 
 The workshop uses the `pubs` sample database ported to PostgreSQL. Run the following commands in pgsql to create the workshop database and sample schema:
 
-Open DBeaver from your Start menu, and create two database connections — one for SQL Server and one for PostgreSQL. DBeaver will prompt you to download the required JDBC drivers automatically on first connection.
+Open DBeaver from your Start menu, and create two database connections,  one for SQL Server and one for PostgreSQL. DBeaver will prompt you to download the required JDBC drivers automatically on first connection.
 
 - *SQL Server connection string example:* `jdbc:sqlserver://localhost:1433;databaseName=pubs`
 - *PostgreSQL connection string example:* `jdbc:postgresql://localhost:5432/postgres`

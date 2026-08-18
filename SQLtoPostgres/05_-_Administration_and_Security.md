@@ -11,7 +11,7 @@
 
 *Estimated Time: 60 minutes (≈20 minutes lecture, ≈40 minutes hands-on)*
 
-This module covers the administrative tasks that SQL Server DBAs perform daily — creating users, managing permissions, backing up and restoring databases, and monitoring server health. For each task you will see the SQL Server approach alongside the PostgreSQL equivalent.
+This module covers the administrative tasks that SQL Server DBAs perform daily,  creating users, managing permissions, backing up and restoring databases, and monitoring server health. For each task you will see the SQL Server approach alongside the PostgreSQL equivalent.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -59,7 +59,7 @@ GRANT USAGE ON SCHEMA public TO app_user;
 -- PostgreSQL Step 4: Grant object-level permissions:
 GRANT SELECT ON ALL TABLES IN SCHEMA public TO app_user;
 
--- Grant future tables too (SQL Server has no equivalent — you must re-grant):
+-- Grant future tables too (SQL Server has no equivalent,  you must re-grant):
 ALTER DEFAULT PRIVILEGES IN SCHEMA public
     GRANT SELECT ON TABLES TO app_user;
 
@@ -85,7 +85,7 @@ GRANT reporting_role TO app_user;
 REVOKE reporting_role FROM app_user;
 ```
 
-**Row-Level Security (RLS) — PostgreSQL equivalent of SQL Server RLS:**
+**Row-Level Security (RLS),  PostgreSQL equivalent of SQL Server RLS:**
 
 ```sql
 -- Enable RLS on a table:
@@ -107,7 +107,7 @@ ALTER TABLE sales FORCE ROW LEVEL SECURITY;
 
 <h3>5.2 – pg_hba.conf: Host-Based Authentication</h3>
 
-The `pg_hba.conf` file controls who can connect to PostgreSQL, from where, and using what authentication method. There is no equivalent single file in SQL Server — this level of control is distributed across Windows Firewall, SQL Server Configuration Manager, and SQL Server's authentication settings.
+The `pg_hba.conf` file controls who can connect to PostgreSQL, from where, and using what authentication method. There is no equivalent single file in SQL Server,  this level of control is distributed across Windows Firewall, SQL Server Configuration Manager, and SQL Server's authentication settings.
 
 The format of each line is:
 ```
@@ -121,7 +121,7 @@ host  all       all   0.0.0.0/0     scram-sha-256
 - **DATABASE:** Database name, `all`, or `sameuser`
 - **USER:** Role name, `all`, or a role group with `+rolename`
 - **ADDRESS:** IP address or CIDR range (only for `host` records)
-- **METHOD:** `scram-sha-256` (recommended), `md5`, `trust` (no password — only for local dev!), `peer`, `cert`, `ldap`, `radius`
+- **METHOD:** `scram-sha-256` (recommended), `md5`, `trust` (no password,  only for local dev!), `peer`, `cert`, `ldap`, `radius`
 
 ```sql
 -- After editing pg_hba.conf, reload without restart:
@@ -137,16 +137,16 @@ WHERE client_addr IS NOT NULL;
 
 <h2><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pencil2.png">5.3 – Backup and Restore</h2>
 
-PostgreSQL has three primary backup tools — each with a different scope and use case, analogous to SQL Server's backup strategy.
+PostgreSQL has three primary backup tools,  each with a different scope and use case, analogous to SQL Server's backup strategy.
 
 | Backup Type | PostgreSQL Tool | SQL Server Equivalent |
 |---|---|---|
 | Logical (single database) | `pg_dump` | `BACKUP DATABASE ... TO DISK` |
-| Logical (entire cluster) | `pg_dumpall` | *No single-statement equivalent — per-database BACKUP DATABASE or a maintenance plan/script* |
+| Logical (entire cluster) | `pg_dumpall` | *No single-statement equivalent,  per-database BACKUP DATABASE or a maintenance plan/script* |
 | Physical (entire cluster) | `pg_basebackup` | Full database backup (all databases) |
 | Point-in-time recovery | WAL archiving + `pg_basebackup` | Transaction log backup chain |
 
-**pg_dump — the everyday backup tool:**
+**pg_dump,  the everyday backup tool:**
 
 You can see the use of this utility at the Command-Line (PowerShell):
 
@@ -167,7 +167,7 @@ pg_dump -U postgres -h localhost -d pubs -t sales -F c -f sales.dump
 pg_dump -U postgres -h localhost -d pubs -F d -j 4 -f pubs_dir/
 ```
 
-**pg_restore — restoring from custom-format archives:**
+**pg_restore,  restoring from custom-format archives:**
 
 ```sql
 -- Restore to a new database:
@@ -184,7 +184,7 @@ pg_restore -U postgres -h localhost -d pubs_restored -j 4 pubs_dir/
 pg_restore -l pubs.dump
 ```
 
-**pg_basebackup — physical cluster backup:**
+**pg_basebackup,  physical cluster backup:**
 
 ```sql
 -- Windows Command Prompt:
@@ -212,7 +212,7 @@ To recover to a point in time: take a base backup, configure `recovery.conf` (or
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
-**Step 1 — Create roles for the pubs application:**
+**Step 1,  Create roles for the pubs application:**
 
 ```sql
 -- Connect as postgres superuser
@@ -250,7 +250,7 @@ $$;
 GRANT pubs_appwrite TO app_user;
 ```
 
-**Step 2 — Test the roles:**
+**Step 2,  Test the roles:**
 
 ```sql
 -- Connect as the report user and verify read access:
@@ -269,7 +269,7 @@ VALUES ('111-22-3333', 'Test', 'User', 'UNKNOWN', 0);   -- Should FAIL
 \c pubs postgres
 ```
 
-**Step 3 — Inspect role memberships (equivalent to sys.database_role_members):**
+**Step 3,  Inspect role memberships (equivalent to sys.database_role_members):**
 
 ```sql
 SELECT r.rolname                   AS role_name,
@@ -289,7 +289,7 @@ FROM pg_roles
 ORDER BY rolname;
 ```
 
-**Step 4 — Check object-level permissions:**
+**Step 4,  Check object-level permissions:**
 
 ```sql
 -- Table-level permissions (equivalent to fn_dbpermissions in SQL Server):
@@ -308,7 +308,7 @@ ORDER BY table_schema, table_name, grantee;
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkmark.png"><b>Steps</b></p>
 
-**Step 1 — Create a backup with pg_dump:**
+**Step 1,  Create a backup with pg_dump:**
 
 Open a Command Prompt (not psql) and run:
 
@@ -326,7 +326,7 @@ REM List the contents of the dump (equivalent to viewing a SQL Server backup set
 pg_restore -l C:\PGBackup\pubs.dump
 ```
 
-**Step 2 — Restore to a new database:**
+**Step 2,  Restore to a new database:**
 
 ```bat
 REM Create the target database
@@ -344,17 +344,17 @@ Verify the restore in psql:
 SELECT COUNT(*) FROM sales;
 ```
 
-**Step 3 — Schema-only backup (equivalent to scripting the database in SSMS):**
+**Step 3,  Schema-only backup (equivalent to scripting the database in SSMS):**
 
 ```bat
-REM Schema only — no data:
+REM Schema only,  no data:
 pg_dump -U postgres -h localhost -d pubs --schema-only -F p -f C:\PGBackup\pubs_schema.sql
 
-REM Data only — no DDL:
+REM Data only,  no DDL:
 pg_dump -U postgres -h localhost -d pubs --data-only -F p -f C:\PGBackup\pubs_data.sql
 ```
 
-**Step 4 — Monitor active connections and block/terminate them (equivalent to kill spid in SQL Server):**
+**Step 4,  Monitor active connections and block/terminate them (equivalent to kill spid in SQL Server):**
 
 ```sql
 \c pubs postgres
@@ -373,11 +373,11 @@ WHERE datname = 'pubs'
   AND usename = 'report_user'
   AND state = 'idle';
 
--- Cancel a running query (like sending a cancel to a process — softer than terminate):
+-- Cancel a running query (like sending a cancel to a process,  softer than terminate):
 SELECT pg_cancel_backend(<pid>);
 ```
 
-**Step 5 — Clean up the test database:**
+**Step 5,  Clean up the test database:**
 
 ```sql
 \c postgres
@@ -437,19 +437,19 @@ ORDER BY l.pid;
 
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/owl.png"><b>For Further Study</b></p>
 
-- [PostgreSQL Documentation — Client Authentication (pg_hba.conf)](https://www.postgresql.org/docs/current/client-authentication.html)
-- [PostgreSQL Documentation — Database Roles](https://www.postgresql.org/docs/current/user-manag.html)
-- [PostgreSQL Documentation — Privilege System](https://www.postgresql.org/docs/current/ddl-priv.html)
-- [PostgreSQL Documentation — Row Level Security](https://www.postgresql.org/docs/current/ddl-rowsecurity.html)
-- [PostgreSQL Documentation — pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html)
-- [PostgreSQL Documentation — pg_restore](https://www.postgresql.org/docs/current/app-pgrestore.html)
-- [PostgreSQL Documentation — Continuous Archiving and PITR](https://www.postgresql.org/docs/current/continuous-archiving.html)
-- [PostgreSQL Documentation — Monitoring Database Activity](https://www.postgresql.org/docs/current/monitoring-stats.html)
-- [PostgreSQL Documentation — Routine Vacuuming](https://www.postgresql.org/docs/current/routine-vacuuming.html)
+- [PostgreSQL Documentation,  Client Authentication (pg_hba.conf)](https://www.postgresql.org/docs/current/client-authentication.html)
+- [PostgreSQL Documentation,  Database Roles](https://www.postgresql.org/docs/current/user-manag.html)
+- [PostgreSQL Documentation,  Privilege System](https://www.postgresql.org/docs/current/ddl-priv.html)
+- [PostgreSQL Documentation,  Row Level Security](https://www.postgresql.org/docs/current/ddl-rowsecurity.html)
+- [PostgreSQL Documentation,  pg_dump](https://www.postgresql.org/docs/current/app-pgdump.html)
+- [PostgreSQL Documentation,  pg_restore](https://www.postgresql.org/docs/current/app-pgrestore.html)
+- [PostgreSQL Documentation,  Continuous Archiving and PITR](https://www.postgresql.org/docs/current/continuous-archiving.html)
+- [PostgreSQL Documentation,  Monitoring Database Activity](https://www.postgresql.org/docs/current/monitoring-stats.html)
+- [PostgreSQL Documentation,  Routine Vacuuming](https://www.postgresql.org/docs/current/routine-vacuuming.html)
 - [PostgreSQL Security Best Practices](https://www.percona.com/blog/postgresql-database-security-best-practices/)
 - [Massively Parallel Postgres Backups](https://planetscale.com/blog/massively-parallel-postgres-backups)
-- [pgBackRest — Advanced PostgreSQL Backup Tool](https://pgbackrest.org/)
-- [Barman — Backup and Recovery Manager for PostgreSQL](https://pgbarman.org/)
+- [pgBackRest,  Advanced PostgreSQL Backup Tool](https://pgbackrest.org/)
+- [Barman,  Backup and Recovery Manager for PostgreSQL](https://pgbarman.org/)
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
 

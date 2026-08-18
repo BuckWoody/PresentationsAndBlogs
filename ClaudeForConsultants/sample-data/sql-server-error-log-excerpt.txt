@@ -1,0 +1,19 @@
+Contoso Retail,  SQL Server ERRORLOG excerpt
+Instance: CONTOSO-SQL01\PROD (fictitious, for training use only)
+Window: flash-sale event, approx. 90 minutes of degraded checkout performance
+
+2026-05-09 14:02:11.34 spid19s     Autogrow of file 'tempdev' in database 'tempdb' took 812 milliseconds. Consider using instant file initialization to speed up this process.
+2026-05-09 14:02:44.02 spid19s     Autogrow of file 'tempdev' in database 'tempdb' took 764 milliseconds.
+2026-05-09 14:03:15.77 spid52      Time out occurred while waiting for buffer latch -- type 2, bp 000001F3A2C41000, page 1:48213, stat 0x10c, database id: 7, allocation unit Id: 72057594043170816, task 0x0000023B4F3D2468 : 0, waittime 30000, flags 0x1018010a, owning task 0x0000023B4F3D9188. Continuing to wait.
+2026-05-09 14:03:16.02 spid52      Buffer latch timeout resolved.
+2026-05-09 14:04:02.55 spid19s     Autogrow of file 'tempdev' in database 'tempdb' took 953 milliseconds.
+2026-05-09 14:05:47.21 spid61      A significant part of sql server process memory has been paged out. This may result in a performance degradation.
+2026-05-09 14:06:12.90 spid44      Lock request time out period exceeded. (Query against dbo.Orders, statement: UPDATE dbo.OrderStatus ...)
+2026-05-09 14:07:03.18 spid19s     Autogrow of file 'tempdev' in database 'tempdb' took 1042 milliseconds.
+2026-05-09 14:09:55.63 spid52      Time out occurred while waiting for buffer latch -- type 2, bp 000001F3A2C41000, page 1:48213, stat 0x10c, database id: 7, allocation unit Id: 72057594043170816. Continuing to wait.
+2026-05-09 14:22:40.09 spid19s     Autogrow of file 'tempdev' in database 'tempdb' took 887 milliseconds.
+
+Notes from the customer's DBA (pasted into the same email as this file):
+"tempdb kept autogrowing all through the event even though we sized it 'big enough' after the last incident.
+We also saw a bunch of blocking on the Orders table around checkout writes. CPU never went above ~60%,
+disk queue length on the data drive looked fine, but something was clearly serializing."
