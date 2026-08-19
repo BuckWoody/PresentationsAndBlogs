@@ -39,6 +39,8 @@ These are the genuine, non-fictitious Microsoft Learn references behind the inci
 
 ## Extending the workflow beyond Claude.ai (Module 07)
 
+- [Claude Code 101](https://anthropic.skilljar.com/claude-code-101)
+- [Claude Code in Action](https://anthropic.skilljar.com/claude-code-in-action)
 - [Claude Code Docs](https://code.claude.com/docs/en/overview),  the agentic command-line tool
 - [Claude Platform Docs,  API Reference](https://platform.claude.com/docs/en/api/overview),  building with the Claude API
 - [Model Context Protocol](https://claude.com/partners/mcp),  connecting Claude to live systems, and the OWASP reference above before you do
