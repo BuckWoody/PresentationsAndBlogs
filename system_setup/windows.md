@@ -120,6 +120,7 @@ As I mentioned, I run a complete update script to keep my system up to date and 
 
 .DESCRIPTION
 Windows 11 System Maintenance (Buck Woody, version 09.12.2025)
+Modified by Ralph Kemperdick, 2026-08-31
 
 Performs maintenance tasks: 
     - Logs each section to Windows Application log.
@@ -134,22 +135,27 @@ Performs maintenance tasks:
 
 Requires: 
     - Chocolately
-    - PSCalendar
+    - Winget
+    - Get-ScheduledTask (Windows 10/11)
     - PSWindowsUpdate
 #>
 
-[CmdletBinding(SupportsShouldProcess)]
+[CmdletBinding(SupportsShouldProcess, PositionalBinding = $false)]
 param(
-    [string]$WifiSSID = 'YourWifiSID',
-    [string]$WifiProfileName = 'YourWifiProfileName',
-    [string]$WifiInterface = 'Wi-Fi',
+    [string]$WifiSSID = "RaKeTe-WiFi",
+    [string]$WifiProfileName = 'RaKeTe-WiFi',
+    [string]$WifiInterface = 'WLAN',
     [switch]$ForceClearEventLogs,
     [switch]$SkipWifi,
-    [switch]$SkipCalendar
+    [switch]$SkipCalendar,
+    [switch]$ForceRun,
+    [switch]$Help,
+    [Parameter(ValueFromRemainingArguments = $true)]
+    [string[]]$RemainingArguments
 )
 
 # --- Config ---
-$EventSource = 'Updateme.Script'
+$EventSource = 'UpdateMe.Script'
 $EventLogName = 'Application'
 $Evt = @{
     SectionStart = 1000
@@ -158,62 +164,33 @@ $Evt = @{
     SectionErr   = 1003
 }
 
-# Export BitLocker Recovery Key for a specific drive (e.g., C:)
-# Save it to a secure location
-
-try {
-    $driveLetter = "C:"  # Change if needed
-    $outputPath  = "C:\BitLockerRecoveryKey.txt"  # Change to a secure location
-
-    # Get BitLocker volume info
-    $bitlockerInfo = Get-BitLockerVolume -MountPoint $driveLetter
-
-    if (-not $bitlockerInfo) {
-        Write-Error "No BitLocker information found for $driveLetter."
-        exit
-    }
-
-    # Extract recovery password protector
-    $recoveryProtector = $bitlockerInfo.KeyProtector | Where-Object { $_.KeyProtectorType -eq 'RecoveryPassword' }
-
-    if (-not $recoveryProtector) {
-        Write-Error "No recovery password found for $driveLetter."
-        exit
-    }
-
-    # Export to file
-    $recoveryProtector | Out-File -FilePath $outputPath -Encoding UTF8 -Force
-
-    Write-Host "BitLocker recovery key for $driveLetter has been saved to: $outputPath" -ForegroundColor Green
-}
-catch {
-    Write-Error "An error occurred: $_"
-}
-
 # --- Functions ---
-function Ensure-Admin {
-    # Ensures the script is running with admin rights; if not, relaunches as admin 
+function Test-Administrator {
+    # Ensures the script is running with admin rights; if not, exits gracefully instead of looping.
     $id = [Security.Principal.WindowsIdentity]::GetCurrent()
     $p  = New-Object Security.Principal.WindowsPrincipal($id)
     if (-not $p.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-        Write-Host "Elevation required. Relaunching as Administrator..."
-        $psi = New-Object System.Diagnostics.ProcessStartInfo
-        $psi.FileName = (Get-Process -Id $PID).Path
-        $args = @()
-        if ($PSCommandPath) { $args += '-File', "`"$PSCommandPath`"" }
-        if ($MyInvocation.UnboundArguments) { $args += $MyInvocation.UnboundArguments }
-        $psi.Arguments = $args -join ' '
-        $psi.Verb = 'runas'
-        [Diagnostics.Process]::Start($psi) | Out-Null
-        exit
+        Write-Host "Elevation required. Please run this script as Administrator. Exiting."
+        exit 1
     }
 }
 
-function Ensure-EventSource {
+function Initialize-EventSource {
     # Ensures the event source exists; if not, creates it
     if (-not [System.Diagnostics.EventLog]::SourceExists($EventSource)) {
         New-EventLog -LogName $EventLogName -Source $EventSource
     }
+}
+
+function Test-AlreadyRanToday {
+    # Marker file records the last run date so a logon-triggered task fires only once/day
+    $markerPath = Join-Path $env:LOCALAPPDATA 'UpdateMe.lastrun'
+    $today = (Get-Date).ToString('yyyy-MM-dd')
+    if ((Test-Path $markerPath) -and ((Get-Content $markerPath -Raw).Trim() -eq $today)) {
+        return $true
+    }
+    Set-Content -Path $markerPath -Value $today
+    return $false
 }
 
 function Set-WindowTitle {
@@ -284,30 +261,73 @@ function Invoke-Step {
 }
 
 # --- Maintenance Tasks ---
-function Show-Calendar {
-    # Displays calendar if PSCalendar is available - if not, you should install it
+function Initialize-MaintenanceTask {
+
     if ($SkipCalendar) { return }
-    if (Get-Command Get-Calendar -ErrorAction SilentlyContinue) {
-        Get-Calendar
+
+    # Validate if a Scheduled Task is available; display the Task name and status if available - if not, create a logon task for this script
+    $taskName = 'UpdateMe-DailyLogon'
+    $taskExists = $false
+
+    try {
+        $taskExists = $null -ne (Get-ScheduledTask -TaskName $taskName -ErrorAction Stop)
+    } catch {
+        $taskExists = $false
+    }
+
+    if (-not $taskExists) {
+        try {
+            $scriptPath = if ($PSCommandPath) {
+                (Resolve-Path -Path $PSCommandPath -ErrorAction Stop).Path
+            } else {
+                $MyInvocation.MyCommand.Path
+            }
+
+            $trigger = New-ScheduledTaskTrigger -AtLogon
+            $settings = New-ScheduledTaskSettingsSet `
+                -AllowStartIfOnBatteries:$false `
+                -RunOnlyIfNetworkAvailable `
+                -MultipleInstances IgnoreNew
+
+            $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument "-NoProfile -ExecutionPolicy Bypass -File `"$scriptPath`""
+
+            Register-ScheduledTask -TaskName $taskName `
+                -Action $action `
+                -Trigger $trigger `
+                -Settings $settings `
+                -Description 'Runs UpdateMe at user logon only when on AC power and network is available. The script requires Administrator rights and must be run elevated. Manual runs are allowed, and concurrent instances are ignored.' `
+                -Force `
+                -RunLevel Highest | Out-Null
+
+            Write-AppLog "Created scheduled task '$taskName' with AC power + network conditions and ignore-duplicate behavior." 'Information' $Evt.SectionOK
+        } catch {
+            Write-AppLog "Failed to create scheduled task '$taskName': $($_.Exception.Message)" 'Warning' $Evt.SectionWarn
+        }
+    }
+
+    if (Get-Command Get-ScheduledTask -ErrorAction SilentlyContinue) {
+        Get-ScheduledTask -TaskName $taskName | Select-Object TaskName, State, LastRunTime, NextRunTime | Format-Table -AutoSize
     } else {
-        Write-AppLog "PSCalendar not available, skipping" 'Warning' $Evt.SectionWarn
+        Write-AppLog "Scheduled Tasks module not available, skipping" 'Warning' $Evt.SectionWarn
     }
 }
 
 function Connect-Wifi {
-    # Connects to specified Wi-Fi SSID/profile/interface if not skipped. Change the name to your wifi profile.
-    param($SSID,$Profile,$Interface)
+    # Connects to specified Wi-Fi name/interface if not skipped. Change the name to your wifi profile.
+    param($WifiSSID, $WifiProfileName,$WiFiInterface)
     if ($SkipWifi) { return }
-    & netsh wlan connect ssid=$SSID name=$Profile interface=$Interface
+    & netsh wlan connect ssid=$WifiSSID name=$WifiProfileName  interface=$WiFiInterface
 }
 
 function Sync-Clock {
     # Syncs the system clock
-    net start w32time | Out-Null
+    if ((Get-Service -Name w32time -ErrorAction SilentlyContinue).Status -ne 'Running') {
+        net start w32time | Out-Null
+    }
     w32tm /resync | Out-Null
 }
 
-function Defender-QuickScan {
+function Start-DefenderQuickScan {
     # Runs a quick scan with Windows Defender
     $mp = Get-ChildItem "$env:ProgramData\Microsoft\Windows Defender\Platform" -Recurse -Filter MpCmdRun.exe -ErrorAction SilentlyContinue |
           Sort-Object LastWriteTime -Descending | Select-Object -First 1 -ExpandProperty FullName
@@ -315,25 +335,49 @@ function Defender-QuickScan {
     if (Test-Path $mp) { & $mp -Scan -ScanType 1 } else { Write-AppLog "Defender not found; skipping" 'Warning' }
 }
 
-function Upgrade-Choco {
+function Update-Choco {
+    # Upgrades Chocolatey itself if installed, then upgrades all installed Chocolatey packages
+    if (Get-Command choco -ErrorAction SilentlyContinue) { choco upgrade chocolatey }
     # Upgrades all installed Chocolatey packages
     if (Get-Command choco -ErrorAction SilentlyContinue) { choco upgrade all -y } else { Write-AppLog "Chocolatey not found" 'Warning' }
 }
 
-function Upgrade-Winget {
+function Update-Winget {
+    # Upgrades Winget itself if installed, then upgrades all installed Winget packages
+    if (Get-Command winget -ErrorAction SilentlyContinue) { winget upgrade --id Microsoft.AppInstaller --exact --silent --accept-source-agreements --accept-package-agreements } else { Write-AppLog "Winget not found" 'Warning' }
     # Upgrades all installed Winget packages
-    if (Get-Command winget -ErrorAction SilentlyContinue) { winget upgrade --all --silent } else { Write-AppLog "Winget not found" 'Warning' }
+    if (Get-Command winget -ErrorAction SilentlyContinue) { winget upgrade --all --silent  --accept-source-agreements --accept-package-agreements } else { Write-AppLog "Winget not found" 'Warning' }
 }
 
-function Upgrade-PSWindowsUpdate {
+function Update-PSWindowsUpdate {
     # Upgrades Windows via PSWindowsUpdate module. You should install it first.
     try {
-        if (-not (Get-Module PSWindowsUpdate -ListAvailable)) {
-            Install-Module PSWindowsUpdate -Scope CurrentUser -Force
+        if (-not (Get-Module -ListAvailable -Name PSWindowsUpdate)) {
+            $scope = if ([Security.Principal.WindowsPrincipal]::new([Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+                'AllUsers'
+            } else {
+                'CurrentUser'
+            }
+
+            try {
+                Install-Module -Name PSWindowsUpdate -Scope $scope -Force -AllowClobber -ErrorAction Stop
+            } catch {
+                if ($scope -ne 'CurrentUser') {
+                    Write-AppLog "PSWindowsUpdate install failed for AllUsers. Retrying CurrentUser: $($_.Exception.Message)" 'Warning' $Evt.SectionWarn
+                    Install-Module -Name PSWindowsUpdate -Scope CurrentUser -Force -AllowClobber -ErrorAction Stop
+                } else {
+                    throw
+                }
+            }
         }
-        Import-Module PSWindowsUpdate
+
+        Import-Module -Name PSWindowsUpdate -ErrorAction Stop
         $updates = Get-WindowsUpdate
-        if ($updates) { Install-WindowsUpdate -AcceptAll -IgnoreReboot } else { Write-AppLog "No Windows Updates" }
+        if ($updates) {
+            Install-WindowsUpdate -AcceptAll -IgnoreReboot
+        } else {
+            Write-AppLog "No Windows Updates"
+        }
     } catch {
         Write-AppLog "PSWindowsUpdate failed: $($_.Exception.Message)" 'Warning'
     }
@@ -343,8 +387,15 @@ function Update-WSL {
     # Updates Windows Subsystem for Linux if installed
     if (Get-Command wsl -ErrorAction SilentlyContinue) { wsl --update } else { Write-AppLog "WSL not found" 'Warning' }
 }
-
-function Run-CleanMgr {
+function Update-M365{
+    # Updates Microsoft M365 installed products via Click2Run 
+    if (Get-Command "C:\Program Files\Common Files\Microsoft Shared\ClickToRun\OfficeC2RClient.exe" -ErrorAction SilentlyContinue) {
+       Start-Process -FilePath "C:\Program Files\Common Files\Microsoft Shared\ClickToRun\OfficeC2RClient.exe" -ArgumentList '/update user displaylevel=false forceappshutdown=true' -Wait
+    } else {
+        Write-AppLog "OfficeC2RClient.exe command not found" 'Warning'
+    }
+}
+function Start-CleanMgr {
     # Runs Disk Cleanup in silent mode with preset options
     if (Get-Command CleanMgr.exe -ErrorAction SilentlyContinue) {
         Start-Process CleanMgr.exe -ArgumentList '/sagerun:1' -Wait -WindowStyle Hidden
@@ -461,26 +512,168 @@ function Clear-AllEventLogs {
     Get-EventLog -List | ForEach-Object { Clear-EventLog $_.Log }
 }
 
-function Create-RestorePoint {
+function Test-SystemRestorePrerequisites {
+    [CmdletBinding()]
+    param(
+        [switch]$AutoFix
+    )
+
+    $result = [pscustomobject]@{
+        ServiceOk               = $false
+        ProtectionOk            = $false
+        SkipBecauseRecentRestore = $false
+        Message                 = ''
+        TroubleshootingHint     = ''
+    }
+
+    $errors = [System.Collections.Generic.List[string]]::new()
+
+    try {
+        $service = Get-Service VSS, swprv -ErrorAction Stop
+    } catch {
+        $errors.Add("System Restore service 'VSS, swprv' is unavailable: $($_.Exception.Message)")
+        $result.TroubleshootingHint = 'Try repairing Windows system files: run DISM /online /cleanup-image /restorehealth, then sfc /scannow, and reboot.'
+        $result.Message = $errors -join '; '
+        return $result
+    }
+
+    if ($service.StartType -eq 'Disabled') {
+        if ($AutoFix) {
+            try { Set-Service -Name swprv -StartupType Manual -ErrorAction Stop
+                  Set-Service -Name VSS -StartupType Manual -ErrorAction Stop 
+                } catch { }
+        }
+        $errors.Add("System Restore service is disabled.")
+    }
+
+    if ($service.Status -ne 'Running') {
+        if ($AutoFix) {
+            try { Start-Service -Name swprv -ErrorAction Stop
+                  Start-Service -Name VSS -ErrorAction Stop
+                } catch { }
+        }
+        $service.Refresh()
+        if ($service.Status -ne 'Running') {
+            $errors.Add("System Restore service is not running.")
+        }
+    }
+
+    try {
+        $srKey = 'HKLM:\Software\Microsoft\Windows NT\CurrentVersion\SystemRestore'
+        if (Test-Path $srKey) {
+            $props = Get-ItemProperty -Path $srKey -ErrorAction Stop
+            if ($props.DisableSR -eq 1 -or $props.DisableConfig -eq 1) {
+                $errors.Add('System Restore is globally disabled by configuration or policy.')
+            }
+        }
+    } catch {
+        # if the registry cannot be read, ignore and continue with other checks
+    }
+
+    try {
+        $last = Get-ComputerRestorePoint -ErrorAction Stop |
+                Sort-Object -Property CreationTime -Descending |
+                Select-Object -First 1
+        if ($last) {
+            $creationTime = $last.CreationTime
+            if ($creationTime -isnot [datetime] -and $creationTime -is [string]) {
+                if ($creationTime -match '^([0-9]{14}\.\d{6})(?:[-+]\d{3})?$') {
+                    $creationTime = [datetime]::ParseExact($matches[1], 'yyyyMMddHHmmss.ffffff', $null)
+                } else {
+                    $creationTime = [datetime]::Parse($creationTime)
+                }
+            }
+
+            $minutesSinceLast = [math]::Round((New-TimeSpan -Start $creationTime -End (Get-Date)).TotalMinutes, 1)
+            if ($minutesSinceLast -lt 1440) {
+                $result.SkipBecauseRecentRestore = $true
+                $result.ServiceOk = $true
+                $result.ProtectionOk = $true
+                $result.Message = "Skipping restore point creation because the last restore point was created $minutesSinceLast minutes ago."
+                return $result
+            }
+        }
+
+        $result.ProtectionOk = $true
+    } catch {
+        $errors.Add("Restore point support is not available: $($_.Exception.Message)")
+    }
+
+    if ($errors.Count -eq 0) {
+        $result.ServiceOk = $true
+        $result.ProtectionOk = $true
+    }
+
+    $result.Message = $errors -join '; '
+    return $result
+}
+
+function New-RestorePoint {
     # Creates a system restore point (requires admin)
-    powershell.exe -ExecutionPolicy Bypass -Command "Checkpoint-Computer -Description 'Weekly' -RestorePointType 'MODIFY_SETTINGS'"
+    $check = Test-SystemRestorePrerequisites -AutoFix
+    if ($check.SkipBecauseRecentRestore) {
+        Write-AppLog $check.Message 'Information' $Evt.SectionOK
+        return
+    }
+
+    if (-not ($check.ServiceOk -and $check.ProtectionOk)) {
+        $message = "Skipping restore point creation: $($check.Message)"
+        if ($check.TroubleshootingHint) {
+            $message += " Troubleshooting: $($check.TroubleshootingHint)"
+        }
+        Write-AppLog $message 'Warning' $Evt.SectionWarn
+        return
+    }
+
+    try {
+        Checkpoint-Computer -Description 'Weekly' -RestorePointType 'MODIFY_SETTINGS' -ErrorAction Stop
+        Write-AppLog 'Restore point created successfully' 'Information' $Evt.SectionOK
+    } catch {
+        Write-AppLog "Restore point creation failed: $($_.Exception.Message)" 'Error' $Evt.SectionErr
+        if ($_.Exception.FullyQualifiedErrorId -match 'ServiceDisabled|ArgumentException') {
+            Write-AppLog 'Hint: enable System Restore and ensure the system volume has protection enabled.' 'Warning' $Evt.SectionWarn
+        }
+    }
 }
 
 # --- Main ---
-Ensure-Admin
-Ensure-EventSource
+if ($Help -or ($RemainingArguments -contains '--help')) {
+        @"
+Usage:
+    .\UpdateMe.ps1 [options]
+
+Options:
+    -WifiSSID <string>          Wi-Fi SSID to connect to. Default: RaKeTe-WiFi
+    -WifiProfileName <string>   Wi-Fi profile name. Default: RaKeTe-WiFi
+    -WifiInterface <string>     Wi-Fi interface name. Default: WLAN
+    -ForceClearEventLogs        Clear all event logs after maintenance.
+    -SkipWifi                   Do not connect to Wi-Fi.
+    -SkipCalendar               Do not create or display the logon scheduled task.
+    -ForceRun                   Bypass the once-per-day run check.
+    -Help, --help               Display this help and exit.
+"@ | Write-Host
+        exit
+}
+
+Test-Administrator
+if (-not $ForceRun -and (Test-AlreadyRanToday)) {
+    Write-Host "Already ran today; exiting."
+    exit
+}
+Initialize-EventSource
 clear-host
 Set-WindowTitle "System Maintenance Starting"
 Write-AppLog "System Maintenance Starting" 'Information'
-Invoke-Step "Calendar & Wi-Fi" { Show-Calendar; Connect-Wifi $WifiSSID $WifiProfileName $WifiInterface }
+Invoke-Step "Maintenance Task & Wi-Fi" { Initialize-MaintenanceTask; Connect-Wifi $WifiSSID $WifiProfileName $WifiInterface }
 Invoke-Step "Synchronizing Clock" { Sync-Clock }
-Invoke-Step "Create Restore Point" { Create-RestorePoint }
-Invoke-Step "Defender Scan" { Defender-QuickScan }
-Invoke-Step "Chocolatey Upgrade" { Upgrade-Choco }
-Invoke-Step "Winget Upgrade" { Upgrade-Winget }
-Invoke-Step "Windows Update" { Upgrade-PSWindowsUpdate }
+Invoke-Step "Create Restore Point" { New-RestorePoint }
+Invoke-Step "Defender Scan" { Start-DefenderQuickScan }
+Invoke-Step "Chocolatey Upgrade" { Update-Choco }
+Invoke-Step "Winget Upgrade" { Update-Winget }
+Invoke-Step "Windows Update" { Update-PSWindowsUpdate }
+Invoke-Step "M365 Update" { Update-M365 }
 Invoke-Step "WSL Update" { Update-WSL }
-Invoke-Step "Disk Cleanup" { Run-CleanMgr }
+Invoke-Step "Disk Cleanup" { Start-CleanMgr }
 Invoke-Step "Check Logs" { Show-RecentErrors }
 Invoke-Step "System Info" { Show-SystemInfo }
 Invoke-Step "Clear Event Logs" { Clear-AllEventLogs }
