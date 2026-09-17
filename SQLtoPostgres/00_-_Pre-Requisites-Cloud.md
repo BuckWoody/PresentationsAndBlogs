@@ -14,11 +14,37 @@ The **PostgreSQL for the SQL Server Database Professional** workshop is taught u
 
 (**Note:** You will find a series of graphical commands below if you want a GUI installation)
 
+## Build your Azure PostgreSQL Flexible Server environment
+
+<p style="border-bottom: 1px solid lightgrey;"></p>
+
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b> Set Up Azure Database for PostgreSQL Flexible Server</b></p>
+
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 1 – Create an Azure Account</b></p>
+
+You need a Microsoft Azure account. Use one of the following options:
+
+- **Free Account (12 months + $200 credit):** [https://azure.microsoft.com/en-us/free/](https://azure.microsoft.com/en-us/free/)
+- **MSDN/Visual Studio Subscriber Credit:** [https://azure.microsoft.com/en-us/pricing/member-offers/credit-for-visual-studio-subscribers/](https://azure.microsoft.com/en-us/pricing/member-offers/credit-for-visual-studio-subscribers/)
+- **Pay-as-you-go:** [https://azure.microsoft.com/en-us/pricing/purchase-options/pay-as-you-go/](https://azure.microsoft.com/en-us/pricing/purchase-options/pay-as-you-go/)
+
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 2 – Create Azure Database for PostgreSQL – Flexible Server</b></p>
+
+Follow the quickstart to create a Flexible Server instance in the Azure Portal:
+
+- [Quickstart: Create Azure Database for PostgreSQL – Flexible Server](https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/quickstart-create-server-portal)
+
+Choose the **Burstable B1ms** tier for workshop purposes to minimize cost. **Turn off the server when not in use** from the Azure Portal to avoid charges.
+
+<p style="border-bottom: 1px solid lightgrey;"></p>
+
+
+# Complete the remaining pre-requisites
 ## Option 1: Use the Windows Package Manager (winget) for a complete course installation
 
 You can use the Windows Package Manager called [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) to install all the software required for this course. 
 
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 1a: Install SQL Server 2022 Developer Edition (Windows), PostgresQL version 17, and DBeaver Community Edition using winget</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 1a: Install SQL Server 2022 Developer Edition (Windows) and DBeaver Community Edition using winget</b></p>
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 1 – Use PowerShell to install all course software</b></p>
 
@@ -29,7 +55,6 @@ Open PowerShell (elavated) and run the following commands:
 ```powershell
 winget install Microsoft.SQLServer.2022.Developer
 winget install --id=Microsoft.SQLServerManagementStudio -e
-winget install --id=PostgreSQL.PostgreSQL.17 -e
 winget install --id=DBeaver.DBeaver.Community -e
 ```
 <p style="border-bottom: 1px solid lightgrey;"></p>
@@ -58,19 +83,15 @@ Install the latest version of SSMS for use as a reference tool throughout the wo
 - [Download SSMS](https://learn.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms)
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 2b: Install PostgreSQL 17 on Windows</b></p>
+<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 2b: Installing local tools to work with your PostgreSQL environment</b></p>
 
-The recommended installer for Windows is the EnterpriseDB (EDB) interactive installer, which includes PostgreSQL, pgAdmin 4, the Stack Builder utility, and command-line tools.
+For this class we recommend you install the Postgres command-line tools and the pgAdmin 4 software. They can be found in the EnterpriseDB (EDB) interactive installer which is the recommended installer for Windows.  While walking through the installer you only need to select pgAdmin and the command line tools on the components page of the install; then complete the installation.
 
 - [Download PostgreSQL 17 for Windows (EDB Installer)](https://sbp.enterprisedb.com/getfile.jsp?fileid=1260306)
-- [Official PostgreSQL Windows Installation Guide](https://www.postgresql.org/docs/current/install-windows.html)
+- [Official PostgreSQL Windows Installation Guide](https://www.enterprisedb.com/docs/supported-open-source/postgresql/installing/windows/) 
 
 During installation:
-
 - Set the **data directory** to a dedicated drive/folder (e.g., `C:\PostgreSQL\17\data`).
-- Set a strong password for the `postgres` superuser,  **remember this password**, you will need it throughout the workshop.
-- Accept the default port **5432**.
-- Accept the default locale.
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 3b: Install DBeaver Community Edition</b></p>
 
@@ -146,29 +167,6 @@ Open DBeaver from your Start menu, and create two database connections,  one for
 
 >  DBeaver has a `Run` and a `Run Script` icon. The former only runs a highlighted line, the latter runs all statements.
 
-<p style="border-bottom: 1px solid lightgrey;"></p>
-
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>(Optional) Set Up Azure Database for PostgreSQL Flexible Server</b></p>
-
-Module 06 demonstrates cloud-managed PostgreSQL. If you want to follow along with the Azure sections, create a Flexible Server instance before the workshop.
-
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 1 – Create an Azure Account</b></p>
-
-You need a Microsoft Azure account. Use one of the following options:
-
-- **Free Account (12 months + $200 credit):** [https://azure.microsoft.com/en-us/free/](https://azure.microsoft.com/en-us/free/)
-- **MSDN/Visual Studio Subscriber Credit:** [https://azure.microsoft.com/en-us/pricing/member-offers/credit-for-visual-studio-subscribers/](https://azure.microsoft.com/en-us/pricing/member-offers/credit-for-visual-studio-subscribers/)
-- **Pay-as-you-go:** [https://azure.microsoft.com/en-us/pricing/purchase-options/pay-as-you-go/](https://azure.microsoft.com/en-us/pricing/purchase-options/pay-as-you-go/)
-
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 2 – Create Azure Database for PostgreSQL – Flexible Server</b></p>
-
-Follow the quickstart to create a Flexible Server instance in the Azure Portal:
-
-- [Quickstart: Create Azure Database for PostgreSQL – Flexible Server](https://learn.microsoft.com/en-us/azure/postgresql/flexible-server/quickstart-create-server-portal)
-
-Choose the **Burstable B1ms** tier for workshop purposes to minimize cost. **Turn off the server when not in use** from the Azure Portal to avoid charges.
-
-<p style="border-bottom: 1px solid lightgrey;"></p>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
