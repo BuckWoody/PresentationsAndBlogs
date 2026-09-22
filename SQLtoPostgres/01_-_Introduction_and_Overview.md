@@ -333,6 +333,7 @@ This writes slow queries to the Postgres log file in the `log` subdirectory of y
 - [Microsoft Learn,  Azure Database for Postgres Overview](https://learn.microsoft.com/en-us/azure/postgresql/overview)
 - [PgBouncer,  Connection Pooling for Postgres](https://www.pgbouncer.org/)
 - [DBeaver Community Edition](https://dbeaver.io/)
+- [Configuration Graphical Explainer](https://postgresqlco.nf/)
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
 
