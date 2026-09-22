@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SQL Server Locking vs PostgreSQL MVCC</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+
+  :root{
+    --bg:#EEF1EF;
+    --surface:#FFFFFF;
+    --surface-2:#F5F7F5;
+    --ink:#1B2630;
+    --ink-strong:#101820;
+    --ink-muted:#55636C;
+    --rule:#D8DDDA;
+
+    --role-writer:#B25A24;
+    --role-reader:#2C7DA0;
+    --danger:#B23A3A;
+    --safe:#2E8F79;
+    --dead:#6B7680;
+
+    --blueprint-bg:#0F2C42;
+    --blueprint-bg-2:#0C2438;
+    --blueprint-line: rgba(255,255,255,.24);
+    --blueprint-line-resp: rgba(255,255,255,.15);
+    --node-bg: rgba(255,255,255,.05);
+    --node-border: rgba(255,255,255,.22);
+    --diagram-ink:#EAF3FA;
+    --diagram-ink-muted: rgba(234,243,250,.62);
+
+    --sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --mono: 'IBM Plex Mono', SFMono-Regular, Consolas, 'Liberation Mono', monospace;
+
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#12161A;
+      --surface:#191F24;
+      --surface-2:#1C2329;
+      --ink:#E7ECEE;
+      --ink-strong:#F5F8F9;
+      --ink-muted:#9AA6AC;
+      --rule:#2A3136;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#12161A;
+    --surface:#191F24;
+    --surface-2:#1C2329;
+    --ink:#E7ECEE;
+    --ink-strong:#F5F8F9;
+    --ink-muted:#9AA6AC;
+    --rule:#2A3136;
+  }
+
+  html{ scroll-padding-top: env(safe-area-inset-top,0px); }
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .page{
+    max-width:900px;
+    margin:0 auto;
+    padding: 3.2rem 1.4rem 5rem;
+  }
+
+  .prose{ max-width: 640px; }
+
+  h1{
+    font-family:var(--sans);
+    font-weight:700;
+    font-size: clamp(1.7rem, 4vw, 2.35rem);
+    letter-spacing:-0.01em;
+    color:var(--ink-strong);
+    margin: 0 0 .5rem;
+  }
+
+  .dek{
+    font-size:1.08rem;
+    color:var(--ink-muted);
+    margin: 0 0 1.6rem;
+    font-style:italic;
+    max-width: 620px;
+  }
+
+  .intro p{ margin: 0 0 1.05rem; font-size:1.02rem; }
+
+  .top-controls{
+    display:flex;
+    align-items:center;
+    gap:.7rem;
+    margin: 1.6rem 0 2.6rem;
+  }
+
+  button.ctrl{
+    font-family:var(--mono);
+    font-size:.8rem;
+    border:1px solid var(--rule);
+    background:var(--surface);
+    color:var(--ink);
+    padding:.5rem .85rem;
+    border-radius:6px;
+    cursor:pointer;
+  }
+  button.ctrl:hover{ border-color: var(--ink-muted); }
+  button.ctrl:focus-visible, a:focus-visible{ outline: 2px solid var(--role-reader); outline-offset:2px; }
+
+  section.panel{ margin: 3.2rem 0 3.6rem; }
+  section.panel h2{
+    font-family:var(--sans);
+    font-weight:600;
+    font-size: clamp(1.25rem, 3vw, 1.55rem);
+    color:var(--ink-strong);
+    margin: 0 0 .8rem;
+  }
+  section.panel .prose p{ margin: 0 0 1rem; font-size:1rem; }
+
+  pre.code{
+    font-family:var(--mono);
+    font-size:.82rem;
+    line-height:1.6;
+    background:var(--surface-2);
+    border:1px solid var(--rule);
+    border-radius:8px;
+    padding: 1rem 1.1rem;
+    overflow-x:auto;
+    color:var(--ink);
+    margin: 1.1rem 0 1.6rem;
+    max-width: 640px;
+  }
+  pre.code .cmt{ color:var(--ink-muted); }
+
+  .legend{
+    display:flex; gap:1.4rem; flex-wrap:wrap;
+    font-family:var(--mono); font-size:.75rem; color:var(--ink-muted);
+    margin: 0 0 .6rem;
+  }
+  .legend span{ display:inline-flex; align-items:center; gap:.4rem; }
+  .dot{ width:9px; height:9px; border-radius:50%; display:inline-block; }
+  .dot.writer{ background:var(--role-writer); }
+  .dot.reader{ background:var(--role-reader); }
+
+  .stage-wrap{ max-width: 100%; }
+
+  .stage-inner{
+    --dur: 14s;
+    position:relative;
+    width:100%;
+    aspect-ratio: 16/9;
+    background: radial-gradient(circle at 78% 50%, var(--blueprint-bg-2), var(--blueprint-bg) 70%);
+    border-radius:10px;
+    overflow:hidden;
+    border:1px solid rgba(255,255,255,.08);
+    box-shadow: inset 0 0 60px rgba(0,0,0,.25);
+  }
+
+  @media (max-width: 560px){
+    .stage-inner{ aspect-ratio: 16/13; }
+  }
+
+  .stage-inner svg.lines{
+    position:absolute; inset:0; width:100%; height:100%;
+  }
+
+  .node{
+    position:absolute;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    gap:.15em;
+    padding: .55em .75em;
+    border-radius:7px;
+    background: var(--node-bg);
+    border:1px solid var(--node-border);
+    color: var(--diagram-ink);
+    font-family: var(--mono);
+    font-size: clamp(.6rem, 1.5vw, .78rem);
+    line-height:1.35;
+    transition: box-shadow .35s ease, border-color .35s ease;
+  }
+  .node .t{
+    font-family: var(--sans); font-weight:600; font-size:1.02em;
+    color:#fff;
+  }
+  .node .m{ color: var(--diagram-ink-muted); }
+
+  .node.n-a{ left:2%; top:8%; width:26%; height:20%; }
+  .node.n-b{ left:2%; top:72%; width:26%; height:20%; }
+  .node.n-row{ left:72%; top:16%; width:26%; height:68%; justify-content:flex-start; padding-top:.7em; }
+  .node.n-row .rowline{ display:flex; flex-direction:column; gap:.3em; }
+
+  .token{
+    position:absolute;
+    width:9px; height:9px;
+    border-radius:50%;
+    transform: translate(-50%,-50%);
+    opacity:0;
+    box-shadow: 0 0 8px 2px currentColor;
+  }
+  .token.writer{ background:var(--role-writer); color:var(--role-writer); }
+  .token.reader{ background:var(--role-reader); color:var(--role-reader); }
+
+  .tag{
+    position:absolute;
+    transform: translate(-50%,-50%);
+    font-family: var(--mono);
+    font-size: clamp(.55rem, 1.3vw, .72rem);
+    padding: .2em .5em;
+    border-radius:5px;
+    white-space:nowrap;
+    opacity:0;
+  }
+  .tag.commit{ background: rgba(46,143,121,.18); border:1px solid var(--safe); color:#B7F0E1; }
+  .tag.blocked{ background: rgba(178,58,58,.22); border:1px solid var(--danger); color:#FAD1D1; }
+  .tag.readout{ background: rgba(44,125,160,.2); border:1px solid var(--role-reader); color:#D4EEFA; }
+
+  .lockbadge{
+    display:flex; align-items:center; gap:.4em;
+    font-family:var(--mono); font-size:.78em;
+    color:#FFE1C4; opacity:0;
+  }
+
+  .valuewrap{ position:relative; display:inline-block; }
+  .valuewrap .v{ position:absolute; left:0; top:0; white-space:nowrap; }
+
+  .tuple{
+    border-radius:5px; border:1px dashed var(--node-border);
+    padding:.35em .5em; font-size:.85em;
+    position:relative;
+  }
+  .tuple.current{ border-style:solid; border-color: var(--safe); background: rgba(46,143,121,.12); }
+  .tuple.pending{ border-style:dashed; border-color: var(--role-writer); background: rgba(178,90,36,.10); }
+  .tuple.expired{ border-style:solid; border-color: var(--dead); background: rgba(107,118,128,.12); color: var(--diagram-ink-muted); text-decoration: line-through; text-decoration-color: rgba(234,243,250,.35); }
+
+  .tuplewrap{ position:relative; min-height: 3.6em; }
+  .tuplewrap > div{ position:absolute; inset:0; }
+
+  .vacuum{
+    position:absolute; opacity:0;
+    font-family:var(--mono); font-size:.72em;
+    color:#D8DEE1;
+  }
+
+  .caption{
+    font-size:.93rem;
+    color:var(--ink-muted);
+    font-style:italic;
+    margin: .9rem 0 0;
+    max-width: 640px;
+  }
+
+  .note{
+    font-size:.93rem;
+    color:var(--ink-muted);
+    margin: .9rem 0 0;
+    max-width: 640px;
+  }
+
+  .reduced-note{ display:none; font-size:.85rem; color:var(--ink-muted); padding:1rem; }
+
+  .wrapup{ margin-top: 3.6rem; padding-top: 2rem; border-top:1px solid var(--rule); }
+  .wrapup h2{ font-family:var(--sans); font-weight:600; font-size:1.4rem; color:var(--ink-strong); margin:0 0 .9rem; }
+  .wrapup p{ max-width:640px; margin:0 0 1rem; font-size:1.02rem; }
+  .kicker{ font-weight:600; color:var(--ink-strong); }
+
+  @media (prefers-reduced-motion: reduce){
+    .stage-inner{ display:none; }
+    .reduced-note{ display:block; }
+  }
+
+  /* ---------- SQL SERVER TIMELINE ---------- */
+  .sql .n-a{ animation: sqlGlowA var(--dur) linear infinite; }
+  .sql .n-b{ animation: sqlGlowB var(--dur) linear infinite; }
+  @keyframes sqlGlowA{
+    0%,4%   { box-shadow:none; border-color:var(--node-border); }
+    5%,63%  { box-shadow: 0 0 0 1px var(--role-writer), 0 0 16px 2px rgba(178,90,36,.55); border-color:var(--role-writer); }
+    64%,100%{ box-shadow:none; border-color:var(--node-border); }
+  }
+  @keyframes sqlGlowB{
+    0%,23%  { box-shadow:none; border-color:var(--node-border); }
+    24%,81% { box-shadow: 0 0 0 1px var(--role-reader), 0 0 16px 2px rgba(44,125,160,.5); border-color:var(--role-reader); }
+    82%,100%{ box-shadow:none; border-color:var(--node-border); }
+  }
+
+  .sql .tok-reqA{ animation: sqlReqA var(--dur) linear infinite; }
+  @keyframes sqlReqA{
+    0%,4%  { opacity:0; left:13%; top:20%; }
+    5%     { opacity:1; left:13%; top:20%; }
+    10%    { left:50%; top:20%; }
+    14%    { left:50%; top:40%; }
+    18%    { left:74%; top:40%; opacity:1; }
+    19%,100%{ opacity:0; left:74%; top:40%; }
+  }
+
+  .sql .tok-reqB{ animation: sqlReqB var(--dur) linear infinite; }
+  @keyframes sqlReqB{
+    0%,23% { opacity:0; left:13%; top:80%; }
+    24%    { opacity:1; left:13%; top:80%; }
+    29%    { left:50%; top:80%; }
+    33%    { left:50%; top:60%; }
+    37%,64%{ left:68%; top:60%; opacity:1; }
+    68%    { left:74%; top:60%; opacity:1; }
+    69%,100%{ opacity:0; left:74%; top:60%; }
+  }
+
+  .sql .tok-resB{ animation: sqlResB var(--dur) linear infinite; }
+  @keyframes sqlResB{
+    0%,68% { opacity:0; left:74%; top:64%; }
+    69%    { opacity:1; left:74%; top:64%; }
+    74%    { left:50%; top:64%; }
+    78%    { left:50%; top:84%; }
+    82%    { left:13%; top:84%; opacity:1; }
+    83%,100%{ opacity:0; left:13%; top:84%; }
+  }
+
+  .sql .lockbadge{ animation: sqlLock var(--dur) linear infinite; }
+  @keyframes sqlLock{
+    0%,17%  { opacity:0; }
+    18%,63% { opacity:1; }
+    64%,100%{ opacity:0; }
+  }
+
+  .sql .v-old{ animation: sqlValOld var(--dur) linear infinite; }
+  @keyframes sqlValOld{
+    0%,17%  { opacity:1; }
+    18%,63% { opacity:.4; }
+    64%,100%{ opacity:0; }
+  }
+  .sql .v-new{ animation: sqlValNew var(--dur) linear infinite; }
+  @keyframes sqlValNew{
+    0%,63%  { opacity:0; }
+    64%,100%{ opacity:1; }
+  }
+
+  .sql .tag-blocked{ animation: sqlBlocked var(--dur) linear infinite; }
+  @keyframes sqlBlocked{
+    0%,36%  { opacity:0; left:68%; top:52%; }
+    37%,63% { opacity:1; left:68%; top:52%; }
+    64%,100%{ opacity:0; left:68%; top:52%; }
+  }
+
+  .sql .tag-commit{ animation: sqlCommit var(--dur) linear infinite; }
+  @keyframes sqlCommit{
+    0%,62%  { opacity:0; }
+    63%,70% { opacity:1; }
+    71%,100%{ opacity:0; }
+  }
+
+  .sql .tag-readout{ animation: sqlReadout var(--dur) linear infinite; }
+  @keyframes sqlReadout{
+    0%,81%  { opacity:0; }
+    82%,95% { opacity:1; }
+    96%,100%{ opacity:0; }
+  }
+
+  /* ---------- POSTGRESQL TIMELINE ---------- */
+  .pg .n-a{ animation: pgGlowA var(--dur) linear infinite; }
+  .pg .n-b{ animation: pgGlowB var(--dur) linear infinite; }
+  @keyframes pgGlowA{
+    0%,4%   { box-shadow:none; border-color:var(--node-border); }
+    5%,33%  { box-shadow: 0 0 0 1px var(--role-writer), 0 0 16px 2px rgba(178,90,36,.55); border-color:var(--role-writer); }
+    34%,100%{ box-shadow:none; border-color:var(--node-border); }
+  }
+  @keyframes pgGlowB{
+    0%,7%   { box-shadow:none; border-color:var(--node-border); }
+    8%,40%  { box-shadow: 0 0 0 1px var(--role-reader), 0 0 16px 2px rgba(44,125,160,.5); border-color:var(--role-reader); }
+    41%,100%{ box-shadow:none; border-color:var(--node-border); }
+  }
+
+  .pg .tok-reqA{ animation: pgReqA var(--dur) linear infinite; }
+  @keyframes pgReqA{
+    0%,4%  { opacity:0; left:13%; top:20%; }
+    5%     { opacity:1; left:13%; top:20%; }
+    10%    { left:50%; top:20%; }
+    14%    { left:50%; top:40%; }
+    18%    { left:74%; top:40%; opacity:1; }
+    19%,100%{ opacity:0; left:74%; top:40%; }
+  }
+
+  .pg .tok-reqB{ animation: pgReqB var(--dur) linear infinite; }
+  @keyframes pgReqB{
+    0%,7%  { opacity:0; left:13%; top:80%; }
+    8%     { opacity:1; left:13%; top:80%; }
+    13%    { left:50%; top:80%; }
+    17%    { left:50%; top:60%; }
+    21%    { left:74%; top:60%; opacity:1; }
+    22%,100%{ opacity:0; left:74%; top:60%; }
+  }
+
+  .pg .tok-resB{ animation: pgResB var(--dur) linear infinite; }
+  @keyframes pgResB{
+    0%,22% { opacity:0; left:74%; top:64%; }
+    23%    { opacity:1; left:74%; top:64%; }
+    26%    { left:50%; top:64%; }
+    28%    { left:50%; top:84%; }
+    30%    { left:13%; top:84%; opacity:1; }
+    31%,100%{ opacity:0; left:13%; top:84%; }
+  }
+
+  .pg .tag-commit{ animation: pgCommit var(--dur) linear infinite; }
+  @keyframes pgCommit{
+    0%,33%  { opacity:0; }
+    34%,40% { opacity:1; }
+    41%,100%{ opacity:0; }
+  }
+
+  .pg .tag-readout{ animation: pgReadout var(--dur) linear infinite; }
+  @keyframes pgReadout{
+    0%,29%  { opacity:0; }
+    30%,58% { opacity:1; }
+    59%,100%{ opacity:0; }
+  }
+
+  .pg .v1-current{ animation: pgV1Current var(--dur) linear infinite; }
+  @keyframes pgV1Current{
+    0%,18%  { opacity:1; }
+    19%,100%{ opacity:0; }
+  }
+  .pg .v1-pending{ animation: pgV1Pending var(--dur) linear infinite; }
+  @keyframes pgV1Pending{
+    0%,18%  { opacity:0; }
+    19%,33% { opacity:1; }
+    34%,100%{ opacity:0; }
+  }
+  .pg .v1-expired{ animation: pgV1Expired var(--dur) linear infinite; }
+  @keyframes pgV1Expired{
+    0%,33%  { opacity:0; }
+    34%,74% { opacity:1; }
+    84%,100%{ opacity:0; }
+  }
+  .pg .v2-pending{ animation: pgV2Pending var(--dur) linear infinite; }
+  @keyframes pgV2Pending{
+    0%,18%  { opacity:0; }
+    19%,33% { opacity:1; }
+    34%,100%{ opacity:0; }
+  }
+  .pg .v2-current{ animation: pgV2Current var(--dur) linear infinite; }
+  @keyframes pgV2Current{
+    0%,33%  { opacity:0; }
+    34%,100%{ opacity:1; }
+  }
+
+  .pg .tag-vacuum{ animation: pgVacuum var(--dur) linear infinite; }
+  @keyframes pgVacuum{
+    0%,73%  { opacity:0; }
+    74%,85% { opacity:1; }
+    86%,100%{ opacity:0; }
+  }
+
+  body.paused .stage-inner *{ animation-play-state: paused !important; }
+
+</style>
+</head>
+<body>
+<div class="page">
+
+  <h1>Two ways to answer the same question</h1>
+  <p class="dek">What happens when a reader shows up while a writer is still working, told through SQL Server's locks and PostgreSQL's row versions.</p>
+
+  <div class="intro prose">
+    <p>Every relational database eventually has to settle an uncomfortable question: what happens when one transaction is changing a row while another transaction wants to look at it. SQL Server and PostgreSQL settle that question in almost opposite ways, and the difference is behind a lot of the blocking chains and phantom slowdowns that show up in production without an obvious cause.</p>
+    <p>Below are two small animated schematics that walk through the same scenario, a withdrawal against an account balance, once under SQL Server's default locking behavior and once under PostgreSQL's MVCC. Watch what happens to the reader in each version, that is the part that actually matters.</p>
+  </div>
+
+  <div class="top-controls">
+    <button class="ctrl" id="pauseBtn" onclick="togglePause()">Pause animations</button>
+  </div>
+
+  <!-- ===================== SQL SERVER PANEL ===================== -->
+  <section class="panel">
+    <h2>SQL Server: pessimistic locking</h2>
+    <div class="prose">
+      <p>SQL Server's default isolation level, read committed, protects a row under modification with an exclusive lock held for the life of the write transaction. Any reader that wants the same row has to request a shared lock first, and the lock manager will not hand one out while an incompatible exclusive lock is outstanding. The reader waits, full stop.</p>
+    </div>
+
+    <pre class="code"><span class="cmt">-- Transaction A (writer)</span>
+BEGIN TRAN;
+UPDATE accounts SET balance = 400 WHERE account_id = 42;
+<span class="cmt">-- exclusive lock held here, transaction still open</span>
+
+<span class="cmt">-- Transaction B (reader), starts while A is still open</span>
+SELECT balance FROM accounts WHERE account_id = 42;
+<span class="cmt">-- blocks until A commits or rolls back</span></pre>
+
+    <div class="legend">
+      <span><i class="dot writer"></i>Transaction A, writer</span>
+      <span><i class="dot reader"></i>Transaction B, reader</span>
+    </div>
+
+    <div class="stage-wrap">
+      <div class="stage-inner sql" id="stage-sql">
+        <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M13,20 L50,20 L50,40 L74,40" fill="none" stroke="rgba(255,255,255,.24)" stroke-width="0.4" stroke-dasharray="1.6 1.2" vector-effect="non-scaling-stroke"/>
+          <path d="M13,80 L50,80 L50,60 L74,60" fill="none" stroke="rgba(255,255,255,.24)" stroke-width="0.4" stroke-dasharray="1.6 1.2" vector-effect="non-scaling-stroke"/>
+          <path d="M74,64 L50,64 L50,84 L13,84" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="0.4" stroke-dasharray="0.8 1.4" vector-effect="non-scaling-stroke"/>
+        </svg>
+
+        <div class="node n-a">
+          <span class="t">Txn A, writer</span>
+          <span class="m">UPDATE accounts</span>
+          <span class="m">SET balance = 400</span>
+        </div>
+
+        <div class="node n-b">
+          <span class="t">Txn B, reader</span>
+          <span class="m">SELECT balance</span>
+          <span class="m">WHERE account_id = 42</span>
+        </div>
+
+        <div class="node n-row">
+          <div class="rowline">
+            <span class="t">Row: accounts #42</span>
+            <span class="lockbadge">&#128274; X-lock held by Txn A</span>
+            <div class="valuewrap">
+              <span class="v v-old m">balance = 500</span>
+              <span class="v v-new m" style="color:#B7F0E1;">balance = 400</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="token writer tok-reqA"></div>
+        <div class="token reader tok-reqB"></div>
+        <div class="token reader tok-resB"></div>
+
+        <div class="tag blocked tag-blocked">waiting on X-lock</div>
+        <div class="tag commit tag-commit" style="left:13%; top:32%;">commit, lock released</div>
+        <div class="tag readout tag-readout" style="left:13%; top:96%;">B reads balance = 400</div>
+      </div>
+      <div class="reduced-note">Animation paused for reduced motion. Transaction A takes an exclusive lock while updating the row. Transaction B requests the same row and waits, because a shared lock cannot be granted while the exclusive lock is outstanding. Once A commits, the lock releases and B reads the new value.</div>
+    </div>
+
+    <p class="caption">Transaction A opens an update against account 42 and takes an exclusive lock on the row. Transaction B asks for the same row a moment later and requests a shared lock, which the lock manager cannot grant while the exclusive lock is outstanding, so B sits and waits. Once A commits, the exclusive lock releases, B's shared lock is granted immediately, and B reads the new balance of 400. Had A rolled back instead, B would have read 500 and never known a change was attempted.</p>
+
+    <p class="note">SQL Server can trade this behavior for something closer to MVCC by turning on read committed snapshot isolation or full snapshot isolation, both of which keep row versions in tempdb. Plenty of shops never touch that switch, so the locking behavior above is still what most SQL Server workloads run into by default.</p>
+  </section>
+
+  <!-- ===================== POSTGRESQL PANEL ===================== -->
+  <section class="panel">
+    <h2>PostgreSQL: multiversion concurrency control</h2>
+    <div class="prose">
+      <p>PostgreSQL never blocks a reader on a writer. Every row carries hidden bookkeeping columns, xmin and xmax, recording which transaction created it and which transaction, if any, has superseded it. An update does not touch the existing row at all, it writes an entirely new tuple version and marks the old one as superseded. A reader's snapshot decides which version it sees, and that decision gets made once, when the reader's transaction starts.</p>
+    </div>
+
+    <pre class="code"><span class="cmt">-- Transaction A (writer)</span>
+BEGIN;
+UPDATE accounts SET balance = 400 WHERE account_id = 42;
+<span class="cmt">-- new tuple written, xmin = 101, not yet committed</span>
+
+<span class="cmt">-- Transaction B (reader), snapshot taken before A commits</span>
+SELECT balance FROM accounts WHERE account_id = 42;
+<span class="cmt">-- returns 500 immediately, no wait at all</span></pre>
+
+    <div class="legend">
+      <span><i class="dot writer"></i>Transaction A, writer</span>
+      <span><i class="dot reader"></i>Transaction B, reader</span>
+    </div>
+
+    <div class="stage-wrap">
+      <div class="stage-inner pg" id="stage-pg">
+        <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <path d="M13,20 L50,20 L50,40 L74,40" fill="none" stroke="rgba(255,255,255,.24)" stroke-width="0.4" stroke-dasharray="1.6 1.2" vector-effect="non-scaling-stroke"/>
+          <path d="M13,80 L50,80 L50,60 L74,60" fill="none" stroke="rgba(255,255,255,.24)" stroke-width="0.4" stroke-dasharray="1.6 1.2" vector-effect="non-scaling-stroke"/>
+          <path d="M74,64 L50,64 L50,84 L13,84" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="0.4" stroke-dasharray="0.8 1.4" vector-effect="non-scaling-stroke"/>
+        </svg>
+
+        <div class="node n-a">
+          <span class="t">Txn A, writer</span>
+          <span class="m">UPDATE accounts</span>
+          <span class="m">SET balance = 400</span>
+        </div>
+
+        <div class="node n-b">
+          <span class="t">Txn B, reader</span>
+          <span class="m">SELECT balance</span>
+          <span class="m">WHERE account_id = 42</span>
+        </div>
+
+        <div class="node n-row">
+          <div class="rowline">
+            <span class="t">Row: accounts #42</span>
+            <div class="tuplewrap">
+              <div class="tuple current v1-current">balance = 500 &middot; xmin 100, committed</div>
+              <div class="tuple pending v1-pending">balance = 500 &middot; xmax 101, uncommitted</div>
+              <div class="tuple expired v1-expired">balance = 500 &middot; xmax 101, committed, dead</div>
+            </div>
+            <div class="tuplewrap" style="min-height:2.6em;">
+              <div class="tuple pending v2-pending">balance = 400 &middot; xmin 101, uncommitted</div>
+              <div class="tuple current v2-current">balance = 400 &middot; xmin 101, committed</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="token writer tok-reqA"></div>
+        <div class="token reader tok-reqB"></div>
+        <div class="token reader tok-resB"></div>
+
+        <div class="tag commit tag-commit" style="left:13%; top:32%;">commit, xmin 101 final</div>
+        <div class="tag readout tag-readout" style="left:13%; top:96%;">B reads balance = 500, no wait</div>
+        <div class="tag vacuum tag-vacuum" style="left:88%; top:90%; opacity:0;">vacuum reclaims dead tuple</div>
+      </div>
+      <div class="reduced-note">Animation paused for reduced motion. Transaction A writes a new tuple version without touching the old one. Transaction B's snapshot was taken before A committed, so B reads the old tuple immediately, with no wait. After commit, the new tuple becomes current and the old one becomes dead weight until vacuum removes it.</div>
+    </div>
+
+    <p class="caption">Transaction A's update writes a new tuple version, balance 400, tagged with its own transaction id, and marks the old tuple's xmax with that same id. Transaction B's snapshot was taken before A committed, so the old tuple is still valid as far as B is concerned, and B reads 500 without any wait at all. Once A commits, the new tuple becomes the current version for any transaction whose snapshot starts afterward. The old tuple becomes dead weight, still sitting in the table file until a vacuum process reclaims it.</p>
+
+    <p class="note">Postgres is not immune to blocking, two writers touching the same row will still fight over it. It is specifically reader-versus-writer contention that MVCC sidesteps.</p>
+  </section>
+
+  <!-- ===================== WRAP UP ===================== -->
+  <div class="wrapup">
+    <h2>Same row, two philosophies</h2>
+    <p>Line them up side by side and the design philosophies come into focus. <span class="kicker">SQL Server keeps one copy of the row and controls access with locks</span>, cheap to check, expensive to wait on. <span class="kicker">PostgreSQL keeps multiple copies of the row and controls access with time</span>, cheap to read, expensive to store until vacuum catches up. Neither approach is free, you are choosing between blocking readers and bloating tables, and which one costs you more depends entirely on your workload.</p>
+    <p>Pick your poison. Just know which one you picked.</p>
+  </div>
+
+</div>
+
+<script>
+  function togglePause(){
+    var b = document.body;
+    var btn = document.getElementById('pauseBtn');
+    b.classList.toggle('paused');
+    btn.textContent = b.classList.contains('paused') ? 'Resume animations' : 'Pause animations';
+  }
+</script>
+</body>
+</html>
