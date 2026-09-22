@@ -51,7 +51,7 @@ One of the most important architectural differences is how each system handles c
 
 SQL Server's default transaction isolation level (`READ COMMITTED`) acquires shared read locks on rows as they are read and releases them when the statement completes. Readers can block writers and writers can block readers (unless `READ_COMMITTED_SNAPSHOT` is enabled at the database level).
 
-Postgres uses **Multi-Version Concurrency Control (MVCC)** by default. When a row is updated, Postgres creates a *new physical version* of that row (called a "tuple") rather than overwriting the existing one. Readers always see a consistent snapshot of the data at their transaction start time, and **readers never block writers, and writers never block readers**. The tradeoff is that "dead" old row versions accumulate on disk and must be reclaimed by the **VACUUM** process, something that has no direct SQL Server equivalent and is covered in Module 05.
+Postgres uses **Multi-Version Concurrency Control (MVCC)** by default. When a row is updated, Postgres creates a *new physical version* of that row (called a "tuple") rather than overwriting the existing one. Readers always see a consistent snapshot of the data at their transaction start time, and **readers never block writers, and writers never block readers**. The tradeoff is that "dead" old row versions accumulate on disk and must be reclaimed by the **VACUUM** process, [something that has no direct SQL Server equivalent](https://htmlpreview.github.io/?https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/SQLtoPostgres/explainers/locking-vs-mvcc.html) and is covered in Module 05.
 
 <h3>WAL vs. Transaction Log</h3>
 
