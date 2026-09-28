@@ -720,6 +720,7 @@ ORDER BY table_schema, table_name;
 
 **Replication:**
 - [PostgreSQL Documentation,  Logical Replication](https://www.postgresql.org/docs/current/logical-replication.html)
+- [Resource on learning and using replication, with explanations and checklists](https://tapoueh.org/blog/2026/09/ten-years-of-postgres-logical-replication/)
 
 **Migration Tools:**
 - [AWS Schema Conversion Tool](https://docs.aws.amazon.com/SchemaConversionTool/latest/userguide/CHAP_UserInterface.html)
