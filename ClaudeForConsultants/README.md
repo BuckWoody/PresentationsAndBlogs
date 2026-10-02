@@ -4,7 +4,7 @@
 
 ## Solution Design, Troubleshooting, and Customer Communication
 
-##https://tinyurl.com/sp-claude
+## https://tinyurl.com/sp-claude
 
 #### *A hands-on lab for Technical Consultants*
 
