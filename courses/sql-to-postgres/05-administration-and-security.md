@@ -67,6 +67,8 @@ ALTER DEFAULT PRIVILEGES IN SCHEMA public
 GRANT EXECUTE ON ALL FUNCTIONS IN SCHEMA public TO app_user;
 ```
 
+> **Seeing `WARNING: no privileges were granted for "pg_stat_statements"` (or `pg_stat_statements_info`)?** If you created the `pg_stat_statements` extension earlier in the course, its views live in the `public` schema, so `GRANT ... ON ALL TABLES IN SCHEMA public` reaches them too. The warning means your role is not allowed to grant privileges on those two views (this is what you see on Azure Database for PostgreSQL – Flexible Server). It is harmless here: the grants on your own tables still succeeded.
+
 **Role groups (equivalent to SQL Server database roles):**
 
 ```sql
@@ -105,6 +107,8 @@ CREATE POLICY sales_policy ON sales
 ALTER TABLE sales FORCE ROW LEVEL SECURITY;
 ```
 
+> **Note:** `SET app.current_store_id = '7066';` only lasts for the current session. If your connection is lost or you close `psql` (or reboot) and reconnect, run the `SET` command again. Otherwise queries against `sales` fail with `unrecognized configuration parameter "app.current_store_id"`.
+
 <h3>5.2 – pg_hba.conf: Host-Based Authentication</h3>
 
 The `pg_hba.conf` file controls who can connect to PostgreSQL, from where, and using what authentication method. There is no equivalent single file in SQL Server,  this level of control is distributed across Windows Firewall, SQL Server Configuration Manager, and SQL Server's authentication settings.
@@ -131,6 +135,12 @@ SELECT pg_reload_conf();
 SELECT usename, client_addr
 FROM pg_stat_activity
 WHERE client_addr IS NOT NULL;
+```
+
+**On Azure Database for PostgreSQL – Flexible Server**, `pg_hba.conf` is managed by the service and you cannot edit it. Control who can connect with the server's firewall rules instead (portal: **Networking**), or with the Azure CLI (for servers that use public access):
+
+```bash
+az postgres flexible-server firewall-rule create --resource-group <resource-group> --server-name <server-name> --name <rule-name> --start-ip-address <start-ip> --end-ip-address <end-ip>
 ```
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
@@ -193,6 +203,8 @@ pg_basebackup -U postgres -h localhost -D C:\PGBackup\base -P -Xs -R
 
 Flags: `-D` = destination directory, `-P` = show progress, `-Xs` = include WAL via streaming, -R = write standby.signal and append connection settings to postgresql.auto.conf (pre-12: recovery.conf).
 
+**On Azure Database for PostgreSQL – Flexible Server**, `pg_basebackup` does not apply: you have no access to the server's data files, and Azure does not let you export its physical backups. The service takes backups for you automatically (see the PITR note below). You set the retention period in the portal (7 days by default, up to 35). For a backup you can keep or move elsewhere, use the logical tools `pg_dump` and `pg_restore` described above.
+
 **Point-In-Time Recovery (PITR):**
 
 Configure WAL archiving in `postgresql.conf`:
@@ -205,6 +217,12 @@ archive_command = 'copy "%p" "C:\\WALArchive\\%f"'   # Windows
 ```
 
 To recover to a point in time: take a base backup, configure `recovery.conf` (or `postgresql.conf` in PostgreSQL 12+) with a `recovery_target_time`, then start PostgreSQL with the restored base backup. This is conceptually identical to SQL Server's log chain restore.
+
+**On Azure Database for PostgreSQL – Flexible Server**, Azure handles PITR for you. It takes the base backups and archives the WAL automatically, so you do not configure `archive_command`. To recover, choose **Restore** on your server's **Overview** page in the Azure portal and pick a point in time. A restore always creates a new server; it does not overwrite the original. The Azure CLI equivalent is:
+
+```bash
+az postgres flexible-server restore --resource-group <resource-group> --name <new-server-name> --source-server <server-name> --restore-time <UTC-timestamp>
+```
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 

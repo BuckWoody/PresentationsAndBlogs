@@ -338,6 +338,18 @@ VACUUM FULL authors;       -- Use sparingly; like DBCC SHRINKFILE but safer
 
 Unlike SQL Server's Query Store (enabled with a single `ALTER DATABASE` command), `pg_stat_statements` requires two separate phases: a server configuration change followed by a restart, then a per-database `CREATE EXTENSION`. Running `CREATE EXTENSION` without completing Phase 1 first produces the error `pg_stat_statements must be loaded via shared_preload_libraries`.
 
+**On Azure Database for PostgreSQL – Flexible Server**, you do not edit `postgresql.conf` and you can skip Phase 1. Microsoft preloads `pg_stat_statements` in `shared_preload_libraries` on every flexible server (you can confirm this on the portal's **Server parameters** page). What you do need to do is allow-list the extension and then run `CREATE EXTENSION` (Phase 2). Allow-list it in the portal (**Server parameters**, then select the extension in the `azure.extensions` parameter and save) or with the CLI:
+
+```bash
+az postgres flexible-server parameter set --resource-group <resource-group> --server-name <server-name> --name azure.extensions --value pg_stat_statements
+```
+
+The `pg_stat_statements.track` parameter controls which statements are collected (`none`, `top` or `all`); check it with `SHOW pg_stat_statements.track;` and change it the same way as any other server parameter. The Server parameters page shows whether a parameter is static (needs a restart) or dynamic (takes effect right away). When you do need a restart, use the portal's **Overview > Restart** button or:
+
+```bash
+az postgres flexible-server restart --resource-group <resource-group> --name <server-name>
+```
+
 **Phase 1,  Server configuration (requires a PostgreSQL restart):**
 
 First, find your `postgresql.conf` location:

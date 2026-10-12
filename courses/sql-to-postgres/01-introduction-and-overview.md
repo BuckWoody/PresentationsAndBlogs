@@ -289,6 +289,20 @@ SELECT pg_reload_conf();   -- Reload config without restart (applies to most par
 
 **Why run them separately?** PostgreSQL does not allow `ALTER SYSTEM` inside a transaction block or function. If your query tool sends everything you run as one batch, it may report that `ALTER SYSTEM` cannot run inside a transaction block. Run the `ALTER SYSTEM` statement on its own, then run the next statement.
 
+**On Azure Database for PostgreSQL – Flexible Server**, you change server parameters in the Azure portal (your server's **Settings > Server parameters** page) or with the Azure CLI instead of editing files on the server. That page also lists every parameter, which is the Azure equivalent of `SHOW all`. To list the parameters from the CLI:
+
+```bash
+az postgres flexible-server parameter list --resource-group <resource-group> --server-name <server-name> --output table
+```
+
+To change one (here `shared_buffers`, which Azure expresses in 8 KB pages, so 512 MB is 65536):
+
+```bash
+az postgres flexible-server parameter set --resource-group <resource-group> --server-name <server-name> --name shared_buffers --value 65536
+```
+
+`shared_buffers` needs a server restart to take effect. The JSON that comes back includes an `isConfigPendingRestart` field, which tells you whether a restart is still pending.
+
 *Note: ALTER SYSTEM writes to postgresql.auto.conf, never to the main postgresql.conf. Per the PostgreSQL docs, ALTER SYSTEM "is used for changing server configuration parameters across the entire database cluster" by writing them to postgresql.auto.conf.*
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 1.3 – Explore Postgres Configuration</b></p>
@@ -342,6 +356,12 @@ SHOW log_min_duration_statement;
 ```
 
 This writes slow queries to the Postgres log file in the `log` subdirectory of your data directory.
+
+**On Azure Database for PostgreSQL – Flexible Server**, set the same parameter from the Azure CLI (or on the portal's **Server parameters** page), then check it with `SHOW log_min_duration_statement;`:
+
+```bash
+az postgres flexible-server parameter set --resource-group <resource-group> --server-name <server-name> --name log_min_duration_statement --value 1000
+```
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
