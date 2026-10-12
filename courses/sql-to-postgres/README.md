@@ -1,4 +1,4 @@
-![](graphics/microsoftlogo.png)
+![](https://github.com/microsoft/sqlworkshops-k8stobdc/blob/master/graphics/microsoftlogo.png?raw=true)
 
 # Workshop: PostgreSQL for the SQL Server Database Professional
 

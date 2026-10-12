@@ -60,16 +60,6 @@ Here are the references used in the presentation, along with other resources you
 
 ### General Links in this topic:
 
-- [Azure Notebooks](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/AzureNotebooks)
-
-- [Data Science Projects with SQL Server Machine Learning Services](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/SQLML)
-
-- [Python for the Data Professional](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/PythonDataProfessional)
-
-- [R for the Data Professional](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/RDataProfessional)
-
-- [The Team Data Science Process Workshop](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/TDSPPython)
-
 - [Machine Learning with Azure ML Studio](https://github.com/Azure/LearnAnalytics-DoingMachineLearningwithAzureMLStudio)
 
 - [Learn AI Materials on Artificial Intelligence on IaaS++](https://azure.github.io/LearnAI-AIonIaaS/)

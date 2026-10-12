@@ -8,11 +8,11 @@
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/textbubble.png"> <h2>01 - Mentoring Foundations</h2>
 
-In <a href="https://github.com/yourusername/mentoring-workshop" target="_blank">this workshop</a> you'll learn the foundations and practices of effective mentoring. 
+In <a href="README.md" target="_blank">this workshop</a> you'll learn the foundations and practices of effective mentoring. 
 
 In each module you'll get references and resources, which you should follow up on to learn more. Also watch for links within the text - click on each one to explore that topic.
 
-(<a href="https://github.com/yourusername/mentoring-workshop/blob/main/00%20-%20Pre-Requisites.md" target="_blank">Make sure you check out the <b>Pre-Requisites</b> page before you start</a>. You'll need to have completed the preparation there before you can proceed with the workshop.)
+(<a href="00-pre-requisites.md" target="_blank">Make sure you check out the <b>Pre-Requisites</b> page before you start</a>. You'll need to have completed the preparation there before you can proceed with the workshop.)
 
 In this module you will learn what mentoring is and how it differs from other developmental relationships. You'll explore various mentoring models and begin developing your own mentoring philosophy and approach.
 

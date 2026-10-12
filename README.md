@@ -39,13 +39,8 @@ Courses, presentations, blog posts and lab notebooks. Each folder has its own RE
 
 ## Older external resources
 
-These links were in the original README and have not been re-checked. The Azure Notebooks website was retired by Microsoft in January 2021, so the first five links in particular are likely to be dead.
+These links were in the original README and have not all been re-checked. (The links to the Azure Notebooks website were removed because Microsoft retired that site in January 2021.)
 
-- [Azure Notebooks](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/AzureNotebooks)
-- [Data Science Projects with SQL Server Machine Learning Services](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/SQLML)
-- [Python for the Data Professional](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/PythonDataProfessional)
-- [R for the Data Professional](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/RDataProfessional)
-- [The Team Data Science Process Workshop](https://notebooks.azure.com/BuckWoodyNoteBooks/libraries/TDSPPython)
 - [Machine Learning with Azure ML Studio](https://github.com/Azure/LearnAnalytics-DoingMachineLearningwithAzureMLStudio)
 - [Learn AI Materials on Artificial Intelligence on IaaS++](https://azure.github.io/LearnAI-AIonIaaS/)
 - [SQL Server R Services Workshop](https://github.com/Azure/LearnAnalytics-SQLServerRServices)

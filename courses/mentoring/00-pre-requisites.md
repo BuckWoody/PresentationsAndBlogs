@@ -8,7 +8,7 @@
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/textbubble.png"> <h2>00 - Pre-Requisites</h2>
 
-In <a href="https://github.com/yourusername/mentoring-workshop" target="_blank">this workshop</a> you'll learn the foundations and practices of effective mentoring. This module covers what you need to prepare before attending the workshop.
+In <a href="README.md" target="_blank">this workshop</a> you'll learn the foundations and practices of effective mentoring. This module covers what you need to prepare before attending the workshop.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 

@@ -8,11 +8,11 @@
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/textbubble.png"> <h2>03 - Structuring Effective Mentoring Sessions</h2>
 
-In <a href="https://github.com/yourusername/mentoring-workshop" target="_blank">this workshop</a> you'll learn practical frameworks for conducting productive mentoring conversations.
+In <a href="README.md" target="_blank">this workshop</a> you'll learn practical frameworks for conducting productive mentoring conversations.
 
 In each module you'll get references and resources, which you should follow up on to learn more. Also watch for links within the text - click on each one to explore that topic.
 
-(<a href="https://github.com/yourusername/mentoring-workshop/blob/main/00%20-%20Pre-Requisites.md" target="_blank">Make sure you check out the <b>Pre-Requisites</b> page before you start</a>. You'll need to have completed the preparation there before you can proceed with the workshop.)
+(<a href="00-pre-requisites.md" target="_blank">Make sure you check out the <b>Pre-Requisites</b> page before you start</a>. You'll need to have completed the preparation there before you can proceed with the workshop.)
 
 In this module you will learn how to structure mentoring sessions from the initial meeting through ongoing conversations and eventual closure. You'll practice using conversation frameworks and develop templates you can use in your own mentoring relationships.
 
@@ -799,4 +799,4 @@ Take turns:
 
 <p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/geopin.png"><b>Next Steps</b></p>
 
-Next, Continue to <a href="[https://github.com/yourusername/mentoring-workshop/blob/main/04%20-%20NavigatingChallenges.md](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/courses/mentoring/04-navigating-challenges.md)" target="_blank"><i>04 - Navigating Challenges & Sustaining the Relationship</i></a>.
+Next, Continue to <a href="04-navigating-challenges.md" target="_blank"><i>04 - Navigating Challenges & Sustaining the Relationship</i></a>.
