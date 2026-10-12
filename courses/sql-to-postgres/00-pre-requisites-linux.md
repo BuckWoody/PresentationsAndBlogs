@@ -62,7 +62,7 @@ Install the latest version of SSMS for use as a reference tool throughout the wo
 
 The recommended installer for Windows is the EnterpriseDB (EDB) interactive installer, which includes PostgreSQL, pgAdmin 4, the Stack Builder utility, and command-line tools.
 
-- [Download PostgreSQL 17 for Windows (EDB Installer)](https://sbp.enterprisedb.com/getfile.jsp?fileid=1260306)
+- [Install PostgreSQL on Windows with the EDB installer (EDB guide and download links)](https://www.enterprisedb.com/docs/supported-open-source/postgresql/installing/windows/)
 - [Official PostgreSQL Windows Installation Guide](https://www.postgresql.org/docs/current/install-windows.html)
 
 During installation:
