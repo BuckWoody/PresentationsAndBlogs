@@ -132,7 +132,7 @@ PostgreSQL uses flat text configuration files. SQL Server uses a mix of registry
 | Applying config changes | Many require restart; some dynamic via sp_configure | pg_reload_conf() or SELECT pg_reload_conf(); or SIGHUP | Many PG params reload without restart; some require restart |
 | View current settings | sys.configurations | pg_settings (system view) | SELECT name, setting, unit FROM pg_settings; |
 | Show a specific setting | EXEC sp_configure 'max degree of parallelism' | SHOW max_connections; or SELECT current_setting('work_mem'); | |
-| Change a setting dynamically | EXEC sp_configure / RECONFIGURE | SET work_mem = '256MB'; (session) or ALTER SYSTEM SET work_mem='256MB'; | ALTER SYSTEM writes to postgresql.auto.conf |
+| Change a setting dynamically | EXEC sp_configure / RECONFIGURE | SET work_mem = '256MB'; (session) or ALTER SYSTEM SET work_mem='256MB'; | ALTER SYSTEM writes to postgresql.auto.conf; run it by itself (it cannot run inside a transaction block) |
 | Session-level setting | SET options | SET config_param = value; | Both scoped to session |
 | Configuration file override | N/A | postgresql.auto.conf (written by ALTER SYSTEM) | Auto.conf takes precedence over postgresql.conf; do not edit manually |
 

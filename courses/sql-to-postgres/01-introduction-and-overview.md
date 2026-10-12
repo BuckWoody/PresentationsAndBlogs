@@ -273,11 +273,21 @@ SHOW all;   -- Show all configuration parameters
 
 -- Change a parameter for the current session
 SET work_mem = '64MB';
-
--- Change a parameter permanently (writes to postgresql.conf, requires reload)
-ALTER SYSTEM SET shared_buffers = '512MB';
-SELECT pg_reload_conf();   -- Reload config without restart (for most parameters)
 ```
+
+To change a parameter permanently, use `ALTER SYSTEM`. It writes the new value to `postgresql.auto.conf` and takes effect after a configuration reload (or, for a few parameters such as `shared_buffers`, after a server restart). Run this statement **by itself**:
+
+```sql
+ALTER SYSTEM SET shared_buffers = '512MB';
+```
+
+Then reload the configuration as a separate step:
+
+```sql
+SELECT pg_reload_conf();   -- Reload config without restart (applies to most parameters)
+```
+
+**Why run them separately?** PostgreSQL does not allow `ALTER SYSTEM` inside a transaction block or function. If your query tool sends everything you run as one batch, it may report that `ALTER SYSTEM` cannot run inside a transaction block. Run the `ALTER SYSTEM` statement on its own, then run the next statement.
 
 *Note: ALTER SYSTEM writes to postgresql.auto.conf, never to the main postgresql.conf. Per the PostgreSQL docs, ALTER SYSTEM "is used for changing server configuration parameters across the entire database cluster" by writing them to postgresql.auto.conf.*
 
@@ -318,8 +328,13 @@ The `pg_settings` view is the Postgres equivalent of `sys.configurations`.
 **Step 3,  Enable query logging for slow queries (equivalent to SQL Server Profiler's duration filter):**
 
 ```sql
--- Log any query taking longer than 1 second
+-- Log any query taking longer than 1 second (run this statement by itself)
 ALTER SYSTEM SET log_min_duration_statement = 1000;  -- milliseconds
+```
+
+Then reload and verify, as separate statements:
+
+```sql
 SELECT pg_reload_conf();
 
 -- Verify:
