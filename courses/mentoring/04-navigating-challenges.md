@@ -8,11 +8,11 @@
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/textbubble.png"> <h2>04 - Navigating Challenges and Sustaining the Relationship</h2>
 
-In <a href="https://github.com/yourusername/mentoring-workshop" target="_blank">this workshop</a> you'll learn how to handle difficult situations and maintain healthy, productive mentoring relationships over time.
+In <a href="README.md" target="_blank">this workshop</a> you'll learn how to handle difficult situations and maintain healthy, productive mentoring relationships over time.
 
 In each module you'll get references and resources, which you should follow up on to learn more. Also watch for links within the text - click on each one to explore that topic.
 
-(<a href="https://github.com/yourusername/mentoring-workshop/blob/main/00%20-%20Pre-Requisites.md" target="_blank">Make sure you check out the <b>Pre-Requisites</b> page before you start</a>. You'll need to have completed the preparation there before you can proceed with the workshop.)
+(<a href="00-pre-requisites.md" target="_blank">Make sure you check out the <b>Pre-Requisites</b> page before you start</a>. You'll need to have completed the preparation there before you can proceed with the workshop.)
 
 In this final module you will learn to navigate common challenges that arise in mentoring relationships, establish and maintain healthy boundaries, handle difficult conversations, and sustain engagement over time.
 
