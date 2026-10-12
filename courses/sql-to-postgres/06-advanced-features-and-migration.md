@@ -131,6 +131,8 @@ ORDER BY name;
 
 If an extension appears in this view, phase 1 is already done and you can skip straight to `CREATE EXTENSION`.
 
+**On Azure Database for PostgreSQL – Flexible Server**, Microsoft supplies the extension files, so phase 1 is replaced by allow-listing: in the Azure portal, open your server, select **Settings > Server parameters**, choose the extension in the `azure.extensions` parameter and save. Then run `CREATE EXTENSION` as usual. See [How to allow extensions](https://learn.microsoft.com/en-us/azure/postgresql/extensions/how-to-allow-extensions).
+
 **Tier 2,  Stack Builder extensions (downloaded via a GUI):**
 
 **PostGIS** is the headline example. It is not in the base installer, but the EDB Windows installer ships a companion utility called **Stack Builder** (Start menu → *PostgreSQL <version>* → *Application Stack Builder*, or `StackBuilder.exe` in the `bin` folder) that downloads and installs it for you:

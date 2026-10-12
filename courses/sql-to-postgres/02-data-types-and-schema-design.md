@@ -164,6 +164,10 @@ Hint: You can use the meta-command of `!` to call to the OS shell, and use this 
 
 `\! pg_dump -U postgres -d pubs --schema-only -t authors --no-owner --no-privileges`
 
+**Using Azure Database for PostgreSQL – Flexible Server?** `pg_dump` needs the server's host name, port and administrator login, because it is not connecting to `localhost`:
+
+`\! pg_dump -h <server-name>.postgres.database.azure.com -p 5432 -U <admin-login> -d pubs --schema-only -t authors --no-owner --no-privileges`
+
 ```sql
 -- Original SQL Server DDL (from pubs):
 -- CREATE TABLE [dbo].[authors](
