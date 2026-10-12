@@ -94,7 +94,7 @@ During creation, they used the [Azure Management Portal to set the Firewall for 
 
 Next, the Development team created a simple Python application that opens a connection to Azure SQL Database, and returns a list of products. This code will be replaced with much more complex functions, and may also include more than one application deployed into the Kubernetes Pods in production for a robust, manifest-driven approach to application solutions. 
 
-The Team created a simple text file called *.env* to hold variables for the server connections and other information. Using the `python-dotenv` library they can then separate out the variables from the Python Code. This is a common approach to keeping secrets and other information out of the code itself. 
+The Team created a simple text file called *.env* to hold variables for the server connections and other information. Using the `python-dotenv` library they can then separate out the variables from the Python Code. This is a common approach to keeping secrets and other information out of the code itself. In this repo you'll find a `.env.example` template: copy it to `.env` and add your own values (the real `.env` file is never committed). 
 
 ```
 SQL_SERVER_ENDPOINT = ReplaceWith_AzureSQLDBServerName
@@ -352,7 +352,7 @@ Using the IP Address (Endpoint) they obtained in the last step, the team checks 
 [You can find all of the code assets for this sample at this location.](https://github.com/BuckWoody/PresentationsAndBlogs/tree/master/K8s2AzureSQL/code). Here's what they do:
 
 - **app.py** - The Python application that performs a simple SELECT from an Azure SQL Database 
-- **.env** - A text file with connection information to the Azure SQL Database
+- **.env.example** - A template for the connection settings. Copy it to *.env* and fill in your own values
 - **Dockerfile** - The manifest for the Docker Image creation
 - **flask2sql.yaml** - The manifest for the Kubernetes deployment
 

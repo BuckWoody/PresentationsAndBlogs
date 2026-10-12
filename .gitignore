@@ -1,0 +1,23 @@
+# ---- OS and editor junk ----
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+
+# ---- Secrets and local config (commit a .env.example template instead) ----
+.env
+.env.*
+!.env.example
+
+# ---- Python / notebooks ----
+__pycache__/
+*.pyc
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# ---- Claude / AI-assistant files: keep local, never commit ----
+.claude/
+CLAUDE.md
+CLAUDE.local.md
+.mcp.json
