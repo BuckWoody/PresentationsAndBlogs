@@ -28,7 +28,7 @@ The table below is your "Rosetta Stone" for the workshop:
 | Server instance | SQL Server instance (one per port, default 1433) | Postgres cluster (one per port, default 5432) |
 | Top-level container | Database | Database |
 | Namespace within database | Schema (dbo is default) | Schema (public is default) |
-| Admin superuser | `sa` | `postgres` |
+| Admin superuser | `sa` | `postgres` (on Azure Database for PostgreSQL, the administrator login you choose when creating the server, which is not a true superuser) |
 | Procedural language | T-SQL | SQL, PL/pgSQL (also PL/Pythonu, PL/Perl, etc.) |
 | Interactive terminal | `sqlcmd` | `psql` |
 | Primary GUI | SSMS | pgAdmin 4 |
@@ -74,6 +74,14 @@ psql -U postgres -h localhost -p 5432
 ```
 
 You will be prompted for the password you set during installation (`postgres` is the default for both the super-user name and password in many cases). A successful connection displays the `postgres=#` prompt.
+
+**Using Azure Database for PostgreSQL – Flexible Server?** There is no `postgres` superuser there. When you create the server you choose an administrator login and password, so connect with that login and your server's host name instead of `localhost`:
+
+```bash
+psql "host=<server-name>.postgres.database.azure.com port=5432 dbname=postgres user=<admin-login> sslmode=require"
+```
+
+The administrator role belongs to `azure_pg_admin`, a restricted role that is not a true superuser (only Microsoft holds that role), so a few commands in this module that need superuser rights will not work on Azure. `postgres` is still the name of a default database on the server. If the connection times out, add your IP address to the server's firewall rules in the Azure portal.
 
 **Step 2,  List all databases (equivalent to `SELECT name FROM sys.databases`):**
 
