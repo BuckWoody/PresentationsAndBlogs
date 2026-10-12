@@ -93,6 +93,8 @@ The administrator role belongs to `azure_pg_admin`, a restricted role that is no
 
 You should see the default databases: `postgres`, `template0`, and `template1`. The `pubs` database you created in pre-requisites should also appear.
 
+> **On Azure Database for PostgreSQL – Flexible Server**, the list also includes `azure_maintenance` and `azure_sys`. These are system databases managed by the service. You cannot connect to `azure_maintenance`. `azure_sys` holds the Query Store data for the server. Leave both alone; they are not part of the course exercises.
+
 **Step 3,  Connect to the pubs database:**
 
 ```sql
