@@ -6,27 +6,27 @@ Courses, presentations, blog posts and lab notebooks. Each folder has its own RE
 
 ## Courses and workshops
 
-- [Claude for Technical Consultants](ClaudeForConsultants/README.md) - solution design, troubleshooting and customer communication with Claude
-- [PostgreSQL for the SQL Server Database Professional](SQLtoPostgres/README.md) - a one-day, hands-on SQL Server to PostgreSQL workshop
-- [Find a Mentor, Be a Mentor](mentoring/README.md) - building meaningful developmental relationships
-- [Data Literacy](dataliteracy/README.md) - using data to make intelligent decisions
-- [Shut the Front Door](shut_the_front_door/README.md) - a guide for organization security audits
-- [Using a Database to Find Solutions for Business Problems](problemtosolution/README.md) - the Problem/Solution database and notebooks
+- [Claude for Technical Consultants](courses/claude-for-consultants/README.md) - solution design, troubleshooting and customer communication with Claude
+- [PostgreSQL for the SQL Server Database Professional](courses/sql-to-postgres/README.md) - a one-day, hands-on SQL Server to PostgreSQL workshop
+- [Find a Mentor, Be a Mentor](courses/mentoring/README.md) - building meaningful developmental relationships
+- [Data Literacy](courses/data-literacy/README.md) - using data to make intelligent decisions
+- [Shut the Front Door](courses/shut-the-front-door/README.md) - a guide for organization security audits
+- [Using a Database to Find Solutions for Business Problems](courses/problem-to-solution/README.md) - the Problem/Solution database and notebooks
 
 ## Presentations
 
-- [AI Prompting](genai/README.md) - the prompt formats I use, plus a [prompt builder](genai/promptbuilder.html) page
-- [An Introduction to AI, Machine Learning and Deep Learning](ai_ml_dl/README.md) ([web version](https://buckwoody.github.io/presentations/ai_ml_dl))
-- [AI-ML-DL-NLP-LLM - A Lab Notebook for Learning about AI](ai_ml_dl/AI-ML-DL-NLP-LLM.ipynb)
-- [AI: What to Use When](ai_whattousewhen/README.md) - choosing among Azure AI solutions
-- [Designing Secure AI Projects](secureai/README.md)
-- [Presentation Workshop](presentation_workshop/README.md)
-- [The Team Data Science Process](tdsp/README.md)
+- [AI Prompting](presentations/ai-prompting/README.md) - the prompt formats I use, plus a [prompt builder](presentations/ai-prompting/promptbuilder.html) page
+- [An Introduction to AI, Machine Learning and Deep Learning](presentations/ai-ml-dl/README.md) ([web version](https://buckwoody.github.io/presentations/ai_ml_dl))
+- [AI-ML-DL-NLP-LLM - A Lab Notebook for Learning about AI](presentations/ai-ml-dl/AI-ML-DL-NLP-LLM.ipynb)
+- [AI: What to Use When](presentations/ai-what-to-use-when/README.md) - choosing among Azure AI solutions
+- [Designing Secure AI Projects](presentations/secure-ai/README.md)
+- [Presentation Workshop](presentations/presentation-workshop/README.md)
+- [The Team Data Science Process](presentations/team-data-science-process/README.md)
 
 ## Blogs
 
-- [Kubernetes Application to Azure SQL DB](K8s2AzureSQL/README.md)
-- [Using Microsoft Azure OpenAI and SQL Server Machine Learning Services](ai_ml_dl/OpenAI-SQLML.ipynb)
+- [Kubernetes Application to Azure SQL DB](blogs/kubernetes-to-azure-sql/README.md)
+- [Using Microsoft Azure OpenAI and SQL Server Machine Learning Services](blogs/azure-openai-sql-ml/azure-openai-sql-ml.ipynb)
 
 ## System Setup
 
@@ -35,7 +35,7 @@ Courses, presentations, blog posts and lab notebooks. Each folder has its own RE
 
 ## Archive
 
-- [SQL Server 2019 Big Data Clusters Workshop](bdc/README.md) - the product was retired in 2025; kept for reference
+- [SQL Server 2019 Big Data Clusters Workshop](archive/big-data-clusters/README.md) - the product was retired in 2025; kept for reference
 
 ## Older external resources
 
@@ -51,6 +51,30 @@ These links were in the original README and have not been re-checked. The Azure 
 - [SQL Server R Services Workshop](https://github.com/Azure/LearnAnalytics-SQLServerRServices)
 - [Microsoft R for Architects](https://github.com/Azure/LearnAnalytics-MicrosoftRforArchitects)
 - [Microsoft R for the SQL Server Professional](https://github.com/Azure/LearnAnalytics-MicrosoftRforSQLServerProfessional)
+
+## Looking for something that moved?
+
+In October 2026 the folders were regrouped. If you have an older link, find the folder below. File names inside moved folders were also changed to lower-case with hyphens (for example, `00 - Pre-Requisites.md` is now `00-pre-requisites.md`).
+
+| Old folder | New location |
+| --- | --- |
+| `ClaudeForConsultants` | [courses/claude-for-consultants](courses/claude-for-consultants/) |
+| `SQLtoPostgres` | [courses/sql-to-postgres](courses/sql-to-postgres/) |
+| `mentoring` | [courses/mentoring](courses/mentoring/) |
+| `dataliteracy` | [courses/data-literacy](courses/data-literacy/) |
+| `shut_the_front_door` | [courses/shut-the-front-door](courses/shut-the-front-door/) |
+| `problemtosolution` | [courses/problem-to-solution](courses/problem-to-solution/) |
+| `ai_ml_dl` | [presentations/ai-ml-dl](presentations/ai-ml-dl/) |
+| `ai_whattousewhen` | [presentations/ai-what-to-use-when](presentations/ai-what-to-use-when/) |
+| `genai` | [presentations/ai-prompting](presentations/ai-prompting/) |
+| `secureai` | [presentations/secure-ai](presentations/secure-ai/) |
+| `presentation_workshop` | [presentations/presentation-workshop](presentations/presentation-workshop/) |
+| `tdsp` | [presentations/team-data-science-process](presentations/team-data-science-process/) |
+| `K8s2AzureSQL` | [blogs/kubernetes-to-azure-sql](blogs/kubernetes-to-azure-sql/) |
+| `bdc` | [archive/big-data-clusters](archive/big-data-clusters/) |
+
+`graphics/` and `system_setup/` did not move.
+
 
 ### Disclaimer, for people who need to be told this sort of thing: 
 
