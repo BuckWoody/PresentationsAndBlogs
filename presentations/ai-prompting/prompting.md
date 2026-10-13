@@ -26,13 +26,13 @@ You can also use the **CREATE** model for Prompt Engineering:
 
 -----
 
-# 🚀 Prompt Engineering Resources
+# Prompt Engineering Resources
 
 Welcome to this curated collection of resources on Prompt Engineering\! Whether you're a beginner looking to understand the basics or an experienced user seeking advanced techniques, these links will help you harness the full power of AI models.
 
 -----
 
-## 📚 Core Concepts & Guides
+## Core Concepts & Guides
 
   * **CoPilot Prompt Guide (Microsoft CoPilot):**
     [https://copilot.cloud.microsoft/en-US/prompts](https://copilot.cloud.microsoft/en-US/prompts)
@@ -60,7 +60,7 @@ Welcome to this curated collection of resources on Prompt Engineering\! Whether 
 
 -----
 
-## ✨ Examples & Practical Applications
+## Examples & Practical Applications
 
   * **OpenAI Examples:**
     [https://platform.openai.com/examples](https://platform.openai.com/examples)
@@ -84,7 +84,7 @@ Welcome to this curated collection of resources on Prompt Engineering\! Whether 
 
 -----
 
-## 🎨 Creative & Niche Prompting
+## Creative & Niche Prompting
 
   * **The LILAI Method (Dave Birss):**
     [https://davebirss.com/lilai/](https://davebirss.com/lilai/)
@@ -96,7 +96,7 @@ Welcome to this curated collection of resources on Prompt Engineering\! Whether 
 
 -----
 
-## 🐦 Social Media Insights
+## Social Media Insights
 
   * **Bo Yoder on Twitter (ChatGPT Prompting):**
     [https://twitter.com/bo\_yoder/status/1654279511024844801?t=eMpKiY3Lz0x6jth1yn6ufg\&s=03](https://twitter.com/bo_yoder/status/1654279511024844801?t=eMpKiY3Lz0x6jth1yn6ufg&s=03)
@@ -105,7 +105,3 @@ Welcome to this curated collection of resources on Prompt Engineering\! Whether 
   * **Rowan Cheung on Twitter (AI News & Prompts):**
     [https://twitter.com/rowancheung/status/1742924602752508235](https://twitter.com/rowancheung/status/1742924602752508235)
     *Follow for updates and discussions on AI, often including prompt-related content.*
-
------
-
-**Happy Prompting\!**
