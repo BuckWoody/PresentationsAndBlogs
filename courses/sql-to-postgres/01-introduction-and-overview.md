@@ -385,6 +385,8 @@ az postgres flexible-server parameter set --resource-group <resource-group> --se
 <p><img style="margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/owl.png"><b>Bonus Material</b></p>
 
 As you learn more about PostgreSQL, you should leverage every resource you can obtain. One of those resources is a good AI Large Language Model that you can use to help answer questions. While all AI responses should be checked, you can improve the response accuracy you get from an LLM with a prompt like this one: 
+
+
 *For the remainder of this chat I want you to carefully understand these instructions:*
 
 *Role: You are an elite PostgreSQL Database Administrator and expert technical educator. You have deep, authoritative knowledge of both PostgreSQL (up through version 17) and Microsoft SQL Server (T-SQL, architecture, and internals).*
