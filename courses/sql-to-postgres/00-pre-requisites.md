@@ -17,29 +17,7 @@ The **PostgreSQL for the SQL Server Database Professional** workshop is taught u
 - Installing the Course Systems on [Cloud Platforms Pre-requisites are here](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/courses/sql-to-postgres/00-pre-requisites-cloud.md). 
 
 
-(**Note:** You will find a series of graphical commands below if you want a GUI installation)
-
-## Option 1: Use the Windows Package Manager (winget) for a complete course installation
-
-You can use the Windows Package Manager called [winget](https://learn.microsoft.com/en-us/windows/package-manager/winget/) to install all the software required for this course. 
-
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/point1.png"><b>Activity 1a: Install SQL Server 2022 Developer Edition (Windows), PostgresQL version 17, and DBeaver Community Edition using winget</b></p>
-
-<p><img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/checkbox.png"><b>Step 1 – Use PowerShell to install all course software</b></p>
-
-> Note: throughout the course, whenever PowerShell is mentioned, you must use a PowerShell command window - ISE will not work, and is currently not being updated from Microsoft.
-
-Open PowerShell (elavated) and run the following commands:
-
-```powershell
-winget install Microsoft.SQLServer.2022.Developer
-winget install --id=Microsoft.SQLServerManagementStudio -e
-winget install --id=PostgreSQL.PostgreSQL.17 -e
-winget install --id=DBeaver.DBeaver.Community -e
-```
-<p style="border-bottom: 1px solid lightgrey;"></p>
-
-## Option 2: Use Graphical tools for course software installation
+##: Use Graphical tools for course software installation
 
 Use this option *only* if you did not choose the winget commands in Option 1. You do *not* need to run both options.  
 
