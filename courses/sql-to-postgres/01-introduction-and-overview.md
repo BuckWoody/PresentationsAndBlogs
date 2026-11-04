@@ -1,4 +1,4 @@
-![](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/graphics/logo.png?raw=true)
+![](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/graphics/live360.png?raw=true)
 
 # Workshop: Postgres for the SQL Server Database Professional
 
