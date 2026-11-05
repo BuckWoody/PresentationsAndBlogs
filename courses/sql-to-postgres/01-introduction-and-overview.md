@@ -45,7 +45,7 @@ The table below is your "Rosetta Stone" for the workshop:
 
 <h3>Process Model vs. Thread Model</h3>
 
-One of the most important architectural differences is how each system handles client connections. SQL Server uses a **thread-based model**: a pool of OS threads managed within a single process (`sqlservr.exe`) handles all client connections. Postgres uses a **process-based model**: each client connection spawns a dedicated OS process (`postgres` backend process). This means that on a system with 500 concurrent connections, Postgres will have approximately 500 OS processes. The process model provides strong isolation,  a crashing backend affects only that connection, but it also means connection pooling is far more critical in Postgres than in SQL Server. Tools such as **PgBouncer** or **pgpool-II** …are used in production Postgres environments to provide the connection pooling that is built into SQL Server's client stack.
+One of the most important architectural differences is how each system handles client connections. SQL Server uses a **thread-based model**: a pool of OS threads managed within a single process (`sqlservr.exe`) handles all client connections. Postgres uses a **process-based model**: each client connection spawns a dedicated OS process (`postgres` backend process). This means that on a system with 500 concurrent connections, Postgres will have approximately 500 OS processes. The process model provides strong isolation,  an ordinary error or a killed session affects only that one connection, but it also means connection pooling is far more critical in Postgres than in SQL Server. A hard backend crash, such as a segfault or the Linux out-of-memory killer stepping in, is the exception,  the postmaster treats that as a sign that shared memory may be corrupted and restarts every session as a precaution. Tools such as **PgBouncer** or **pgpool-II** …are used in production Postgres environments to provide the connection pooling that is built into SQL Server's client stack.
 
 <h3>MVCC vs. Lock-Based Concurrency</h3>
 
@@ -114,7 +114,7 @@ The prompt changes to `pubs=#`.
 \dn
 ```
 
-You should see the schemas you created.
+You should see `public`, along with the built-in `pg_catalog` and `information_schema` schemas. The pubs script only creates the `public` schema, so that's the only one you "created",  don't go looking for more.
 
 **Step 5,  Explore system catalog views (equivalent to `sys.*` in SQL Server):**
 
@@ -320,7 +320,7 @@ SHOW config_file;
 SHOW hba_file;
 ```
 
-Open the `Postgres.conf` file in a text editor to inspect it. Note that it is heavily commented,  the default values are shown next to each parameter name.
+Open the `postgresql.conf` file in a text editor to inspect it (the file name is all lower-case, which matters if you're on Linux). Note that it is heavily commented,  the default values are shown next to each parameter name.
 
 **Step 2,  Query the current parameter settings via SQL:**
 
