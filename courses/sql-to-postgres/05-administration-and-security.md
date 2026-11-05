@@ -28,8 +28,8 @@ SQL Server has a two-layer security model: **Logins** (server-level principals t
 | Role (server-level) | Role without `LOGIN` (a group role) |
 | `sysadmin` fixed server role | `SUPERUSER` attribute |
 | `db_owner` fixed database role | Role with `GRANT ALL PRIVILEGES ON DATABASE` |
-| `db_datareader` fixed database role | Role with `GRANT SELECT ON ALL TABLES IN SCHEMA public` |
-| `db_datawriter` | Role with `GRANT INSERT, UPDATE, DELETE ON ALL TABLES` |
+| `db_datareader` fixed database role | `GRANT pg_read_all_data TO role;` (PostgreSQL 14+), or `GRANT SELECT ON ALL TABLES IN SCHEMA public` on older versions |
+| `db_datawriter` | `GRANT pg_write_all_data TO role;` (PostgreSQL 14+), or `GRANT INSERT, UPDATE, DELETE ON ALL TABLES` on older versions |
 | `GRANT EXECUTE ON PROCEDURE` | `GRANT EXECUTE ON FUNCTION` |
 | Schema ownership | `ALTER SCHEMA ... OWNER TO role` |
 
@@ -103,7 +103,9 @@ CREATE POLICY sales_policy ON sales
 -- SET app.current_store_id = '7066';
 -- SELECT * FROM sales;  -- Returns only store 7066's sales
 
--- Superusers bypass RLS by default; to enforce on table owner:
+-- Superusers, and any role with the BYPASSRLS attribute, always bypass RLS,
+-- with or without FORCE. FORCE ROW LEVEL SECURITY only changes behavior for
+-- the table OWNER, who would otherwise skip RLS on their own tables:
 ALTER TABLE sales FORCE ROW LEVEL SECURITY;
 ```
 
@@ -216,7 +218,7 @@ archive_command = 'copy "%p" "C:\\WALArchive\\%f"'   # Windows
 # archive_command = 'cp %p /var/lib/pgsql/wal_archive/%f'  # Linux
 ```
 
-To recover to a point in time: take a base backup, configure `recovery.conf` (or `postgresql.conf` in PostgreSQL 12+) with a `recovery_target_time`, then start PostgreSQL with the restored base backup. This is conceptually identical to SQL Server's log chain restore.
+To recover to a point in time: take a base backup, create a `recovery.signal` file in the data directory, and set `recovery_target_time` (and related settings) in `postgresql.conf`, then start PostgreSQL with the restored base backup. (`recovery.conf` was removed entirely in PostgreSQL 12,  don't look for it on current versions.) This is conceptually identical to SQL Server's log chain restore.
 
 **On Azure Database for PostgreSQL – Flexible Server**, Azure handles PITR for you. It takes the base backups and archives the WAL automatically, so you do not configure `archive_command`. To recover, choose **Restore** on your server's **Overview** page in the Azure portal and pick a point in time. A restore always creates a new server; it does not overwrite the original. The Azure CLI equivalent is:
 
@@ -391,7 +393,9 @@ WHERE datname = 'pubs'
   AND usename = 'report_user'
   AND state = 'idle';
 
--- Cancel a running query (like sending a cancel to a process,  softer than terminate):
+-- Cancel a running query (like sending a cancel to a process,  softer than terminate).
+-- Replace <pid> below with a real process id from the pg_stat_activity query
+-- above,  pasted as written, <pid> is not valid SQL and will raise a syntax error:
 SELECT pg_cancel_backend(<pid>);
 ```
 

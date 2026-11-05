@@ -91,8 +91,6 @@ CREATE INDEX idx_titles_fts ON titles USING GIN (search_vector);
 
 SQL Server builds indexes with locks that can block concurrent DML (depending on edition). PostgreSQL has `CREATE INDEX CONCURRENTLY`, which builds the index without blocking reads or writes (at the cost of taking longer and using more resources):
 
-> Note: Each of the following steps should be run individually. If you run UPDATE and SELECT from `pg_stat_user_tables` as a batch, the dead rows may not show up in the results. It's best-practice to run the UPDATE first, then separately run the stats query.
-
 ```sql
 -- Build index without blocking production traffic:
 CREATE INDEX CONCURRENTLY idx_employee_pub_id
@@ -228,6 +226,11 @@ The plan should now show an **Index Scan** or **Bitmap Index Scan** depending on
 **Step 4,  Create a covering index and observe an Index Only Scan:**
 
 ```sql
+-- Run VACUUM first so the visibility map is up to date for the 9,999 rows
+-- inserted in Step 1. Skip this and the plan below may still show a large
+-- number of heap fetches even with a covering index in place.
+VACUUM authors;
+
 -- Drop the old index, create a covering index:
 DROP INDEX idx_authors_lname;
 
@@ -331,7 +334,9 @@ VACUUM ANALYZE authors;
 
 ```sql
 -- Full vacuum,  reclaims space to OS, rewrites the table, exclusive lock required:
-VACUUM FULL authors;       -- Use sparingly; like DBCC SHRINKFILE but safer
+VACUUM FULL authors;       -- Use sparingly; closer to a full table rebuild than a shrink,
+                           -- it rewrites the table into a new file and takes an exclusive lock.
+                           -- Plain VACUUM, above, just marks space reusable without shrinking the file.
 ```
 
 **pg_stat_statements,  the equivalent of Query Store:**
@@ -456,6 +461,8 @@ ORDER BY n_dead_tup DESC;
 ```
 
 **Step 2,  Deliberately create dead rows and observe:**
+
+> Note: Run each of the following statements individually. If you run the UPDATE and the SELECT from `pg_stat_user_tables` as a batch, the dead rows may not show up in the results. It's best practice to run the UPDATE first, then separately run the stats query.
 
 ```sql
 -- Touch every row to create dead tuple versions
