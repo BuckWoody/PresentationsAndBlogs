@@ -1,10 +1,12 @@
-![logo](https://github.com/BuckWoody/PresentationsAndBlogs/blob/f0e91c908fe4b5b2b3d28eadaaa2f04adb00780b/graphics/logo.png)
+![logo](assets/logo.png)
 
 # Adventure Works Cycles: company profile
 
-*A fictitious multinational bicycle manufacturer, used as the case company for the course and presentation materials in this repository.*
+## https://tinyurl.com/bw-sample 
 
-## Snapshot
+*A fictitious multinational bicycle manufacturer, initially created by Microsoft, used as the case company for the course and presentation materials, adapted and expanded by Buck Woody.*
+
+## Company Snapshot
 
 | | |
 |---|---|
@@ -102,7 +104,7 @@ An analyst picking up Adventure Works would reasonably ask:
 
 ## How the company's information is organized
 
-The company's information falls into five business areas: people and contacts, human resources, production, purchasing, and sales. A reporting warehouse built from those areas supports analysis. Instructors and workload authors will find the full technical detail in the [Company 360 technical reference](reference/company-360.md).
+The company's information falls into five business areas: people and contacts, human resources, production, purchasing, and sales. A reporting warehouse built from those areas supports analysis.
 
 ## How this repository is organized
 
@@ -110,41 +112,33 @@ The company's information falls into five business areas: people and contacts, h
 /
 +-- README.md          This company profile
 +-- assets/            Shared images, such as the logo
-+-- reference/         Company 360 technical reference
 +-- ai-governance/     Workload: data governance and AI usage for Adventure Works
 ```
 
-Read this profile first. Then open a workload folder. A workload applies the company to one purpose, and its README lists its files and the parts of the technical reference it draws on. The list of workloads and files is in the next section, and it grows as workloads are added.
 
 ## Workloads and assets
 
-This section grows as workloads are added. Each workload lives in its own folder beneath this README. Links will be added after the repository is published.
+Along with this company description, there are various workloads that are used for the sample business. 
 
 ### Workload: AI governance
 
-**Folder:** `ai-governance/`. A complete governance operating model for Adventure Works Cycles, from the "Governance Without the Gridlock" session: a charter, a RACI, a register of critical data elements, a scorecard, an AI usage standard, meeting agendas, executive interview results, and a 90-day plan.
+`ai-governance/`. A complete governance operating model for Adventure Works Cycles, from the "Governance Without the Gridlock" session: a charter, a RACI, a register of critical data elements, a scorecard, an AI usage standard, meeting agendas, executive interview results, and a 90-day plan.
 
 | File name | Folder | What it is |
 |---|---|---|
-| [README.md](https://placeholder) | ai-governance | Index for the workload: the files, the technical reference sections each one draws on, the numbers that tie the documents together, and assumptions to check. |
-| [01_charter.md](https://placeholder) | ai-governance | The two-page data governance charter, filled in: intent, the Five Decisions, domain map, meetings, CDE rules, AI use, measures, and review. |
-| [02_raci.md](https://placeholder) | ai-governance | Who decides what, as a RACI table, with the people who hold each role. |
-| [03_cde_register.md](https://placeholder) | ai-governance | The register of ten critical data elements: sources, owners, stewards, quality rules, bars, and results, plus one full CDE card. |
-| [04_scorecard_and_issue_log.md](https://placeholder) | ai-governance | Coverage, Trust, and Use across three runs, CDE and use-case status, and the issue log. |
-| [05_ai_standard.md](https://placeholder) | ai-governance | The AI usage standard: data class to tool matrix, risk tiers, access rules, use-case register, approved grounding sources, and a sample intake form. |
-| [06_meeting_agendas.md](https://placeholder) | ai-governance | Decision Board and Steward Huddle agendas, with sample decisions. |
-| [07_executive_interviews_and_first_win.md](https://placeholder) | ai-governance | Executive interview summary, the Data Storm result, executive KPIs, business-to-data goals, candidate wins, and a Return on Data range. |
-| [08_ninety_day_plan.md](https://placeholder) | ai-governance | The 13-week plan with status at week 10, and the next 90 days. |
+| [README.md](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/presentations/sample/ai-governance/README.md) | ai-governance | Index for the workload: the files, the technical reference sections each one draws on, the numbers that tie the documents together, and assumptions to check. |
+| [01_charter.md]([https://placeholder](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/presentations/sample/ai-governance/01_charter.md)) | ai-governance | The two-page data governance charter, filled in: intent, the Five Decisions, domain map, meetings, CDE rules, AI use, measures, and review. |
+| [02_raci.md]([https://placeholder](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/presentations/sample/ai-governance/02_raci.md)) | ai-governance | Who decides what, as a RACI table, with the people who hold each role. |
+| [03_cde_register.md]([https://placeholder](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/presentations/sample/ai-governance/03_cde_register.md)) | ai-governance | The register of ten critical data elements: sources, owners, stewards, quality rules, bars, and results, plus one full CDE card. |
+| [04_scorecard_and_issue_log.md](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/presentations/sample/ai-governance/04_scorecard_and_issue_log.md) | ai-governance | Coverage, Trust, and Use across three runs, CDE and use-case status, and the issue log. |
+| [05_ai_standard.md](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/presentations/sample/ai-governance/05_ai_standard.md) | ai-governance | The AI usage standard: data class to tool matrix, risk tiers, access rules, use-case register, approved grounding sources, and a sample intake form. |
+| [06_meeting_agendas.md](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/presentations/sample/ai-governance/06_meeting_agendas.md) | ai-governance | Decision Board and Steward Huddle agendas, with sample decisions. |
+| [07_executive_interviews_and_first_win.md](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/presentations/sample/ai-governance/07_executive_interviews_and_first_win.md) | ai-governance | Executive interview summary, the Data Storm result, executive KPIs, business-to-data goals, candidate wins, and a Return on Data range. |
+| [08_ninety_day_plan.md](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/presentations/sample/ai-governance/08_ninety_day_plan.md) | ai-governance | The 13-week plan with status at week 10, and the next 90 days. |
 
 ### Shared assets and references
 
 | File name | Folder | What it is |
 |---|---|---|
-| [company-360.md](https://placeholder) | reference | The Company 360 technical reference: databases, schemas, objects, mappings, and governance patterns, for instructors, workload authors, and LLM agents. |
 | [logo.png](https://placeholder) | assets | The Straight Path Solutions logo, used at the top of the documents. |
 
-### Adding a workload
-
-1. Create a folder beneath the repository root, named for the workload in lowercase with hyphens.
-2. Add a README.md to the folder that lists its files and the parts of this profile and the technical reference that they draw on.
-3. Add a subsection and a table here, with one row per file.
