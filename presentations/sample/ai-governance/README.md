@@ -2,9 +2,9 @@
 
 # Workload: AI governance for Adventure Works Cycles
 
-*Part of the [AdventureWorks Company 360](../README.md) repository. All names, scores, dates, and dollar figures in this folder are illustrative.*
+*Part of the [Adventure Works case company](../README.md) repository. All names, scores, dates, and dollar figures in this folder are illustrative.*
 
-This workload is a complete set of governance working papers for the fictitious Adventure Works Cycles: a charter, a RACI, a register of critical data elements, a scorecard, an AI usage standard, meeting agendas, executive interview results, and a 90-day plan. It comes from the session "Governance Without the Gridlock" (Live! 360 Orlando 2026), and it uses the Company 360 in the root of this repository as its single source of company facts.
+This workload is a complete set of governance working papers for the fictitious Adventure Works Cycles: a charter, a RACI, a register of critical data elements, a scorecard, an AI usage standard, meeting agendas, executive interview results, and a 90-day plan. It comes from the session "Governance Without the Gridlock" (Live! 360 Orlando 2026), and it takes business facts from the [company profile](../README.md) and technical facts from the [Company 360 technical reference](../reference/company-360.md).
 
 ## What is in this folder
 
@@ -31,8 +31,8 @@ The numbers tie together, so the papers read as one engagement.
 
 ## Assumptions to check
 
-1. **Facts about the company** (scale, channels, territories, fiscal year, schemas, and column names) come from the Company 360. Where a rule would test something the schema already enforces, such as a primary key or a check constraint, the register says so and the rule tests a different property.
+1. **Facts about the company** (scale, channels, territories, fiscal year, schemas, and column names) come from the Company 360 technical reference. Where a rule would test something the schema already enforces, such as a primary key or a check constraint, the register says so and the rule tests a different property.
 2. **Order data dates.** The sample's orders span May 31, 2011 to June 30, 2014. The engagement treats the data as current, so dates in these documents are shown by week number.
-3. **The people.** Owners are shown by title, because the Company 360 gives no executive names. Steward and custodian names (Dana, Priya, Marcus, Elena, Tomas, Grace, and Raj) are placeholders.
-4. **The numbers.** Quality scores, issue counts, and the dollar figures in the Return on Data example are illustrative assumptions. Scale figures (504 products, 31,465 orders, and so on) are from the Company 360.
-5. **Finance.** The Company 360 has no Finance schema. The Finance domain here is a reporting domain built on order totals in the Sales schema, with the warehouse (including the FactFinance budget scenarios) as its reporting layer.
+3. **The people.** Owners are shown by title, because neither the company profile nor the Company 360 gives executive names. Steward and custodian names (Dana, Priya, Marcus, Elena, Tomas, Grace, and Raj) are placeholders.
+4. **The numbers.** Quality scores, issue counts, and the dollar figures in the Return on Data example are illustrative assumptions. Scale figures (504 products, 31,465 orders, and so on) are from the company profile and the Company 360.
+5. **Finance.** The Company 360 technical reference has no Finance schema. The Finance domain here is a reporting domain built on order totals in the Sales schema, with the warehouse (including the FactFinance budget scenarios) as its reporting layer.

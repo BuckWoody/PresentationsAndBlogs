@@ -55,9 +55,10 @@ Assistants answer from sources the Data Lead has approved, and they cite them. T
 
 | ID | Source | Class | Owner | Approved for | Review |
 |---|---|---|---|---|---|
-| GS-01 | [AdventureWorks Company 360](../README.md) (the repository README) | Internal | Data Lead | Questions about the company's data estate: schemas, objects, warehouse mapping, business scenarios, and governance patterns | Quarterly |
+| GS-01 | [Company 360 technical reference](../reference/company-360.md) | Internal | Data Lead | Questions about the data estate: schemas, objects, warehouse mapping, business scenarios, and governance patterns | Quarterly |
+| GS-02 | [Adventure Works company profile](../README.md) (the repository README) | Internal | Data Lead | Questions about the business: products, channels, territories, operations, and the fiscal calendar | Quarterly |
 
-Rules for agents, taken from the operating instructions in the Company 360 itself:
+Rules for agents, taken from the operating instructions in the Company 360 technical reference itself:
 
 1. Ground first in the approved sources, and cite every nontrivial claim.
 2. List assumptions, constraints, and steps.

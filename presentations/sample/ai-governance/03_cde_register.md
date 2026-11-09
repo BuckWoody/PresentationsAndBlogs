@@ -2,7 +2,7 @@
 
 # CDE register and thresholds
 
-**Adventure Works Cycles** | Register version 1.3 | Status as of week 10 | *Example document. Scores are illustrative. Table, column, and scale facts come from the [AdventureWorks Company 360](../README.md).*
+**Adventure Works Cycles** | Register version 1.3 | Status as of week 10 | *Example document. Scores are illustrative. Table, column, and scale facts come from the [Company 360 technical reference](../reference/company-360.md).*
 
 Ten critical data elements, chosen with the Data Storm test and then filtered by executive dashboards, regulated or contractual data, and planned AI use. Scale is taken from the company profile: about 500 products (504 in the catalog), about 20,000 customers, about 31,000 sales orders (31,465 order headers), and nearly 300 employees. The fiscal year runs July 1 to June 30.
 
