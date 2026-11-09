@@ -1,4 +1,4 @@
-![Straight Path Solutions](assets/logo.png)
+![logo](https://github.com/BuckWoody/PresentationsAndBlogs/blob/f0e91c908fe4b5b2b3d28eadaaa2f04adb00780b/graphics/logo.png)
 
 # Adventure Works Cycles: company profile
 
