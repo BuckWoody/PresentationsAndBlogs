@@ -32,7 +32,7 @@ SQL Server stores JSON as `NVARCHAR(MAX)` and provides a set of functions (`JSON
 | Check key exists | `ISJSON(col) > 0 AND JSON_VALUE(col,'$.k') IS NOT NULL` | `col ? 'key'` |
 | Containment | (no equivalent) | `col @> '{"key":"value"}'::jsonb` |
 | Array elements | `OPENJSON(col)` | `jsonb_array_elements(col)` |
-| Index on JSON field | Not possible on NVARCHAR directly | `CREATE INDEX ON t ((col->>'key'))` or GIN index |
+| Index on JSON field | Not possible on NVARCHAR directly (a computed column with an index is the usual workaround; SQL Server 2025 added a native JSON type with its own JSON indexes, narrowing this gap) | `CREATE INDEX ON t ((col->>'key'))` or GIN index |
 
 **JSONB operators:**
 
@@ -143,7 +143,7 @@ If an extension appears in this view, phase 1 is already done and you can skip s
 4. Check the latest **PostGIS … Bundle** for your PostgreSQL version, then **Next**.
 5. Accept the defaults; Stack Builder downloads and runs the bundle installer, placing `postgis*.dll` and the control/script files into your PostgreSQL `lib` and `share\extension` folders.
 
-If Stack Builder is blocked by a corporate firewall, you can instead download the standalone PostGIS bundle installer directly from <https://postgis.net/documentation/getting_started/install_windows/> and run it against your existing PostgreSQL installation. **Version-match matters:** a PostGIS bundle built for PostgreSQL 17 will not load into PostgreSQL 17, so always pick the bundle that matches your server's major version. Only after the files are on disk does this work:
+If Stack Builder is blocked by a corporate firewall, you can instead download the standalone PostGIS bundle installer directly from <https://postgis.net/documentation/getting_started/install_windows/> and run it against your existing PostgreSQL installation. **Version-match matters:** a PostGIS bundle built for PostgreSQL 17 will not load into PostgreSQL 16 (or any other major version), so always pick the bundle that matches your server's major version. Only after the files are on disk does this work:
 
 ```sql
 CREATE EXTENSION IF NOT EXISTS postgis;
@@ -196,7 +196,7 @@ CREATE EXTENSION IF NOT EXISTS vector;
 | `PostGIS` | Geospatial types, functions, indexes | SQL Server Spatial (geometry/geography types) |
 | `pg_trgm` | Trigram fuzzy text matching | Fuzzy search via CONTAINS/FREETEXT (FTS) |
 | `pg_partman` | Automated table partitioning management | SQL Agent + maintenance scripts |
-| `pgvector` | Vector embeddings for AI/ML workloads | No equivalent (new in SQL Server 2025 preview) |
+| `pgvector` | Vector embeddings for AI/ML workloads | No equivalent in core (SQL Server 2025, generally available since November 2025, added a native vector type and approximate vector indexes) |
 | `pg_cron` | Cron-style job scheduling | SQL Server Agent |
 | `postgres_fdw` | Foreign data wrapper for other PostgreSQL instances | Linked Servers |
 | `tablefunc` | `crosstab()` pivot function | `PIVOT` operator |
@@ -518,7 +518,8 @@ Microsoft's own free tool for migrating from SQL Server to Azure Database for Po
 Phase 1 – Assessment
   ☐ Run EDB Migration Portal or AWS SCT on the schema
   ☐ Identify unsupported objects (CLR, linked servers, SQL Agent jobs)
-  ☐ Identify T-SQL features requiring rewrite (MERGE, OUTPUT INTO, FOR XML, etc.)
+  ☐ Identify T-SQL features requiring rewrite (OUTPUT INTO, FOR XML, etc.,  MERGE itself is
+    supported since PostgreSQL 15 and needs no rewrite, see Activity 6.2)
   ☐ Identify IDENTITY columns and plan SEQUENCE/SERIAL strategy
   ☐ Note collation differences (case-insensitive → case-sensitive)
   ☐ Estimate data volume and migration window
@@ -544,7 +545,9 @@ Phase 4 – Application Testing
   ☐ Load test and tune (random_page_cost, work_mem, connection pooling)
 
 Phase 5 – Cutover
-  ☐ Set up logical replication for near-zero-downtime cutover
+  ☐ For Postgres-to-Postgres moves, set up logical replication for a near-zero-downtime
+    cutover (it cannot read from SQL Server,  a SQL Server source needs a CDC-based tool
+    such as AWS DMS or Debezium instead)
   ☐ Plan rollback procedure
   ☐ Monitor pg_stat_activity and pg_stat_statements post-cutover
 ```

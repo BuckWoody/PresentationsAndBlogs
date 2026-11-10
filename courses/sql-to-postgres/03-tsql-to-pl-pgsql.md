@@ -111,7 +111,7 @@ SELECT AGE('2024-12-31'::DATE, '1990-06-15'::DATE);
 
 CTEs (`WITH` clauses) and window functions work in both systems. The syntax is mostly identical. The key differences:
 
-- PostgreSQL CTEs are **optimization fences** by default (evaluated once, independently of the outer query). Since PostgreSQL 12, you can add `WITH ... AS (NOT MATERIALIZED ...)` to allow the planner to inline the CTE. SQL Server inlines CTEs by default.
+- Since PostgreSQL 12, a non-recursive CTE with no side effects that's referenced exactly once is **inlined** into the outer query by default, the same as SQL Server. Add `WITH ... AS MATERIALIZED (...)` when you specifically want the old fenced behavior, evaluated once regardless of how the planner would otherwise treat it.
 - PostgreSQL supports **`FILTER (WHERE ...)`** in aggregate window functions, which has no T-SQL equivalent.
 - PostgreSQL supports **recursive CTEs** using `WITH RECURSIVE` (SQL Server uses `WITH` and the recursion is implied by the self-reference).
 
@@ -174,7 +174,7 @@ FROM authors
 ORDER BY au_lname
 LIMIT 3;
 
--- OFFSET (paging),  no T-SQL equivalent without ROW_NUMBER workaround:
+-- OFFSET (paging). T-SQL has had OFFSET...FETCH since SQL Server 2012, so this maps directly:
 SELECT au_fname, au_lname
 FROM authors
 ORDER BY au_lname
@@ -463,11 +463,13 @@ SELECT * FROM get_titles_for_author('409-56-7008');
 SELECT * FROM get_titles_for_author('267-41-2394');
 ```
 
-**Step 3,  Create a PostgreSQL PROCEDURE with transaction control:**
+**Step 3,  Create a PostgreSQL PROCEDURE:**
 
 ```sql
--- Procedures in PostgreSQL (11+) support COMMIT/ROLLBACK inside them
--- This is something SQL Server procedures also support
+-- Procedures in PostgreSQL (11+) can also include COMMIT/ROLLBACK inside them
+-- for multi-step transaction control, which a function cannot do. This example
+-- doesn't need one since it's a single statement, but a procedure is where
+-- you'd reach for it if you needed to commit partway through a longer script.
 CREATE OR REPLACE PROCEDURE transfer_title_to_publisher(
     p_title_id      VARCHAR(6),
     p_source_pub    CHAR(4),
@@ -505,7 +507,9 @@ DECLARE
     v_count   INTEGER := 0;
 BEGIN
     -- Standardize title types: set any UNDECIDED type to 'UNASSIGNED'
-    -- and report which titles were updated
+    -- and report which titles were updated.
+    -- Only one title (MC3026) has type = 'UNDECIDED' in the pubs data, so
+    -- expect "Standardized 1 title records" below,  that's correct, not a bug.
     FOR v_rec IN
         SELECT title_id, title, type
         FROM titles
