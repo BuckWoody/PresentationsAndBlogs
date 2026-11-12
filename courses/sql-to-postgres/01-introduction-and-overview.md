@@ -366,7 +366,7 @@ This writes slow queries to the Postgres log file in the `log` subdirectory of y
 ```bash
 az postgres flexible-server parameter set --resource-group <resource-group> --server-name <server-name> --name log_min_duration_statement --value 1000
 ```
-[There's an "explainer" page here on this topic that you can review.](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/courses/sql-to-postgres/explainers/postgres-configuration.html)
+[There's an "explainer" page here on this topic that you can review.](https://htmlpreview.github.io/?https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/courses/sql-to-postgres/explainers/postgres-configuration.html)
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
