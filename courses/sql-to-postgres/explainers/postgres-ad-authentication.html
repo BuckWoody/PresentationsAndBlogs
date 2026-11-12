@@ -45,7 +45,7 @@
   <div class="alert alert-info" role="note">
     <h2 class="h6 mt-0 pt-0 mb-2 border-0">Active Directory proves identity. It does not create users.</h2>
     <p class="mb-2">PostgreSQL never reads your directory to build a user list. Every person who needs access gets a role created in PostgreSQL, and the authentication method on the matching <code>pg_hba.conf</code> line hands the password check, or the Kerberos check, to Active Directory.</p>
-    <p class="mb-0">AD groups are not imported either. There is no equivalent of <code>CREATE LOGIN [CONTOSO\DBAs] FROM WINDOWS</code>. Section 5 covers the options for groups.</p>
+    <p class="mb-0">On-premises AD groups are not imported either. There is no equivalent of <code>CREATE LOGIN [CONTOSO\DBAs] FROM WINDOWS</code>. Section 5 covers the options for groups. The managed Azure service is the exception, because it can map Microsoft Entra ID groups to roles.</p>
   </div>
 
   <!-- ============ MAPPING TABLE ============ -->
@@ -88,7 +88,12 @@
         <tr>
           <td><code>auth_scheme</code> in <code>sys.dm_exec_connections</code></td>
           <td>The <code>log_connections</code> entry: <code>connection authenticated: identity=... method=...</code></td>
-          <td>PostgreSQL 14 and later. It also names the <code>pg_hba.conf</code> line that matched.</td>
+          <td>PostgreSQL 14 and later. It also names the <code>pg_hba.conf</code> line that matched. PostgreSQL 18 turns <code>log_connections</code> into a list, so <code>authentication</code> alone logs this line, and <code>on</code> still works.</td>
+        </tr>
+        <tr>
+          <td><code>CREATE USER [jsmith@contoso.com] FROM EXTERNAL PROVIDER</code> (Azure SQL)</td>
+          <td><code>SELECT * FROM pgaadauth_create_principal('jsmith@contoso.com', false, false);</code> (Azure Database for PostgreSQL)</td>
+          <td>Managed service only. Section 2 has an Entra ID tab.</td>
         </tr>
         <tr>
           <td><code>ALTER LOGIN ... DISABLE</code></td>
@@ -134,16 +139,17 @@
           <td>Yes, through Entra tokens</td>
           <td>Azure Database for PostgreSQL</td>
           <td>No. A token is used as the password.</td>
-          <td>You use the managed service. On-premises AD accounts must be synced to Entra ID first.</td>
+          <td>You use the managed service. On-premises AD accounts must be synced to Entra ID first. Entra groups can be mapped to roles.</td>
         </tr>
       </tbody>
     </table>
   </div>
-  <p class="small text-muted">For all three on-premises methods, the matching role must already exist in PostgreSQL. The authentication method only decides whether the person is who they say they are.</p>
+  <p class="small text-muted mb-2">For all three on-premises methods, the matching role must already exist in PostgreSQL. The authentication method only decides whether the person is who they say they are.</p>
+  <p class="small text-muted">PostgreSQL 18 added an <code>oauth</code> method for bearer tokens from an OAuth 2.0 identity provider. It needs a server-side validator library and is a different route from the methods above, so this page does not cover it.</p>
 
   <!-- ============ SECTION 2 ============ -->
   <h2 id="steps">2. The setup steps, per method</h2>
-  <p>Each step is tagged with who normally does it. Pick the tab that matches your method. The role and permission steps are the same for all three, and the permission part is in section 5.</p>
+  <p>Each step is tagged with who normally does it. Pick the tab that matches your method. The role and permission steps are the same for all of them, and the permission part is in section 5.</p>
   <p class="mb-2">
     <span class="badge text-bg-warning">AD admin</span>
     <span class="badge text-bg-primary">DBA</span>
@@ -154,6 +160,7 @@
     <li class="nav-item" role="presentation"><button class="nav-link active" id="tab-sspi" data-bs-toggle="tab" data-bs-target="#pane-sspi" type="button" role="tab" aria-controls="pane-sspi" aria-selected="true">SSPI (server on Windows)</button></li>
     <li class="nav-item" role="presentation"><button class="nav-link" id="tab-gss" data-bs-toggle="tab" data-bs-target="#pane-gss" type="button" role="tab" aria-controls="pane-gss" aria-selected="false">GSSAPI (server on Linux or Windows)</button></li>
     <li class="nav-item" role="presentation"><button class="nav-link" id="tab-ldap" data-bs-toggle="tab" data-bs-target="#pane-ldap" type="button" role="tab" aria-controls="pane-ldap" aria-selected="false">LDAP (password check)</button></li>
+    <li class="nav-item" role="presentation"><button class="nav-link" id="tab-entra" data-bs-toggle="tab" data-bs-target="#pane-entra" type="button" role="tab" aria-controls="pane-entra" aria-selected="false">Microsoft Entra ID (Azure)</button></li>
   </ul>
 
   <div class="tab-content">
@@ -183,7 +190,7 @@ setspn -L DBHOST</code></pre>
         <div class="card-body">
 <pre><code>CREATE ROLE jsmith LOGIN;</code></pre>
           <p class="mb-1">No password. Active Directory proves identity, and PostgreSQL only needs the role to exist. The role name is the name the person will connect as.</p>
-          <p class="small text-muted mb-0">Without a map (Step 3), the role name has to match exactly what SSPI hands over, which by default is <code>jsmith@CONTOSO</code>. That works with <code>CREATE ROLE "jsmith@CONTOSO" LOGIN;</code>, but every user then needs <code>-U</code> with that quoted name. A short role name plus a map is easier to live with.</p>
+          <p class="small text-muted mb-0">Without a map (Step 3), the role name has to match what SSPI hands over, which by default is <code>jsmith@CONTOSO</code>. That works with <code>CREATE ROLE "jsmith@CONTOSO" LOGIN;</code>, but every user then needs <code>-U</code> with that quoted name. A short role name plus a map is easier to live with.</p>
         </div>
       </div>
 
@@ -192,7 +199,7 @@ setspn -L DBHOST</code></pre>
         <div class="card-body">
 <pre><code># MAPNAME    SYSTEM-USERNAME      DATABASE-USERNAME
 ad_users     /^(.*)@CONTOSO$      \1</code></pre>
-          <p class="mb-1">SSPI gives PostgreSQL an identity of the form <code>user@NETBIOSDOMAIN</code>, because <code>compat_realm</code> defaults to 1. The regular expression keeps the part before the <code>@</code> and only accepts the CONTOSO domain. A same-named account from another trusted domain does not match.</p>
+          <p class="mb-1">With <code>include_realm</code> and <code>compat_realm</code> at their defaults of 1, the map is given a name of the form <code>user@NETBIOSDOMAIN</code>, built from the account's SAM name. The regular expression keeps the part before the <code>@</code> and only accepts the CONTOSO domain. A same-named account from another trusted domain does not match. The expression itself is case-sensitive.</p>
           <p class="small text-muted mb-0">The PostgreSQL docs recommend keeping <code>include_realm</code> at its default and using a map, instead of stripping the realm.</p>
         </div>
       </div>
@@ -224,7 +231,8 @@ SELECT pg_reload_conf();</code></pre>
         <div class="card-body">
 <pre><code>psql -h dbhost.contoso.com -U jsmith -d pubs</code></pre>
           <p class="mb-1">The user is signed in to Windows as CONTOSO\jsmith and sees no password prompt. Use the server's full name, the same one used in the SPN. An IP address or an alias gives Kerberos nothing to build the service name from, and Negotiate falls back to NTLM.</p>
-          <p class="small text-muted mb-0">With <code>log_connections</code> on, the server log shows a line like <code>connection authenticated: identity="jsmith@CONTOSO" method=sspi</code>, followed by the <code>pg_hba.conf</code> path and line number (PostgreSQL 14 and later). Write your map against exactly that identity value.</p>
+          <p class="small text-muted mb-2">With <code>log_connections</code> on, the server log shows a line like <code>connection authenticated: identity="CONTOSO\jsmith" method=sspi</code>, followed by the <code>pg_hba.conf</code> path and line number (PostgreSQL 14 and later).</p>
+          <p class="small text-muted mb-0">Read that line with care. With the default <code>compat_realm</code>, the log shows the SAM form <code>DOMAIN\user</code>, but the map is handed <code>user@DOMAIN</code>. Write the map against the second form. SSPI also compares the final role name without regard to case. GSSAPI does not, unless <code>krb_caseins_users</code> is on.</p>
         </div>
       </div>
     </div>
@@ -324,14 +332,14 @@ psql -h dbhost.contoso.com -U jsmith -d pubs</code></pre>
           <p class="mb-1"><strong>Simple bind.</strong> PostgreSQL builds the sign-in name from a prefix, the role name, and a suffix, then binds to AD as that user.</p>
 <pre><code># TYPE    DATABASE  USER  ADDRESS      METHOD
 hostssl   all       all   10.0.0.0/8   ldap ldapserver=dc1.contoso.com ldapscheme=ldaps ldapsuffix="@contoso.com"</code></pre>
-          <p class="small text-muted">The suffix form builds a user principal name such as jsmith@contoso.com. In Active Directory you can also use <code>ldapprefix</code> with the NetBIOS style <code>DOMAIN\</code>.</p>
+          <p class="small text-muted">The suffix form builds a user principal name such as jsmith@contoso.com. In Active Directory you can also use <code>ldapprefix</code> with the NetBIOS style <code>DOMAIN\</code>. The <code>ldapscheme</code> option needs PostgreSQL 14 or later. On older versions use <code>ldaptls=1</code> for StartTLS, or give an <code>ldaps://</code> address in <code>ldapurl</code>.</p>
           <p class="mb-1"><strong>Search+bind.</strong> PostgreSQL first binds with a service account, finds the user's entry, then binds again as that user with the password the client gave.</p>
-<pre><code>hostssl   all       all   10.0.0.0/8   ldap ldapserver=dc1.contoso.com ldapscheme=ldaps
-          ldapbasedn="DC=contoso,DC=com"
-          ldapbinddn="CN=svc_pgldap,OU=Service Accounts,DC=contoso,DC=com"
-          ldapbindpasswd="the service account password"
+<pre><code>hostssl   all       all   10.0.0.0/8   ldap ldapserver=dc1.contoso.com ldapscheme=ldaps \
+          ldapbasedn="DC=contoso,DC=com" \
+          ldapbinddn="CN=svc_pgldap,OU=Service Accounts,DC=contoso,DC=com" \
+          ldapbindpasswd="the service account password" \
           ldapsearchattribute=sAMAccountName</code></pre>
-          <p class="small text-muted mb-0">In a real file this is one long line, because <code>pg_hba.conf</code> records cannot be continued. The bind password sits in the file in clear text, so lock down who can read it. <code>ldapsearchfilter</code> lets you require membership in an AD group before a login is accepted. Check the PostgreSQL docs for the filter syntax.</p>
+          <p class="small text-muted mb-0">The trailing backslash continues the record onto the next line, so this is still one rule. The bind password sits in the file in clear text, so lock down who can read it. <code>ldapsearchfilter</code> lets you require membership in an AD group before a login is accepted. Check the PostgreSQL docs for the filter syntax.</p>
         </div>
       </div>
 
@@ -351,6 +359,48 @@ SELECT pg_reload_conf();</code></pre>
 <pre><code>psql "host=dbhost.contoso.com dbname=pubs user=jsmith sslmode=require"</code></pre>
           <p class="mb-1">The user is prompted for a password and types the AD password.</p>
           <p class="small text-muted mb-0">The password reaches PostgreSQL in clear text, and that is why <code>hostssl</code> and <code>sslmode=require</code> matter here. Setting <code>ldapscheme</code> or <code>ldaptls</code> only protects the leg between PostgreSQL and the domain controller. Failed attempts count against the AD account lockout policy.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Microsoft Entra ID -->
+    <div class="tab-pane fade" id="pane-entra" role="tabpanel" aria-labelledby="tab-entra" tabindex="0">
+
+      <div class="card mb-3 step-card">
+        <div class="card-header d-flex align-items-center gap-2"><strong>Step 1. Turn on Entra authentication and name an Entra admin</strong><span class="badge text-bg-warning ms-auto">AD admin</span></div>
+        <div class="card-body">
+          <p>In the Azure portal, open the server, go to Security, then Authentication. Choose <em>PostgreSQL and Microsoft Entra authentication</em>, or <em>Microsoft Entra authentication only</em>. Then add at least one Entra admin, which can be a user, a group, a service principal, or a managed identity.</p>
+          <p class="mb-0 small text-muted">The Entra admin becomes a role with full administrator permissions. Use it to create other roles, not for everyday work. Accounts that live only in on-premises AD must be synced to Entra ID before they can sign in this way. With private networking, the server also needs outbound access to Entra ID, so check the Learn page on network requirements.</p>
+        </div>
+      </div>
+
+      <div class="card mb-3 step-card">
+        <div class="card-header d-flex align-items-center gap-2"><strong>Step 2. Create the role from the Entra identity</strong><span class="badge text-bg-primary ms-auto">DBA</span></div>
+        <div class="card-body">
+<pre><code>-- connected as an Entra admin
+SELECT * FROM pgaadauth_create_principal('jsmith@contoso.com', false, false);</code></pre>
+          <p class="mb-1">This is the Azure counterpart of <code>CREATE USER ... FROM EXTERNAL PROVIDER</code>. The two <code>false</code> values create a regular role: not an administrator, and not flagged for multifactor authentication.</p>
+          <p class="small text-muted mb-0">The role name is the user principal name, and Entra names are case-sensitive, so use the exact spelling. There is no map and no <code>pg_hba.conf</code> line to write. The service handles both.</p>
+        </div>
+      </div>
+
+      <div class="card mb-3 step-card">
+        <div class="card-header d-flex align-items-center gap-2"><strong>Step 3. Connect with a token as the password</strong><span class="badge text-bg-success ms-auto">User</span></div>
+        <div class="card-body">
+<pre><code>az login
+$env:PGPASSWORD = (az account get-access-token --resource-type oss-rdbms --query accessToken -o tsv)
+psql "host=myserver.postgres.database.azure.com user=jsmith@contoso.com dbname=pubs sslmode=require"</code></pre>
+          <p class="mb-1">The token is the password. It is too long to type, so psql takes it from the <code>PGPASSWORD</code> variable. That example is PowerShell. On Linux or macOS use <code>export PGPASSWORD=$(az account get-access-token ...)</code>.</p>
+          <p class="small text-muted mb-0">A token is valid for 5 to 60 minutes. Fetch it just before you connect, and do not store it in scripts. If a name contains spaces, put a backslash before each space.</p>
+        </div>
+      </div>
+
+      <div class="card mb-3 step-card">
+        <div class="card-header d-flex align-items-center gap-2"><strong>Step 4. Optional: map an Entra group to a role</strong><span class="badge text-bg-primary ms-auto">DBA</span></div>
+        <div class="card-body">
+<pre><code>SELECT * FROM pgaadauth_create_principal('Prod DB Readonly', false, false);</code></pre>
+          <p class="mb-1">With the server parameter <code>pgaadauth.enable_group_sync</code> set to <code>ON</code>, members sign in with their own Entra credentials and the service keeps role membership in step with the group. The sync runs about every 30 minutes, and membership changes are picked up. Leave the group role in place, because deleting it stops the sync.</p>
+          <p class="small text-muted mb-0">With sync off, members can still sign in by using the group name as the user name. That is the one place where PostgreSQL gets close to <code>CREATE LOGIN [CONTOSO\DBAs] FROM WINDOWS</code>. It is a feature of the Azure service, not of PostgreSQL itself.</p>
         </div>
       </div>
     </div>
@@ -402,7 +452,7 @@ SELECT pg_reload_conf();</code></pre>
 
   <!-- ============ SECTION 4 ============ -->
   <h2 id="builder">4. Why "authentication failed for user"? Try the name builder</h2>
-  <p>The most common AD problem is a mismatch between the identity AD supplies and the role name the client asks for. Change the settings below and see what the server would conclude. This is a simplified model. On a real server, confirm the identity with <code>log_connections</code> and write your map against that exact string.</p>
+  <p>The most common AD problem is a mismatch between the identity AD supplies and the role name the client asks for. Change the settings below and see what the server would conclude. This is a simplified model. On a real server, the log line <code>no match in usermap ... authenticated as "..."</code> shows the exact string your map was given, so write the map against that.</p>
 
   <div class="row g-4">
     <div class="col-lg-5">
@@ -498,18 +548,21 @@ GRANT pubs_readers TO jsmith;</code></pre>
 SELECT pg_terminate_backend(pid)
 FROM pg_stat_activity
 WHERE usename = 'jsmith';</code></pre>
-      <p class="small text-muted mb-0">Disabling the AD account stops new tickets and password checks, but a Kerberos ticket already issued stays valid until it expires, and open sessions keep running. The role also stays. Change it to <code>NOLOGIN</code>, end sessions, and drop it once nothing depends on it.</p>
+      <p class="small text-muted mb-2">Disabling the AD account stops new tickets and password checks, but a Kerberos ticket already issued stays valid until it expires, and open sessions keep running. The role also stays. Change it to <code>NOLOGIN</code>, end sessions, and drop it once nothing depends on it.</p>
+      <p class="small text-muted mb-2"><code>VALID UNTIL</code> is not a substitute. It expires passwords only, so a role set to expire can still sign in through Kerberos or LDAP. <code>NOLOGIN</code> is the switch that works for every method.</p>
+      <p class="small text-muted mb-0">A role that owns objects or holds privileges cannot be dropped yet. Run <code>REASSIGN OWNED BY jsmith TO some_owner;</code> and <code>DROP OWNED BY jsmith;</code> in each database first, then <code>DROP ROLE jsmith;</code>.</p>
     </div>
   </div>
 
   <div class="card mt-4">
     <div class="card-body">
       <h3 class="h5">What about AD groups?</h3>
-      <p class="mb-2">PostgreSQL cannot see AD group membership during login. You have three realistic options.</p>
+      <p class="mb-2">PostgreSQL cannot see AD group membership during login. You have three realistic options on-premises, and a fourth on Azure.</p>
       <ul class="mb-0">
         <li><strong>Manage membership in PostgreSQL.</strong> Add each person to the right group role when they are created. Simple, and easy to audit. Often fine for small teams.</li>
         <li><strong>Sync on a schedule.</strong> A community tool such as <code>pg-ldap-sync</code> reads AD groups and creates matching roles and memberships in PostgreSQL.</li>
         <li><strong>Gate the login with a group (LDAP only).</strong> With search+bind, <code>ldapsearchfilter</code> can require membership in an AD group. That decides who may log in, while privileges still come from PostgreSQL roles.</li>
+        <li><strong>Map Entra ID groups (Azure only).</strong> Azure Database for PostgreSQL can create a role for an Entra group and keep its membership in sync. See the Entra ID tab in section 2.</li>
       </ul>
     </div>
   </div>
@@ -533,7 +586,7 @@ WHERE usename = 'jsmith';</code></pre>
         <tr>
           <td><code>SSPI authentication failed for user "jsmith"</code> or the <code>GSSAPI</code> version</td>
           <td>The identity from AD, after <code>include_realm</code> and the map, does not equal the requested role. Also appears when a map line is missing or the client omitted <code>-U</code>.</td>
-          <td>The <code>identity=</code> value in the <code>log_connections</code> line, and the name builder above.</td>
+          <td>The log line <code>no match in usermap ... authenticated as "..."</code>, which shows the exact string the map was given. The <code>identity=</code> value from <code>log_connections</code> is close but not identical for SSPI (<code>DOMAIN\user</code> versus <code>user@DOMAIN</code>). Then try the name builder above.</td>
         </tr>
         <tr>
           <td><code>role "jsmith" does not exist</code></td>
@@ -560,6 +613,11 @@ WHERE usename = 'jsmith';</code></pre>
           <td>Wrong password, a locked-out account, a bad prefix or suffix, or the server cannot reach or trust the domain controller.</td>
           <td>The PostgreSQL server log, which carries the LDAP library's reason, and AD lockout status.</td>
         </tr>
+        <tr>
+          <td>Sign-in fails on Azure Database for PostgreSQL with Entra ID</td>
+          <td>The token expired (they last 5 to 60 minutes), the user name is spelled differently from the role (Entra names are case-sensitive), the role was never created with <code>pgaadauth_create_principal</code>, or the token was requested for the wrong resource.</td>
+          <td>Request a fresh token with <code>az account get-access-token --resource-type oss-rdbms</code>, then compare the name with <code>\du</code>.</td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -570,6 +628,10 @@ WHERE usename = 'jsmith';</code></pre>
       <li><a href="https://www.postgresql.org/docs/current/auth-methods.html">PostgreSQL documentation: Authentication methods (trust, GSSAPI, SSPI, and more)</a></li>
       <li><a href="https://www.postgresql.org/docs/current/auth-ldap.html">PostgreSQL documentation: LDAP authentication</a></li>
       <li><a href="https://www.postgresql.org/docs/current/auth-username-maps.html">PostgreSQL documentation: User name maps</a></li>
+      <li><a href="https://www.postgresql.org/docs/current/gssapi-auth.html">PostgreSQL documentation: GSSAPI authentication</a></li>
+      <li><a href="https://www.postgresql.org/docs/current/sspi-auth.html">PostgreSQL documentation: SSPI authentication</a></li>
+      <li><a href="https://www.postgresql.org/docs/current/sql-createrole.html">PostgreSQL documentation: CREATE ROLE (including VALID UNTIL)</a></li>
+      <li><a href="https://learn.microsoft.com/en-us/azure/postgresql/security/security-entra-configure">Microsoft Learn: Use Microsoft Entra ID authentication in Azure Database for PostgreSQL flexible server</a></li>
       <li><a href="https://www.crunchydata.com/blog/windows-active-directory-postgresql-gssapi-kerberos-authentication">Crunchy Data: Windows Active Directory and PostgreSQL GSSAPI Kerberos authentication</a></li>
     </ul>
   </footer>
@@ -632,17 +694,17 @@ WHERE usename = 'jsmith';</code></pre>
         sql: 'Same.' },
       { f: 'P', t: 'P', label: 'Validate ticket, read the identity',
         title: 'The server proves the ticket is genuine',
-        what: 'The server opens the ticket with its own key. If it opens and the authenticator is fresh, the server knows who is calling, for example jsmith@CONTOSO from SSPI or jsmith@CONTOSO.COM from GSSAPI. This is the authenticated identity, and with log_connections on, it is written to the log.',
+        what: 'The server opens the ticket with its own key. If it opens and the authenticator is fresh, the server knows who is calling. GSSAPI reports the Kerberos principal, for example jsmith@CONTOSO.COM. SSPI looks up the Windows account and reports CONTOSO\\jsmith. This is the authenticated identity, and with log_connections on, it is written to the log.',
         fail: 'A failure here is logged as an SSPI or GSSAPI error, and the client sees that authentication failed.',
         sql: 'auth_scheme shows KERBEROS in sys.dm_exec_connections.' },
       { f: 'P', t: 'P', label: 'Apply include_realm and the map',
         title: 'The identity becomes a role name',
-        what: 'The identity is turned into a role name. include_realm=1 keeps the domain. A map line such as /^(.*)@CONTOSO$ to \\1 then turns jsmith@CONTOSO into jsmith. The result must equal the role the client asked for in step 2.',
-        fail: 'No map line matches, or the result differs from the requested role: FATAL: SSPI authentication failed for user "jsmith". This is the most common AD problem. Try the name builder in section 4.',
+        what: 'The identity is turned into the string the map sees. With include_realm=1, SSPI builds jsmith@CONTOSO from the account name and the NetBIOS domain, and GSSAPI keeps jsmith@CONTOSO.COM. A map line such as /^(.*)@CONTOSO$ to \\1 then turns jsmith@CONTOSO into jsmith. The result must equal the role the client asked for in step 2. SSPI compares the role without regard to case, and GSSAPI is case-sensitive by default.',
+        fail: 'No map line matches, or the result differs from the requested role: FATAL: SSPI authentication failed for user "jsmith". The client sees only that. The server log adds a line such as no match in usermap "ad_users" for user "jsmith" authenticated as "jsmith@CONTOSO". This is the most common AD problem. Try the name builder in section 4.',
         sql: 'No counterpart. SQL Server uses the Windows account name directly as the login name.' },
       { f: 'P', t: 'P', label: 'Role exists? LOGIN? CONNECT?',
         title: 'Authorization starts here',
-        what: 'Identity is settled. The server now looks the role up. It must exist, carry the LOGIN attribute, and not be past VALID UNTIL. Then CONNECT on the database is checked.',
+        what: 'Identity is settled. The server now looks the role up. It must exist and carry the LOGIN attribute. Then CONNECT on the database is checked. A VALID UNTIL date is not part of this check, because it only expires passwords and Kerberos sends none.',
         fail: 'FATAL: role "jsmith" does not exist, or is not permitted to log in, or permission denied for database. These appear only after the identity was proven.',
         sql: 'The login must exist and the user must have access to the database.' },
       { f: 'P', t: 'C', reply: true, label: 'Authentication OK, session starts',
@@ -883,7 +945,9 @@ WHERE usename = 'jsmith';</code></pre>
     var roles = val('bRoles').split(',').map(function (s) { return s.trim(); }).filter(function (s) { return s.length > 0; });
     var label = (method === 'sspi') ? 'SSPI' : (method === 'gss' ? 'GSSAPI' : 'LDAP');
 
+    var identNote = '';
     function finishRole() {
+      logEl.textContent = identNote;
       var exists = roles.indexOf(req) !== -1;
       if (exists) {
         addRow(steps, 'ok', 'text-bg-success', 'Role "' + req + '" exists in PostgreSQL. LOGIN and CONNECT are assumed to be in place.');
@@ -898,7 +962,7 @@ WHERE usename = 'jsmith';</code></pre>
     function failAuth(msg, why) {
       verdict.className = 'alert alert-danger mt-3 mb-2';
       verdict.textContent = msg;
-      logEl.textContent = 'Server log: ' + why;
+      logEl.textContent = 'Server log: ' + why + (identNote ? ' ' + identNote : '');
     }
 
     if (method === 'ldap') {
@@ -915,23 +979,26 @@ WHERE usename = 'jsmith';</code></pre>
 
     var sam = val('bSam'), upn = val('bUpn'), nb = val('bNb'), realm = val('bRealm');
     var include = val('bInclude');
-    var id, suffix;
+    var id, suffix, logged;
     if (method === 'gss') {
       id = sam + '@' + realm.toUpperCase();
       suffix = realm.toUpperCase();
+      logged = id;
       addRow(steps, 'info', 'text-bg-secondary', 'GSSAPI hands over the Kerberos principal: ' + id + '.');
     } else {
       var compat = val('bCompat');
       var upnUser = val('bUpnUser');
       if (compat === '1') {
-        var who = (upnUser === 'on') ? upn : sam;
-        id = who + '@' + nb;
+        id = sam + '@' + nb;
         suffix = nb;
-        addRow(steps, 'info', 'text-bg-secondary', 'SSPI with compat_realm=1 uses the NetBIOS domain, and the ' + ((upnUser === 'on') ? 'UPN' : 'SAM') + ' user name: ' + id + '.');
+        logged = nb + '\\' + sam;
+        addRow(steps, 'info', 'text-bg-secondary', 'SSPI with compat_realm=1 builds the name from the SAM account name and the NetBIOS domain: ' + id + '.' + ((upnUser === 'on') ? ' upn_username has no effect while compat_realm=1, because the server only reads the UPN when compat_realm is 0.' : ''));
       } else {
-        id = upn + '@' + realm;
+        var who = (upnUser === 'on') ? upn : sam;
+        id = who + '@' + realm;
         suffix = realm;
-        addRow(steps, 'info', 'text-bg-secondary', 'SSPI with compat_realm=0 uses the user principal name: ' + id + '.');
+        logged = id;
+        addRow(steps, 'info', 'text-bg-secondary', 'SSPI with compat_realm=0 takes the realm from the UPN, in the case AD stores it, and the ' + ((upnUser === 'on') ? 'UPN' : 'SAM') + ' user name: ' + id + '.');
       }
     }
     var name = id;
@@ -941,12 +1008,15 @@ WHERE usename = 'jsmith';</code></pre>
     } else {
       addRow(steps, 'info', 'text-bg-secondary', 'include_realm=1 keeps the domain. The name stays ' + name + '.');
     }
+    identNote = 'log_connections records identity="' + logged + '"' + (logged !== name ? ', but the map is given "' + name + '".' : '.');
     var candidate = name;
-    if (val('bMap') === 'strip') {
+    var useMap = (val('bMap') === 'strip');
+    var caseless = (method === 'sspi');
+    if (useMap) {
       var tail = '@' + suffix;
       var ends = (name.length > tail.length) ? (name.slice(name.length - tail.length) === tail) : false;
       if (!ends) {
-        addRow(steps, 'stop', 'text-bg-danger', 'The map expects a name ending in ' + tail + '. "' + name + '" does not match any map line.');
+        addRow(steps, 'stop', 'text-bg-danger', 'The map expects a name ending in ' + tail + '. "' + name + '" does not match any map line. The pattern is case-sensitive.');
         failAuth('FATAL: ' + label + ' authentication failed for user "' + req + '"', 'no match in usermap "ad_users" for user "' + req + '" authenticated as "' + name + '".');
         return;
       }
@@ -955,12 +1025,18 @@ WHERE usename = 'jsmith';</code></pre>
     } else {
       addRow(steps, 'info', 'text-bg-secondary', 'No map, so the name above is compared directly to the requested role.');
     }
-    if (candidate !== req) {
-      addRow(steps, 'stop', 'text-bg-danger', 'Authenticated as "' + candidate + '", but the client asked for "' + req + '". They are compared exactly, including case.');
-      failAuth('FATAL: ' + label + ' authentication failed for user "' + req + '"', 'provided user name (' + req + ') and authenticated user name (' + candidate + ') do not match.');
+    var same = caseless ? (candidate.toLowerCase() === req.toLowerCase()) : (candidate === req);
+    if (!same) {
+      addRow(steps, 'stop', 'text-bg-danger', 'Authenticated as "' + candidate + '", but the client asked for "' + req + '". ' + (caseless ? 'SSPI ignores case in this comparison, and the names still differ.' : 'GSSAPI compares them exactly, including case, unless krb_caseins_users is on.'));
+      failAuth('FATAL: ' + label + ' authentication failed for user "' + req + '"', useMap
+        ? 'no match in usermap "ad_users" for user "' + req + '" authenticated as "' + name + '".'
+        : 'provided user name (' + req + ') and authenticated user name (' + name + ') do not match.');
       return;
     }
-    addRow(steps, 'ok', 'text-bg-success', 'Authenticated name "' + candidate + '" equals the requested role.');
+    if (candidate !== req) {
+      addRow(steps, 'info', 'text-bg-secondary', 'The names differ only in case. SSPI accepts that.');
+    }
+    addRow(steps, 'ok', 'text-bg-success', 'Authenticated name "' + candidate + '" matches the requested role.');
     finishRole();
   }
   ids.forEach(function (id) {

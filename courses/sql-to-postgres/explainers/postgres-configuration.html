@@ -196,7 +196,7 @@ WHERE name = 'work_mem';</code></pre>
 
   <!-- ============ SECTION 3 ============ -->
   <h2 id="startup">3. What happens at startup</h2>
-  <p>Select a step, or press Next, to see what the server reads and in what order. The files are read from the top of the stack up, and <code>pg_hba.conf</code> is loaded before the server accepts a single connection.</p>
+  <p>Select a step, or press Next, to see what the server reads and in what order. The two config files are read in order, <code>postgresql.conf</code> first and <code>postgresql.auto.conf</code> second, then the command line is applied on top. <code>pg_hba.conf</code> is loaded before the server accepts a single connection.</p>
 
   <div class="row g-4">
     <div class="col-lg-5">
@@ -232,6 +232,7 @@ WHERE name = 'work_mem';</code></pre>
       <p>A reload makes the server re-read <code>postgresql.conf</code>, <code>postgresql.auto.conf</code>, <code>pg_hba.conf</code>, and <code>pg_ident.conf</code> without stopping. Any of these starts one:</p>
 <pre><code>SELECT pg_reload_conf();
 pg_ctl reload -D "path to the data directory"</code></pre>
+      <p class="small text-muted">On Linux packages the service manager has its own reload command, such as <code>systemctl reload</code>. On Windows, <code>pg_ctl reload</code> or the SQL function are the usual routes.</p>
       <ul class="mb-0">
         <li>A reload disconnects nobody. New <code>pg_hba.conf</code> rules apply to new connections only.</li>
         <li>A reload is forgiving. If one value is bad, the server logs the problem and keeps the old value for that parameter. If the file has a syntax error, the whole file is rejected. At startup, by contrast, either problem stops the server from starting.</li>
@@ -293,7 +294,8 @@ pg_ctl reload -D "path to the data directory"</code></pre>
 
   <div id="hbaResult" class="alert" role="status"></div>
 
-  <p class="small text-muted mb-0">On Windows there is normally no Unix socket, so connections arrive as <code>host</code> lines. The socket choice is included here because most Linux packages ship with <code>local</code> lines.</p>
+  <p class="small text-muted mb-2">On Windows there is normally no Unix socket, so connections arrive as <code>host</code> lines. The socket choice is included here because most Linux packages ship with <code>local</code> lines.</p>
+  <p class="small text-muted mb-0">A real file can do more than this example shows. A record can continue onto the next line if the line ends with a backslash. Since PostgreSQL 16 the database and user fields also accept regular expressions (written with a leading slash), and <code>include</code>, <code>include_if_exists</code>, and <code>include_dir</code> lines can pull in other files. The matching rule stays the same: top to bottom, first match wins.</p>
 
   <!-- ============ SECTION 5 ============ -->
   <h2 id="others">5. Other control mechanisms</h2>
@@ -323,7 +325,7 @@ local   all   app_user   peer   map=ops</code></pre>
       </h3>
       <div id="o2" class="accordion-collapse collapse" data-bs-parent="#otherAcc">
         <div class="accordion-body">
-          <p>These store a default value in the <code>pg_db_role_setting</code> catalog. The server applies them after authentication succeeds, so they affect new sessions only. A role-in-database default beats a role default, which beats a database default. This is the closest thing PostgreSQL has to per-login option defaults in SQL Server.</p>
+          <p>These store a default value in the <code>pg_db_role_setting</code> catalog. The server applies them after authentication succeeds, so they affect new sessions only. A role-in-database default beats a role default, which beats a database default. <code>ALTER ROLE ALL SET</code> stores a default for every role in every database. It sits below the database defaults and above the command line. This is the closest thing PostgreSQL has to per-login option defaults in SQL Server.</p>
 <pre><code>ALTER DATABASE pubs SET work_mem = '48MB';
 ALTER ROLE report_user SET work_mem = '64MB';
 ALTER ROLE report_user IN DATABASE pubs SET statement_timeout = '30s';</code></pre>
@@ -344,7 +346,7 @@ BEGIN;
 SET LOCAL work_mem = '300MB';
 COMMIT;
 SELECT set_config('app.current_store_id', '7066', false);</code></pre>
-          <p class="mb-0">Custom names with a dot, such as <code>app.current_store_id</code> in the row-level security example, are allowed for your own variables. Extensions use the same pattern, as in <code>pg_stat_statements.track</code>.</p>
+          <p class="mb-0">Custom names with a dot, such as <code>app.current_store_id</code> above, are allowed for your own variables. A row-level security policy can read one with <code>current_setting('app.current_store_id')</code>. Extensions use the same pattern, as in <code>pg_stat_statements.track</code>.</p>
         </div>
       </div>
     </div>
@@ -449,6 +451,7 @@ ALTER SYSTEM RESET work_mem;</code></pre>
           <ul class="small mb-0">
             <li>Use <code>RESET</code> to remove a value you added. Do not hand-edit <code>postgresql.auto.conf</code>.</li>
             <li>For settings you want in version control, edit <code>postgresql.conf</code> or an included file instead, and keep <code>ALTER SYSTEM</code> for quick changes.</li>
+            <li>PostgreSQL 17 and later: <code>allow_alter_system = off</code> makes <code>ALTER SYSTEM</code> return an error. Teams that manage config with an external tool use it to stop well-meaning edits. It is a guardrail, not a security control. Superusers can still reach the file by other routes, and values already in <code>postgresql.auto.conf</code> still apply.</li>
           </ul>
         </div>
       </div>
@@ -501,9 +504,11 @@ COMMIT;</code></pre>
       </thead>
       <tbody>
         <tr><td><code>postmaster</code></td><td>Restart the server. Files and command line only.</td><td><code>shared_buffers</code>, <code>max_connections</code>, <code>wal_level</code>, <code>listen_addresses</code></td></tr>
-        <tr><td><code>sighup</code></td><td>Reload. No restart and no disconnects.</td><td><code>log_min_duration_statement</code>, <code>autovacuum_naptime</code>, <code>max_wal_size</code></td></tr>
-        <tr><td><code>superuser</code></td><td>Superusers can change it with <code>SET</code> at runtime. It can also be a default in files or catalogs.</td><td><code>log_statement</code></td></tr>
+        <tr><td><code>sighup</code></td><td>Reload. No restart and no disconnects.</td><td><code>log_line_prefix</code>, <code>autovacuum_naptime</code>, <code>max_wal_size</code></td></tr>
+        <tr><td><code>superuser</code></td><td>Superusers can change it with <code>SET</code> at runtime. It can also be a default in files or catalogs.</td><td><code>log_min_duration_statement</code>, <code>log_statement</code></td></tr>
         <tr><td><code>user</code></td><td>Any role can change it with <code>SET</code> for its own session.</td><td><code>work_mem</code>, <code>statement_timeout</code></td></tr>
+        <tr><td><code>backend</code> and <code>superuser-backend</code></td><td>Fixed when a session starts. Set it in a file or catalog before the connection is made. <code>SET</code> inside the session is refused.</td><td><code>ignore_system_indexes</code></td></tr>
+        <tr><td><code>internal</code></td><td>Read-only. The server computes it, and nothing you run changes it.</td><td><code>block_size</code>, <code>server_version</code></td></tr>
       </tbody>
     </table>
   </div>
@@ -542,6 +547,7 @@ COMMIT;</code></pre>
     { id: 'roledb', name: 'Role in one database', how: 'ALTER ROLE ... IN DATABASE ... SET', where: 'pg_db_role_setting catalog', val: '96MB' },
     { id: 'role', name: 'Role', how: 'ALTER ROLE ... SET', where: 'pg_db_role_setting catalog', val: '64MB' },
     { id: 'db', name: 'Database', how: 'ALTER DATABASE ... SET', where: 'pg_db_role_setting catalog', val: '48MB' },
+    { id: 'global', name: 'All roles, all databases', how: 'ALTER ROLE ALL SET', where: 'pg_db_role_setting catalog', val: '24MB' },
     { id: 'cmd', name: 'Server command line', how: 'postgres -c work_mem=12MB', where: 'Service definition or systemd unit', val: '12MB' },
     { id: 'auto', name: 'postgresql.auto.conf', how: 'ALTER SYSTEM SET work_mem', where: 'File in the data directory', val: '32MB' },
     { id: 'conf', name: 'postgresql.conf', how: 'Edit the file, including included files', where: 'File in the data directory', val: '8MB' }
@@ -730,7 +736,7 @@ COMMIT;</code></pre>
   var methodText = {
     'peer': 'Allowed if the operating system user name matches the role. No password prompt.',
     'scram-sha-256': 'Allowed to continue. The server now asks for a password using SCRAM-SHA-256.',
-    'reject': 'Refused at once. Lines below this one are never read.'
+    'reject': 'Refused at once. The client sees a "pg_hba.conf rejects connection" message. Lines below this one are never read.'
   };
 
   function toNum(ip) {

@@ -1,643 +1,1023 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>SQL Server Locking vs PostgreSQL MVCC</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SQL Server Locking vs PostgreSQL MVCC: Who Waits for Whom</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
-
-  :root{
-    --bg:#EEF1EF;
-    --surface:#FFFFFF;
-    --surface-2:#F5F7F5;
-    --ink:#1B2630;
-    --ink-strong:#101820;
-    --ink-muted:#55636C;
-    --rule:#D8DDDA;
-
-    --role-writer:#B25A24;
-    --role-reader:#2C7DA0;
-    --danger:#B23A3A;
-    --safe:#2E8F79;
-    --dead:#6B7680;
-
-    --blueprint-bg:#0F2C42;
-    --blueprint-bg-2:#0C2438;
-    --blueprint-line: rgba(255,255,255,.24);
-    --blueprint-line-resp: rgba(255,255,255,.15);
-    --node-bg: rgba(255,255,255,.05);
-    --node-border: rgba(255,255,255,.22);
-    --diagram-ink:#EAF3FA;
-    --diagram-ink-muted: rgba(234,243,250,.62);
-
-    --sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-    --mono: 'IBM Plex Mono', SFMono-Regular, Consolas, 'Liberation Mono', monospace;
-
-    box-sizing:border-box;
-    padding-top:env(safe-area-inset-top,0px);
-    padding-bottom:env(safe-area-inset-bottom,0px);
-  }
-
-  @media (prefers-color-scheme: dark){
-    :root:not([data-theme="light"]){
-      --bg:#12161A;
-      --surface:#191F24;
-      --surface-2:#1C2329;
-      --ink:#E7ECEE;
-      --ink-strong:#F5F8F9;
-      --ink-muted:#9AA6AC;
-      --rule:#2A3136;
-    }
-  }
-  :root[data-theme="dark"]{
-    --bg:#12161A;
-    --surface:#191F24;
-    --surface-2:#1C2329;
-    --ink:#E7ECEE;
-    --ink-strong:#F5F8F9;
-    --ink-muted:#9AA6AC;
-    --rule:#2A3136;
-  }
-
-  html{ scroll-padding-top: env(safe-area-inset-top,0px); }
-  *{ box-sizing:border-box; }
-
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--ink);
-    font-family:var(--sans);
-    line-height:1.6;
-    -webkit-font-smoothing:antialiased;
-  }
-
-  .page{
-    max-width:900px;
-    margin:0 auto;
-    padding: 3.2rem 1.4rem 5rem;
-  }
-
-  .prose{ max-width: 640px; }
-
-  h1{
-    font-family:var(--sans);
-    font-weight:700;
-    font-size: clamp(1.7rem, 4vw, 2.35rem);
-    letter-spacing:-0.01em;
-    color:var(--ink-strong);
-    margin: 0 0 .5rem;
-  }
-
-  .dek{
-    font-size:1.08rem;
-    color:var(--ink-muted);
-    margin: 0 0 1.6rem;
-    font-style:italic;
-    max-width: 620px;
-  }
-
-  .intro p{ margin: 0 0 1.05rem; font-size:1.02rem; }
-
-  .top-controls{
-    display:flex;
-    align-items:center;
-    gap:.7rem;
-    margin: 1.6rem 0 2.6rem;
-  }
-
-  button.ctrl{
-    font-family:var(--mono);
-    font-size:.8rem;
-    border:1px solid var(--rule);
-    background:var(--surface);
-    color:var(--ink);
-    padding:.5rem .85rem;
-    border-radius:6px;
-    cursor:pointer;
-  }
-  button.ctrl:hover{ border-color: var(--ink-muted); }
-  button.ctrl:focus-visible, a:focus-visible{ outline: 2px solid var(--role-reader); outline-offset:2px; }
-
-  section.panel{ margin: 3.2rem 0 3.6rem; }
-  section.panel h2{
-    font-family:var(--sans);
-    font-weight:600;
-    font-size: clamp(1.25rem, 3vw, 1.55rem);
-    color:var(--ink-strong);
-    margin: 0 0 .8rem;
-  }
-  section.panel .prose p{ margin: 0 0 1rem; font-size:1rem; }
-
-  pre.code{
-    font-family:var(--mono);
-    font-size:.82rem;
-    line-height:1.6;
-    background:var(--surface-2);
-    border:1px solid var(--rule);
-    border-radius:8px;
-    padding: 1rem 1.1rem;
-    overflow-x:auto;
-    color:var(--ink);
-    margin: 1.1rem 0 1.6rem;
-    max-width: 640px;
-  }
-  pre.code .cmt{ color:var(--ink-muted); }
-
-  .legend{
-    display:flex; gap:1.4rem; flex-wrap:wrap;
-    font-family:var(--mono); font-size:.75rem; color:var(--ink-muted);
-    margin: 0 0 .6rem;
-  }
-  .legend span{ display:inline-flex; align-items:center; gap:.4rem; }
-  .dot{ width:9px; height:9px; border-radius:50%; display:inline-block; }
-  .dot.writer{ background:var(--role-writer); }
-  .dot.reader{ background:var(--role-reader); }
-
-  .stage-wrap{ max-width: 100%; }
-
-  .stage-inner{
-    --dur: 14s;
-    position:relative;
-    width:100%;
-    aspect-ratio: 16/9;
-    background: radial-gradient(circle at 78% 50%, var(--blueprint-bg-2), var(--blueprint-bg) 70%);
-    border-radius:10px;
-    overflow:hidden;
-    border:1px solid rgba(255,255,255,.08);
-    box-shadow: inset 0 0 60px rgba(0,0,0,.25);
-  }
-
-  @media (max-width: 560px){
-    .stage-inner{ aspect-ratio: 16/13; }
-  }
-
-  .stage-inner svg.lines{
-    position:absolute; inset:0; width:100%; height:100%;
-  }
-
-  .node{
-    position:absolute;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    gap:.15em;
-    padding: .55em .75em;
-    border-radius:7px;
-    background: var(--node-bg);
-    border:1px solid var(--node-border);
-    color: var(--diagram-ink);
-    font-family: var(--mono);
-    font-size: clamp(.6rem, 1.5vw, .78rem);
-    line-height:1.35;
-    transition: box-shadow .35s ease, border-color .35s ease;
-  }
-  .node .t{
-    font-family: var(--sans); font-weight:600; font-size:1.02em;
-    color:#fff;
-  }
-  .node .m{ color: var(--diagram-ink-muted); }
-
-  .node.n-a{ left:2%; top:8%; width:26%; height:20%; }
-  .node.n-b{ left:2%; top:72%; width:26%; height:20%; }
-  .node.n-row{ left:72%; top:16%; width:26%; height:68%; justify-content:flex-start; padding-top:.7em; }
-  .node.n-row .rowline{ display:flex; flex-direction:column; gap:.3em; }
-
-  .token{
-    position:absolute;
-    width:9px; height:9px;
-    border-radius:50%;
-    transform: translate(-50%,-50%);
-    opacity:0;
-    box-shadow: 0 0 8px 2px currentColor;
-  }
-  .token.writer{ background:var(--role-writer); color:var(--role-writer); }
-  .token.reader{ background:var(--role-reader); color:var(--role-reader); }
-
-  .tag{
-    position:absolute;
-    transform: translate(-50%,-50%);
-    font-family: var(--mono);
-    font-size: clamp(.55rem, 1.3vw, .72rem);
-    padding: .2em .5em;
-    border-radius:5px;
-    white-space:nowrap;
-    opacity:0;
-  }
-  .tag.commit{ background: rgba(46,143,121,.18); border:1px solid var(--safe); color:#B7F0E1; }
-  .tag.blocked{ background: rgba(178,58,58,.22); border:1px solid var(--danger); color:#FAD1D1; }
-  .tag.readout{ background: rgba(44,125,160,.2); border:1px solid var(--role-reader); color:#D4EEFA; }
-
-  .lockbadge{
-    display:flex; align-items:center; gap:.4em;
-    font-family:var(--mono); font-size:.78em;
-    color:#FFE1C4; opacity:0;
-  }
-
-  .valuewrap{ position:relative; display:inline-block; }
-  .valuewrap .v{ position:absolute; left:0; top:0; white-space:nowrap; }
-
-  .tuple{
-    border-radius:5px; border:1px dashed var(--node-border);
-    padding:.35em .5em; font-size:.85em;
-    position:relative;
-  }
-  .tuple.current{ border-style:solid; border-color: var(--safe); background: rgba(46,143,121,.12); }
-  .tuple.pending{ border-style:dashed; border-color: var(--role-writer); background: rgba(178,90,36,.10); }
-  .tuple.expired{ border-style:solid; border-color: var(--dead); background: rgba(107,118,128,.12); color: var(--diagram-ink-muted); text-decoration: line-through; text-decoration-color: rgba(234,243,250,.35); }
-
-  .tuplewrap{ position:relative; min-height: 3.6em; }
-  .tuplewrap > div{ position:absolute; inset:0; }
-
-  .vacuum{
-    position:absolute; opacity:0;
-    font-family:var(--mono); font-size:.72em;
-    color:#D8DEE1;
-  }
-
-  .caption{
-    font-size:.93rem;
-    color:var(--ink-muted);
-    font-style:italic;
-    margin: .9rem 0 0;
-    max-width: 640px;
-  }
-
-  .note{
-    font-size:.93rem;
-    color:var(--ink-muted);
-    margin: .9rem 0 0;
-    max-width: 640px;
-  }
-
-  .reduced-note{ display:none; font-size:.85rem; color:var(--ink-muted); padding:1rem; }
-
-  .wrapup{ margin-top: 3.6rem; padding-top: 2rem; border-top:1px solid var(--rule); }
-  .wrapup h2{ font-family:var(--sans); font-weight:600; font-size:1.4rem; color:var(--ink-strong); margin:0 0 .9rem; }
-  .wrapup p{ max-width:640px; margin:0 0 1rem; font-size:1.02rem; }
-  .kicker{ font-weight:600; color:var(--ink-strong); }
-
-  @media (prefers-reduced-motion: reduce){
-    .stage-inner{ display:none; }
-    .reduced-note{ display:block; }
-  }
-
-  /* ---------- SQL SERVER TIMELINE ---------- */
-  .sql .n-a{ animation: sqlGlowA var(--dur) linear infinite; }
-  .sql .n-b{ animation: sqlGlowB var(--dur) linear infinite; }
-  @keyframes sqlGlowA{
-    0%,4%   { box-shadow:none; border-color:var(--node-border); }
-    5%,63%  { box-shadow: 0 0 0 1px var(--role-writer), 0 0 16px 2px rgba(178,90,36,.55); border-color:var(--role-writer); }
-    64%,100%{ box-shadow:none; border-color:var(--node-border); }
-  }
-  @keyframes sqlGlowB{
-    0%,23%  { box-shadow:none; border-color:var(--node-border); }
-    24%,81% { box-shadow: 0 0 0 1px var(--role-reader), 0 0 16px 2px rgba(44,125,160,.5); border-color:var(--role-reader); }
-    82%,100%{ box-shadow:none; border-color:var(--node-border); }
-  }
-
-  .sql .tok-reqA{ animation: sqlReqA var(--dur) linear infinite; }
-  @keyframes sqlReqA{
-    0%,4%  { opacity:0; left:13%; top:20%; }
-    5%     { opacity:1; left:13%; top:20%; }
-    10%    { left:50%; top:20%; }
-    14%    { left:50%; top:40%; }
-    18%    { left:74%; top:40%; opacity:1; }
-    19%,100%{ opacity:0; left:74%; top:40%; }
-  }
-
-  .sql .tok-reqB{ animation: sqlReqB var(--dur) linear infinite; }
-  @keyframes sqlReqB{
-    0%,23% { opacity:0; left:13%; top:80%; }
-    24%    { opacity:1; left:13%; top:80%; }
-    29%    { left:50%; top:80%; }
-    33%    { left:50%; top:60%; }
-    37%,64%{ left:68%; top:60%; opacity:1; }
-    68%    { left:74%; top:60%; opacity:1; }
-    69%,100%{ opacity:0; left:74%; top:60%; }
-  }
-
-  .sql .tok-resB{ animation: sqlResB var(--dur) linear infinite; }
-  @keyframes sqlResB{
-    0%,68% { opacity:0; left:74%; top:64%; }
-    69%    { opacity:1; left:74%; top:64%; }
-    74%    { left:50%; top:64%; }
-    78%    { left:50%; top:84%; }
-    82%    { left:13%; top:84%; opacity:1; }
-    83%,100%{ opacity:0; left:13%; top:84%; }
-  }
-
-  .sql .lockbadge{ animation: sqlLock var(--dur) linear infinite; }
-  @keyframes sqlLock{
-    0%,17%  { opacity:0; }
-    18%,63% { opacity:1; }
-    64%,100%{ opacity:0; }
-  }
-
-  .sql .v-old{ animation: sqlValOld var(--dur) linear infinite; }
-  @keyframes sqlValOld{
-    0%,17%  { opacity:1; }
-    18%,63% { opacity:.4; }
-    64%,100%{ opacity:0; }
-  }
-  .sql .v-new{ animation: sqlValNew var(--dur) linear infinite; }
-  @keyframes sqlValNew{
-    0%,63%  { opacity:0; }
-    64%,100%{ opacity:1; }
-  }
-
-  .sql .tag-blocked{ animation: sqlBlocked var(--dur) linear infinite; }
-  @keyframes sqlBlocked{
-    0%,36%  { opacity:0; left:68%; top:52%; }
-    37%,63% { opacity:1; left:68%; top:52%; }
-    64%,100%{ opacity:0; left:68%; top:52%; }
-  }
-
-  .sql .tag-commit{ animation: sqlCommit var(--dur) linear infinite; }
-  @keyframes sqlCommit{
-    0%,62%  { opacity:0; }
-    63%,70% { opacity:1; }
-    71%,100%{ opacity:0; }
-  }
-
-  .sql .tag-readout{ animation: sqlReadout var(--dur) linear infinite; }
-  @keyframes sqlReadout{
-    0%,81%  { opacity:0; }
-    82%,95% { opacity:1; }
-    96%,100%{ opacity:0; }
-  }
-
-  /* ---------- POSTGRESQL TIMELINE ---------- */
-  .pg .n-a{ animation: pgGlowA var(--dur) linear infinite; }
-  .pg .n-b{ animation: pgGlowB var(--dur) linear infinite; }
-  @keyframes pgGlowA{
-    0%,4%   { box-shadow:none; border-color:var(--node-border); }
-    5%,33%  { box-shadow: 0 0 0 1px var(--role-writer), 0 0 16px 2px rgba(178,90,36,.55); border-color:var(--role-writer); }
-    34%,100%{ box-shadow:none; border-color:var(--node-border); }
-  }
-  @keyframes pgGlowB{
-    0%,7%   { box-shadow:none; border-color:var(--node-border); }
-    8%,40%  { box-shadow: 0 0 0 1px var(--role-reader), 0 0 16px 2px rgba(44,125,160,.5); border-color:var(--role-reader); }
-    41%,100%{ box-shadow:none; border-color:var(--node-border); }
-  }
-
-  .pg .tok-reqA{ animation: pgReqA var(--dur) linear infinite; }
-  @keyframes pgReqA{
-    0%,4%  { opacity:0; left:13%; top:20%; }
-    5%     { opacity:1; left:13%; top:20%; }
-    10%    { left:50%; top:20%; }
-    14%    { left:50%; top:40%; }
-    18%    { left:74%; top:40%; opacity:1; }
-    19%,100%{ opacity:0; left:74%; top:40%; }
-  }
-
-  .pg .tok-reqB{ animation: pgReqB var(--dur) linear infinite; }
-  @keyframes pgReqB{
-    0%,7%  { opacity:0; left:13%; top:80%; }
-    8%     { opacity:1; left:13%; top:80%; }
-    13%    { left:50%; top:80%; }
-    17%    { left:50%; top:60%; }
-    21%    { left:74%; top:60%; opacity:1; }
-    22%,100%{ opacity:0; left:74%; top:60%; }
-  }
-
-  .pg .tok-resB{ animation: pgResB var(--dur) linear infinite; }
-  @keyframes pgResB{
-    0%,22% { opacity:0; left:74%; top:64%; }
-    23%    { opacity:1; left:74%; top:64%; }
-    26%    { left:50%; top:64%; }
-    28%    { left:50%; top:84%; }
-    30%    { left:13%; top:84%; opacity:1; }
-    31%,100%{ opacity:0; left:13%; top:84%; }
-  }
-
-  .pg .tag-commit{ animation: pgCommit var(--dur) linear infinite; }
-  @keyframes pgCommit{
-    0%,33%  { opacity:0; }
-    34%,40% { opacity:1; }
-    41%,100%{ opacity:0; }
-  }
-
-  .pg .tag-readout{ animation: pgReadout var(--dur) linear infinite; }
-  @keyframes pgReadout{
-    0%,29%  { opacity:0; }
-    30%,58% { opacity:1; }
-    59%,100%{ opacity:0; }
-  }
-
-  .pg .v1-current{ animation: pgV1Current var(--dur) linear infinite; }
-  @keyframes pgV1Current{
-    0%,18%  { opacity:1; }
-    19%,100%{ opacity:0; }
-  }
-  .pg .v1-pending{ animation: pgV1Pending var(--dur) linear infinite; }
-  @keyframes pgV1Pending{
-    0%,18%  { opacity:0; }
-    19%,33% { opacity:1; }
-    34%,100%{ opacity:0; }
-  }
-  .pg .v1-expired{ animation: pgV1Expired var(--dur) linear infinite; }
-  @keyframes pgV1Expired{
-    0%,33%  { opacity:0; }
-    34%,74% { opacity:1; }
-    84%,100%{ opacity:0; }
-  }
-  .pg .v2-pending{ animation: pgV2Pending var(--dur) linear infinite; }
-  @keyframes pgV2Pending{
-    0%,18%  { opacity:0; }
-    19%,33% { opacity:1; }
-    34%,100%{ opacity:0; }
-  }
-  .pg .v2-current{ animation: pgV2Current var(--dur) linear infinite; }
-  @keyframes pgV2Current{
-    0%,33%  { opacity:0; }
-    34%,100%{ opacity:1; }
-  }
-
-  .pg .tag-vacuum{ animation: pgVacuum var(--dur) linear infinite; }
-  @keyframes pgVacuum{
-    0%,73%  { opacity:0; }
-    74%,85% { opacity:1; }
-    86%,100%{ opacity:0; }
-  }
-
-  body.paused .stage-inner *{ animation-play-state: paused !important; }
-
+  :root { --bs-primary: #336791; --bs-primary-rgb: 51, 103, 145; --bs-link-color: #336791; --bs-link-hover-color: #22495f; }
+  body { background: #ffffff; color: #212529; }
+  main { max-width: 1120px; }
+  h2 { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #dee2e6; font-size: 1.6rem; }
+  h3 { font-size: 1.15rem; }
+  .lead-narrow { max-width: 46rem; }
+  pre { background: #f8f9fa; border: 1px solid #dee2e6; border-radius: .375rem; padding: .85rem 1rem; font-size: .85rem; }
+  code { color: #1d4a6b; }
+  pre code { color: inherit; }
+  .cmp-table th { background: #f1f5f9; vertical-align: bottom; }
+  .cmp-table td { vertical-align: top; font-size: .92rem; }
+  .btn-primary { --bs-btn-bg: #336791; --bs-btn-border-color: #336791; --bs-btn-hover-bg: #2a5578; --bs-btn-hover-border-color: #2a5578; --bs-btn-active-bg: #22495f; --bs-btn-active-border-color: #22495f; --bs-btn-disabled-bg: #336791; --bs-btn-disabled-border-color: #336791; }
+  .btn-outline-primary { --bs-btn-color: #336791; --bs-btn-border-color: #336791; --bs-btn-hover-bg: #336791; --bs-btn-hover-border-color: #336791; --bs-btn-active-bg: #336791; --bs-btn-active-border-color: #336791; }
+  .btn-check:checked + .btn-outline-primary { background-color: #336791; border-color: #336791; color: #fff; }
+  .accordion-button:not(.collapsed) { background: #eef4f9; color: #1d4a6b; }
+  .step-list .list-group-item { cursor: pointer; }
+  .step-list .list-group-item.active { background: #336791; border-color: #336791; }
+  .step-detail dt { margin-top: .75rem; font-size: .9rem; color: #495057; }
+  .step-detail dd { margin-bottom: 0; }
+  .lane-card { border-left: 4px solid #adb5bd; }
+  .lane-card.is-run { border-left-color: #336791; background: #f3f8fc; }
+  .lane-card.is-wait { border-left-color: #dc3545; background: #fdf2f3; }
+  .lane-card.is-done { border-left-color: #198754; }
+  .lane-card.is-idle { color: #6c757d; }
+  .lane-sql { font-family: SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; font-size: .82rem; overflow-wrap: anywhere; }
+  .ver { border: 1px solid #dee2e6; border-radius: .375rem; padding: .5rem .75rem; margin-bottom: .5rem; background: #ffffff; }
+  .ver.is-new { border-color: #336791; background: #f3f8fc; }
+  .ver.is-dead { background: #f1f3f5; color: #6c757d; }
+  .ver.is-gone { border-style: dashed; color: #adb5bd; background: #ffffff; }
+  .ver .badge { font-weight: 600; font-size: .72rem; }
+  .ver-title { font-weight: 600; }
+  .ver-meta { font-size: .85rem; }
+  .stat { font-size: .9rem; }
+  footer { margin-top: 3rem; padding-top: 1rem; border-top: 1px solid #dee2e6; }
 </style>
 </head>
 <body>
-<div class="page">
+<main class="container py-4">
 
-  <h1>Two ways to answer the same question</h1>
-  <p class="dek">What happens when a reader shows up while a writer is still working, told through SQL Server's locks and PostgreSQL's row versions.</p>
+  <header class="mb-4">
+    <img src="data:image/png;base64,/9j/4AAQSkZJRgABAgAAAQABAAD/wAARCAE0BAwDACIAAREBAhEB/9sAQwAIBgYHBgUIBwcHCQkICgwUDQwLCwwZEhMPFB0aHx4dGhwcICQuJyAiLCMcHCg3KSwwMTQ0NB8nOT04MjwuMzQy/9sAQwEJCQkMCwwYDQ0YMiEcITIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIy/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMAAAERAhEAPwD1rwB/yI2l/wDXNv8A0I10tc14A/5EbS/+ubf+hGuloAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKAOa8Af8iNpf/XNv/QjXS1zXgD/AJEbS/8Arm3/AKEa6WgAooooAKKKKACiiigAooooASioZ7iC1iM1xNHDGvV5GCgfia5jUviDotjuSB5LyUZGIVwufdj29xmmoyk7JXE2o6tnW0V5PffErVZyRaQQWqdsjzGH4nj9O9YN34n1u+yJ9TuCp6qjbAfwXArpjgqr6WMJYmmvM9ykmjiXMjqo9WOKpNr2jocPqtip9DcIP614Mzs5y7Fj6k5ptb/2e/5vwMvri/lPdv8AhJ9D/wCgtaf9/RSp4k0R841ey49Z1H8zXhFFP+z/AO9+AfXPI+godSsbnAgvbeXPTZIrZ/I1ar5zq1balfWjA295cQkdPLkK/wAql5fK2khrGR6o+ghSHNeNWfj7X7QgNdJcKP4Zowf1GD+tdJp/xOgcqmoWDxnoZIG3D/vk4wPxNYTwlWHS/oaxxFOXWx6FS1k6X4h0rV8LZ3kbyEZ8sna4/A81q1ztNOzNk01dC0UUUhhRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQBzXgD/kRtL/65t/6Ea6Wua8Af8iNpf/XNv/QjXS0AFFFFABRRRQA0UtFcV4g+IFnp4e303F1cgY8wHMaH6/xH6ce9OMXN2iribUVds6q81C0063M95cRwxD+JzjP09T9K4PWviV96HR4Pb7RMP5L/AI/lXCahqV5ql21zeztLK3cngewHYVVr0qWBW9Q4amL6QLd9ql/qcm+9u5pznI3uSB9B0H4VUoorvhCMFaKsckpSbuwoooqyQooopDCiiigAooooEFFFFMBVZkYMpKsDkEHBBro9H8caxpW1Gm+1QLwI5+SOOzdcdPyrm6KznShNWkrmkakoO8We06J4w0vW8RpKILknHkSnBPpg9D9BzXR9q+c667w947vtK2297vu7T/aJMiccAEnp7GvOrYFrWn9x2U8WnpM9epaztL1ey1m18+ymEqDhh0KnHQitCuBpp2Z1ppq6FooopDCiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooAKKKKACiiigAooooA5rwB/yI2l/9c2/9CNdLXNeAP+RG0v8A65t/6Ea6WgAooooASobq6gsrWS5uZVihjG53boBUOoaja6VZSXV3II4kHJ7k+g9TXj3ibxTd+ILply0Vip/dwZ/8eb1P8q0pUZVXZbGdSpGmrs0fFHjm41cvZ2G63ss8tnDyj39B7fn6Vx9FFe1SoxpKyR5k6spu7CiiitzIKKkt7ea6nSC3ieWVzhURck/hXY6P8ONQu9kuoyraxHkxj5pD/Qf54qJ1IwV5OxUYyk7RRxVXLPS7/UDi0s55/eOMkD6noK9e07wVoenKuLRZ3H/LSf5yfw6fpXQBQoAAwB0FcU8fBfCrnTHCSe7seOW3w/8AEFxy9tHB7yyjn8s1pRfDDUTjzb62XpnYGb+gr1KisHj6r6I2WEh3Z5r/AMKsn/6Cqf8Afg/401/hbdDGzU4j65iI/rXp2aM1P16t3K+q0zyOb4ba1H/q5bWUH0cgj8xWLd+FtcsVLT6bOFHVkAkA/Fc17rzRVrMKnVIh4OPRnzoysjFWBVgcEEYINJXvt9pGn6mhW8s4ZuOroMj6HqK4/VfhnbS+ZJply0DnlYZfmT6Z6gfnXTTx1OWktDGeFmttTzKitLU9B1PR2xeWrxrkgSD5lPTuPqKza7E01dHM007MKKKKYi7puqXmkXYubKdonHUA/Kw9GHcV614a8XWniBPKx5F6q5eJjw3up7j/AD714xUlvcTWtxHPBI0csZ3K6nBBrlr4WNVX6nRSrSpvyPoiiuP8J+MotaVLK7YRagB16LNjuPf1H5e3YV41SnKnLlkelCamroWiiipKCiiigAooooAKKKKACiio5JEijaSR1RFGSzHAA9zQA+iuO1L4h6RY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FFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQBzXgD/AJEbS/8Arm3/AKEa6Wua8Af8iNpf/XNv/QjXS0AFFFFABRRRQAUUUUAYGueFNN14F54zHcYAEycNx0B7EV5vrPgfVdJ3SRR/a7cf8tIR8wHuvUfhke9ezdqMV0UcVUpabowqYeE9dmfOhBBIIwR1Bre8FWn2vxZZKRlY2Mp6cbQSP1xXqmqeGdI1f5rqzQydfNT5X/MdfxzWboHgyHQNXkvILp5UaIxhJFGRlgc5HXgY6Cu767CUH0djl+qyjJdUdZRRRXknohRRRQB4j41/5HDUf99f/QRXrHhpg3hnTDjH+ixj8lAryXxk+/xdqRxj94B+QAr1fwo+/wAK6acY/cKPy4r0cR/usPl+Rw0v48vmbNFFFecdwVwHxQtN+nWV4BzFK0Z47MM/+y/rXfVj+JNG/t7R5LISCNy6sjsMhSDzx9M1dKfJUjIipHmg0eF1d03SL/V5vLsrZ5W7kDCr9T0FeoaZ8PtHssPcK95IMHMpwoP+6P65rqoYIraFYYYkijUYVEUAAewFenUx8FpBXOCGFk99DhtE+G8EBSbVZvPkHPkx8IPqep/Su5hgitoVhgiSKNRhURQAB7AVNSV51WvOr8TO2nRjT2QtFFFZGoUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQBzXgD/kRtL/AOubf+hGulrC8IafdaZ4VsLK8i8q4iQh03BsHcT1BI71u0AFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAGXP4f0i6neebTraSVzlnaMEk+9Xbe3htYEggjWOJBhVUYAHtU1FU5yas3oSoxTukLRRRUlBRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFABRRRQAUUUUAFFFFAH/2Q==" alt="Course logo" height="48" class="mb-3">
+    <h1 class="h2 border-0 mt-0 pt-0">SQL Server Locking vs PostgreSQL MVCC: Who Waits for Whom</h1>
+    <p class="lead lead-narrow">Every database must decide what happens when one transaction is changing a row while another wants to read it. SQL Server answers with locks, and PostgreSQL answers with row versions. This page puts the two side by side, steps through one scenario in each engine, and covers the places where the usual advice breaks down.</p>
+  </header>
 
-  <div class="intro prose">
-    <p>Every relational database eventually has to settle an uncomfortable question: what happens when one transaction is changing a row while another transaction wants to look at it. SQL Server and PostgreSQL settle that question in almost opposite ways, and the difference is behind a lot of the blocking chains and phantom slowdowns that show up in production without an obvious cause.</p>
-    <p>Below are two small animated schematics that walk through the same scenario, a withdrawal against an account balance, once under SQL Server's default locking behavior and once under PostgreSQL's MVCC. Watch what happens to the reader in each version, that is the part that actually matters.</p>
+  <div class="alert alert-info" role="note">
+    <h2 class="h6 border-0 mt-0 pt-0 mb-2">The short version</h2>
+    <p class="mb-2"><strong>SQL Server, by default, keeps one copy of a row and uses locks.</strong> A reader waits for a writer, and a writer can wait for a reader. <strong>PostgreSQL keeps more than one copy of a row.</strong> A reader looks at the version that was current when its snapshot was taken, so it does not wait for a writer, and a writer does not wait for a reader.</p>
+    <p class="mb-0">Neither is free. SQL Server pays with waiting. PostgreSQL pays with dead row versions that vacuum has to clean up. Two writers on the same row wait for each other in both engines, and a few kinds of statement, such as most <code>ALTER TABLE</code> forms, still block readers in PostgreSQL.</p>
   </div>
 
-  <div class="top-controls">
-    <button class="ctrl" id="pauseBtn" onclick="togglePause()">Pause animations</button>
+  <!-- ============ SECTION 1 ============ -->
+  <h2 id="compare" class="mt-4">1. Side by side</h2>
+  <p>The left column describes SQL Server with its default settings. SQL Server can also keep row versions, which is covered in the stepper in section 2, so read the left column as &quot;SQL Server without row versioning&quot; unless it says otherwise.</p>
+
+  <div class="table-responsive">
+    <table class="table table-bordered cmp-table">
+      <thead>
+        <tr>
+          <th style="width:18%">Question</th>
+          <th style="width:41%">SQL Server (default)</th>
+          <th style="width:41%">PostgreSQL</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>What does a plain SELECT take?</strong></td>
+          <td>Shared locks on the rows it reads, plus intent locks above them. Under <code>READ COMMITTED</code> each shared lock is released as soon as the row is read.</td>
+          <td>No row locks. A table-level <code>ACCESS SHARE</code> lock that conflicts only with <code>ACCESS EXCLUSIVE</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>What does an UPDATE do to the row?</strong></td>
+          <td>Takes an exclusive lock on the row and changes it in place. The old value is kept in the transaction log so the change can be undone.</td>
+          <td>Writes a whole new row version and marks the old one as replaced. Nothing is edited in place.</td>
+        </tr>
+        <tr>
+          <td><strong>Does a reader wait for a writer?</strong></td>
+          <td>Yes, unless row versioning is turned on (<code>READ_COMMITTED_SNAPSHOT</code> or snapshot isolation).</td>
+          <td>No.</td>
+        </tr>
+        <tr>
+          <td><strong>Does a writer wait for a reader?</strong></td>
+          <td>Yes, for as long as the reader holds a shared lock. That is only an instant under <code>READ COMMITTED</code>, but until the transaction ends under <code>REPEATABLE READ</code> and <code>SERIALIZABLE</code>.</td>
+          <td>No.</td>
+        </tr>
+        <tr>
+          <td><strong>Two writers, same row?</strong></td>
+          <td>The second waits for the first one's exclusive lock, then continues with the new value.</td>
+          <td>The second waits for the first transaction to finish. Under <code>READ COMMITTED</code> it then continues with the new value. Under <code>REPEATABLE READ</code> or <code>SERIALIZABLE</code> it fails with SQLSTATE <code>40001</code> and must be retried.</td>
+        </tr>
+        <tr>
+          <td><strong>Where do old versions live?</strong></td>
+          <td>Nowhere, by default. With row versioning on, in the version store: in <code>tempdb</code>, or in the user database when accelerated database recovery (ADR) is on.</td>
+          <td>In the table itself, next to the live row, until vacuum removes them.</td>
+        </tr>
+        <tr>
+          <td><strong>What cleans up?</strong></td>
+          <td>Nothing to clean for plain updates. With row versioning, a background task removes versions nobody needs.</td>
+          <td><code>VACUUM</code>, run for you by autovacuum, which is on by default.</td>
+        </tr>
+        <tr>
+          <td><strong>Lock memory and escalation</strong></td>
+          <td>Locks live in memory. A statement that takes about 5,000 or more locks on one table or index can trigger escalation to a table lock.</td>
+          <td>No escalation. Row locks are marks in the row header, so there is no limit on how many rows can be locked. Table-level locks do sit in a shared memory pool.</td>
+        </tr>
+        <tr>
+          <td><strong>Deadlocks</strong></td>
+          <td>Detected. One session is the victim and gets error 1205.</td>
+          <td>Detected after <code>deadlock_timeout</code> (1 second by default). One session gets <code>ERROR: deadlock detected</code>, SQLSTATE <code>40P01</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>What does ROLLBACK cost?</strong></td>
+          <td>The changes are undone from the log, so a big rollback can take as long as the work did.</td>
+          <td>Almost nothing. The new row versions are simply never visible and vacuum removes them later.</td>
+        </tr>
+        <tr>
+          <td><strong>What about the newer SQL Server features?</strong></td>
+          <td>Row versioning is on by default in Azure SQL Database. Optimized locking (always on in Azure SQL, opt-in per database in SQL Server 2025) holds one transaction ID lock instead of many row locks, which cuts lock memory and escalation.</td>
+          <td>Nothing to enable. MVCC is the only model.</td>
+        </tr>
+      </tbody>
+    </table>
   </div>
 
-  <!-- ===================== SQL SERVER PANEL ===================== -->
-  <section class="panel">
-    <h2>SQL Server: pessimistic locking</h2>
-    <div class="prose">
-      <p>SQL Server's default isolation level, read committed, protects a row under modification with an exclusive lock held for the life of the write transaction. Any reader that wants the same row has to request a shared lock first, and the lock manager will not hand one out while an incompatible exclusive lock is outstanding. The reader waits, full stop.</p>
+  <!-- ============ SECTION 2 ============ -->
+  <h2 id="stepper">2. Try it: a reader meets a writer</h2>
+  <p>One scenario, four configurations. Account 42 holds a balance of 500. Transaction A changes it to 400 and does not commit right away. Transaction B reads the balance while A is still open. Pick a configuration, then step through it. The row card shows what is stored, and the detail card says what B sees and why.</p>
+
+  <div class="btn-group mb-3 flex-wrap" role="group" aria-label="Choose a configuration">
+    <input type="radio" class="btn-check" name="modePick" id="mSqlRc" value="sqlrc" autocomplete="off" checked>
+    <label class="btn btn-outline-primary" for="mSqlRc">SQL Server, read committed (locks)</label>
+    <input type="radio" class="btn-check" name="modePick" id="mRcsi" value="rcsi" autocomplete="off">
+    <label class="btn btn-outline-primary" for="mRcsi">SQL Server, with RCSI</label>
+    <input type="radio" class="btn-check" name="modePick" id="mPgRc" value="pgrc" autocomplete="off">
+    <label class="btn btn-outline-primary" for="mPgRc">PostgreSQL, read committed</label>
+    <input type="radio" class="btn-check" name="modePick" id="mPgRr" value="pgrr" autocomplete="off">
+    <label class="btn btn-outline-primary" for="mPgRr">PostgreSQL, repeatable read</label>
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-4">
+      <div class="list-group step-list" id="stepList" role="tablist" aria-label="Scenario steps"></div>
+      <div class="d-flex gap-2 mt-3">
+        <button type="button" class="btn btn-outline-primary" id="stepBack">Back</button>
+        <button type="button" class="btn btn-primary" id="stepNext">Next</button>
+        <button type="button" class="btn btn-outline-secondary" id="stepPlay">Play</button>
+      </div>
     </div>
-
-    <pre class="code"><span class="cmt">-- Transaction A (writer)</span>
-BEGIN TRAN;
-UPDATE accounts SET balance = 400 WHERE account_id = 42;
-<span class="cmt">-- exclusive lock held here, transaction still open</span>
-
-<span class="cmt">-- Transaction B (reader), starts while A is still open</span>
-SELECT balance FROM accounts WHERE account_id = 42;
-<span class="cmt">-- blocks until A commits or rolls back</span></pre>
-
-    <div class="legend">
-      <span><i class="dot writer"></i>Transaction A, writer</span>
-      <span><i class="dot reader"></i>Transaction B, reader</span>
-    </div>
-
-    <div class="stage-wrap">
-      <div class="stage-inner sql" id="stage-sql">
-        <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <path d="M13,20 L50,20 L50,40 L74,40" fill="none" stroke="rgba(255,255,255,.24)" stroke-width="0.4" stroke-dasharray="1.6 1.2" vector-effect="non-scaling-stroke"/>
-          <path d="M13,80 L50,80 L50,60 L74,60" fill="none" stroke="rgba(255,255,255,.24)" stroke-width="0.4" stroke-dasharray="1.6 1.2" vector-effect="non-scaling-stroke"/>
-          <path d="M74,64 L50,64 L50,84 L13,84" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="0.4" stroke-dasharray="0.8 1.4" vector-effect="non-scaling-stroke"/>
-        </svg>
-
-        <div class="node n-a">
-          <span class="t">Txn A, writer</span>
-          <span class="m">UPDATE accounts</span>
-          <span class="m">SET balance = 400</span>
-        </div>
-
-        <div class="node n-b">
-          <span class="t">Txn B, reader</span>
-          <span class="m">SELECT balance</span>
-          <span class="m">WHERE account_id = 42</span>
-        </div>
-
-        <div class="node n-row">
-          <div class="rowline">
-            <span class="t">Row: accounts #42</span>
-            <span class="lockbadge">&#128274; X-lock held by Txn A</span>
-            <div class="valuewrap">
-              <span class="v v-old m">balance = 500</span>
-              <span class="v v-new m" style="color:#B7F0E1;">balance = 400</span>
+    <div class="col-lg-8" aria-live="polite">
+      <div class="row g-3 mb-3">
+        <div class="col-md-6">
+          <div class="card lane-card h-100" id="laneA">
+            <div class="card-body">
+              <div class="d-flex align-items-center gap-2 mb-1"><strong>Transaction A</strong><span class="badge text-bg-secondary" id="laneAState"></span></div>
+              <div class="text-muted small mb-1">The writer</div>
+              <div class="lane-sql" id="laneAText"></div>
             </div>
           </div>
         </div>
-
-        <div class="token writer tok-reqA"></div>
-        <div class="token reader tok-reqB"></div>
-        <div class="token reader tok-resB"></div>
-
-        <div class="tag blocked tag-blocked">waiting on X-lock</div>
-        <div class="tag commit tag-commit" style="left:13%; top:32%;">commit, lock released</div>
-        <div class="tag readout tag-readout" style="left:13%; top:96%;">B reads balance = 400</div>
-      </div>
-      <div class="reduced-note">Animation paused for reduced motion. Transaction A takes an exclusive lock while updating the row. Transaction B requests the same row and waits, because a shared lock cannot be granted while the exclusive lock is outstanding. Once A commits, the lock releases and B reads the new value.</div>
-    </div>
-
-    <p class="caption">Transaction A opens an update against account 42 and takes an exclusive lock on the row. Transaction B asks for the same row a moment later and requests a shared lock, which the lock manager cannot grant while the exclusive lock is outstanding, so B sits and waits. Once A commits, the exclusive lock releases, B's shared lock is granted immediately, and B reads the new balance of 400. Had A rolled back instead, B would have read 500 and never known a change was attempted.</p>
-
-    <p class="note">SQL Server can trade this behavior for something closer to MVCC by turning on read committed snapshot isolation or full snapshot isolation, both of which keep row versions in tempdb. Plenty of shops never touch that switch, so the locking behavior above is still what most SQL Server workloads run into by default.</p>
-  </section>
-
-  <!-- ===================== POSTGRESQL PANEL ===================== -->
-  <section class="panel">
-    <h2>PostgreSQL: multiversion concurrency control</h2>
-    <div class="prose">
-      <p>PostgreSQL never blocks a reader on a writer. Every row carries hidden bookkeeping columns, xmin and xmax, recording which transaction created it and which transaction, if any, has superseded it. An update does not touch the existing row at all, it writes an entirely new tuple version and marks the old one as superseded. A reader's snapshot decides which version it sees, and that decision gets made once, when the reader's transaction starts.</p>
-    </div>
-
-    <pre class="code"><span class="cmt">-- Transaction A (writer)</span>
-BEGIN;
-UPDATE accounts SET balance = 400 WHERE account_id = 42;
-<span class="cmt">-- new tuple written, xmin = 101, not yet committed</span>
-
-<span class="cmt">-- Transaction B (reader), snapshot taken before A commits</span>
-SELECT balance FROM accounts WHERE account_id = 42;
-<span class="cmt">-- returns 500 immediately, no wait at all</span></pre>
-
-    <div class="legend">
-      <span><i class="dot writer"></i>Transaction A, writer</span>
-      <span><i class="dot reader"></i>Transaction B, reader</span>
-    </div>
-
-    <div class="stage-wrap">
-      <div class="stage-inner pg" id="stage-pg">
-        <svg class="lines" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <path d="M13,20 L50,20 L50,40 L74,40" fill="none" stroke="rgba(255,255,255,.24)" stroke-width="0.4" stroke-dasharray="1.6 1.2" vector-effect="non-scaling-stroke"/>
-          <path d="M13,80 L50,80 L50,60 L74,60" fill="none" stroke="rgba(255,255,255,.24)" stroke-width="0.4" stroke-dasharray="1.6 1.2" vector-effect="non-scaling-stroke"/>
-          <path d="M74,64 L50,64 L50,84 L13,84" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="0.4" stroke-dasharray="0.8 1.4" vector-effect="non-scaling-stroke"/>
-        </svg>
-
-        <div class="node n-a">
-          <span class="t">Txn A, writer</span>
-          <span class="m">UPDATE accounts</span>
-          <span class="m">SET balance = 400</span>
-        </div>
-
-        <div class="node n-b">
-          <span class="t">Txn B, reader</span>
-          <span class="m">SELECT balance</span>
-          <span class="m">WHERE account_id = 42</span>
-        </div>
-
-        <div class="node n-row">
-          <div class="rowline">
-            <span class="t">Row: accounts #42</span>
-            <div class="tuplewrap">
-              <div class="tuple current v1-current">balance = 500 &middot; xmin 100, committed</div>
-              <div class="tuple pending v1-pending">balance = 500 &middot; xmax 101, uncommitted</div>
-              <div class="tuple expired v1-expired">balance = 500 &middot; xmax 101, committed, dead</div>
-            </div>
-            <div class="tuplewrap" style="min-height:2.6em;">
-              <div class="tuple pending v2-pending">balance = 400 &middot; xmin 101, uncommitted</div>
-              <div class="tuple current v2-current">balance = 400 &middot; xmin 101, committed</div>
+        <div class="col-md-6">
+          <div class="card lane-card h-100" id="laneB">
+            <div class="card-body">
+              <div class="d-flex align-items-center gap-2 mb-1"><strong>Transaction B</strong><span class="badge text-bg-secondary" id="laneBState"></span></div>
+              <div class="text-muted small mb-1">The reader</div>
+              <div class="lane-sql" id="laneBText"></div>
             </div>
           </div>
         </div>
-
-        <div class="token writer tok-reqA"></div>
-        <div class="token reader tok-reqB"></div>
-        <div class="token reader tok-resB"></div>
-
-        <div class="tag commit tag-commit" style="left:13%; top:32%;">commit, xmin 101 final</div>
-        <div class="tag readout tag-readout" style="left:13%; top:96%;">B reads balance = 500, no wait</div>
-        <div class="tag vacuum tag-vacuum" style="left:88%; top:90%; opacity:0;">vacuum reclaims dead tuple</div>
       </div>
-      <div class="reduced-note">Animation paused for reduced motion. Transaction A writes a new tuple version without touching the old one. Transaction B's snapshot was taken before A committed, so B reads the old tuple immediately, with no wait. After commit, the new tuple becomes current and the old one becomes dead weight until vacuum removes it.</div>
+
+      <div class="card mb-3">
+        <div class="card-body">
+          <h3 class="h6 mb-2">What is stored for account 42</h3>
+          <div id="rowCard"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body step-detail">
+          <h3 class="h5" id="stepTitle"></h3>
+          <dl class="mb-0">
+            <dt>What happens</dt>
+            <dd id="stepWhat"></dd>
+            <dt>What B sees</dt>
+            <dd id="stepSees"></dd>
+            <dt>Under the hood</dt>
+            <dd id="stepHood"></dd>
+            <dt>The other side</dt>
+            <dd id="stepOther"></dd>
+          </dl>
+        </div>
+      </div>
     </div>
-
-    <p class="caption">Transaction A's update writes a new tuple version, balance 400, tagged with its own transaction id, and marks the old tuple's xmax with that same id. Transaction B's snapshot was taken before A committed, so the old tuple is still valid as far as B is concerned, and B reads 500 without any wait at all. Once A commits, the new tuple becomes the current version for any transaction whose snapshot starts afterward. The old tuple becomes dead weight, still sitting in the table file until a vacuum process reclaims it.</p>
-
-    <p class="note">Postgres is not immune to blocking, two writers touching the same row will still fight over it. It is specifically reader-versus-writer contention that MVCC sidesteps.</p>
-  </section>
-
-  <!-- ===================== WRAP UP ===================== -->
-  <div class="wrapup">
-    <h2>Same row, two philosophies</h2>
-    <p>Line them up side by side and the design philosophies come into focus. <span class="kicker">SQL Server keeps one copy of the row and controls access with locks</span>, cheap to check, expensive to wait on. <span class="kicker">PostgreSQL keeps multiple copies of the row and controls access with time</span>, cheap to read, expensive to store until vacuum catches up. Neither approach is free, you are choosing between blocking readers and bloating tables, and which one costs you more depends entirely on your workload.</p>
-    <p>Pick your poison. Just know which one you picked.</p>
   </div>
 
-</div>
+  <div class="alert alert-secondary mt-4 mb-0" role="note">
+    <strong>What the stepper does not show.</strong> It stays on one row. The same pattern holds for a table scan: under locking, a reader scanning a table can wait on any row that a writer has locked, and under MVCC it never does. Also note that <code>WITH (NOLOCK)</code> in SQL Server is not a way to get MVCC behavior. It reads rows that are still being changed, including changes that are later rolled back.
+  </div>
 
+  <!-- ============ SECTION 3 ============ -->
+  <h2 id="isolation">3. Isolation levels in each engine</h2>
+  <p>The same level names mean different mechanics in each engine. This table is the one to keep open when a SQL Server habit meets a PostgreSQL server.</p>
+  <div class="table-responsive">
+    <table class="table table-bordered cmp-table">
+      <thead>
+        <tr><th style="width:16%">Level</th><th style="width:42%">SQL Server</th><th style="width:42%">PostgreSQL</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>READ UNCOMMITTED</code></td>
+          <td>Reads rows another transaction has changed but not committed. This is what <code>NOLOCK</code> gives you.</td>
+          <td>Accepted, but it runs as <code>READ COMMITTED</code>. PostgreSQL never shows uncommitted data.</td>
+        </tr>
+        <tr>
+          <td><code>READ COMMITTED</code></td>
+          <td>The default. With locking, a reader waits for writers. With <code>READ_COMMITTED_SNAPSHOT</code> on, each statement reads the committed data as of its own start, with no waiting.</td>
+          <td>The default. Each statement sees the data committed before that statement began. Two statements in one transaction can see different data.</td>
+        </tr>
+        <tr>
+          <td><code>REPEATABLE READ</code></td>
+          <td>Holds shared locks until the transaction ends, so writers wait, and phantom rows can still appear.</td>
+          <td>One snapshot for the whole transaction, taken at its first statement. No waiting for writers and no phantom rows. An update to a row that changed after the snapshot fails with <code>40001</code>.</td>
+        </tr>
+        <tr>
+          <td><code>SNAPSHOT</code></td>
+          <td>One snapshot per transaction using row versions. It must be enabled with <code>ALLOW_SNAPSHOT_ISOLATION</code>, and a conflicting update fails with error 3960.</td>
+          <td>There is no separate level. <code>REPEATABLE READ</code> is snapshot isolation.</td>
+        </tr>
+        <tr>
+          <td><code>SERIALIZABLE</code></td>
+          <td>Key-range locks. Readers and writers block each other, and deadlocks are common when transactions read before they write.</td>
+          <td>Serializable snapshot isolation. Nothing blocks, but a transaction can be cancelled with <code>40001</code> when the engine spots a pattern that could not be serialized, so it must be retried.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="small text-muted">Set a level in PostgreSQL with <code>BEGIN ISOLATION LEVEL REPEATABLE READ;</code> or <code>SET TRANSACTION ISOLATION LEVEL ...</code> as the first statement of the transaction. The server default comes from <code>default_transaction_isolation</code>.</p>
+
+  <!-- ============ SECTION 4 ============ -->
+  <h2 id="writers">4. Try it: two writers on the same row</h2>
+  <p>Both engines make writers queue. What differs is what the second writer does once the first has committed. Both transactions run <code>UPDATE accounts SET balance = balance - 100 WHERE account_id = 42;</code> and the balance starts at 500. A goes first and commits. Pick a configuration to see what B does.</p>
+
+  <div class="row g-3 mb-3">
+    <div class="col-md-5">
+      <label class="form-label" for="wMode">Configuration</label>
+      <select class="form-select" id="wMode">
+        <option value="sqlrc" selected>SQL Server, READ COMMITTED</option>
+        <option value="sqlsi">SQL Server, SNAPSHOT</option>
+        <option value="sqlser">SQL Server, SERIALIZABLE</option>
+        <option value="pgrc">PostgreSQL, READ COMMITTED</option>
+        <option value="pgrr">PostgreSQL, REPEATABLE READ</option>
+        <option value="pgser">PostgreSQL, SERIALIZABLE</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-body step-detail" aria-live="polite">
+      <h3 class="h5" id="wTitle"></h3>
+      <dl class="mb-0">
+        <dt>What B does</dt>
+        <dd id="wDoes"></dd>
+        <dt>Final balance</dt>
+        <dd id="wFinal"></dd>
+        <dt>Error B may get</dt>
+        <dd id="wError"></dd>
+        <dt>What the application must do</dt>
+        <dd id="wApp"></dd>
+      </dl>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-body">
+      <h3 class="h5">The pattern that loses updates in both engines</h3>
+      <p>The risk is not in the engine. It is in code that reads a value, computes in the application, and writes a literal back.</p>
+<pre><code>-- Both sessions run this under READ COMMITTED
+SELECT balance FROM accounts WHERE account_id = 42;   -- both read 500
+-- the application computes 500 - 100 = 400
+UPDATE accounts SET balance = 400 WHERE account_id = 42;  -- B overwrites A: one withdrawal is lost</code></pre>
+      <p class="mb-2">Three ways out:</p>
+      <ul class="mb-0">
+        <li>Do the arithmetic in the statement: <code>SET balance = balance - 100</code>. This is safe under <code>READ COMMITTED</code> in both engines.</li>
+        <li>Lock the row first. In PostgreSQL that is <code>SELECT ... FOR UPDATE</code>. In SQL Server it is <code>SELECT ... WITH (UPDLOCK, ROWLOCK)</code>.</li>
+        <li>Use a stricter level and retry on failure (<code>40001</code> in PostgreSQL, error 3960 or 1205 in SQL Server).</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 5 ============ -->
+  <h2 id="waits">5. Where PostgreSQL readers still wait</h2>
+  <p>&quot;Readers never block&quot; is true for row data and false for a handful of statements. These are the exceptions that cause the surprising outages.</p>
+
+  <div class="accordion" id="waitAcc">
+    <div class="accordion-item">
+      <h3 class="accordion-header">
+        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#w1">DDL takes ACCESS EXCLUSIVE and blocks even SELECT</button>
+      </h3>
+      <div id="w1" class="accordion-collapse collapse show" data-bs-parent="#waitAcc">
+        <div class="accordion-body">
+          <p><code>DROP TABLE</code>, <code>TRUNCATE</code>, <code>REINDEX</code>, <code>CLUSTER</code>, <code>VACUUM FULL</code>, a plain <code>REFRESH MATERIALIZED VIEW</code>, and many forms of <code>ALTER TABLE</code> take an <code>ACCESS EXCLUSIVE</code> lock. That is the one table lock that conflicts with the <code>ACCESS SHARE</code> lock every SELECT takes.</p>
+          <p>The worse part is the queue. If an <code>ALTER TABLE</code> waits behind one long transaction, every new query on that table queues behind the <code>ALTER</code>, so a quick change can stall the whole table. The fix is to refuse to wait:</p>
+<pre><code>SET lock_timeout = '3s';
+ALTER TABLE accounts ADD COLUMN note text;   -- fails fast if it cannot get the lock, then retry</code></pre>
+          <p class="mb-0">SQL Server has the same shape with schema modification locks (<code>Sch-M</code>) against schema stability locks (<code>Sch-S</code>), and offers <code>WAIT_AT_LOW_PRIORITY</code> for some online operations. In PostgreSQL, <code>CREATE INDEX CONCURRENTLY</code> and <code>REINDEX ... CONCURRENTLY</code> avoid the blocking lock.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h3 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#w2">SELECT ... FOR UPDATE and the other explicit row locks</button>
+      </h3>
+      <div id="w2" class="accordion-collapse collapse" data-bs-parent="#waitAcc">
+        <div class="accordion-body">
+          <p>A row lock never blocks a plain SELECT. It blocks writers and other lockers of the same row. <code>FOR UPDATE</code>, <code>FOR NO KEY UPDATE</code>, <code>FOR SHARE</code>, and <code>FOR KEY SHARE</code> differ in how strong they are. Foreign key checks use <code>FOR KEY SHARE</code>, the weakest.</p>
+<pre><code>-- take the next job, skip rows another worker already holds
+SELECT job_id FROM jobs
+WHERE status = 'new'
+ORDER BY job_id
+LIMIT 1
+FOR UPDATE SKIP LOCKED;
+
+SELECT * FROM accounts WHERE account_id = 42 FOR UPDATE NOWAIT;  -- error instead of waiting</code></pre>
+          <p class="mb-0">The SQL Server cousins are the <code>UPDLOCK</code>, <code>ROWLOCK</code>, and <code>READPAST</code> hints. One PostgreSQL oddity: locking a row writes to the row header, so a large <code>SELECT ... FOR UPDATE</code> can cause disk writes.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h3 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#w3">Writers, waiting, and deadlocks</button>
+      </h3>
+      <div id="w3" class="accordion-collapse collapse" data-bs-parent="#waitAcc">
+        <div class="accordion-body">
+          <p>When a writer meets another transaction's uncommitted change to the same row, it waits for that transaction to finish. There is no timeout unless you set one. If two transactions end up waiting for each other, the server notices after <code>deadlock_timeout</code> and cancels one of them.</p>
+          <ul class="mb-0">
+            <li>Update rows in a consistent order, so two transactions never wait on each other in a circle.</li>
+            <li>Set <code>lock_timeout</code> for work that should give up. It is the counterpart of <code>SET LOCK_TIMEOUT</code> in SQL Server.</li>
+            <li>Turn on <code>log_lock_waits</code> to have the server log any wait longer than <code>deadlock_timeout</code>, which is a cheap way to find chronic blocking.</li>
+            <li>Retry on SQLSTATE <code>40P01</code>, the way you would retry error 1205.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h3 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#w4">Advisory locks: the sp_getapplock of PostgreSQL</button>
+      </h3>
+      <div id="w4" class="accordion-collapse collapse" data-bs-parent="#waitAcc">
+        <div class="accordion-body">
+          <p>Advisory locks are locks on a number that the application chooses. The server does not tie them to any table or row. They are the nearest thing to <code>sp_getapplock</code>.</p>
+<pre><code>SELECT pg_advisory_lock(42);          -- held until released or the session ends
+SELECT pg_advisory_xact_lock(42);     -- released at the end of the transaction
+SELECT pg_try_advisory_lock(42);      -- returns false instead of waiting</code></pre>
+          <p class="mb-0">Session-level advisory locks ignore transactions. A lock taken inside a transaction that rolls back is still held. Use the <code>xact</code> forms unless you need the lock to outlive the transaction.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h3 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#w5">Idle in transaction: a session that holds on to everything</button>
+      </h3>
+      <div id="w5" class="accordion-collapse collapse" data-bs-parent="#waitAcc">
+        <div class="accordion-body">
+          <p>A session that ran <code>BEGIN</code>, did some work, and then went quiet keeps its locks and keeps its snapshot. Its locks can block other writers and DDL. Its snapshot stops vacuum from removing recent dead rows (section 6). It shows up as <code>idle in transaction</code> in <code>pg_stat_activity</code>. Application code that opens a transaction and then calls a slow web service is the usual cause.</p>
+<pre><code>-- cancel sessions that sit idle inside a transaction for more than a minute
+ALTER SYSTEM SET idle_in_transaction_session_timeout = '60s';
+SELECT pg_reload_conf();</code></pre>
+          <p class="mb-0">SQL Server has the same problem, since an open transaction holds locks and pins the log. In PostgreSQL it also pins the cleanup of dead rows.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <h3 class="accordion-header">
+        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#w6">No lock escalation, but a different ceiling</button>
+      </h3>
+      <div id="w6" class="accordion-collapse collapse" data-bs-parent="#waitAcc">
+        <div class="accordion-body">
+          <p class="mb-0">SQL Server may trade thousands of row locks for one table lock, which can suddenly block everyone else on that table. PostgreSQL never does that, because row locks cost no lock memory. The trade is that the row header is written to, and a very large number of locked rows means a lot of writes. Table-level locks and advisory locks do live in a shared memory pool sized by <code>max_locks_per_transaction</code> and <code>max_connections</code>, which is a limit you can hit if one transaction touches thousands of tables or partitions.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 6 ============ -->
+  <h2 id="bill">6. The bill for MVCC: dead row versions and vacuum</h2>
+  <p>Every update in PostgreSQL leaves the old row version behind, and a delete leaves the deleted one. Once no transaction can still need it, the version is dead. <code>VACUUM</code> finds dead versions and marks their space as reusable. Autovacuum runs it for you, and it is on by default.</p>
+
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h3 class="h5">Try it: why one open transaction stops cleanup</h3>
+          <p class="small">One account row. Each update leaves the old version behind. Vacuum can only remove a dead version that no open snapshot can still see.</p>
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <button type="button" class="btn btn-primary btn-sm" id="simUpdate">Run an UPDATE</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" id="simLong" aria-pressed="false">Open a long transaction</button>
+            <button type="button" class="btn btn-outline-primary btn-sm" id="simVacuum">Run VACUUM</button>
+            <button type="button" class="btn btn-outline-secondary btn-sm" id="simReset">Reset</button>
+          </div>
+          <p class="stat mb-2" id="simStats" aria-live="polite"></p>
+          <div id="simVersions"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-body">
+          <h3 class="h5">What to know about the bill</h3>
+          <ul class="mb-3">
+            <li><strong>Table bloat.</strong> If dead versions arrive faster than vacuum removes them, tables and indexes grow. A plain <code>VACUUM</code> reuses the space but does not usually return it to the operating system. <code>VACUUM FULL</code> does, by rewriting the table, and it needs an <code>ACCESS EXCLUSIVE</code> lock and extra disk space while it runs.</li>
+            <li><strong>Old transactions.</strong> A long-running transaction, an idle-in-transaction session, or a stalled replication slot holds back the cleanup horizon for the whole database. SQL Server shows the same effect with a long snapshot transaction and a growing version store.</li>
+            <li><strong>Write cost.</strong> An update writes a complete new row version, and index entries can need updating too. Heap-only tuple (HOT) updates avoid the index work when no indexed column changes and the new version fits on the same page.</li>
+            <li><strong>Transaction ID wraparound.</strong> Transaction IDs are 32 bits. Vacuum marks old rows as frozen so they stay visible after the counter wraps. A table must be vacuumed in time, and autovacuum forces an aggressive vacuum when it is not. If a database gets too close to wraparound, PostgreSQL refuses to assign new transaction IDs.</li>
+          </ul>
+<pre><code>-- which tables carry the most dead rows?
+SELECT relname, n_live_tup, n_dead_tup, last_autovacuum
+FROM pg_stat_user_tables
+ORDER BY n_dead_tup DESC
+LIMIT 10;
+
+-- how far is each database from wraparound?
+SELECT datname, age(datfrozenxid) FROM pg_database;</code></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ SECTION 7 ============ -->
+  <h2 id="monitor">7. Seeing blocking and old versions</h2>
+  <p>You will want the same answers you get from the SQL Server dynamic management views. Here is where each one lives.</p>
+  <div class="table-responsive">
+    <table class="table table-bordered cmp-table">
+      <thead>
+        <tr><th style="width:22%">What you want to know</th><th style="width:39%">SQL Server</th><th style="width:39%">PostgreSQL</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Who is blocked, and by whom</strong></td>
+          <td><code>sys.dm_exec_requests</code> (<code>blocking_session_id</code>), <code>sys.dm_os_waiting_tasks</code></td>
+          <td><code>pg_stat_activity</code> with <code>pg_blocking_pids(pid)</code></td>
+        </tr>
+        <tr>
+          <td><strong>Which locks are held or requested</strong></td>
+          <td><code>sys.dm_tran_locks</code></td>
+          <td><code>pg_locks</code></td>
+        </tr>
+        <tr>
+          <td><strong>What a session is waiting for</strong></td>
+          <td>Wait types such as <code>LCK_M_S</code> and <code>LCK_M_X</code></td>
+          <td><code>wait_event_type = 'Lock'</code> in <code>pg_stat_activity</code>, with <code>wait_event</code> values such as <code>transactionid</code>, <code>relation</code>, and <code>tuple</code></td>
+        </tr>
+        <tr>
+          <td><strong>Log long lock waits</strong></td>
+          <td>Blocked process report (<code>blocked process threshold</code>)</td>
+          <td><code>log_lock_waits = on</code></td>
+        </tr>
+        <tr>
+          <td><strong>Give up instead of waiting</strong></td>
+          <td><code>SET LOCK_TIMEOUT</code></td>
+          <td><code>lock_timeout</code>, <code>statement_timeout</code></td>
+        </tr>
+        <tr>
+          <td><strong>Find deadlocks</strong></td>
+          <td>Error 1205, the <code>system_health</code> session, deadlock graph</td>
+          <td><code>deadlock detected</code> (<code>40P01</code>) in the server log, with the processes and statements involved</td>
+        </tr>
+        <tr>
+          <td><strong>Oldest open transaction</strong></td>
+          <td><code>DBCC OPENTRAN</code></td>
+          <td><code>pg_stat_activity</code>, ordered by <code>xact_start</code></td>
+        </tr>
+        <tr>
+          <td><strong>Old row versions</strong></td>
+          <td><code>sys.dm_tran_version_store_space_usage</code>, tempdb space, <code>sys.dm_tran_active_snapshot_database_transactions</code></td>
+          <td><code>n_dead_tup</code> in <code>pg_stat_user_tables</code>, and the <code>pgstattuple</code> extension for exact numbers</td>
+        </tr>
+        <tr>
+          <td><strong>Is cleanup keeping up</strong></td>
+          <td>Version store size over time</td>
+          <td><code>last_autovacuum</code>, <code>pg_stat_progress_vacuum</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+<pre><code>-- who is waiting on whom, right now
+SELECT pid,
+       pg_blocking_pids(pid) AS blocked_by,
+       wait_event_type, wait_event, state,
+       left(query, 60) AS query
+FROM pg_stat_activity
+WHERE cardinality(pg_blocking_pids(pid)) &gt; 0;
+
+-- the oldest open transactions
+SELECT pid, now() - xact_start AS open_for, state, left(query, 60) AS query
+FROM pg_stat_activity
+WHERE xact_start IS NOT NULL
+ORDER BY xact_start
+LIMIT 5;</code></pre>
+
+  <!-- ============ SECTION 8 ============ -->
+  <h2 id="habits">8. Habits that change when you move</h2>
+  <div class="row g-4">
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100"><div class="card-body">
+        <h3 class="h5">Drop the NOLOCK reflex</h3>
+        <p class="mb-0">Plain reads do not wait for writers in PostgreSQL, and they only ever see committed data. There is nothing to work around, and no hint to add.</p>
+      </div></div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100"><div class="card-body">
+        <h3 class="h5">Keep transactions short, and never idle</h3>
+        <p class="mb-0">Long transactions hurt more here, because they hold back vacuum for everyone. Commit before calling slow services, and set <code>idle_in_transaction_session_timeout</code>.</p>
+      </div></div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100"><div class="card-body">
+        <h3 class="h5">Build in retries</h3>
+        <p class="mb-0">Anything above <code>READ COMMITTED</code> can raise <code>40001</code>, and any level can raise <code>40P01</code>. Retry the whole transaction, not just the statement.</p>
+      </div></div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100"><div class="card-body">
+        <h3 class="h5">Treat DDL as the blocking exception</h3>
+        <p class="mb-0">Set <code>lock_timeout</code> before schema changes, prefer the <code>CONCURRENTLY</code> forms for indexes, and run changes when no long transaction is open.</p>
+      </div></div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100"><div class="card-body">
+        <h3 class="h5">Watch autovacuum, not only locks</h3>
+        <p class="mb-0">Add dead rows, vacuum lag, and the age of the oldest transaction to your monitoring, next to the blocking checks you already have.</p>
+      </div></div>
+    </div>
+    <div class="col-md-6 col-lg-4">
+      <div class="card h-100"><div class="card-body">
+        <h3 class="h5">Know your SQL Server baseline</h3>
+        <p class="mb-0">If your SQL Server databases already run with <code>READ_COMMITTED_SNAPSHOT</code>, you already live with row versions. If they do not, expect the blocking you are used to to disappear, and the cleanup chores to arrive.</p>
+      </div></div>
+    </div>
+  </div>
+
+  <footer class="small text-muted">
+    <p class="mb-2">Further reading</p>
+    <ul class="list-unstyled mb-0">
+      <li><a href="https://www.postgresql.org/docs/current/mvcc-intro.html">PostgreSQL documentation: Concurrency control, introduction</a></li>
+      <li><a href="https://www.postgresql.org/docs/current/transaction-iso.html">PostgreSQL documentation: Transaction isolation</a></li>
+      <li><a href="https://www.postgresql.org/docs/current/explicit-locking.html">PostgreSQL documentation: Explicit locking</a></li>
+      <li><a href="https://www.postgresql.org/docs/current/routine-vacuuming.html">PostgreSQL documentation: Routine vacuuming</a></li>
+      <li><a href="https://learn.microsoft.com/en-us/sql/relational-databases/sql-server-transaction-locking-and-row-versioning-guide">Microsoft Learn: Transaction locking and row versioning guide</a></li>
+      <li><a href="https://learn.microsoft.com/en-us/sql/relational-databases/performance/optimized-locking">Microsoft Learn: Optimized locking</a></li>
+    </ul>
+  </footer>
+
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  function togglePause(){
-    var b = document.body;
-    var btn = document.getElementById('pauseBtn');
-    b.classList.toggle('paused');
-    btn.textContent = b.classList.contains('paused') ? 'Resume animations' : 'Pause animations';
+(function () {
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) { e.className = cls; }
+    if (text !== undefined) { e.textContent = text; }
+    return e;
   }
+  /* Text between backticks becomes <code>. Everything else stays plain text. */
+  function rich(node, text) {
+    node.textContent = '';
+    String(text).split('`').forEach(function (seg, i) {
+      if (i % 2 === 1) { node.appendChild(el('code', '', seg)); }
+      else if (seg) { node.appendChild(document.createTextNode(seg)); }
+    });
+    return node;
+  }
+
+  /* ---------- Section 2: reader meets writer ---------- */
+  var ROW = 'Row: accounts, account_id 42';
+  function v(title, meta, badges, cls) { return { title: title, meta: meta, badges: badges || [], cls: cls || '' }; }
+
+  var modes = {
+    sqlrc: [
+      { t: 'Before anything runs',
+        a: ['idle', 'Idle'], b: ['idle', 'Idle'],
+        row: [v(ROW, 'balance = 500', [['committed', 'success']])],
+        what: 'One copy of the row exists and no locks are held on it. Under the default isolation level, `READ COMMITTED`, SQL Server relies on locks, not versions, to keep readers and writers apart.',
+        sees: 'Nothing yet.',
+        hood: 'This is a database with `READ_COMMITTED_SNAPSHOT` off, which is the default in SQL Server and in Azure SQL Managed Instance. Azure SQL Database has it on, so use the RCSI configuration to see that case.',
+        other: 'PostgreSQL starts the same way, with one version of the row, but it never uses a lock to keep a reader out.' },
+      { t: 'A updates the row',
+        a: ['run', 'BEGIN TRAN;\nUPDATE accounts SET balance = 400\nWHERE account_id = 42;'], b: ['idle', 'Idle'],
+        row: [v(ROW, 'balance = 400, changed in place', [['uncommitted', 'warning'], ['X lock held by A', 'danger']], 'is-new')],
+        what: 'A takes an exclusive lock on the row and changes it where it sits. The lock stays until A commits or rolls back.',
+        sees: 'Nothing yet. B has not run.',
+        hood: 'The old value, 500, is kept only in the transaction log, so SQL Server can undo the change if A rolls back. In `sys.dm_tran_locks` you would see an `X` lock on a KEY or RID resource, with intent locks on the page and the table above it.',
+        other: 'PostgreSQL would not change the row. It would write a second version next to the first.' },
+      { t: 'B asks for the same row',
+        a: ['run', 'Still open, no COMMIT yet'], b: ['wait', 'SELECT balance FROM accounts\nWHERE account_id = 42;'],
+        row: [v(ROW, 'balance = 400, changed in place', [['uncommitted', 'warning'], ['X lock held by A', 'danger'], ['S lock requested by B, waiting', 'dark']], 'is-new')],
+        what: 'To read the row under `READ COMMITTED`, B needs a shared lock. A shared lock cannot be granted while A holds an exclusive lock on the row, so B waits in the lock queue.',
+        sees: 'Nothing. B has no result, and its query is stuck.',
+        hood: 'B shows an `LCK_M_S` wait, and `sys.dm_exec_requests` lists A as the `blocking_session_id`. There is no timeout by default. B waits as long as A stays open, unless the application runs `SET LOCK_TIMEOUT`.',
+        other: 'In PostgreSQL this step finishes at once, with the old value.' },
+      { t: 'A commits',
+        a: ['done', 'COMMIT;'], b: ['wait', 'Waiting, about to be released'],
+        row: [v(ROW, 'balance = 400', [['committed', 'success'], ['X lock released', 'secondary']])],
+        what: 'A commits and its exclusive lock is released. The lock manager now grants B the shared lock it asked for.',
+        sees: 'B is released.',
+        hood: 'If A had rolled back instead, SQL Server would use the log to put 500 back, and B would read 500, with no sign that a change was ever attempted.',
+        other: 'A PostgreSQL commit just marks the transaction as committed. No row is rewritten.' },
+      { t: 'B reads the new value',
+        a: ['done', 'Finished'], b: ['done', 'Returns 400'],
+        row: [v(ROW, 'balance = 400', [['committed', 'success']])],
+        what: 'B reads 400 and releases the shared lock straight away. Under `READ COMMITTED`, shared locks are not kept until the end of the transaction.',
+        sees: '400, after waiting for the whole length of A\'s transaction.',
+        hood: 'The wait is as long as A\'s transaction, so one slow writer delays every reader of its rows. The `NOLOCK` hint skips the wait, but it reads uncommitted data. B could see 400 and then watch A roll back to 500. That is not MVCC.',
+        other: 'PostgreSQL gives the same final answer, but B never had to wait for it.' },
+      { t: 'Housekeeping',
+        a: ['done', 'Finished'], b: ['done', 'Finished'],
+        row: [v(ROW, 'balance = 400', [['committed', 'success']])],
+        what: 'Nothing needs cleaning. No old versions were kept, so the cost of this design was B\'s wait, and nothing is left behind afterward.',
+        sees: 'Nothing new.',
+        hood: 'Deletes leave ghost records that a background task removes, but updates leave no old versions in the table.',
+        other: 'PostgreSQL pays the other way. Readers never wait, but every update leaves a dead row version for vacuum to remove.' }
+    ],
+    rcsi: [
+      { t: 'Before anything runs',
+        a: ['idle', 'Idle'], b: ['idle', 'Idle'],
+        row: [v(ROW, 'balance = 500', [['committed', 'success']])],
+        what: 'One committed version of the row. The database has row versioning turned on for `READ COMMITTED`, which is what `READ_COMMITTED_SNAPSHOT` does.',
+        sees: 'Nothing yet.',
+        hood: 'Row versioning is on by default in Azure SQL Database. In SQL Server it is an opt-in with `ALTER DATABASE ... SET READ_COMMITTED_SNAPSHOT ON`.',
+        other: 'PostgreSQL has no other mode. It always works this way.' },
+      { t: 'A updates the row',
+        a: ['run', 'BEGIN TRAN;\nUPDATE accounts SET balance = 400\nWHERE account_id = 42;'], b: ['idle', 'Idle'],
+        row: [
+          v(ROW, 'balance = 400, changed in place', [['uncommitted', 'warning'], ['X lock held by A', 'danger']], 'is-new'),
+          v('Old version in the version store', 'balance = 500', [['committed', 'success'], ['kept for readers', 'secondary']])
+        ],
+        what: 'A still takes an exclusive lock, because two writers must not change one row at once. Before it changes the row, SQL Server copies the committed version into the version store.',
+        sees: 'Nothing yet.',
+        hood: 'The version store lives in `tempdb`, or in the user database when accelerated database recovery (ADR) is on, as it always is in Azure SQL Database. Each row in a versioned database carries a tag of up to 14 bytes that points to its older version.',
+        other: 'PostgreSQL keeps the old version too. The difference is where: in a separate store here, in the table itself there.' },
+      { t: 'B asks for the same row',
+        a: ['run', 'Still open, no COMMIT yet'], b: ['run', 'SELECT balance FROM accounts\nWHERE account_id = 42;'],
+        row: [
+          v(ROW, 'balance = 400, changed in place', [['uncommitted', 'warning'], ['X lock held by A', 'danger'], ['invisible to B', 'secondary']], 'is-new'),
+          v('Old version in the version store', 'balance = 500', [['committed', 'success'], ['B reads this one', 'primary']])
+        ],
+        what: 'B does not ask for a shared lock. It reads the last committed version of the row as of the start of its statement, which it finds in the version store.',
+        sees: '500, immediately.',
+        hood: 'No `LCK_M_S` wait appears. Readers stop blocking on writers, and writers stop waiting for readers. Two writers on the same row still queue for the exclusive lock.',
+        other: 'PostgreSQL behaves the same for B at this step.' },
+      { t: 'A commits',
+        a: ['done', 'COMMIT;'], b: ['done', 'Already has its answer: 500'],
+        row: [
+          v(ROW, 'balance = 400', [['committed', 'success'], ['X lock released', 'secondary']]),
+          v('Old version in the version store', 'balance = 500', [['no longer current', 'secondary'], ['kept while a statement might need it', 'secondary']], 'is-dead')
+        ],
+        what: 'A commits and its lock is released. The old version stays in the version store for now, because a statement that started earlier might still need it.',
+        sees: 'B\'s first result stands. It was correct for the moment its statement began.',
+        hood: 'The version store is cleaned by a background task. It cannot remove a version while any active transaction might still read it.',
+        other: 'In PostgreSQL, the old version stays in the table until vacuum removes it.' },
+      { t: 'B reads again',
+        a: ['done', 'Finished'], b: ['run', 'SELECT balance FROM accounts\nWHERE account_id = 42;'],
+        row: [v(ROW, 'balance = 400', [['committed', 'success'], ['B reads this one', 'primary']])],
+        what: 'Under RCSI each statement gets its own view. B\'s second statement starts after A committed, so it reads 400. Two reads in one transaction can return different values.',
+        sees: '400.',
+        hood: 'The full `SNAPSHOT` isolation level fixes the view for the whole transaction instead. It needs `ALLOW_SNAPSHOT_ISOLATION` and must be requested with `SET TRANSACTION ISOLATION LEVEL SNAPSHOT`. If a snapshot transaction updates a row that changed after it started, it fails with error 3960.',
+        other: 'PostgreSQL `READ COMMITTED` does exactly this. PostgreSQL `REPEATABLE READ` matches SQL Server `SNAPSHOT`.' },
+      { t: 'Housekeeping',
+        a: ['done', 'Finished'], b: ['done', 'Finished'],
+        row: [
+          v(ROW, 'balance = 400', [['committed', 'success']]),
+          v('Old version in the version store', 'balance = 500', [['removed by cleanup', 'secondary']], 'is-gone')
+        ],
+        what: 'A background task removes versions that no active transaction can need. A long-running transaction keeps old versions alive, so the version store grows.',
+        sees: 'Nothing new.',
+        hood: 'Watch `sys.dm_tran_version_store_space_usage` and `tempdb` size. With ADR, the persistent version store sits in the user database and the cleaner works there.',
+        other: 'Vacuum does the same job in PostgreSQL, inside the table. Section 6 lets you try it.' }
+    ],
+    pgrc: [
+      { t: 'Before anything runs',
+        a: ['idle', 'Idle'], b: ['idle', 'Idle'],
+        row: [v('Version 1', 'balance = 500', [['xmin 100, committed', 'success'], ['live', 'primary']])],
+        what: 'Every row version carries two hidden columns. `xmin` is the transaction that created it, and `xmax` is the transaction that deleted or replaced it. This version has no `xmax`, so it is live.',
+        sees: 'Nothing yet.',
+        hood: 'You can look at them yourself with `SELECT xmin, xmax, balance FROM accounts WHERE account_id = 42;`.',
+        other: 'SQL Server has no such columns on a normal row. Its version tag appears only when row versioning is on.' },
+      { t: 'A updates the row',
+        a: ['run', 'BEGIN;\nUPDATE accounts SET balance = 400\nWHERE account_id = 42;'], b: ['idle', 'Idle'],
+        row: [
+          v('Version 1', 'balance = 500', [['xmin 100, committed', 'success'], ['xmax 101, A not committed', 'warning']]),
+          v('Version 2', 'balance = 400', [['xmin 101, A not committed', 'warning'], ['new', 'primary']], 'is-new')
+        ],
+        what: 'An `UPDATE` never edits the existing row. It writes a complete new version, stamps it with A\'s transaction ID, 101, and sets `xmax = 101` on the old version to say that A replaced it. The row lock is that `xmax` mark, not an entry in a lock table.',
+        sees: 'Nothing yet.',
+        hood: 'Both versions sit in the table, usually on the same page. No one else can see Version 2 until A commits. A second writer that wants this row will find `xmax` 101 and wait for transaction 101 to end.',
+        other: 'SQL Server changes the row in place and holds an exclusive lock on it.' },
+      { t: 'B asks for the same row',
+        a: ['run', 'Still open, no COMMIT yet'], b: ['run', 'SELECT balance FROM accounts\nWHERE account_id = 42;'],
+        row: [
+          v('Version 1', 'balance = 500', [['xmin 100, committed', 'success'], ['xmax 101, A not committed', 'warning'], ['B reads this one', 'primary']]),
+          v('Version 2', 'balance = 400', [['xmin 101, A not committed', 'warning'], ['invisible to B', 'secondary']], 'is-new')
+        ],
+        what: 'When B\'s statement starts, it takes a snapshot: a list of which transactions had committed. Transaction 101 is still running, so B ignores Version 2 and treats the `xmax` mark on Version 1 as not yet real. Version 1 is the one B sees.',
+        sees: '500, immediately. No wait and no row lock.',
+        hood: 'B takes only an `ACCESS SHARE` lock on the table, which conflicts with nothing except `ACCESS EXCLUSIVE`. Row-level locks never affect plain reads.',
+        other: 'In SQL Server with default settings, B would be waiting right now.' },
+      { t: 'A commits',
+        a: ['done', 'COMMIT;'], b: ['done', 'Already has its answer: 500'],
+        row: [
+          v('Version 1', 'balance = 500', [['xmax 101, committed', 'secondary'], ['replaced', 'secondary']], 'is-dead'),
+          v('Version 2', 'balance = 400', [['xmin 101, committed', 'success'], ['live', 'primary']], 'is-new')
+        ],
+        what: 'Commit flips transaction 101 to committed in the commit log. No row is rewritten. Every new snapshot now treats Version 2 as current and Version 1 as replaced.',
+        sees: 'B\'s first result stands. It was correct for the moment its statement began.',
+        hood: 'The server writes a commit record to the write-ahead log, and whether it waits for the flush depends on `synchronous_commit`.',
+        other: 'SQL Server releases its locks at this point.' },
+      { t: 'B reads again',
+        a: ['done', 'Finished'], b: ['run', 'SELECT balance FROM accounts\nWHERE account_id = 42;'],
+        row: [
+          v('Version 1', 'balance = 500', [['replaced', 'secondary'], ['invisible to B', 'secondary']], 'is-dead'),
+          v('Version 2', 'balance = 400', [['xmin 101, committed', 'success'], ['B reads this one', 'primary']], 'is-new')
+        ],
+        what: 'B\'s next statement takes a fresh snapshot. Under `READ COMMITTED`, the default, every statement gets a new snapshot, so this read finds 400.',
+        sees: '400. Inside one transaction, B has now seen two different values.',
+        hood: 'If B needs the same answer twice inside one transaction, it must run at `REPEATABLE READ`. Switch to that configuration to compare.',
+        other: 'The same as SQL Server with RCSI.' },
+      { t: 'Housekeeping',
+        a: ['done', 'Finished'], b: ['done', 'Finished'],
+        row: [
+          v('Version 1', 'balance = 500', [['dead, waiting for vacuum', 'secondary']], 'is-dead'),
+          v('Version 2', 'balance = 400', [['live', 'primary']], 'is-new')
+        ],
+        what: 'Version 1 is now dead weight. Once every older transaction has finished, no snapshot can need it. Autovacuum finds it and marks the space reusable. Until then it takes space in the table, and index entries still point at it.',
+        sees: 'Nothing new.',
+        hood: 'The freed space is reused for later row versions, but a plain vacuum seldom returns it to the operating system. Section 6 shows how one long-open transaction stops this cleanup.',
+        other: 'SQL Server cleans a separate version store here. PostgreSQL cleans the table itself.' }
+    ],
+    pgrr: [
+      { t: 'Before anything runs',
+        a: ['idle', 'Idle'], b: ['idle', 'Idle'],
+        row: [v('Version 1', 'balance = 500', [['xmin 100, committed', 'success'], ['live', 'primary']])],
+        what: 'The same starting point. This time B will run at `REPEATABLE READ`, so its snapshot is taken at its first statement and kept until its transaction ends.',
+        sees: 'Nothing yet.',
+        hood: '`REPEATABLE READ` in PostgreSQL is snapshot isolation. It is stricter than the SQL standard requires, because phantom rows cannot appear either.',
+        other: 'SQL Server\'s closest match is `SNAPSHOT` isolation, not its own `REPEATABLE READ`, which uses locks.' },
+      { t: 'A updates the row',
+        a: ['run', 'BEGIN;\nUPDATE accounts SET balance = 400\nWHERE account_id = 42;'], b: ['idle', 'Idle'],
+        row: [
+          v('Version 1', 'balance = 500', [['xmin 100, committed', 'success'], ['xmax 101, A not committed', 'warning']]),
+          v('Version 2', 'balance = 400', [['xmin 101, A not committed', 'warning'], ['new', 'primary']], 'is-new')
+        ],
+        what: 'A writes a new version, stamped 101, and marks the old one with `xmax = 101`. Nothing is edited in place.',
+        sees: 'Nothing yet.',
+        hood: 'A runs at the default `READ COMMITTED`. Only B needs the stricter level for this demonstration.',
+        other: 'SQL Server would hold an exclusive lock on the row here.' },
+      { t: 'B\'s transaction starts and reads',
+        a: ['run', 'Still open, no COMMIT yet'], b: ['run', 'BEGIN ISOLATION LEVEL REPEATABLE READ;\nSELECT balance FROM accounts\nWHERE account_id = 42;'],
+        row: [
+          v('Version 1', 'balance = 500', [['xmin 100, committed', 'success'], ['xmax 101, A not committed', 'warning'], ['B reads this one', 'primary']]),
+          v('Version 2', 'balance = 400', [['xmin 101, A not committed', 'warning'], ['invisible to B', 'secondary']], 'is-new')
+        ],
+        what: 'B\'s first statement takes a snapshot. Under `REPEATABLE READ`, B keeps that same snapshot for every statement in the transaction.',
+        sees: '500, immediately.',
+        hood: 'The snapshot is taken at the first statement after `BEGIN`, not at the `BEGIN` itself.',
+        other: 'The same as the read-committed configuration so far.' },
+      { t: 'A commits',
+        a: ['done', 'COMMIT;'], b: ['run', 'Transaction still open'],
+        row: [
+          v('Version 1', 'balance = 500', [['xmax 101, committed', 'secondary'], ['replaced for new snapshots', 'secondary']], 'is-dead'),
+          v('Version 2', 'balance = 400', [['xmin 101, committed', 'success'], ['live for new snapshots', 'primary']], 'is-new')
+        ],
+        what: 'Transaction 101 is now committed. Transactions that start from now on see Version 2. B\'s snapshot was taken earlier, so it still counts 101 as not committed.',
+        sees: 'Nothing changes for B yet.',
+        hood: 'Version 1 is no longer current, but B can still see it, so vacuum must leave it alone.',
+        other: 'SQL Server\'s `SNAPSHOT` isolation works the same way, with the old version in the version store.' },
+      { t: 'B reads again, same transaction',
+        a: ['done', 'Finished'], b: ['run', 'SELECT balance FROM accounts\nWHERE account_id = 42;'],
+        row: [
+          v('Version 1', 'balance = 500', [['replaced for new snapshots', 'secondary'], ['B reads this one', 'primary']], 'is-dead'),
+          v('Version 2', 'balance = 400', [['xmin 101, committed', 'success'], ['invisible to B', 'secondary']], 'is-new')
+        ],
+        what: 'B\'s snapshot still says that transaction 101 had not committed when it began, so Version 2 stays invisible. Both reads return 500.',
+        sees: '500 again. Only a new transaction would see 400.',
+        hood: 'If B now tried to `UPDATE` this row, it would fail with `ERROR: could not serialize access due to concurrent update`, SQLSTATE `40001`. The application should roll back and retry the whole transaction.',
+        other: 'SQL Server `SNAPSHOT` fails in the same situation with error 3960.' },
+      { t: 'Housekeeping',
+        a: ['done', 'Finished'], b: ['done', 'COMMIT, snapshot released'],
+        row: [
+          v('Version 1', 'balance = 500', [['dead once B\'s snapshot is gone', 'secondary']], 'is-dead'),
+          v('Version 2', 'balance = 400', [['live', 'primary']], 'is-new')
+        ],
+        what: 'While B\'s transaction was open, its snapshot kept Version 1 from being vacuumed. Once B ends, Version 1 is dead for good and autovacuum can reclaim it.',
+        sees: 'Nothing new.',
+        hood: 'This is the mechanism behind the bloat warning in section 6. A transaction that stays open for hours holds back cleanup for every row changed since it began.',
+        other: 'SQL Server shows the same effect as a growing version store.' }
+    ]
+  };
+
+  var stepCur = 0, stepTimer = null, modeKey = 'sqlrc';
+  var stepList = document.getElementById('stepList');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var stateClass = { idle: 'is-idle', run: 'is-run', wait: 'is-wait', done: 'is-done' };
+  var stateLabel = { idle: 'idle', run: 'running', wait: 'waiting', done: 'done' };
+  var stateBadge = { idle: 'text-bg-secondary', run: 'text-bg-primary', wait: 'text-bg-danger', done: 'text-bg-success' };
+
+  function setLane(prefix, pair) {
+    var card = document.getElementById('lane' + prefix);
+    card.className = 'card lane-card h-100 ' + stateClass[pair[0]];
+    var badge = document.getElementById('lane' + prefix + 'State');
+    badge.className = 'badge ' + stateBadge[pair[0]];
+    badge.textContent = stateLabel[pair[0]];
+    var box = document.getElementById('lane' + prefix + 'Text');
+    box.textContent = '';
+    pair[1].split('\n').forEach(function (line, i) {
+      if (i > 0) { box.appendChild(document.createElement('br')); }
+      box.appendChild(document.createTextNode(line));
+    });
+  }
+
+  function renderRow(items) {
+    var host = document.getElementById('rowCard');
+    host.textContent = '';
+    items.forEach(function (it) {
+      var d = el('div', 'ver ' + it.cls);
+      var head = el('div', 'd-flex flex-wrap align-items-center gap-2');
+      head.appendChild(el('span', 'ver-title', it.title));
+      it.badges.forEach(function (b) { head.appendChild(el('span', 'badge text-bg-' + b[1], b[0])); });
+      d.appendChild(head);
+      d.appendChild(el('div', 'ver-meta', it.meta));
+      host.appendChild(d);
+    });
+  }
+
+  function renderSteps() {
+    var steps = modes[modeKey];
+    stepList.textContent = '';
+    steps.forEach(function (s, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'list-group-item list-group-item-action' + (i === stepCur ? ' active' : '');
+      b.setAttribute('role', 'tab');
+      b.setAttribute('aria-selected', i === stepCur ? 'true' : 'false');
+      b.textContent = (i + 1) + '. ' + s.t;
+      b.addEventListener('click', function () { stopPlay(); stepCur = i; renderSteps(); });
+      stepList.appendChild(b);
+    });
+    var s2 = steps[stepCur];
+    setLane('A', s2.a);
+    setLane('B', s2.b);
+    renderRow(s2.row);
+    document.getElementById('stepTitle').textContent = 'Step ' + (stepCur + 1) + ' of ' + steps.length + ': ' + s2.t;
+    rich(document.getElementById('stepWhat'), s2.what);
+    rich(document.getElementById('stepSees'), s2.sees);
+    rich(document.getElementById('stepHood'), s2.hood);
+    rich(document.getElementById('stepOther'), s2.other);
+  }
+  function stopPlay() {
+    if (stepTimer !== null) { clearInterval(stepTimer); stepTimer = null; }
+    document.getElementById('stepPlay').textContent = 'Play';
+  }
+  document.getElementById('stepNext').addEventListener('click', function () {
+    stopPlay(); stepCur = (stepCur + 1) % modes[modeKey].length; renderSteps();
+  });
+  document.getElementById('stepBack').addEventListener('click', function () {
+    var n = modes[modeKey].length; stopPlay(); stepCur = (stepCur + n - 1) % n; renderSteps();
+  });
+  var playBtn = document.getElementById('stepPlay');
+  if (reduce) {
+    playBtn.disabled = true;
+    playBtn.title = 'Auto-play is off because your system asks for reduced motion';
+  }
+  playBtn.addEventListener('click', function () {
+    if (stepTimer !== null) { stopPlay(); return; }
+    playBtn.textContent = 'Pause';
+    stepTimer = setInterval(function () {
+      stepCur = (stepCur + 1) % modes[modeKey].length;
+      renderSteps();
+      playBtn.textContent = 'Pause';
+    }, 5000);
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('input[name="modePick"]'), function (r) {
+    r.addEventListener('change', function () { stopPlay(); modeKey = r.value; stepCur = 0; renderSteps(); });
+  });
+  renderSteps();
+
+  /* ---------- Section 4: two writers ---------- */
+  var writers = {
+    sqlrc: {
+      title: 'SQL Server, READ COMMITTED',
+      does: 'B asks for an exclusive lock on the row and waits for A\'s lock. When A commits, B gets the lock, reads the current value, 400, and applies its change to that.',
+      final: '300. Both withdrawals count.',
+      error: 'None, unless B waits past a `LOCK_TIMEOUT` (error 1222) or the two get tangled in a deadlock (error 1205).',
+      app: 'Nothing special for this statement. A read-then-write pattern still loses updates, so use the statement form or lock the row first.'
+    },
+    sqlsi: {
+      title: 'SQL Server, SNAPSHOT',
+      does: 'B works from a snapshot taken when its transaction began, so it sees 500. It still has to wait for A\'s exclusive lock when it updates. Once A commits, B finds that the row changed after its snapshot began.',
+      final: '400 after the first attempt, because B is rolled back. 300 once B retries in a new transaction.',
+      error: 'Error 3960, `Snapshot isolation transaction aborted due to update conflict`.',
+      app: 'Catch error 3960 and retry the whole transaction.'
+    },
+    sqlser: {
+      title: 'SQL Server, SERIALIZABLE',
+      does: 'With a bare `UPDATE`, B waits for A\'s lock and then continues, as in read committed. The difference shows when each transaction reads the row first. Both take shared key-range locks, and each then waits for the other to let go.',
+      final: '300 for the bare update. In the read-first pattern, one transaction is the deadlock victim and its work is lost until it retries.',
+      error: 'Error 1205 when the transactions deadlock.',
+      app: 'Retry on 1205. Read rows with `UPDLOCK` if the transaction will update them, which stops the circular wait.'
+    },
+    pgrc: {
+      title: 'PostgreSQL, READ COMMITTED',
+      does: 'B waits for transaction A to end. When A commits, B re-checks its `WHERE` clause against the new version of the row. The row still matches, so B applies `balance - 100` to the new version. If A had rolled back, B would have updated the original row.',
+      final: '300. Both withdrawals count.',
+      error: 'None, unless B hits a `lock_timeout` (SQLSTATE `55P03`) or a deadlock (`40P01`).',
+      app: 'Nothing special for this statement. A read-then-write pattern still loses updates, so use the statement form, or `SELECT ... FOR UPDATE` first.'
+    },
+    pgrr: {
+      title: 'PostgreSQL, REPEATABLE READ',
+      does: 'B waits for A. When A commits, B notices that the row changed after its snapshot was taken, and it does not try to merge. It is rolled back.',
+      final: '400 after the first attempt. 300 once B retries in a new transaction.',
+      error: '`ERROR: could not serialize access due to concurrent update`, SQLSTATE `40001`.',
+      app: 'Catch `40001`, roll back, and run the whole transaction again from the start. Read-only transactions never fail this way.'
+    },
+    pgser: {
+      title: 'PostgreSQL, SERIALIZABLE',
+      does: 'It behaves like `REPEATABLE READ` for this conflict: B waits, then fails when A has committed a change to the row. Serializable also watches for read and write patterns across rows that could not have run one after the other, and cancels one transaction when it finds one.',
+      final: '400 after the first attempt. 300 once B retries.',
+      error: 'SQLSTATE `40001`, which can also appear when no row was updated twice.',
+      app: 'Every transaction at this level needs a generic retry wrapper. Nothing ever blocks on a read, but any transaction may be asked to try again.'
+    }
+  };
+  function renderWriters() {
+    var w = writers[document.getElementById('wMode').value];
+    document.getElementById('wTitle').textContent = w.title;
+    rich(document.getElementById('wDoes'), w.does);
+    rich(document.getElementById('wFinal'), w.final);
+    rich(document.getElementById('wError'), w.error);
+    rich(document.getElementById('wApp'), w.app);
+  }
+  document.getElementById('wMode').addEventListener('change', renderWriters);
+  renderWriters();
+
+  /* ---------- Section 6: dead versions and vacuum ---------- */
+  var sim = null;
+  function simInit() {
+    sim = { txn: 101, next: 2, snap: null, versions: [{ id: 1, born: 100, died: null, gone: false }] };
+  }
+  function simHorizon() { return (sim.snap === null) ? sim.txn : sim.snap; }
+  function simStatus(v) {
+    if (v.gone) { return { cls: 'is-gone', badge: ['space reused', 'secondary'] }; }
+    if (v.died === null) { return { cls: 'is-new', badge: ['live', 'primary'] }; }
+    if (v.died < simHorizon()) { return { cls: 'is-dead', badge: ['dead, vacuum can remove', 'warning'] }; }
+    return { cls: 'is-dead', badge: ['dead, held by the open transaction', 'danger'] };
+  }
+  function renderSim() {
+    var live = 0, removable = 0, held = 0, freed = 0;
+    sim.versions.forEach(function (v) {
+      if (v.gone) { freed++; }
+      else if (v.died === null) { live++; }
+      else if (v.died < simHorizon()) { removable++; }
+      else { held++; }
+    });
+    document.getElementById('simStats').textContent =
+      'Row versions taking space: ' + (live + removable + held) + ' (1 live, ' + (removable + held) + ' dead). Reusable slots: ' + freed + '. ' +
+      (sim.snap === null ? 'No long transaction is open.' : 'A long transaction has been open since before transaction ' + sim.snap + '.');
+    var host = document.getElementById('simVersions');
+    host.textContent = '';
+    var shown = sim.versions.slice(-12);
+    if (sim.versions.length > shown.length) {
+      host.appendChild(el('div', 'small text-muted mb-2', 'Showing the 12 most recent of ' + sim.versions.length + ' versions.'));
+    }
+    shown.forEach(function (v) {
+      var st = simStatus(v);
+      var d = el('div', 'ver ' + st.cls);
+      var head = el('div', 'd-flex flex-wrap align-items-center gap-2');
+      head.appendChild(el('span', 'ver-title', 'Version ' + v.id));
+      head.appendChild(el('span', 'badge text-bg-' + st.badge[1], st.badge[0]));
+      d.appendChild(head);
+      d.appendChild(el('div', 'ver-meta', v.gone ? 'removed by an earlier vacuum' : 'created by transaction ' + v.born + (v.died === null ? '' : ', replaced by transaction ' + v.died)));
+      host.appendChild(d);
+    });
+    var btn = document.getElementById('simLong');
+    btn.setAttribute('aria-pressed', sim.snap === null ? 'false' : 'true');
+    btn.textContent = sim.snap === null ? 'Open a long transaction' : 'Close the long transaction';
+    btn.className = 'btn btn-sm ' + (sim.snap === null ? 'btn-outline-primary' : 'btn-primary');
+  }
+  document.getElementById('simUpdate').addEventListener('click', function () {
+    var cur = null;
+    sim.versions.forEach(function (v) { if (!v.gone && v.died === null) { cur = v; } });
+    cur.died = sim.txn;
+    sim.versions.push({ id: sim.next, born: sim.txn, died: null, gone: false });
+    sim.next++; sim.txn++;
+    renderSim();
+  });
+  document.getElementById('simLong').addEventListener('click', function () {
+    sim.snap = (sim.snap === null) ? sim.txn : null;
+    renderSim();
+  });
+  document.getElementById('simVacuum').addEventListener('click', function () {
+    var h = simHorizon();
+    sim.versions.forEach(function (v) { if (!v.gone && v.died !== null && v.died < h) { v.gone = true; } });
+    renderSim();
+  });
+  document.getElementById('simReset').addEventListener('click', function () { simInit(); renderSim(); });
+  simInit();
+  renderSim();
+})();
 </script>
 </body>
 </html>
