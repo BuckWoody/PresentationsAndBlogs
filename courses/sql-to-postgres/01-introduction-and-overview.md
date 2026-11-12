@@ -53,6 +53,8 @@ SQL Server's default transaction isolation level (`READ COMMITTED`) acquires sha
 
 Postgres uses **Multi-Version Concurrency Control (MVCC)** by default. When a row is updated, Postgres creates a *new physical version* of that row (called a "tuple") rather than overwriting the existing one. Readers always see a consistent snapshot of the data at their transaction start time, and **readers never block writers, and writers never block readers**. The tradeoff is that "dead" old row versions accumulate on disk and must be reclaimed by the **VACUUM** process, [something that has no direct SQL Server equivalent](https://htmlpreview.github.io/?https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/courses/sql-to-postgres/explainers/locking-vs-mvcc.html) and is covered in Module 05.
 
+[There's an "explainer" page here on this topic that you can review.](https://htmlpreview.github.io/?https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/courses/sql-to-postgres/explainers/locking-vs-mvcc.html)
+
 <h3>WAL vs. Transaction Log</h3>
 
 SQL Server writes all changes to a per-database transaction log (`.ldf` file) before writing to data pages. Postgres writes all changes to the cluster-wide **Write-Ahead Log (WAL)** before writing to data pages. The principle is identical: Durability and crash recovery, but because the WAL is cluster-wide rather than per-database, Postgres backup, replication, and PITR (Point-In-Time Recovery) all work at the cluster level rather than the database level.
