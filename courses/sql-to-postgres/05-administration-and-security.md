@@ -136,6 +136,7 @@ SELECT usename, client_addr
 FROM pg_stat_activity
 WHERE client_addr IS NOT NULL;
 ```
+[You can find an "explainer" here for working with Windows and Active Directory users here.](https://htmlpreview.github.io/?https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/courses/sql-to-postgres/explainers/postgres-ad-authentication.html)
 
 **On Azure Database for PostgreSQL – Flexible Server**, `pg_hba.conf` is managed by the service and you cannot edit it. Control who can connect with the server's firewall rules instead (portal: **Networking**), or with the Azure CLI (for servers that use public access):
 
