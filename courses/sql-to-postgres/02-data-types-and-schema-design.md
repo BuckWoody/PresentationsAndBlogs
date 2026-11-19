@@ -11,7 +11,7 @@
 
 *Estimated Time: 60 minutes (≈20 minutes lecture, ≈40 minutes hands-on)*
 
-In this module you will build the workshop sample schema in PostgreSQL, translating SQL Server DDL patterns as you go. You will learn the type-mapping rules that cover 95% of real-world migrations, understand how PostgreSQL handles auto-increment columns and sequences differently from SQL Server's `IDENTITY`, and learn the DDL differences around constraints, defaults, and computed columns.
+In this module you will study how the workshop's pubs sample schema was translated into PostgreSQL, comparing SQL Server DDL patterns side by side with their PostgreSQL equivalents. You will learn the type-mapping rules that cover 95% of real-world migrations, understand how PostgreSQL handles auto-increment columns and sequences differently from SQL Server's `IDENTITY`, and learn the DDL differences around constraints, defaults, and computed columns.
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
 
@@ -29,7 +29,7 @@ The table below maps the most common SQL Server data types to their PostgreSQL e
 | `DECIMAL(p,s)` / `NUMERIC(p,s)` | `NUMERIC(p,s)` | Direct equivalent |
 | `FLOAT` | `DOUBLE PRECISION` or `FLOAT8` | IEEE 754 64-bit |
 | `REAL` | `REAL` or `FLOAT4` | IEEE 754 32-bit |
-| `MONEY` / `SMALLMONEY` | `NUMERIC(19,4)` | No native MONEY type in PostgreSQL; use NUMERIC |
+| `MONEY` / `SMALLMONEY` | `NUMERIC(19,4)` | PostgreSQL does have a native MONEY type, but it's tied to the server's locale settings; most teams use NUMERIC instead |
 | `CHAR(n)` | `CHAR(n)` | Direct equivalent (blank-padded) |
 | `VARCHAR(n)` | `VARCHAR(n)` | Direct equivalent |
 | `VARCHAR(MAX)` | `TEXT` | PostgreSQL TEXT has no length limit |
@@ -37,7 +37,7 @@ The table below maps the most common SQL Server data types to their PostgreSQL e
 | `NVARCHAR(n)` | `VARCHAR(n)` | PostgreSQL databases are typically created as UTF-8 (encoding is chosen per database), so no N-prefix is needed.|
 | `NVARCHAR(MAX)` | `TEXT` | PostgreSQL databases are typically created as UTF-8 (encoding is chosen per database), so no N-prefix is needed. |
 | `TEXT` (deprecated in SS) | `TEXT` | Same name, similar behavior |
-| `DATETIME` | `TIMESTAMP` | PostgreSQL TIMESTAMP has microsecond precision |
+| `DATETIME` | `TIMESTAMP` | PostgreSQL TIMESTAMP has microsecond precision. This is a fine literal mapping, but most PostgreSQL teams default to `TIMESTAMPTZ` even here, since it stores an unambiguous point in time and converts on display; reach for plain `TIMESTAMP` only when you specifically want wall-clock time with no time zone conversion |
 | `DATETIME2(7)` | `TIMESTAMP(6)` | 6 decimal places = microseconds (max in PG) |
 | `SMALLDATETIME` | `TIMESTAMP(0)` | No seconds fractions |
 | `DATE` | `DATE` | Direct equivalent |
@@ -105,7 +105,10 @@ CREATE SEQUENCE job_id_seq START WITH 1 INCREMENT BY 1;
 
 SELECT nextval('job_id_seq');      -- Get next value
 SELECT currval('job_id_seq');      -- Current value in this session
-SELECT setval('jobs_id_seq', 14);   -- Reset (e.g., after a bulk load)
+SELECT setval(pg_get_serial_sequence('jobs', 'job_id'), 14);   -- Reset (e.g., after a bulk load)
+-- pg_get_serial_sequence looks up the real sequence name for you. Guessing it
+-- (e.g. 'jobs_id_seq') is risky,  PostgreSQL would actually generate 'jobs_job_id_seq'
+-- here, and a hardcoded name like 'jobs_id_seq' would just raise "relation does not exist".
 ```
 
 SQL Server also supports `CREATE SEQUENCE` (since SQL Server 2012),  the syntax is nearly identical.
@@ -296,6 +299,8 @@ ORDER BY ordinal_position;
 
 **Step 8,  Insert test rows and verify defaults and constraints:**
 
+Publisher `1389` and title `BU1032` already exist in the pubs data loaded during the pre-requisites, so running the inserts below exactly as written will raise a duplicate key error,  that's expected, not a sign anything is broken. Read through them for the syntax, then substitute your own ids (for example `'9999'` and `'ZZ9999'`) if you want to see them actually succeed.
+
 ```sql
 -- Insert a publisher:
 INSERT INTO publishers (pub_id, pub_name, city, state)
@@ -361,6 +366,12 @@ WHERE contract = 0;    -- Not under contract
 -- In SQL Server you would write: WHERE contract = 1
 -- PostgreSQL BOOLEAN short form (WHERE is_active) has no SQL Server equivalent,
 -- but it is available if you convert the column type to BOOLEAN.
+```
+
+**Cleanup:** Step 1 added three test authors (Smith, SMITH, smith) that aren't part of the original pubs data. The pubs data has 23 authors, and Module 04 refers to that count, so delete the three test rows before moving on:
+
+```sql
+DELETE FROM authors WHERE au_id IN ('111-11-1111', '222-22-2222', '333-33-3333');
 ```
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
