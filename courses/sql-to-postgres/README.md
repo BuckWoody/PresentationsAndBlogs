@@ -2,6 +2,8 @@
 
 # Workshop: PostgreSQL for the SQL Server Database Professional
 
+## tinyurl.com/bw-sql2pg
+
 #### <i>SQL Server to PostgreSQL Skilling</i>
 
 <p style="border-bottom: 1px solid lightgrey;"></p>
