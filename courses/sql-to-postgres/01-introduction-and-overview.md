@@ -149,6 +149,8 @@ SELECT current_database(),
        inet_server_port();
 ```
 
+`inet_server_addr()` and `inet_server_port()` report the server endpoint for TCP connections. Both return `NULL` when connected through a local Unix-domain socket.
+
 **Step 7,  List useful psql meta-commands (there is no SSMS toolbar here!):**
 
 Note: The PSQL_EDITOR system variable sets the editor that psql will use to edit files. For instance, to set that from PowerShell in Windows, you would run: 

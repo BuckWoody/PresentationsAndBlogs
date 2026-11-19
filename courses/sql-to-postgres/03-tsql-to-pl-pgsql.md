@@ -37,9 +37,7 @@ Most of your `SELECT` queries will work with minor modifications. The table belo
 | `STUFF(col, 1, 3, 'abc')` | `OVERLAY(col PLACING 'abc' FROM 1 FOR 3)` | |
 | `REPLICATE('x', 5)` | `REPEAT('x', 5)` | |
 | `LTRIM(RTRIM(col))` | `TRIM(col)` or `BTRIM(col)` | PostgreSQL TRIM removes both ends |
-| `DATEDIFF(day, d1, d2)` | `d2::DATE - d1::DATE` or `EXTRACT(DAY FROM (d2-d1))` | *Note: If d1/d2 are timestamps, d2 - d1 yields an interval, and EXTRACT(DAY FROM interval) returns only the days field of the normalized interval,  e.g. EXTRACT(DAY FROM (TIMESTAMP '2024-03-01' - TIMESTAMP '2024-01-01')) = 0, not 60, because the interval is normalised to 2 mons. (DATEDIFF(day,…) would return 60.)
-If d1/d2 are dates, d2 - d1 is already an integer count of days, so wrapping it in EXTRACT(DAY FROM …) is wrong (EXTRACT does not take an integer).
-The first alternative, d2::DATE - d1::DATE, is correct (returns integer days).* |
+| `DATEDIFF(day, d1, d2)` | `d2::DATE - d1::DATE` or `EXTRACT(DAY FROM (d2-d1))` | *Note: For timestamps, `d2 - d1` yields an interval; the example `TIMESTAMP '2024-03-01' - TIMESTAMP '2024-01-01'` is `60 days`, so extracting its day field returns 60. `AGE()` does normalize this span to `2 mons`, and `EXTRACT(DAY FROM AGE(...))` returns 0, but `AGE()` is not equivalent to timestamp subtraction or `DATEDIFF`. `EXTRACT(DAY FROM interval)` also ignores any time component. If d1/d2 are dates, `d2 - d1` is already an integer count of days, so wrapping it in `EXTRACT(DAY FROM ...)` is wrong (EXTRACT does not take an integer). The first alternative, `d2::DATE - d1::DATE`, returns integer days.* |
 | `DATEADD(day, 7, d)` | `d + INTERVAL '7 days'` | |
 | `YEAR(d)` / `MONTH(d)` / `DAY(d)` | `EXTRACT(YEAR FROM d)` / `EXTRACT(MONTH FROM d)` / `EXTRACT(DAY FROM d)` | |
 | `FORMAT(n, 'N2')` | `TO_CHAR(n, 'FM999,999.00')` | |

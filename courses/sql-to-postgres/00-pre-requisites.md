@@ -10,7 +10,7 @@
 
 The **PostgreSQL for the SQL Server Database Professional** workshop is taught using the components listed below. You should install and configure each section *before* attending the workshop,  there will not be time to complete setup during class. Note that in this pre-requisite, and in the entire course, you will switch between using various graphical clients and also various command-line tools. This is inefficient, but will help you get familiarized with multiple tools. 
 
-*All examples in this workshop use Microsoft Windows, Linux, Containers or Cloud Platforms as the base operating system. PostgreSQL runs natively on Windows, Linux, and macOS; the hands-on exercises will work on any platform, but screenshots and path examples my reference Windows . Also note that we are standardizing on Postgres 17 to be consistent with instructions and screenshots at the time of course creation.*
+*This main setup guide is for Windows. For an alternate environment, use the [Linux](00-pre-requisites-linux.md), [container](00-pre-requisites-container.md), or [cloud](00-pre-requisites-cloud.md) setup guide. The course standardizes on PostgreSQL 17.*
 
 - Installing the Course Systems on [Linux Pre-requisites are here](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/courses/sql-to-postgres/00-pre-requisites-linux.md). 
 - Installing the Course Systems on [Containers Pre-requisites are here](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/courses/sql-to-postgres/00-pre-requisites-container.md). 

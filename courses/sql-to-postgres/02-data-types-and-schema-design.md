@@ -270,7 +270,12 @@ CREATE TABLE employee (
 
 **Step 6,  Observe the foreign key constraint between tables:**
 
+The `titles` table already has a foreign key on `pub_id` from its table definition. Drop that constraint before adding the replacement so that there is only one foreign key and `ON DELETE SET NULL` can take effect:
+
 ```sql
+ALTER TABLE titles
+    DROP CONSTRAINT titles_pub_id_fkey;
+
 ALTER TABLE titles
     ADD CONSTRAINT fk_titles_publishers
     FOREIGN KEY (pub_id)
@@ -335,17 +340,17 @@ VALUES ('111-11-1111', 'Smith',  'John',  '415 000-0001', 1),
 -- Case-sensitive match (PostgreSQL default):
 SELECT au_fname, au_lname
 FROM authors
-WHERE au_lname = 'Smith';     -- Returns only 'Smith', NOT 'SMITH' or 'smith'
+WHERE au_lname = 'Smith';     -- Matches this exact casing, including existing authors
 
 -- Case-insensitive with ILIKE (PostgreSQL-specific):
 SELECT au_fname, au_lname
 FROM authors
-WHERE au_lname ILIKE 'smith';  -- Returns all three rows
+WHERE au_lname ILIKE 'smith';  -- Matches all case variants (including existing authors)
 
 -- Case-insensitive with LOWER():
 SELECT au_fname, au_lname
 FROM authors
-WHERE LOWER(au_lname) = 'smith';  -- Returns all three rows
+WHERE LOWER(au_lname) = 'smith';  -- Matches all case variants (including existing authors)
 
 -- SQL Server equivalent of ILIKE:
 -- WHERE au_lname = 'smith' COLLATE SQL_Latin1_General_CP1_CI_AS
