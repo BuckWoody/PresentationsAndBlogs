@@ -109,6 +109,7 @@ This workshop uses PostgreSQL 16/17 and SQL Server 2022 Developer Edition for al
 
 <img style="float: left; margin: 0px 15px 15px 0px;" src="https://raw.githubusercontent.com/microsoft/sqlworkshops/master/graphics/pinmap.png"> <h2>Related Workshops and Resources</h2>
 
+- [PostgreSQL Certification Guide for the SQL Server Professional](sql2pg-certification-guide.md)
 - [Microsoft SQL Server Workshop Series](https://microsoft.github.io/sqlworkshops/)
 - [Azure Database for PostgreSQL Documentation](https://learn.microsoft.com/en-us/azure/postgresql/)
 - [PostgreSQL Official Documentation](https://www.postgresql.org/docs/)
