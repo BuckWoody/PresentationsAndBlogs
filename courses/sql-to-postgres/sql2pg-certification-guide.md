@@ -1,3 +1,5 @@
+![](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/graphics/logo.png?raw=true)
+
 # PostgreSQL for the SQL Server Professional: A Certification Guide
 
 **Course Reference Document**
@@ -7,13 +9,15 @@
 
 ## Table of Contents
 
-1. [The Certification Landscape](#1-the-certification-landscape)
-2. [Certifications at a Glance](#2-certifications-at-a-glance)
-3. [Choosing a Path](#3-choosing-a-path)
-4. [Mapping This Course to the Exams](#4-mapping-this-course-to-the-exams)
-5. [SQL Server Habits That Cost Exam Points](#5-sql-server-habits-that-cost-exam-points)
-6. [Study Plan](#6-study-plan)
-7. [Study Resources](#7-study-resources)
+- [PostgreSQL for the SQL Server Professional: A Certification Guide](#postgresql-for-the-sql-server-professional-a-certification-guide)
+  - [Table of Contents](#table-of-contents)
+  - [1. The Certification Landscape](#1-the-certification-landscape)
+  - [2. Certifications at a Glance](#2-certifications-at-a-glance)
+  - [3. Choosing a Path](#3-choosing-a-path)
+  - [4. Mapping This Course to the Exams](#4-mapping-this-course-to-the-exams)
+  - [5. SQL Server Habits That Cost Exam Points](#5-sql-server-habits-that-cost-exam-points)
+  - [6. Study Plan](#6-study-plan)
+  - [7. Study Resources](#7-study-resources)
 
 ---
 

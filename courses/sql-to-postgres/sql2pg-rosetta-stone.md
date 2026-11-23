@@ -1,3 +1,5 @@
+![](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/graphics/logo.png?raw=true)
+
 # PostgreSQL for the SQL Server Professional: A Rosetta Stone
 
 **Course Reference Document**

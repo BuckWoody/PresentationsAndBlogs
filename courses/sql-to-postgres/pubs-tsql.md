@@ -1,3 +1,5 @@
+![](https://github.com/BuckWoody/PresentationsAndBlogs/blob/master/graphics/logo.png?raw=true)
+
 ```sql
 /*                                                                        */
 /*              InstPubs.SQL - Creates the Pubs database                  */
