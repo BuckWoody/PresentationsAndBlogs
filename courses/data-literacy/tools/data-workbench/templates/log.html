@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h3">Change log</h1>
+<p class="text-muted">Every create, update and delete you make is recorded here. (Real systems keep a trail like this so someone can answer "who changed this, and when?")</p>
+<table class="table table-sm table-bordered">
+  <thead class="table-light"><tr><th>When</th><th>Table</th><th>Action</th><th>Row</th><th>Detail</th></tr></thead>
+  <tbody>
+    {% for r in rows %}
+    <tr><td class="text-nowrap">{{ r['at'] }}</td><td>{{ r['table_name'] }}</td><td>{{ r['action'] }}</td><td>{{ r['row_id'] }}</td><td>{{ r['detail'] }}</td></tr>
+    {% else %}
+    <tr><td colspan="5" class="text-muted">Nothing has been changed yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

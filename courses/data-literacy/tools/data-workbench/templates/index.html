@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="h3">Tables</h1>
+<p class="text-muted">Pick a table to read it, search it, and change it. Your changes go to a working copy, so the original stays safe.</p>
+<table class="table table-bordered w-auto">
+  <thead><tr><th>Table</th><th class="text-end">Rows</th></tr></thead>
+  <tbody>
+    {% for name, count in tables %}
+    <tr>
+      <td><a href="{{ url_for('show_table', table=name) }}">{{ name }}</a></td>
+      <td class="text-end">{{ "{:,}".format(count) }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

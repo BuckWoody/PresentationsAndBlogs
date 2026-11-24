@@ -1,0 +1,11 @@
+territory_id,territory_name,region
+1,Canada,North America
+2,Central,North America
+3,Northeast,North America
+4,Northwest,North America
+5,Southeast,North America
+6,Southwest,North America
+7,France,Europe
+8,Germany,Europe
+9,United Kingdom,Europe
+10,Pacific,Pacific

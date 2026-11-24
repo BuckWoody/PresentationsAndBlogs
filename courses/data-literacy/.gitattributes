@@ -1,0 +1,9 @@
+# Markdown and code use LF line endings.
+*.md text eol=lf
+*.py text eol=lf
+*.html text eol=lf
+# The data files must not be converted, because the rebuild check compares them byte for byte.
+*.csv -text
+*.sqlite binary
+*.png binary
+*.zip binary

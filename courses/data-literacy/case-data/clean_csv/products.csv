@@ -1,0 +1,61 @@
+product_id,product_name,category,list_price,unit_cost,color
+1,Camp Shade Shelter,Shelter,136.73,89.94,Green
+2,Trailfly Tarp 10x10,Shelter,202.22,107.75,Gray
+3,Stormbreak Rain Fly,Shelter,224.68,145.78,Navy
+4,Summit Bivy,Shelter,271.45,175.29,Black
+5,Alpine Hammock Shelter,Shelter,298.11,192.92,Red
+6,Gearshed Canopy,Shelter,321.05,189.02,Red
+7,Featherlight 1P Tent,Shelter,322.31,175.8,Green
+8,Ridgeline 2P Tent,Shelter,337.34,185.42,Gray
+9,Ridgeline 4P Tent,Shelter,387.21,252.6,Green
+10,Basecamp Cabin Tent,Shelter,387.91,240.11,Green
+11,Camp Pillow Compact,Sleep,62.79,36.47,Orange
+12,Summer Liner Bag,Sleep,85.32,45.34,Gray
+13,Down Booties,Sleep,95.57,53.64,Orange
+14,Hammock Underquilt,Sleep,105.76,68.47,Black
+15,Cloudrest Sleeping Pad,Sleep,156.61,87.99,Navy
+16,Airlift Pad Plus,Sleep,156.64,98.6,Red
+17,Quilted Trail Quilt,Sleep,160.08,101.43,Yellow
+18,Basecamp Cot,Sleep,179.83,111.37,Yellow
+19,Nightfall 20F Bag,Sleep,197.49,128.67,Olive
+20,Nightfall 0F Bag,Sleep,198.38,107.51,Yellow
+21,Pack Rain Cover,Packs,43.79,23.86,Olive
+22,Hip Belt Pouch,Packs,54.05,34.36,Black
+23,Dry Bag 10L,Packs,108.27,57.43,Orange
+24,Dry Bag 30L,Packs,109.45,70.57,Gray
+25,Camera Sling,Packs,133.33,89.13,Blue
+26,Kid Explorer Pack,Packs,138.97,76.38,Brown
+27,Daybreak 20L Pack,Packs,163.9,103.54,Brown
+28,Trail Runner Vest,Packs,193.78,113.34,Olive
+29,Ridge 45L Pack,Packs,201.68,134.72,Blue
+30,Summit 65L Pack,Packs,210.56,117.81,Green
+31,Wool Hiking Socks,Clothing,32.18,12.75,Green
+32,Sun Hoodie,Clothing,35.99,15.06,Olive
+33,Trail Shorts,Clothing,74.88,29.14,Gray
+34,Merino Base Layer Top,Clothing,120.0,56.44,Orange
+35,Merino Base Layer Bottom,Clothing,120.38,50.57,Brown
+36,Hiking Pants,Clothing,122.06,60.78,Orange
+37,Fleece Midlayer,Clothing,123.21,47.76,Brown
+38,Trail Rain Jacket,Clothing,123.56,62.52,Brown
+39,Insulated Puffy Jacket,Clothing,138.17,54.1,Yellow
+40,Alpine Shell,Clothing,149.62,76.13,Olive
+41,Camp Slipper,Footwear,81.71,40.01,Green
+42,Trail Sandal,Footwear,109.21,66.08,Orange
+43,Water Shoe,Footwear,114.41,67.49,Yellow
+44,Camp Sandal,Footwear,115.09,64.09,Red
+45,Approach Shoe,Footwear,117.6,59.92,Olive
+46,Trail Runner Low,Footwear,120.26,59.13,Orange
+47,Trail Runner Mid,Footwear,131.54,80.54,Olive
+48,Hiking Shoe,Footwear,162.79,86.9,Olive
+49,Hiking Boot,Footwear,180.04,106.71,Red
+50,Insulated Winter Boot,Footwear,193.46,113.31,Green
+51,Spork Set,Cook_Hydrate,11.75,7.15,Gray
+52,Camp Mug,Cook_Hydrate,43.19,26.34,Gray
+53,Fuel Canister,Cook_Hydrate,61.17,34.44,Navy
+54,Water Filter Squeeze,Cook_Hydrate,65.71,35.56,Blue
+55,Insulated Bottle 32oz,Cook_Hydrate,85.07,44.52,Brown
+56,Hydration Bladder 2L,Cook_Hydrate,85.74,46.54,Blue
+57,Pocket Stove,Cook_Hydrate,92.36,47.04,Orange
+58,Titanium Pot Set,Cook_Hydrate,96.75,55.84,Yellow
+59,Gravity Filter 4L,Cook_Hydrate,97.41,60.04,Navy
+60,Dual Burner Camp Stove,Cook_Hydrate,113.19,66.74,Brown

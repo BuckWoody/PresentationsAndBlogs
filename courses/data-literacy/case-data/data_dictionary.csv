@@ -1,0 +1,69 @@
+table,column,description,example_value
+customers,customer_id,Unique number for each customer account,4793
+customers,acquired_date,Date of the customer's first order,2024-05-03
+customers,acquisition_channel,Marketing source that brought the customer in,organic_search
+customers,customer_type,Individual shopper (consumer) or business buyer (wholesale),consumer
+customers,region,Sales region of the customer's address,Southwest
+customers,age_band,"Age range the customer chose, if they chose one",45-54
+customers,email_opt_in,"Whether the customer agreed to receive marketing email (1 yes, 0 no)",1
+products,product_id,Unique number for each product,26
+products,product_name,Name shown in the catalog,Kid Explorer Pack
+products,category,Product family,Packs
+products,list_price,Advertised price in US dollars,138.97
+products,unit_cost,What the product costs the company in US dollars,76.38
+products,color,Color shown in the catalog,Brown
+orders,order_id,Unique number for each order,103999
+orders,customer_id,The customer who placed the order,4793
+orders,order_date,Date the order was placed,2024-05-03
+orders,ship_date,Date the order left the warehouse (blank if cancelled),2024-05-07
+orders,channel,How the order was placed,web
+orders,status,shipped or cancelled,shipped
+orders,shipping_fee,Shipping charged to the customer in US dollars,0.0
+orders,order_total,"Merchandise total of the order in US dollars, before shipping",138.97
+order_items,order_id,The order this line belongs to,103999
+order_items,line_no,"Position of the line within its order (1, 2, 3 ...)",1
+order_items,product_id,The product on this line,26
+order_items,quantity,Number of units on this line,1
+order_items,unit_price,Price per unit before discount,138.97
+order_items,discount_pct,Promotion discount as a fraction (0.15 is 15 percent),0.0
+order_items,line_total,quantity times unit_price after discount,138.97
+returns,return_id,Unique number for each return,1
+returns,order_id,The order the item came from,100010
+returns,line_no,The line within that order that was returned,2
+returns,return_date,Date the return was received,2023-01-25
+returns,reason,Reason the customer gave,Changed mind
+returns,refund_amount,Amount refunded in US dollars,123.56
+loyalty_members,customer_id,Customer who joined the loyalty program,1006
+loyalty_members,join_date,Date the customer joined (program launched 2024-07-01),2024-08-23
+marketing_monthly,month,Calendar month (YYYY-MM),2025-03
+marketing_monthly,paid_social_spend,Paid social advertising spend in US dollars,12113
+marketing_monthly,email_sends,Marketing emails sent in the month,28693
+marketing_monthly,site_sessions,Website visits in the month,17434
+survey_responses,response_id,Unique number for each survey response,1
+survey_responses,customer_id,The customer who responded,1025
+survey_responses,survey_date,Date of the response,2025-12-20
+survey_responses,rating,Satisfaction from 1 (very unhappy) to 5 (very happy),5
+survey_responses,would_recommend,1 if the customer would recommend the company,1
+churn_model_scores,customer_id,Customer scored in the vendor pilot,4660
+churn_model_scores,predicted_churn,Vendor model prediction (1 means predicted to leave),0
+churn_model_scores,actual_churn,What happened in the next 6 months (1 means the customer left),0
+customer_spend_summary,customer_id,Consumer customer acquired before 2025,1006
+customer_spend_summary,acquired_date,Date of the customer's first order,2023-10-05
+customer_spend_summary,loyalty_member,1 if the customer ever joined the loyalty program,1
+customer_spend_summary,join_date,Date the customer joined (blank if not a member),2024-08-23
+customer_spend_summary,spend_h1_2024,"Shipped order_total from January 1 to June 30, 2024, before the program launched",0.0
+customer_spend_summary,spend_h1_2025,"Shipped order_total from January 1 to June 30, 2025",0.0
+customer_spend_summary,spend_2025,Shipped order_total for calendar 2025,774.42
+survey_audit,customer_id,Customer emailed the satisfaction survey (bought July to December 2025),1025
+survey_audit,responded,1 if the customer answered the survey,1
+survey_audit,rating,Survey rating from 1 to 5 (blank if the customer did not respond),5
+survey_audit,returned_item,1 if the customer returned something from an order placed July to December 2025,0
+repeat_cohort,customer_id,Consumer customer whose first shipped order fell between January 1 and September 30 of 2024 or 2025,2801
+repeat_cohort,first_order_date,Date of the customer's first shipped order,2024-06-23
+repeat_cohort,cohort_year,Year of the first order (2024 or 2025),2024
+repeat_cohort,acquisition_channel,Marketing source that brought the customer in,email_referral
+repeat_cohort,repeat_90,1 if the customer placed a second shipped order within 90 days after the first,1
+repeat_cohort,orders_90d,"Shipped orders within 90 days of the first order, including the first",2
+repeat_cohort,revenue_90d,"Merchandise revenue in those orders, after removing returned lines",406.68
+repeat_cohort,gross_profit_90d,"Revenue minus product cost in those orders, after removing returned lines",163.61
+repeat_cohort,gross_profit_365d,"The same measure over 365 days (blank for 2025 customers, who don't have a full year yet)",163.61

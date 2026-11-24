@@ -1,0 +1,49 @@
+product_id,product_name,category,subcategory,list_price,standard_cost
+1,Ridgeback 200,Bikes,Mountain Bikes,2130.59,1322.71
+2,Ridgeback 400,Bikes,Mountain Bikes,2861.0,1802.2
+3,Ridgeback 600,Bikes,Mountain Bikes,2915.35,1898.89
+4,Roadster 100,Bikes,Road Bikes,1242.34,764.07
+5,Roadster 300,Bikes,Road Bikes,2608.83,1635.83
+6,Roadster 500,Bikes,Road Bikes,2687.31,1758.36
+7,Wayfarer 300,Bikes,Touring Bikes,1545.92,945.44
+8,Wayfarer 500,Bikes,Touring Bikes,2306.42,1467.86
+9,Wayfarer 700,Bikes,Touring Bikes,2455.08,1511.08
+10,Trail Wheel,Components,Wheels,125.49,76.79
+11,Road Wheel,Components,Wheels,265.51,143.61
+12,Carbon Wheel,Components,Wheels,281.54,158.09
+13,Flat Bar,Components,Handlebars,31.14,18.36
+14,Drop Bar,Components,Handlebars,36.31,20.75
+15,Riser Bar,Components,Handlebars,94.66,51.14
+16,Rim Brake Set,Components,Brakes,107.3,61.19
+17,Disc Brake Set,Components,Brakes,124.98,73.6
+18,Hydraulic Brake Set,Components,Brakes,136.12,75.23
+19,Comfort Saddle,Components,Saddles,53.34,29.2
+20,Sport Saddle,Components,Saddles,104.25,53.97
+21,Race Saddle,Components,Saddles,116.84,59.16
+22,Platform Pedals,Components,Pedals,22.89,12.42
+23,Clipless Pedals,Components,Pedals,29.02,15.42
+24,Touring Pedals,Components,Pedals,65.24,36.85
+25,Short-Sleeve Jersey,Clothing,Jerseys,45.2,23.5
+26,Long-Sleeve Jersey,Clothing,Jerseys,55.08,25.67
+27,Race Jersey,Clothing,Jerseys,57.12,27.41
+28,Basic Shorts,Clothing,Shorts,41.6,20.84
+29,Padded Shorts,Clothing,Shorts,43.44,21.49
+30,Bib Shorts,Clothing,Shorts,79.72,38.98
+31,Half-Finger Gloves,Clothing,Gloves,22.45,10.3
+32,Full-Finger Gloves,Clothing,Gloves,44.36,18.85
+33,Winter Gloves,Clothing,Gloves,47.29,21.07
+34,Mountain Socks,Clothing,Socks,9.36,4.2
+35,Racing Socks,Clothing,Socks,14.25,6.07
+36,Wool Socks,Clothing,Socks,16.14,7.08
+37,Sport Helmet,Accessories,Helmets,63.52,27.61
+38,Road Helmet,Accessories,Helmets,95.57,37.24
+39,Trail Helmet,Accessories,Helmets,98.8,40.48
+40,Front Light,Accessories,Lights,39.22,14.19
+41,Rear Light,Accessories,Lights,58.67,22.95
+42,Light Set,Accessories,Lights,89.87,33.18
+43,Cable Lock,Accessories,Locks,44.87,17.08
+44,U-Lock,Accessories,Locks,48.02,16.68
+45,Chain Lock,Accessories,Locks,53.27,18.69
+46,Basic Bottle,Accessories,Water Bottles,8.67,3.42
+47,Insulated Bottle,Accessories,Water Bottles,8.72,3.2
+48,Race Bottle,Accessories,Water Bottles,9.44,3.58

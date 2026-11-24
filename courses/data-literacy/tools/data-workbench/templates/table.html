@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="d-flex align-items-center mb-3">
+  <h1 class="h3 mb-0 me-3">{{ table }}</h1>
+  <span class="text-muted me-auto">{{ "{:,}".format(total) }} rows</span>
+  <a class="btn btn-primary btn-sm" href="{{ url_for('add_row', table=table) }}">Add row</a>
+</div>
+<form method="get" class="row g-2 mb-3">
+  <div class="col-auto">
+    <input type="text" name="q" value="{{ search }}" class="form-control form-control-sm" placeholder="Search every column">
+  </div>
+  {% if sort %}<input type="hidden" name="sort" value="{{ sort }}"><input type="hidden" name="dir" value="{{ direction }}">{% endif %}
+  <div class="col-auto">
+    <button class="btn btn-outline-secondary btn-sm" type="submit">Search</button>
+    <a class="btn btn-link btn-sm" href="{{ url_for('show_table', table=table) }}">Clear</a>
+  </div>
+</form>
+<div class="table-responsive">
+<table class="table table-sm table-bordered table-hover">
+  <thead class="table-light">
+    <tr>
+      {% for n in names %}
+      <th>
+        <a class="text-decoration-none" href="{{ url_for('show_table', table=table, sort=n, dir=('desc' if sort == n and direction == 'asc' else 'asc'), q=search) }}">{{ n }}{% if sort == n %} ({{ direction }}){% endif %}</a>
+      </th>
+      {% endfor %}
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for row in rows %}
+    <tr>
+      {% for n in names %}<td>{{ '' if row[n] is none else row[n] }}</td>{% endfor %}
+      <td class="text-nowrap">
+        <a class="btn btn-secondary btn-sm" href="{{ url_for('edit_row', table=table, rowid=row['__rowid__']) }}">Edit</a>
+        <form action="{{ url_for('delete_row', table=table, rowid=row['__rowid__']) }}" method="post" class="d-inline"
+              onsubmit="return confirm('Delete this row from the working copy?');">
+          <input type="hidden" name="csrf" value="{{ csrf_token }}">
+          <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="{{ names|length + 1 }}" class="text-muted">No rows match.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+<nav class="d-flex align-items-center">
+  {% if page > 1 %}<a class="btn btn-outline-secondary btn-sm me-2" href="{{ url_for('show_table', table=table, page=page-1, sort=sort, dir=direction, q=search) }}">Previous</a>{% endif %}
+  <span class="text-muted">Page {{ page }} of {{ pages }}</span>
+  {% if page < pages %}<a class="btn btn-outline-secondary btn-sm ms-2" href="{{ url_for('show_table', table=table, page=page+1, sort=sort, dir=direction, q=search) }}">Next</a>{% endif %}
+</nav>
+<p class="mt-3"><a href="{{ url_for('index') }}">Back to all tables</a></p>
+{% endblock %}

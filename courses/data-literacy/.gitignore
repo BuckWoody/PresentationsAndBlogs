@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+venv/
+.DS_Store
+tools/data-workbench/working_copy.sqlite
