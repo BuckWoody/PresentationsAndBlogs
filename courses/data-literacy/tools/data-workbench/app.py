@@ -187,6 +187,10 @@ def add_row(table):
         form = {}
     conn.close()
     return render_template("form.html", table=table, cols=cols, form=form, row=None, adding=True)
+    table = next((t for t in table_names(conn) if t == table), None)
+    if table is None:
+        conn.close()
+        abort(404)
 
 
 @app.route("/table/<table>/edit/<int:rowid>", methods=("GET", "POST"))
