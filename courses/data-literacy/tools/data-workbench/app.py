@@ -162,11 +162,14 @@ def read_form(cols, adding):
 def add_row(table):
     conn = get_db()
     cols = columns_of(conn, table)
+    allowed_columns = {c["name"] for c in cols}
     if request.method == "POST":
         values, errors = read_form(cols, adding=True)
         if not errors:
             try:
                 names = list(values)
+                if any(n not in allowed_columns for n in names):
+                    abort(400)
                 cur = conn.execute("INSERT INTO %s (%s) VALUES (%s)" % (
                     quote(table), ", ".join(quote(n) for n in names), ", ".join("?" * len(names))),
                     [values[n] for n in names])
