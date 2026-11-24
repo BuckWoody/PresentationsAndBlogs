@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if local_bootstrap %}
+    <link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+    {% else %}
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    {% endif %}
+    <title>Data Workbench</title>
+  </head>
+  <body class="bg-white">
+    <nav class="navbar navbar-expand navbar-light border-bottom mb-4">
+      <div class="container">
+        <a class="navbar-brand" href="{{ url_for('index') }}">Data Workbench</a>
+        <span class="navbar-text me-auto">Editing a copy of <code>{{ source_db }}</code></span>
+        <a class="btn btn-outline-secondary btn-sm me-2" href="{{ url_for('change_log') }}">Change log</a>
+        <form action="{{ url_for('reset') }}" method="post" class="d-inline"
+              onsubmit="return confirm('Throw away all your changes and start again from the original?');">
+          <input type="hidden" name="csrf" value="{{ csrf_token }}">
+          <button type="submit" class="btn btn-outline-danger btn-sm">Reset copy</button>
+        </form>
+      </div>
+    </nav>
+    <div class="container pb-5">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+        {% endfor %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </div>
+  </body>
+</html>
