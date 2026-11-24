@@ -65,9 +65,11 @@ def table_names(conn):
 
 
 def columns_of(conn, table):
-    if table not in table_names(conn):
+    allowed = table_names(conn)
+    safe_table = next((t for t in allowed if t == table), None)
+    if safe_table is None:
         abort(404)
-    return conn.execute("PRAGMA table_info(%s)" % quote(table)).fetchall()
+    return conn.execute("PRAGMA table_info(%s)" % quote(safe_table)).fetchall()
 
 
 def log_change(conn, table, action, row_id, detail):
