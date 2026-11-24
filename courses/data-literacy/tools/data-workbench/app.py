@@ -196,8 +196,13 @@ def add_row(table):
 @app.route("/table/<table>/edit/<int:rowid>", methods=("GET", "POST"))
 def edit_row(table, rowid):
     conn = get_db()
-    cols = columns_of(conn, table)
-    row = conn.execute("SELECT rowid AS __rowid__, * FROM %s WHERE rowid = ?" % quote(table), (rowid,)).fetchone()
+    allowed = table_names(conn)
+    safe_table = next((t for t in allowed if t == table), None)
+    if safe_table is None:
+        conn.close()
+        abort(404)
+    cols = columns_of(conn, safe_table)
+    row = conn.execute("SELECT rowid AS __rowid__, * FROM %s WHERE rowid = ?" % quote(safe_table), (rowid,)).fetchone()
     if row is None:
         conn.close()
         abort(404)
@@ -207,18 +212,18 @@ def edit_row(table, rowid):
             try:
                 changes = ["%s: %s to %s" % (n, row[n], values[n]) for n in values if row[n] != values[n]]
                 conn.execute("UPDATE %s SET %s WHERE rowid = ?" % (
-                    quote(table), ", ".join("%s = ?" % quote(n) for n in values)), list(values.values()) + [rowid])
-                log_change(conn, table, "update", rowid, "; ".join(changes) or "no change")
+                    quote(safe_table), ", ".join("%s = ?" % quote(n) for n in values)), list(values.values()) + [rowid])
+                log_change(conn, safe_table, "update", rowid, "; ".join(changes) or "no change")
                 conn.commit()
                 conn.close()
                 flash("Row updated.", "success")
-                return redirect(url_for("show_table", table=table))
+                return redirect(url_for("show_table", table=safe_table))
             except sqlite3.DatabaseError as e:
                 errors.append("The database refused the change: %s" % e)
         for e in errors:
             flash(e, "danger")
     conn.close()
-    return render_template("form.html", table=table, cols=cols, form=request.form if request.method == "POST" else {},
+    return render_template("form.html", table=safe_table, cols=cols, form=request.form if request.method == "POST" else {},
                            row=row, adding=False)
 
 
