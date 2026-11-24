@@ -230,21 +230,25 @@ def edit_row(table, rowid):
 @app.route("/table/<table>/delete/<int:rowid>", methods=("POST",))
 def delete_row(table, rowid):
     conn = get_db()
-    columns_of(conn, table)
-    row = conn.execute("SELECT * FROM %s WHERE rowid = ?" % quote(table), (rowid,)).fetchone()
+    allowed = table_names(conn)
+    safe_table = next((t for t in allowed if t == table), None)
+    if safe_table is None:
+        conn.close()
+        abort(404)
+    row = conn.execute("SELECT * FROM %s WHERE rowid = ?" % quote(safe_table), (rowid,)).fetchone()
     if row is None:
         conn.close()
         abort(404)
     try:
-        conn.execute("DELETE FROM %s WHERE rowid = ?" % quote(table), (rowid,))
-        log_change(conn, table, "delete", rowid, ", ".join("%s=%s" % (k, row[k]) for k in row.keys()))
+        conn.execute("DELETE FROM %s WHERE rowid = ?" % quote(safe_table), (rowid,))
+        log_change(conn, safe_table, "delete", rowid, ", ".join("%s=%s" % (k, row[k]) for k in row.keys()))
         conn.commit()
         flash("Row deleted.", "success")
     except sqlite3.IntegrityError as e:
         conn.rollback()
         flash("The database refused the delete (%s). Other rows still point to this one." % e, "danger")
     conn.close()
-    return redirect(url_for("show_table", table=table))
+    return redirect(url_for("show_table", table=safe_table))
 
 
 @app.route("/log")
