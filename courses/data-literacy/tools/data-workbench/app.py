@@ -105,6 +105,9 @@ def index():
 @app.route("/table/<table>")
 def show_table(table):
     conn = get_db()
+    allowed_tables = table_names(conn)
+    if table not in allowed_tables:
+        abort(404)
     cols = columns_of(conn, table)
     names = [c["name"] for c in cols]
     sort = request.args.get("sort", "")
